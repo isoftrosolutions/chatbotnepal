@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Models\User;
+use App\Models\WidgetSessionToken;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,6 +24,23 @@ class ValidateWidgetDomain
                 'Access-Control-Allow-Headers' => 'Content-Type, Authorization, X-Requested-With',
                 'Access-Control-Allow-Credentials' => 'true',
             ]);
+        }
+
+        // Valid session token means the widget already authenticated — skip domain check
+        $sessionToken = $request->header('X-Session-Token');
+        if ($sessionToken) {
+            $valid = WidgetSessionToken::where('token', $sessionToken)
+                ->where('expires_at', '>', now())
+                ->exists();
+            if ($valid) {
+                $response = $next($request);
+                return $response->withHeaders([
+                    'Access-Control-Allow-Origin' => $origin ?: '*',
+                    'Access-Control-Allow-Methods' => 'GET, POST, OPTIONS',
+                    'Access-Control-Allow-Headers' => 'Content-Type, Authorization, X-Session-Token',
+                    'Access-Control-Allow-Credentials' => 'true',
+                ]);
+            }
         }
 
         $allowedDomains = $this->getAllowedDomains($request);

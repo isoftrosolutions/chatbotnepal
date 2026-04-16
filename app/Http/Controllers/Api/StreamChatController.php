@@ -58,7 +58,7 @@ class StreamChatController extends Controller
                 ->first();
             if ($session) {
                 $client = $session->user;
-                $session->touch();
+                $session->touchLastUsed();
             }
         }
 
