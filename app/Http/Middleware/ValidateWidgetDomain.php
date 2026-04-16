@@ -14,6 +14,17 @@ class ValidateWidgetDomain
         $origin = $request->headers->get('origin');
         $referer = $request->headers->get('referer');
 
+        if ($request->is('api/widget/*') || $request->is('api/widget/session')) {
+            $response = $next($request);
+
+            return $response->withHeaders([
+                'Access-Control-Allow-Origin' => $origin ?: '*',
+                'Access-Control-Allow-Methods' => 'GET, POST, OPTIONS',
+                'Access-Control-Allow-Headers' => 'Content-Type, Authorization, X-Requested-With',
+                'Access-Control-Allow-Credentials' => 'true',
+            ]);
+        }
+
         $allowedDomains = $this->getAllowedDomains($request);
 
         $requestOrigin = $origin ?: ($referer ? parse_url($referer, PHP_URL_HOST) : null);

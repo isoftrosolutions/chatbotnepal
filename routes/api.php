@@ -8,7 +8,8 @@ use App\Http\Controllers\Api\WidgetSessionController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/widget/session', [WidgetSessionController::class, 'createSession'])
-    ->middleware('throttle:session');
+    ->middleware('throttle:session')
+    ->withoutMiddleware('widget.domain');
 
 Route::post('/chat', [ChatController::class, 'chat'])
     ->middleware(['throttle:chat', 'widget.domain']);
