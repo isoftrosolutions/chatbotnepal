@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(php /c/Apache24/htdocs/ai/chatbotnepal/artisan --version)",
+      "Bash(php /c/Apache24/htdocs/ai/chatbotnepal/artisan migrate:status)",
+      "Bash(mysql -u root -e \"SELECT 1;\")",
+      "Bash(php artisan *)",
+      "Bash(where mysql *)",
+      "Read(//c/xampp/mysql/bin/**)",
+      "Read(//c/Program Files/MySQL/MySQL Server 8.0/bin/**)",
+      "Read(//c/wamp64/bin/**)",
+      "Bash(find /c -name \"mysql.exe\")",
+      "Bash($MYSQL *)",
+      "Bash(grep *)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost/ai/chatbotnepal/public/login)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost/ai/chatbotnepal/public/)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost/ai/chatbotnepal/public/api/widget-config/test123)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost/ai/public/login)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost/ai/public/api/widget-config/test123)",
+      "Bash(curl -si http://localhost/ai/public/login)",
+      "Bash(curl -si http://localhost/ai/)",
+      "Bash(curl -si http://localhost/ai/login)"
+    ]
+  }
+}

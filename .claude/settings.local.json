@@ -1,0 +1,34 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(php /c/Apache24/htdocs/ai/chatbotnepal/artisan --version)",
+      "Bash(php /c/Apache24/htdocs/ai/chatbotnepal/artisan migrate:status)",
+      "Bash(mysql -u root -e \"SELECT 1;\")",
+      "Bash(php artisan *)",
+      "Bash(where mysql *)",
+      "Read(//c/xampp/mysql/bin/**)",
+      "Read(//c/Program Files/MySQL/MySQL Server 8.0/bin/**)",
+      "Read(//c/wamp64/bin/**)",
+      "Bash(find /c -name \"mysql.exe\")",
+      "Bash($MYSQL *)",
+      "Bash(grep *)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost/ai/chatbotnepal/public/login)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost/ai/chatbotnepal/public/)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost/ai/chatbotnepal/public/api/widget-config/test123)",
+      "Bash(C:/Apache24/bin/httpd.exe *)",
+      "Read(//c/Apache24/conf/extra/**)",
+      "Read(//c/Apache24/conf/**)",
+      "Read(//c/Apache24/logs/**)",
+      "Bash(php C:/Apache24/htdocs/ai/artisan migrate:status)",
+      "Bash(php C:/Apache24/htdocs/ai/artisan db:show --counts)",
+      "Bash(php C:/Apache24/htdocs/ai/artisan route:list)",
+      "Bash(curl *)",
+      "Read(//tmp/**)",
+      "Bash(python -m json.tool)",
+      "Bash(php C:/Apache24/htdocs/ai/artisan config:clear)",
+      "Bash(php C:/Apache24/htdocs/ai/artisan route:clear)",
+      "Bash(php *)",
+      "Bash(find C:/Apache24/htdocs/ai/app -name \"*.php\" -exec php -l {} \\\\;)"
+    ]
+  }
+}

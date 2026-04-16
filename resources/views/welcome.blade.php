@@ -1,0 +1,1426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ChatBot Nepal — AI Chatbot Service for Your Website</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green: #a3e635;
+    --green-dark: #84cc16;
+    --green-glow: rgba(163,230,53,0.15);
+    --bg: #0a0f0a;
+    --bg2: #0f150f;
+    --bg3: #141c14;
+    --card: #111811;
+    --border: rgba(163,230,53,0.12);
+    --text: #e8f5e8;
+    --muted: #7a9a7a;
+    --white: #ffffff;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+  /* NOISE TEXTURE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.4;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+    background: rgba(10,15,10,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.3rem;
+    color: var(--green);
+    letter-spacing: -0.02em;
+    text-decoration: none;
+  }
+
+  .logo span { color: var(--text); }
+
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--green); }
+
+  .nav-cta {
+    background: var(--green);
+    color: var(--bg);
+    padding: 0.6rem 1.4rem;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-decoration: none;
+    font-family: 'Syne', sans-serif;
+    transition: all 0.2s;
+  }
+
+  .nav-cta:hover {
+    background: var(--green-dark);
+    transform: translateY(-1px);
+  }
+
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    padding: 4px;
+  }
+
+  .hamburger span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: var(--green);
+    border-radius: 2px;
+    transition: all 0.3s;
+  }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 7rem 2rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 50% 0%, rgba(163,230,53,0.08) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 40% at 80% 60%, rgba(163,230,53,0.04) 0%, transparent 60%);
+  }
+
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(163,230,53,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(163,230,53,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 0%, transparent 80%);
+  }
+
+  .hero-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    width: 100%;
+    position: relative;
+    z-index: 2;
+    text-align: center;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(163,230,53,0.08);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 0.4rem 1rem;
+    font-size: 0.8rem;
+    color: var(--green);
+    font-weight: 500;
+    margin-bottom: 2rem;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .badge-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--green);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.3); }
+  }
+
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2.4rem, 6vw, 5rem);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    margin-bottom: 1.5rem;
+    animation: fadeUp 0.6s 0.1s ease both;
+  }
+
+  h1 .accent { color: var(--green); }
+
+  .hero-sub {
+    font-size: clamp(1rem, 2vw, 1.2rem);
+    color: var(--muted);
+    max-width: 600px;
+    margin: 0 auto 2.5rem;
+    line-height: 1.7;
+    font-weight: 300;
+    animation: fadeUp 0.6s 0.2s ease both;
+  }
+
+  .hero-btns {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    animation: fadeUp 0.6s 0.3s ease both;
+  }
+
+  .btn-primary {
+    background: var(--green);
+    color: var(--bg);
+    padding: 0.85rem 2rem;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 1rem;
+    font-family: 'Syne', sans-serif;
+    text-decoration: none;
+    transition: all 0.2s;
+    box-shadow: 0 0 30px rgba(163,230,53,0.3);
+  }
+
+  .btn-primary:hover {
+    background: var(--green-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 0 40px rgba(163,230,53,0.4);
+  }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--text);
+    padding: 0.85rem 2rem;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 1rem;
+    text-decoration: none;
+    border: 1px solid var(--border);
+    transition: all 0.2s;
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--green);
+    color: var(--green);
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: 3rem;
+    justify-content: center;
+    margin-top: 4rem;
+    flex-wrap: wrap;
+    animation: fadeUp 0.6s 0.4s ease both;
+  }
+
+  .stat {
+    text-align: center;
+  }
+
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--green);
+    display: block;
+  }
+
+  .stat-label {
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-top: 0.2rem;
+  }
+
+  /* CHAT DEMO WIDGET */
+  .demo-widget {
+    max-width: 380px;
+    margin: 3rem auto 0;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    animation: fadeUp 0.6s 0.5s ease both;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px var(--border);
+  }
+
+  .widget-header {
+    background: var(--green);
+    padding: 0.8rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .widget-avatar {
+    width: 32px;
+    height: 32px;
+    background: var(--bg);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+  }
+
+  .widget-name {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    color: var(--bg);
+    font-size: 0.9rem;
+  }
+
+  .widget-status {
+    font-size: 0.7rem;
+    color: rgba(10,15,10,0.7);
+  }
+
+  .widget-messages {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    min-height: 200px;
+  }
+
+  .msg-bot {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    padding: 0.7rem 0.9rem;
+    border-radius: 0 12px 12px 12px;
+    font-size: 0.85rem;
+    max-width: 85%;
+    line-height: 1.5;
+    color: var(--text);
+    animation: msgIn 0.4s ease both;
+  }
+
+  .msg-user {
+    background: var(--green);
+    color: var(--bg);
+    padding: 0.7rem 0.9rem;
+    border-radius: 12px 0 12px 12px;
+    font-size: 0.85rem;
+    max-width: 85%;
+    align-self: flex-end;
+    font-weight: 500;
+    animation: msgIn 0.4s ease both;
+  }
+
+  @keyframes msgIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .widget-input {
+    display: flex;
+    gap: 0.5rem;
+    padding: 0.8rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .widget-input input {
+    flex: 1;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.6rem 0.8rem;
+    color: var(--text);
+    font-size: 0.8rem;
+    outline: none;
+  }
+
+  .widget-input button {
+    background: var(--green);
+    border: none;
+    border-radius: 8px;
+    padding: 0.6rem 0.9rem;
+    color: var(--bg);
+    cursor: pointer;
+    font-size: 0.9rem;
+  }
+
+  /* SECTION STYLES */
+  section {
+    padding: 5rem 2rem;
+  }
+
+  .section-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    display: inline-block;
+    color: var(--green);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    font-family: 'Syne', sans-serif;
+  }
+
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    margin-bottom: 1rem;
+  }
+
+  .section-sub {
+    color: var(--muted);
+    font-size: 1rem;
+    line-height: 1.7;
+    max-width: 560px;
+    font-weight: 300;
+  }
+
+  /* ABOUT */
+  .about { background: var(--bg2); }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    margin-top: 3rem;
+  }
+
+  .about-features {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    margin-top: 2rem;
+  }
+
+  .about-feature {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .feature-icon {
+    width: 40px;
+    height: 40px;
+    background: var(--green-glow);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+  }
+
+  .feature-text h4 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    margin-bottom: 0.2rem;
+    color: var(--text);
+  }
+
+  .feature-text p {
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .about-visual {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .about-visual::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(ellipse 40% 40% at 70% 30%, rgba(163,230,53,0.06) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .process-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .process-step {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    padding: 1rem;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    transition: border-color 0.2s;
+  }
+
+  .process-step:hover { border-color: var(--green); }
+
+  .step-num {
+    width: 32px;
+    height: 32px;
+    background: var(--green);
+    color: var(--bg);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+  }
+
+  .step-text {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .step-sub {
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-top: 0.15rem;
+  }
+
+  /* PRICING */
+  .pricing { background: var(--bg); }
+
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 3rem;
+  }
+
+  .pricing-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 2rem;
+    position: relative;
+    transition: all 0.3s;
+    overflow: hidden;
+  }
+
+  .pricing-card:hover {
+    border-color: rgba(163,230,53,0.3);
+    transform: translateY(-4px);
+  }
+
+  .pricing-card.featured {
+    border-color: var(--green);
+    background: linear-gradient(135deg, rgba(163,230,53,0.05) 0%, var(--card) 60%);
+  }
+
+  .featured-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: var(--green);
+    color: var(--bg);
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.25rem 0.6rem;
+    border-radius: 100px;
+    font-family: 'Syne', sans-serif;
+    letter-spacing: 0.05em;
+  }
+
+  .plan-name {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+  }
+
+  .plan-price {
+    margin-bottom: 0.5rem;
+  }
+
+  .setup-fee {
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-bottom: 1.5rem;
+  }
+
+  .price-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--text);
+    letter-spacing: -0.03em;
+  }
+
+  .price-currency {
+    font-size: 1rem;
+    color: var(--muted);
+    vertical-align: top;
+    margin-top: 0.5rem;
+    display: inline-block;
+    font-weight: 500;
+  }
+
+  .price-period {
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
+  .plan-divider {
+    height: 1px;
+    background: var(--border);
+    margin: 1.5rem 0;
+  }
+
+  .plan-features {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    margin-bottom: 2rem;
+  }
+
+  .plan-features li {
+    display: flex;
+    gap: 0.6rem;
+    align-items: flex-start;
+    font-size: 0.88rem;
+    color: var(--text);
+    line-height: 1.4;
+  }
+
+  .plan-features li::before {
+    content: '✓';
+    color: var(--green);
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 0.05rem;
+  }
+
+  .plan-features li.muted {
+    color: var(--muted);
+    text-decoration: line-through;
+  }
+
+  .plan-features li.muted::before {
+    content: '×';
+    color: var(--muted);
+  }
+
+  .plan-btn {
+    display: block;
+    text-align: center;
+    padding: 0.8rem;
+    border-radius: 8px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: all 0.2s;
+    cursor: pointer;
+    border: none;
+    width: 100%;
+  }
+
+  .plan-btn-outline {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text);
+  }
+
+  .plan-btn-outline:hover {
+    border-color: var(--green);
+    color: var(--green);
+  }
+
+  .plan-btn-solid {
+    background: var(--green);
+    color: var(--bg);
+  }
+
+  .plan-btn-solid:hover {
+    background: var(--green-dark);
+    transform: translateY(-1px);
+  }
+
+  /* TESTIMONIALS */
+  .testimonials { background: var(--bg2); }
+
+  .testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 3rem;
+  }
+
+  .testimonial-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.8rem;
+    position: relative;
+    transition: border-color 0.2s;
+  }
+
+  .testimonial-card:hover {
+    border-color: rgba(163,230,53,0.25);
+  }
+
+  .quote-mark {
+    font-size: 3rem;
+    color: var(--green);
+    line-height: 1;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    opacity: 0.4;
+    margin-bottom: 0.5rem;
+  }
+
+  .testimonial-text {
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: var(--text);
+    margin-bottom: 1.5rem;
+    font-weight: 300;
+    font-style: italic;
+  }
+
+  .testimonial-author {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+
+  .author-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--green);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 0.9rem;
+    color: var(--bg);
+    flex-shrink: 0;
+  }
+
+  .author-name {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--text);
+  }
+
+  .author-role {
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-top: 0.1rem;
+  }
+
+  .stars {
+    color: var(--green);
+    font-size: 0.8rem;
+    margin-bottom: 0.8rem;
+    letter-spacing: 0.1em;
+  }
+
+  /* FAQ */
+  .faq { background: var(--bg); }
+
+  .faq-list {
+    max-width: 700px;
+    margin: 3rem auto 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+
+  .faq-item {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .faq-item:hover { border-color: rgba(163,230,53,0.25); }
+
+  .faq-q {
+    padding: 1.2rem 1.5rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--text);
+    user-select: none;
+  }
+
+  .faq-icon {
+    color: var(--green);
+    font-size: 1.2rem;
+    transition: transform 0.3s;
+    flex-shrink: 0;
+  }
+
+  .faq-item.open .faq-icon { transform: rotate(45deg); }
+
+  .faq-a {
+    padding: 0 1.5rem;
+    max-height: 0;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    font-size: 0.88rem;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  .faq-item.open .faq-a {
+    max-height: 200px;
+    padding: 0 1.5rem 1.2rem;
+  }
+
+  /* CTA SECTION */
+  .cta-section {
+    background: var(--bg2);
+    text-align: center;
+  }
+
+  .cta-box {
+    max-width: 700px;
+    margin: 0 auto;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 4rem 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-box::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(ellipse, rgba(163,230,53,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .cta-box h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: 1rem;
+    position: relative;
+  }
+
+  .cta-box p {
+    color: var(--muted);
+    margin-bottom: 2rem;
+    font-size: 1rem;
+    line-height: 1.6;
+    position: relative;
+  }
+
+  .cta-btns {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    position: relative;
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--bg);
+    border-top: 1px solid var(--border);
+    padding: 3rem 2rem;
+  }
+
+  .footer-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .footer-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    color: var(--green);
+    font-size: 1.1rem;
+    text-decoration: none;
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 1.5rem;
+    list-style: none;
+    flex-wrap: wrap;
+  }
+
+  .footer-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: color 0.2s;
+  }
+
+  .footer-links a:hover { color: var(--green); }
+
+  .footer-copy {
+    color: var(--muted);
+    font-size: 0.8rem;
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* MOBILE */
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.2rem; }
+    .nav-links { display: none; }
+    .nav-cta { display: none; }
+    .hamburger { display: flex; }
+
+    .nav-mobile-open .nav-links {
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 60px;
+      left: 0; right: 0;
+      background: var(--bg2);
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--border);
+      gap: 1rem;
+      z-index: 99;
+    }
+
+    .nav-mobile-open .nav-cta {
+      display: block;
+      text-align: center;
+      margin-top: 0.5rem;
+    }
+
+    .about-grid { grid-template-columns: 1fr; gap: 2rem; }
+    .pricing-grid { grid-template-columns: 1fr; }
+    .testimonials-grid { grid-template-columns: 1fr; }
+    .hero-stats { gap: 1.5rem; }
+    section { padding: 3.5rem 1.2rem; }
+  }
+
+  @media (max-width: 480px) {
+    h1 { font-size: 2.1rem; }
+    .hero { padding: 6rem 1.2rem 3rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#" class="logo">Chat<span>Bot</span> Nepal</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#testimonials">Reviews</a></li>
+    <li><a href="#faq">FAQ</a></li>
+    <li><a href="{{ route('login') }}" style="color: var(--green); font-weight: 600;">Login</a></li>
+  </ul>
+  <a href="{{ route('login') }}" class="nav-cta" style="background: var(--green);">Login</a>
+  <div class="hamburger" onclick="toggleNav()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-badge">
+      <span class="badge-dot"></span>
+      Now serving businesses across Nepal 🇳🇵
+    </div>
+    <h1>Let Your Website<br><span class="accent">Answer Customers</span><br>Automatically</h1>
+    <p class="hero-sub">Add an AI chatbot to your website in 24 hours. Answer customer questions 24/7, capture leads, and never miss a sale — even while you sleep.</p>
+    <div class="hero-btns">
+      <a href="#contact" class="btn-primary">See Free Demo →</a>
+      <a href="#pricing" class="btn-secondary">View Pricing</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat">
+        <span class="stat-num">24/7</span>
+        <div class="stat-label">Always Online</div>
+      </div>
+      <div class="stat">
+        <span class="stat-num">&lt;1hr</span>
+        <div class="stat-label">Response Time</div>
+      </div>
+      <div class="stat">
+        <span class="stat-num">150+</span>
+        <div class="stat-label">Happy Clients</div>
+      </div>
+      <div class="stat">
+        <span class="stat-num">NP</span>
+        <div class="stat-label">Nepal Based</div>
+      </div>
+    </div>
+
+    <!-- Live Demo Widget -->
+    <div class="demo-widget">
+      <div class="widget-header">
+        <div class="widget-avatar">🤖</div>
+        <div>
+          <div class="widget-name">AI Assistant</div>
+          <div class="widget-status">● Online — Ready to help</div>
+        </div>
+      </div>
+      <div class="widget-messages" id="demo-messages">
+        <div class="msg-bot">👋 Namaste! I'm your AI assistant. Ask me about services, pricing, or anything!</div>
+      </div>
+      <div class="widget-input">
+        <input type="text" id="demo-input" placeholder="Type a question..." onkeypress="if(event.key==='Enter') sendDemo()"/>
+        <button onclick="sendDemo()">➤</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="section-inner">
+    <span class="section-label reveal">What We Do</span>
+    <h2 class="section-title reveal">Your Website, Working<br><span style="color:var(--green)">Smarter</span></h2>
+    <p class="section-sub reveal">We interview you about your business, build a custom knowledge base, and deploy an AI chatbot that knows everything about your services.</p>
+    <div class="about-grid">
+      <div>
+        <div class="about-features">
+          <div class="about-feature reveal">
+            <div class="feature-icon">🎯</div>
+            <div class="feature-text">
+              <h4>Custom Knowledge Base</h4>
+              <p>We interview you and build a chatbot that knows your exact services, pricing, FAQs, and contact info.</p>
+            </div>
+          </div>
+          <div class="about-feature reveal">
+            <div class="feature-icon">🌐</div>
+            <div class="feature-text">
+              <h4>Works on Any Website</h4>
+              <p>WordPress, custom sites, Laravel, HTML — just one line of code to install. No developer needed.</p>
+            </div>
+          </div>
+          <div class="about-feature reveal">
+            <div class="feature-icon">🇳🇵</div>
+            <div class="feature-text">
+              <h4>Nepali & Hindi Support</h4>
+              <p>Your chatbot replies in Nepali, Hindi, or English automatically based on what your customer types.</p>
+            </div>
+          </div>
+          <div class="about-feature reveal">
+            <div class="feature-icon">🔄</div>
+            <div class="feature-text">
+              <h4>Monthly Updates Included</h4>
+              <p>Changed your pricing? New service? Just message us and we update your chatbot same day.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="about-visual reveal">
+        <div class="process-steps">
+          <div class="process-step">
+            <div class="step-num">1</div>
+            <div>
+              <div class="step-text">We Interview You</div>
+              <div class="step-sub">30 min call — we learn everything about your business</div>
+            </div>
+          </div>
+          <div class="process-step">
+            <div class="step-num">2</div>
+            <div>
+              <div class="step-text">We Build Knowledge Base</div>
+              <div class="step-sub">Services, pricing, FAQs — all in one smart system</div>
+            </div>
+          </div>
+          <div class="process-step">
+            <div class="step-num">3</div>
+            <div>
+              <div class="step-text">We Deploy Chatbot</div>
+              <div class="step-sub">One line of code added to your website</div>
+            </div>
+          </div>
+          <div class="process-step">
+            <div class="step-num">4</div>
+            <div>
+              <div class="step-text">Your Website Answers 24/7</div>
+              <div class="step-sub">Customers get instant answers, you get more sales</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing" id="pricing">
+  <div class="section-inner">
+    <div style="text-align:center">
+      <span class="section-label reveal">Simple Pricing</span>
+      <h2 class="section-title reveal">No Hidden Fees.<br><span style="color:var(--green)">Just Results.</span></h2>
+      <p class="section-sub reveal" style="margin:0 auto">Start with a free demo. Pay only when you love it.</p>
+    </div>
+    <div class="pricing-grid">
+
+      <div class="pricing-card reveal">
+        <div class="plan-name">Starter</div>
+        <div class="plan-price">
+          <span class="price-currency">Rs.</span>
+          <span class="price-num">1,999</span>
+        </div>
+        <div class="price-period">per month</div>
+        <div class="setup-fee">+ Rs. 3,000 one-time setup</div>
+        <div class="plan-divider"></div>
+        <ul class="plan-features">
+          <li>1 AI Chatbot</li>
+          <li>Basic Knowledge Base</li>
+          <li>Nepali & English Support</li>
+          <li>Email Support</li>
+          <li>Monthly Updates</li>
+          <li class="muted">Lead Capture</li>
+          <li class="muted">Analytics Dashboard</li>
+        </ul>
+        <a href="#contact" class="plan-btn plan-btn-outline">Get Started</a>
+      </div>
+
+      <div class="pricing-card featured reveal">
+        <div class="featured-badge">POPULAR</div>
+        <div class="plan-name">Growth</div>
+        <div class="plan-price">
+          <span class="price-currency">Rs.</span>
+          <span class="price-num">3,999</span>
+        </div>
+        <div class="price-period">per month</div>
+        <div class="setup-fee">+ Rs. 3,000 one-time setup</div>
+        <div class="plan-divider"></div>
+        <ul class="plan-features">
+          <li>1 AI Chatbot</li>
+          <li>Full Knowledge Base</li>
+          <li>Nepali, Hindi & English</li>
+          <li>Priority Support</li>
+          <li>Unlimited Updates</li>
+          <li>Lead Capture</li>
+          <li class="muted">Analytics Dashboard</li>
+        </ul>
+        <a href="#contact" class="plan-btn plan-btn-solid">Get Started</a>
+      </div>
+
+      <div class="pricing-card reveal">
+        <div class="plan-name">Pro</div>
+        <div class="plan-price">
+          <span class="price-currency">Rs.</span>
+          <span class="price-num">6,999</span>
+        </div>
+        <div class="price-period">per month</div>
+        <div class="setup-fee">+ Rs. 5,000 one-time setup</div>
+        <div class="plan-divider"></div>
+        <ul class="plan-features">
+          <li>2 AI Chatbots</li>
+          <li>Advanced Knowledge Base</li>
+          <li>All Languages</li>
+          <li>Dedicated Support</li>
+          <li>Unlimited Updates</li>
+          <li>Lead Capture</li>
+          <li>Analytics Dashboard</li>
+        </ul>
+        <a href="#contact" class="plan-btn plan-btn-outline">Get Started</a>
+      </div>
+
+    </div>
+    <p style="text-align:center; color:var(--muted); font-size:0.85rem; margin-top:2rem;" class="reveal">
+      💡 Pay yearly and get <strong style="color:var(--green)">2 months FREE</strong> on any plan
+    </p>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials" id="testimonials">
+  <div class="section-inner">
+    <div style="text-align:center">
+      <span class="section-label reveal">Testimonials</span>
+      <h2 class="section-title reveal">Businesses Love It.<br><span style="color:var(--green)">See Why.</span></h2>
+    </div>
+    <div class="testimonials-grid">
+
+      <div class="testimonial-card reveal">
+        <div class="stars">★★★★★</div>
+        <div class="quote-mark">"</div>
+        <div class="testimonial-text">Hamro website ma chatbot add gareko pachi customer haru aafai answer paune bhaye. Hami ko call aaune ghatyo, sales badhyo. Ekdam ramro service!</div>
+        <div class="testimonial-author">
+          <div class="author-avatar">RK</div>
+          <div>
+            <div class="author-name">Ram Kumar Shrestha</div>
+            <div class="author-role">Owner, Kathmandu Digital Store</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card reveal">
+        <div class="stars">★★★★★</div>
+        <div class="quote-mark">"</div>
+        <div class="testimonial-text">Our coaching center website now handles 100+ student inquiries daily without any staff. The chatbot knows everything about our courses and fees. Worth every rupee!</div>
+        <div class="testimonial-author">
+          <div class="author-avatar">SP</div>
+          <div>
+            <div class="author-name">Sushila Poudel</div>
+            <div class="author-role">Director, Pokhara Coaching Center</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card reveal">
+        <div class="stars">★★★★★</div>
+        <div class="quote-mark">"</div>
+        <div class="testimonial-text">Setup was done in just one day. The team interviewed us, built the knowledge base, and installed it. Our customers get instant answers even at midnight. Amazing!</div>
+        <div class="testimonial-author">
+          <div class="author-avatar">BT</div>
+          <div>
+            <div class="author-name">Bikash Tamang</div>
+            <div class="author-role">CEO, Lalitpur Tech Solutions</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq" id="faq">
+  <div class="section-inner">
+    <div style="text-align:center">
+      <span class="section-label reveal">FAQ</span>
+      <h2 class="section-title reveal">Common <span style="color:var(--green)">Questions</span></h2>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item reveal">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          Does my website need to be rebuilt?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-a">No! We just add one small line of code to your existing website. Works on WordPress, custom websites, Laravel, HTML — any website. Your developer can do it in 2 minutes.</div>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          How does the chatbot know about my business?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-a">We interview you for 30 minutes and collect all information about your services, pricing, FAQs, and contact details. We build a custom knowledge base just for your business. The chatbot only answers using your information.</div>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          Can it reply in Nepali or Hindi?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-a">Yes! The chatbot automatically detects the language your customer is typing in and replies in the same language — Nepali, Hindi, or English. No extra setup needed.</div>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          What if I change my pricing or services?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-a">Just message us! We update your knowledge base same day. All Growth and Pro plans include unlimited updates. This is exactly why our monthly fee makes sense — we maintain everything for you.</div>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          Is there a contract or lock-in?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-a">No long-term contracts. Pay month to month. Cancel anytime. We're confident you'll love the results — so we don't need to lock you in.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="contact">
+  <div class="section-inner">
+    <div class="cta-box reveal">
+      <h2>Ready to See Your<br><span style="color:var(--green)">Demo for Free?</span></h2>
+      <p>Message us on WhatsApp. We'll show you a live demo built for your business — completely free. No payment needed to see it.</p>
+      <div class="cta-btns">
+        <a href="https://wa.me/9779811144402" class="btn-primary" target="_blank">💬 WhatsApp Us Now</a>
+        <a href="mailto:info@isoftro.com" class="btn-secondary">✉️ Send Email</a>
+      </div>
+      <p style="margin-top: 1.5rem; color: var(--muted); font-size: 0.85rem;">
+        Already a client? <a href="{{ route('login') }}" style="color: var(--green); font-weight: 600; text-decoration: none;">Access Your Dashboard →</a>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <a href="#" class="footer-logo">ChatBot Nepal</a>
+    <ul class="footer-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+      <li><a href="#testimonials">Reviews</a></li>
+      <li><a href="#faq">FAQ</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <div class="footer-copy">© 2026 ChatBot Nepal. Kathmandu, Nepal 🇳🇵</div>
+  </div>
+</footer>
+
+<script>
+  // Mobile nav toggle
+  function toggleNav() {
+    document.getElementById('navbar').classList.toggle('nav-mobile-open');
+  }
+
+  // FAQ toggle
+  function toggleFaq(el) {
+    const item = el.parentElement;
+    item.classList.toggle('open');
+  }
+
+  // Demo chat
+  const demoReplies = {
+    default: "That's a great question! Our AI chatbot can answer exactly this kind of query for your customers 24/7. Want to see a demo for your website? 😊",
+    price: "Our plans start from Rs. 1,999/month + Rs. 3,000 one-time setup. You get unlimited updates and full support included!",
+    hello: "Namaste! 🙏 I'm a demo of what your website chatbot could look like. Try asking me about pricing or services!",
+    service: "We build AI chatbots for any business website in Nepal. We interview you, build a knowledge base, and install it in 24 hours!",
+    nepali: "जी, हाम्रो chatbot नेपाली, हिन्दी र अंग्रेजी तिनै भाषामा जवाफ दिन सक्छ! 🇳🇵",
+  };
+
+  function sendDemo() {
+    const input = document.getElementById('demo-input');
+    const messages = document.getElementById('demo-messages');
+    const text = input.value.trim();
+    if (!text) return;
+
+    // User message
+    const userDiv = document.createElement('div');
+    userDiv.className = 'msg-user';
+    userDiv.textContent = text;
+    messages.appendChild(userDiv);
+    input.value = '';
+
+    // Bot reply
+    setTimeout(() => {
+      const lower = text.toLowerCase();
+      let reply = demoReplies.default;
+      if (lower.includes('price') || lower.includes('cost') || lower.includes('kati') || lower.includes('paisa')) reply = demoReplies.price;
+      else if (lower.includes('hello') || lower.includes('hi') || lower.includes('namaste') || lower.includes('नमस्')) reply = demoReplies.hello;
+      else if (lower.includes('service') || lower.includes('what') || lower.includes('chatbot')) reply = demoReplies.service;
+      else if (lower.includes('nepali') || lower.includes('नेपाली') || lower.includes('nepal')) reply = demoReplies.nepali;
+
+      const botDiv = document.createElement('div');
+      botDiv.className = 'msg-bot';
+      botDiv.textContent = reply;
+      messages.appendChild(botDiv);
+      messages.scrollTop = messages.scrollHeight;
+    }, 600);
+
+    messages.scrollTop = messages.scrollHeight;
+  }
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

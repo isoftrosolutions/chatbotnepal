@@ -1,0 +1,92 @@
+<?php
+
+use App\Http\Controllers\Admin\ClientController;
+use App\Http\Controllers\Admin\ConversationController as AdminConversationController;
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\InvoiceController as AdminInvoiceController;
+use App\Http\Controllers\Admin\KnowledgeBaseController;
+use App\Http\Controllers\Admin\SettingController;
+use App\Http\Controllers\Admin\UsageController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Client\ConversationController;
+use App\Http\Controllers\Client\DashboardController;
+use App\Http\Controllers\Client\EmbedController;
+use App\Http\Controllers\Client\InvoiceController;
+use App\Http\Controllers\Client\ProfileController;
+use App\Http\Controllers\Client\UpdateRequestController;
+use Illuminate\Support\Facades\Route;
+
+Route::get('/', function () {
+    if (auth()->check()) {
+        return auth()->user()->isAdmin() 
+            ? redirect()->route('admin.dashboard') 
+            : redirect()->route('client.dashboard');
+    }
+    return redirect()->route('login');
+});
+
+Route::middleware('guest')->group(function () {
+    Route::get('login', [AuthenticatedSessionController::class, 'create'])->name('login');
+    Route::get('auth/login', [AuthenticatedSessionController::class, 'create']);
+    Route::post('login', [AuthenticatedSessionController::class, 'store']);
+    Route::post('auth/login', [AuthenticatedSessionController::class, 'store']);
+});
+
+Route::middleware('auth')->group(function () {
+    Route::post('auth/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
+
+    Route::prefix('admin')->middleware('admin')->group(function () {
+        Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
+
+        Route::get('/clients', [ClientController::class, 'index'])->name('admin.clients.index');
+        Route::get('/clients/create', [ClientController::class, 'create'])->name('admin.clients.create');
+        Route::post('/clients', [ClientController::class, 'store'])->name('admin.clients.store');
+        Route::get('/clients/{id}/edit', [ClientController::class, 'edit'])->name('admin.clients.edit');
+        Route::put('/clients/{id}', [ClientController::class, 'update'])->name('admin.clients.update');
+        Route::delete('/clients/{id}', [ClientController::class, 'destroy'])->name('admin.clients.destroy');
+        Route::post('/clients/{id}/toggle', [ClientController::class, 'toggle'])->name('admin.clients.toggle');
+
+        Route::get('/knowledge-base', [KnowledgeBaseController::class, 'overview'])->name('admin.knowledge-base');
+
+        Route::get('/clients/{clientId}/knowledge-base', [KnowledgeBaseController::class, 'index'])->name('admin.clients.knowledge-base');
+        Route::post('/clients/{clientId}/knowledge-base', [KnowledgeBaseController::class, 'store'])->name('admin.clients.knowledge-base.store');
+        Route::put('/clients/{clientId}/knowledge-base/{kbId}', [KnowledgeBaseController::class, 'update'])->name('admin.clients.knowledge-base.update');
+        Route::delete('/clients/{clientId}/knowledge-base/{kbId}', [KnowledgeBaseController::class, 'destroy'])->name('admin.clients.knowledge-base.destroy');
+        Route::post('/clients/{clientId}/knowledge-base/{kbId}/toggle', [KnowledgeBaseController::class, 'toggleActive'])->name('admin.clients.knowledge-base.toggle');
+
+        Route::get('/clients/{clientId}/conversations', [AdminConversationController::class, 'index'])->name('admin.clients.conversations');
+        Route::get('/clients/{clientId}/conversations/{conversationId}', [AdminConversationController::class, 'show'])->name('admin.clients.conversations.show');
+
+        Route::get('/clients/{clientId}/usage', [UsageController::class, 'clientUsage'])->name('admin.clients.usage');
+
+        Route::get('/invoices', [AdminInvoiceController::class, 'index'])->name('admin.invoices.index');
+        Route::post('/invoices', [AdminInvoiceController::class, 'create'])->name('admin.invoices.store');
+        Route::post('/invoices/{id}/mark-paid', [AdminInvoiceController::class, 'markPaid'])->name('admin.invoices.mark-paid');
+        Route::delete('/invoices/{id}', [AdminInvoiceController::class, 'destroy'])->name('admin.invoices.destroy');
+
+        Route::get('/usage', [UsageController::class, 'index'])->name('admin.usage');
+        Route::get('/settings', [SettingController::class, 'index'])->name('admin.settings');
+        Route::put('/settings', [SettingController::class, 'update'])->name('admin.settings.update');
+    });
+
+    Route::prefix('client')->middleware('client')->group(function () {
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('client.dashboard');
+
+        Route::get('/conversations', [ConversationController::class, 'index'])->name('client.conversations');
+        Route::get('/conversations/{id}', [ConversationController::class, 'show'])->name('client.conversations.show');
+
+        Route::get('/invoices', [InvoiceController::class, 'index'])->name('client.invoices');
+        Route::get('/invoices/{invoice}/pay', [InvoiceController::class, 'pay'])->name('client.invoices.pay');
+        Route::get('/invoices/{invoice}/callback', [InvoiceController::class, 'callback'])->name('client.invoices.callback');
+
+        Route::get('/embed-code', [EmbedController::class, 'index'])->name('client.embed-code');
+        Route::post('/embed-code', [EmbedController::class, 'updateConfig'])->name('client.embed-code.update');
+
+        Route::get('/request-update', [UpdateRequestController::class, 'create'])->name('client.request-update.create');
+        Route::post('/request-update', [UpdateRequestController::class, 'store'])->name('client.request-update.store');
+
+        Route::get('/profile', [ProfileController::class, 'edit'])->name('client.profile');
+        Route::put('/profile', [ProfileController::class, 'update'])->name('client.profile.update');
+        Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('client.profile.password');
+    });
+});

@@ -1,0 +1,3 @@
+# Requests to /ai/ are handled by the Apache Alias in httpd-vhosts.conf
+# which maps /ai -> c:/Apache24/htdocs/ai/public
+# This file is intentionally minimal.
