@@ -53,7 +53,7 @@ class WidgetSessionToken extends Model
         return $this->expires_at->isFuture();
     }
 
-    public function touch(): void
+    public function touchLastUsed(): void
     {
         $this->update(['last_used_at' => now()]);
     }

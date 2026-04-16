@@ -72,7 +72,7 @@ class WidgetSessionController extends Controller
             return response()->json(['valid' => false], 401);
         }
 
-        $session->touch();
+        $session->touchLastUsed();
 
         return response()->json([
             'valid' => true,

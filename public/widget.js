@@ -19,6 +19,7 @@
     let visitorId = localStorage.getItem('cbn_visitor_id') || uuidv4();
     localStorage.setItem('cbn_visitor_id', visitorId);
     let isWindowOpen = false;
+    let sessionToken = null;
 
     const styles = `
         #cbn-widget * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -260,8 +261,6 @@
             </button>
         `;
         document.body.appendChild(container);
-
-        let sessionToken = null;
 
         function initSession() {
             return fetch(`${BASE_URL}/api/widget/session`, {
