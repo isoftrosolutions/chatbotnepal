@@ -1,10 +1,10 @@
 (function() {
     const SCRIPT_TAG = document.currentScript;
-    const SITE_ID = SCRIPT_TAG.getAttribute('data-site-id');
+    const SITE_ID = SCRIPT_TAG.getAttribute('data-token') || SCRIPT_TAG.getAttribute('data-site-id');
     const BASE_URL = new URL(SCRIPT_TAG.src).origin;
 
     if (!SITE_ID) {
-        console.error('ChatBot Nepal: Missing data-site-id attribute.');
+        console.error('ChatBot Nepal: Missing data-token or data-site-id attribute.');
         return;
     }
 
