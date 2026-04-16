@@ -1,3 +1,8 @@
+Header always set Access-Control-Allow-Origin "*"
+Header always set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+Header always set Access-Control-Allow-Headers "Content-Type, Authorization, X-Session-Token, X-Requested-With, Accept"
+Header always set Access-Control-Max-Age "86400"
+
 <IfModule mod_rewrite.c>
     <IfModule mod_negotiation.c>
         Options -MultiViews -Indexes
@@ -6,9 +11,8 @@
     RewriteEngine On
     RewriteBase /ai/
 
-    # Pass OPTIONS preflight directly to PHP (no redirect)
     RewriteCond %{REQUEST_METHOD} OPTIONS
-    RewriteRule .* index.php [L]
+    RewriteRule ^(.*)$ - [R=204,L]
 
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
