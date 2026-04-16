@@ -110,8 +110,8 @@
 
         .cbn-msg-content { display: flex; flex-direction: column; gap: 4px; }
         .cbn-msg-bubble {
-            padding: 14px 18px; border-radius: 20px; font-size: 14px; line-height: 1.5;
-            position: relative; word-wrap: break-word;
+            padding: 14px 18px; border-radius: 20px; font-size: 14px; line-height: 1.6;
+            position: relative; word-wrap: break-word; white-space: pre-wrap;
         }
         .cbn-msg.bot .cbn-msg-bubble {
             background: white; color: #1E293B;
@@ -127,11 +127,42 @@
         .cbn-msg-time { font-size: 10px; color: #94A3B8; padding: 0 4px; }
         .cbn-msg.visitor .cbn-msg-time { text-align: right; }
 
-        .cbn-typing { display: flex; gap: 6px; padding: 4px 0; }
-        .cbn-typing-dot { width: 8px; height: 8px; background: #94A3B8; border-radius: 50%; animation: cbn-bounce 1.4s infinite ease-in-out; }
-        .cbn-typing-dot:nth-child(2) { animation-delay: 0.15s; }
-        .cbn-typing-dot:nth-child(3) { animation-delay: 0.3s; }
-        @keyframes cbn-bounce { 0%, 60%, 100% { transform: translateY(0); } 30% { transform: translateY(-6px); } }
+        /* ChatGPT-style typing indicator */
+        .cbn-typing-container {
+            display: flex; align-items: center; gap: 4px;
+        }
+        .cbn-cursor {
+            display: inline-block; width: 2px; height: 18px;
+            background: ${config.primary_color};
+            margin-left: 2px;
+            animation: cbn-blink 0.8s infinite;
+            vertical-align: text-bottom;
+        }
+        @keyframes cbn-blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        /* Thinking dots animation */
+        .cbn-thinking {
+            display: flex; gap: 4px; padding: 4px 0;
+        }
+        .cbn-thinking-dot {
+            width: 6px; height: 6px; background: #94A3B8; border-radius: 50%;
+            animation: cbn-think 1.4s infinite ease-in-out;
+        }
+        .cbn-thinking-dot:nth-child(2) { animation-delay: 0.2s; }
+        .cbn-thinking-dot:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes cbn-think { 0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; } 40% { transform: scale(1); opacity: 1; } }
+
+        /* Streaming text effect */
+        .cbn-streaming .cbn-msg-bubble::after {
+            content: '';
+            display: inline-block; width: 2px; height: 16px;
+            background: ${config.primary_color};
+            margin-left: 2px; animation: cbn-blink 0.8s infinite;
+            vertical-align: text-bottom;
+        }
 
         .cbn-date-separator {
             text-align: center; padding: 12px 0; position: relative;
@@ -140,18 +171,6 @@
             background: #E2E8F0; padding: 6px 16px; border-radius: 20px;
             font-size: 11px; color: #64748B; font-weight: 500;
         }
-
-        .cbn-suggestions {
-            display: flex; flex-wrap: wrap; gap: 8px; padding: 8px 16px;
-            background: white; border-radius: 16px; margin: 0 16px 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-        }
-        .cbn-suggestion {
-            padding: 8px 14px; background: #F1F5F9; border: 1px solid #E2E8F0;
-            border-radius: 20px; font-size: 12px; color: #475569; cursor: pointer;
-            transition: all 0.2s;
-        }
-        .cbn-suggestion:hover { background: ${config.primary_color}; color: white; border-color: ${config.primary_color}; }
 
         #cbn-input-area {
             padding: 16px; background: white; border-top: 1px solid #F1F5F9;
@@ -299,18 +318,26 @@
                 return;
             }
 
-            addMessage('visitor', msg);
+            const visitorMsgDiv = addMessage('visitor', msg);
             input.value = '';
             autoResize();
-            showTyping();
+
+            const { msgDiv: botMsgDiv, bubble: botBubble } = showStreamingIndicator();
 
             sendBtn.disabled = true;
 
-            fetch(`${BASE_URL}/api/chat`, {
+            const eventSource = new EventSource(`${BASE_URL}/api/chat/stream`, {
+                withCredentials: false
+            });
+
+            let conversationIdValue = null;
+
+            fetch(`${BASE_URL}/api/chat/stream`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-Session-Token': sessionToken
+                    'X-Session-Token': sessionToken,
+                    'Accept': 'text/event-stream',
                 },
                 body: JSON.stringify({
                     site_id: SITE_ID,
@@ -320,22 +347,59 @@
                     source_url: window.location.href
                 })
             })
-            .then(r => r.json())
-            .then(data => {
-                hideTyping();
-                sendBtn.disabled = false;
-                if (data.reply) {
-                    addMessage('bot', data.reply);
-                    if (data.conversation_id) {
-                        conversationId = data.conversation_id;
-                        sessionStorage.setItem('cbn_conversation_id', conversationId);
-                    }
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Stream failed');
                 }
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+
+                function read() {
+                    reader.read().then(({ done, value }) => {
+                        if (done) return;
+
+                        const chunk = decoder.decode(value);
+                        const lines = chunk.split('\n');
+
+                        for (const line of lines) {
+                            if (line.startsWith('data: ')) {
+                                try {
+                                    const data = JSON.parse(line.slice(6));
+                                    if (data.type === 'chunk') {
+                                        appendToBubble(botBubble, data.content);
+                                    } else if (data.type === 'done') {
+                                        conversationIdValue = data.conversation_id;
+                                        removeStreamingIndicator();
+                                        addMessageTime(botMsgDiv);
+                                    } else if (data.type === 'error') {
+                                        removeStreamingIndicator();
+                                        botBubble.innerText = data.message || "I'm sorry, I'm having trouble connecting right now.";
+                                    }
+                                } catch (e) {
+                                    // Skip invalid JSON
+                                }
+                            }
+                        }
+
+                        if (conversationIdValue) {
+                            conversationId = conversationIdValue;
+                            sessionStorage.setItem('cbn_conversation_id', conversationId);
+                            sendBtn.disabled = false;
+                            eventSource.close();
+                        } else {
+                            read();
+                        }
+                    });
+                }
+
+                read();
             })
-            .catch(() => {
-                hideTyping();
+            .catch(error => {
+                console.error('Stream error:', error);
+                removeStreamingIndicator();
+                botBubble.innerText = "I'm sorry, I'm having trouble connecting right now. Please try again later.";
                 sendBtn.disabled = false;
-                addMessage('bot', "I'm sorry, I'm having trouble connecting right now. Please try again later.");
+                eventSource.close();
             });
         }
 
@@ -348,20 +412,27 @@
         };
     }
 
+    function createAvatarElement(role) {
+        const avatar = document.createElement('div');
+        avatar.className = 'cbn-msg-avatar';
+        if (role === 'bot') {
+            if (config.bot_avatar_url) {
+                avatar.innerHTML = `<img src="${config.bot_avatar_url}" alt="Bot">`;
+            } else {
+                avatar.innerHTML = `<svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 1 0-16 0"/></svg>`;
+            }
+        } else {
+            avatar.innerHTML = `<svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`;
+        }
+        return avatar;
+    }
+
     function addMessage(role, text) {
         const container = document.getElementById('cbn-messages');
         const msgDiv = document.createElement('div');
         msgDiv.className = `cbn-msg ${role}`;
 
-        const avatar = document.createElement('div');
-        avatar.className = 'cbn-msg-avatar';
-        if (role === 'bot' && config.bot_avatar_url) {
-            avatar.innerHTML = `<img src="${config.bot_avatar_url}" alt="Bot">`;
-        } else if (role === 'bot') {
-            avatar.innerHTML = `<svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 1 0-16 0"/></svg>`;
-        } else {
-            avatar.innerHTML = `<svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`;
-        }
+        msgDiv.appendChild(createAvatarElement(role));
 
         const content = document.createElement('div');
         content.className = 'cbn-msg-content';
@@ -376,45 +447,59 @@
 
         content.appendChild(bubble);
         content.appendChild(time);
-
-        msgDiv.appendChild(avatar);
         msgDiv.appendChild(content);
 
         container.appendChild(msgDiv);
         scrollToBottom();
+
+        return msgDiv;
     }
 
-    function showTyping() {
+    function showStreamingIndicator() {
         const container = document.getElementById('cbn-messages');
         const msgDiv = document.createElement('div');
-        msgDiv.className = 'cbn-msg bot';
-        msgDiv.id = 'cbn-typing-indicator';
+        msgDiv.className = 'cbn-msg bot cbn-streaming';
 
-        const avatar = document.createElement('div');
-        avatar.className = 'cbn-msg-avatar';
-        if (config.bot_avatar_url) {
-            avatar.innerHTML = `<img src="${config.bot_avatar_url}" alt="Bot">`;
-        } else {
-            avatar.innerHTML = `<svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 1 0-16 0"/></svg>`;
-        }
+        msgDiv.appendChild(createAvatarElement('bot'));
 
         const content = document.createElement('div');
         content.className = 'cbn-msg-content';
 
         const bubble = document.createElement('div');
         bubble.className = 'cbn-msg-bubble';
-        bubble.innerHTML = `<div class="cbn-typing"><div class="cbn-typing-dot"></div><div class="cbn-typing-dot"></div><div class="cbn-typing-dot"></div></div>`;
+        bubble.innerHTML = '<div class="cbn-thinking"><div class="cbn-thinking-dot"></div><div class="cbn-thinking-dot"></div><div class="cbn-thinking-dot"></div></div>';
 
         content.appendChild(bubble);
-        msgDiv.appendChild(avatar);
         msgDiv.appendChild(content);
+
         container.appendChild(msgDiv);
+        scrollToBottom();
+
+        return { msgDiv, bubble };
+    }
+
+    function appendToBubble(bubble, text) {
+        const existingHtml = bubble.innerHTML.replace('<span class="cbn-cursor"></span>', '');
+        bubble.innerHTML = existingHtml + text + '<span class="cbn-cursor"></span>';
         scrollToBottom();
     }
 
-    function hideTyping() {
-        const el = document.getElementById('cbn-typing-indicator');
-        if (el) el.remove();
+    function removeStreamingIndicator() {
+        const streaming = document.querySelector('.cbn-streaming');
+        if (streaming) {
+            streaming.classList.remove('cbn-streaming');
+            const bubble = streaming.querySelector('.cbn-msg-bubble');
+            if (bubble) {
+                bubble.innerHTML = bubble.innerHTML.replace('<span class="cbn-cursor"></span>', '');
+            }
+        }
+    }
+
+    function addMessageTime(msgDiv) {
+        const time = msgDiv.querySelector('.cbn-msg-time');
+        if (time) {
+            time.innerText = formatTime(new Date());
+        }
     }
 
     function scrollToBottom() {
@@ -427,7 +512,6 @@
     }
 
     function updateTheme() {
-        document.getElementById('cbn-business-name')?.remove();
         document.querySelector('.cbn-business-name').textContent = config.business_name;
         document.querySelector('.cbn-bot-name').textContent = config.bot_name;
 
@@ -438,7 +522,7 @@
     }
 
     function uuidv4() {
-        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g', function(c) {
             var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
             return v.toString(16);
         });

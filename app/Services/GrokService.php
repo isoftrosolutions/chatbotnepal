@@ -74,6 +74,67 @@ class GrokService
         }
     }
 
+    public function streamChat(array $messages, callable $onChunk, callable $onComplete, callable $onError): void
+    {
+        try {
+            $ch = curl_init();
+
+            $postData = json_encode([
+                'model' => $this->model,
+                'messages' => $messages,
+                'max_tokens' => $this->maxTokens,
+                'temperature' => $this->temperature,
+                'stream' => true,
+            ]);
+
+            curl_setopt_array($ch, [
+                CURLOPT_URL => $this->apiUrl,
+                CURLOPT_POST => true,
+                CURLOPT_POSTFIELDS => $postData,
+                CURLOPT_HTTPHEADER => [
+                    'Authorization: Bearer '.$this->apiKey,
+                    'Content-Type: application/json',
+                ],
+                CURLOPT_RETURNTRANSFER => false,
+                CURLOPT_WRITEFUNCTION => function ($ch, $data) use ($onChunk) {
+                    $lines = explode("\n", $data);
+                    foreach ($lines as $line) {
+                        if (strpos($line, 'data: ') === 0) {
+                            $json = substr($line, 6);
+                            if (trim($json) === '[DONE]') {
+                                continue;
+                            }
+                            $decoded = json_decode($json, true);
+                            if (isset($decoded['choices'][0]['delta']['content'])) {
+                                $content = $decoded['choices'][0]['delta']['content'];
+                                $onChunk($content);
+                            }
+                        }
+                    }
+
+                    return strlen($data);
+                },
+                CURLOPT_TIMEOUT => 60,
+            ]);
+
+            $result = curl_exec($ch);
+            $error = curl_error($ch);
+            curl_close($ch);
+
+            if ($error) {
+                Log::error('Grok streaming error', ['error' => $error]);
+                $onError('Connection error');
+
+                return;
+            }
+
+            $onComplete();
+        } catch (\Exception $e) {
+            Log::error('Grok streaming exception', ['message' => $e->getMessage()]);
+            $onError('AI service temporarily unavailable');
+        }
+    }
+
     public function estimateCost(int $totalTokens): float
     {
         $costPerToken = 0.00001;
