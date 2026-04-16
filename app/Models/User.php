@@ -24,6 +24,7 @@ class User extends Authenticatable
         'status',
         'api_token',
         'chatbot_enabled',
+        'last_login_at',
     ];
 
     protected $hidden = [
@@ -33,8 +34,9 @@ class User extends Authenticatable
 
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'password' => 'hashed',
-        'chatbot_enabled' => 'boolean',
+        'last_login_at'     => 'datetime',
+        'password'          => 'hashed',
+        'chatbot_enabled'   => 'boolean',
     ];
 
     protected static function booted(): void

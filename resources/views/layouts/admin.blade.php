@@ -49,9 +49,9 @@
                     <span class="font-medium">Knowledge Base</span>
                 </a>
 
-                <a href="{{ route('admin.clients.index') }}" class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all hover:bg-white/5">
-                    <i data-lucide="share-2" class="w-5 h-5"></i>
-                    <span class="font-medium">Integration</span>
+                <a href="{{ route('admin.embed-scripts') }}" class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all {{ request()->routeIs('admin.embed-scripts*') ? 'bg-[#4318FF] text-white shadow-[0_10px_20px_-5px_rgba(67,24,255,0.4)]' : 'hover:bg-white/5' }}">
+                    <i data-lucide="code-2" class="w-5 h-5"></i>
+                    <span class="font-medium">Embed Scripts</span>
                 </a>
 
                 <a href="{{ route('admin.invoices.index') }}" class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all {{ request()->routeIs('admin.invoices.*') ? 'bg-[#4318FF] text-white shadow-[0_10px_20px_-5px_rgba(67,24,255,0.4)]' : 'hover:bg-white/5' }}">

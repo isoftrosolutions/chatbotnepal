@@ -308,8 +308,9 @@
     font-weight: 600;
     color: #4f46e5;
     text-decoration: none;
-    cursor: default;
+    transition: color 0.2s;
   }
+  .forgot:hover { color: #4338ca; text-decoration: underline; }
 
   /* SIGN IN BUTTON */
   .btn-signin {
@@ -604,7 +605,7 @@
           <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }} />
           <span>Remember me</span>
         </label>
-        <span class="forgot">Forgot password?</span>
+        <a href="{{ route('password.request') }}" class="forgot">Forgot password?</a>
       </div>
 
       <button type="submit" class="btn-signin">

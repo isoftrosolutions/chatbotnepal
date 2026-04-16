@@ -54,7 +54,7 @@
                     <span class="font-medium">Request Update</span>
                 </a>
 
-                <a href="{{ route('client.profile') }}" class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all {{ request()->routeIs('client.profile*') ? 'bg-indigo-600 text-white shadow-[0_10px_20px_-5px_rgba(79,70,229,0.4)]' : 'hover:bg-white/5' }}">
+                <a href="{{ route('profile.show') }}" class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all {{ request()->routeIs('profile*') || request()->routeIs('client.profile*') ? 'bg-indigo-600 text-white shadow-[0_10px_20px_-5px_rgba(79,70,229,0.4)]' : 'hover:bg-white/5' }}">
                     <i data-lucide="user" class="w-5 h-5"></i>
                     <span class="font-medium">My Profile</span>
                 </a>

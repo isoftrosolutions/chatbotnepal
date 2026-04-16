@@ -3,11 +3,14 @@
 use App\Http\Controllers\Admin\ClientController;
 use App\Http\Controllers\Admin\ConversationController as AdminConversationController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\EmbedScriptController;
 use App\Http\Controllers\Admin\InvoiceController as AdminInvoiceController;
 use App\Http\Controllers\Admin\KnowledgeBaseController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\UsageController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Client\ConversationController;
 use App\Http\Controllers\Client\DashboardController;
 use App\Http\Controllers\Client\EmbedController;
@@ -18,10 +21,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     if (auth()->check()) {
-        return auth()->user()->isAdmin() 
-            ? redirect()->route('admin.dashboard') 
+        return auth()->user()->isAdmin()
+            ? redirect()->route('admin.dashboard')
             : redirect()->route('client.dashboard');
     }
+
     return redirect()->route('login');
 });
 
@@ -30,10 +34,23 @@ Route::middleware('guest')->group(function () {
     Route::get('auth/login', [AuthenticatedSessionController::class, 'create']);
     Route::post('login', [AuthenticatedSessionController::class, 'store']);
     Route::post('auth/login', [AuthenticatedSessionController::class, 'store']);
+
+    Route::get('forgot-password', [ForgotPasswordController::class, 'create'])->name('password.request');
+    Route::post('forgot-password', [ForgotPasswordController::class, 'store'])->name('password.email');
+    Route::get('reset-password', [ResetPasswordController::class, 'create'])->name('password.reset');
+    Route::post('reset-password', [ResetPasswordController::class, 'store'])->name('password.update');
 });
 
 Route::middleware('auth')->group(function () {
     Route::post('auth/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
+
+    // Profile (accessible to all authenticated users — both admin and client)
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.show');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::get('/profile/email/verify', [ProfileController::class, 'emailVerifyForm'])->name('profile.email.verify.form');
+    Route::post('/profile/email/verify', [ProfileController::class, 'emailVerify'])->name('profile.email.verify');
+    Route::get('/profile/password', [ProfileController::class, 'passwordEdit'])->name('profile.password.edit');
+    Route::patch('/profile/password', [ProfileController::class, 'passwordUpdate'])->name('profile.password.update');
 
     Route::prefix('admin')->middleware('admin')->group(function () {
         Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
@@ -45,6 +62,9 @@ Route::middleware('auth')->group(function () {
         Route::put('/clients/{id}', [ClientController::class, 'update'])->name('admin.clients.update');
         Route::delete('/clients/{id}', [ClientController::class, 'destroy'])->name('admin.clients.destroy');
         Route::post('/clients/{id}/toggle', [ClientController::class, 'toggle'])->name('admin.clients.toggle');
+
+        Route::get('/embed-scripts', [EmbedScriptController::class, 'index'])->name('admin.embed-scripts');
+        Route::get('/embed-scripts/{id}', [EmbedScriptController::class, 'show'])->name('admin.embed-scripts.show');
 
         Route::get('/knowledge-base', [KnowledgeBaseController::class, 'overview'])->name('admin.knowledge-base');
 
