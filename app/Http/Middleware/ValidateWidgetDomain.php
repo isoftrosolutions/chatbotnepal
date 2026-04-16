@@ -59,10 +59,13 @@ class ValidateWidgetDomain
 
     private function getAllowedDomains(Request $request): array
     {
-        $token = $request->input('token') ?? $request->route('token');
+        $identifier = $request->input('token') ?? $request->route('token') ?? $request->input('site_id');
 
-        if ($token) {
-            $user = User::where('api_token', $token)->first();
+        if ($identifier) {
+            $user = User::where('api_token', $identifier)
+                ->orWhere('site_id', $identifier)
+                ->first();
+
             if ($user && $user->website_url) {
                 $parsed = parse_url($user->website_url);
                 $host = $parsed['host'] ?? null;
