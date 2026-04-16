@@ -23,6 +23,7 @@ class User extends Authenticatable
         'plan',
         'status',
         'api_token',
+        'site_id',
         'chatbot_enabled',
         'last_login_at',
     ];
@@ -34,9 +35,9 @@ class User extends Authenticatable
 
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'last_login_at'     => 'datetime',
-        'password'          => 'hashed',
-        'chatbot_enabled'   => 'boolean',
+        'last_login_at' => 'datetime',
+        'password' => 'hashed',
+        'chatbot_enabled' => 'boolean',
     ];
 
     protected static function booted(): void
@@ -45,7 +46,18 @@ class User extends Authenticatable
             if (empty($user->api_token)) {
                 $user->api_token = Str::random(64);
             }
+            if (empty($user->site_id)) {
+                $user->site_id = self::generateSiteId($user->company_name ?? $user->name);
+            }
         });
+    }
+
+    public static function generateSiteId(?string $name): string
+    {
+        $base = Str::slug($name ?? 'client', '');
+        $unique = Str::lower(Str::random(6));
+
+        return $base ? substr($base, 0, 20).'-'.$unique : 'client-'.$unique;
     }
 
     public function knowledgeBases(): HasMany

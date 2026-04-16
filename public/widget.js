@@ -1,13 +1,11 @@
 (function() {
     // 1. Configuration & Constants
     const SCRIPT_TAG = document.currentScript;
-    const API_TOKEN = SCRIPT_TAG.getAttribute('data-token');
-    // Derive API base from the script's own src so it always points to ChatBot Nepal,
-    // not the client's website where the widget is embedded.
+    const SITE_ID = SCRIPT_TAG.getAttribute('data-site-id');
     const BASE_URL = new URL(SCRIPT_TAG.src).origin;
-    
-    if (!API_TOKEN) {
-        console.error('ChatBot Nepal: Missing data-token attribute.');
+
+    if (!SITE_ID) {
+        console.error('ChatBot Nepal: Missing data-site-id attribute.');
         return;
     }
 
@@ -94,16 +92,26 @@
         `;
         document.body.appendChild(container);
 
-        // Fetch Config
-        fetch(`${BASE_URL}/api/widget-config/${API_TOKEN}`)
+        let sessionToken = null;
+
+        function initSession() {
+            return fetch(`${BASE_URL}/api/widget/session`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ site_id: SITE_ID })
+            })
             .then(r => r.json())
             .then(data => {
-                config = { ...config, ...data };
-                updateTheme();
-                addMessage('bot', config.welcome_message);
+                if (data.session_token) {
+                    sessionToken = data.session_token;
+                    config = { ...config, ...data.config };
+                    updateTheme();
+                    addMessage('bot', config.welcome_message);
+                }
             });
+        }
 
-        setupEvents();
+        initSession().then(() => setupEvents());
     }
 
     // 5. Helper Functions
@@ -120,16 +128,23 @@
         const sendMessage = () => {
             const msg = input.value.trim();
             if (!msg) return;
-            
+            if (!sessionToken) {
+                addMessage('bot', "Chat not ready. Please refresh the page.");
+                return;
+            }
+
             addMessage('visitor', msg);
             input.value = '';
             showTyping();
 
             fetch(`${BASE_URL}/api/chat`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Session-Token': sessionToken
+                },
                 body: JSON.stringify({
-                    token: API_TOKEN,
+                    site_id: SITE_ID,
                     message: msg,
                     visitor_id: visitorId,
                     conversation_id: conversationId,

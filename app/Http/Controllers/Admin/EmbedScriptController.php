@@ -46,6 +46,8 @@ class EmbedScriptController extends Controller
 
     private function generateEmbedScript(User $client): string
     {
-        return '<script src="'.config('app.url').'/widget.js" data-token="'.$client->api_token.'" defer></script>';
+        $siteId = $client->site_id ?? $client->api_token;
+
+        return '<script src="'.config('app.url').'/widget.js" data-site-id="'.$siteId.'" defer></script>';
     }
 }

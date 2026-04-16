@@ -14,7 +14,11 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         RateLimiter::for('chat', function (Request $request) {
-            return Limit::perMinute(30)->by($request->input('token', $request->ip()));
+            return Limit::perMinute(30)->by($request->input('site_id', $request->ip()));
+        });
+
+        RateLimiter::for('session', function (Request $request) {
+            return Limit::perMinute(10)->by($request->input('site_id', $request->ip()));
         });
     }
 }
