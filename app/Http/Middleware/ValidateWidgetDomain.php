@@ -22,7 +22,11 @@ class ValidateWidgetDomain
             return response()->json([
                 'success' => false,
                 'error' => 'Domain not authorized',
-            ], 403);
+            ], 403)->withHeaders([
+                'Access-Control-Allow-Origin' => $origin,
+                'Access-Control-Allow-Methods' => 'GET, POST, OPTIONS',
+                'Access-Control-Allow-Headers' => 'Content-Type, Authorization, X-Session-Token',
+            ]);
         }
 
         if (! $requestOrigin && ! app()->environment('local')) {
@@ -32,7 +36,14 @@ class ValidateWidgetDomain
             ], 403);
         }
 
-        return $next($request);
+        $response = $next($request);
+
+        return $response->withHeaders([
+            'Access-Control-Allow-Origin' => $origin ?: '*',
+            'Access-Control-Allow-Methods' => 'GET, POST, OPTIONS',
+            'Access-Control-Allow-Headers' => 'Content-Type, Authorization, X-Session-Token',
+            'Access-Control-Allow-Credentials' => 'true',
+        ]);
     }
 
     private function getAllowedDomains(Request $request): array

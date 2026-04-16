@@ -13,16 +13,23 @@ class WidgetSessionController extends Controller
     public function createSession(Request $request): JsonResponse
     {
         $request->validate([
-            'site_id' => 'required|string',
+            'site_id' => 'nullable|string',
+            'token' => 'nullable|string',
         ]);
 
-        $user = User::where('site_id', $request->site_id)
+        $identifier = $request->site_id ?? $request->token;
+
+        if (! $identifier) {
+            return response()->json(['error' => 'site_id or token required'], 400);
+        }
+
+        $user = User::where('site_id', $identifier)
             ->where('chatbot_enabled', true)
             ->where('status', 'active')
             ->first();
 
         if (! $user) {
-            $user = User::where('api_token', $request->site_id)
+            $user = User::where('api_token', $identifier)
                 ->where('chatbot_enabled', true)
                 ->where('status', 'active')
                 ->first();
