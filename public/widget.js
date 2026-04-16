@@ -84,7 +84,7 @@
                         <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path></svg>
                     </button>
                 </div>
-                <div id="cbn-branding">Powered by <a href="https://chatbotnepal.com" target="_blank">ChatBot Nepal</a></div>
+                <div id="cbn-branding">Powered by <a href="https://chatbotnepal.isoftroerp.com/" target="_blank">ChatBot Nepal</a></div>
             </div>
             <div id="cbn-button">
                 <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"></path></svg>
