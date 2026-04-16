@@ -7,6 +7,8 @@ use App\Http\Controllers\Api\WidgetConfigController;
 use App\Http\Controllers\Api\WidgetSessionController;
 use Illuminate\Support\Facades\Route;
 
+Route::options('/widget/session', fn () => response()->noContent());
+
 Route::post('/widget/session', [WidgetSessionController::class, 'createSession'])
     ->middleware('throttle:session')
     ->withoutMiddleware('widget.domain');

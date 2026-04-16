@@ -326,10 +326,6 @@
 
             sendBtn.disabled = true;
 
-            const eventSource = new EventSource(`${BASE_URL}/api/chat/stream`, {
-                withCredentials: false
-            });
-
             let conversationIdValue = null;
 
             fetch(`${BASE_URL}/api/chat/stream`, {
@@ -356,7 +352,7 @@
 
                 function read() {
                     reader.read().then(({ done, value }) => {
-                        if (done) return;
+                        if (done) { sendBtn.disabled = false; return; }
 
                         const chunk = decoder.decode(value);
                         const lines = chunk.split('\n');
@@ -385,7 +381,6 @@
                             conversationId = conversationIdValue;
                             sessionStorage.setItem('cbn_conversation_id', conversationId);
                             sendBtn.disabled = false;
-                            eventSource.close();
                         } else {
                             read();
                         }
@@ -399,7 +394,6 @@
                 removeStreamingIndicator();
                 botBubble.innerText = "I'm sorry, I'm having trouble connecting right now. Please try again later.";
                 sendBtn.disabled = false;
-                eventSource.close();
             });
         }
 
@@ -469,7 +463,11 @@
         bubble.className = 'cbn-msg-bubble';
         bubble.innerHTML = '<div class="cbn-thinking"><div class="cbn-thinking-dot"></div><div class="cbn-thinking-dot"></div><div class="cbn-thinking-dot"></div></div>';
 
+        const time = document.createElement('div');
+        time.className = 'cbn-msg-time';
+
         content.appendChild(bubble);
+        content.appendChild(time);
         msgDiv.appendChild(content);
 
         container.appendChild(msgDiv);
