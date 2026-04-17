@@ -243,31 +243,7 @@
         }
         .cbn-msg.visitor .cbn-msg-time { text-align: right; }
 
-        /* ── THINKING DOTS ── */
-        .cbn-thinking {
-            display: flex; gap: 5px; padding: 4px 2px; align-items: center;
-        }
-        .cbn-thinking-dot {
-            width: 6px; height: 6px; border-radius: 50%;
-            background: ${T.s4};
-            animation: cbn-think 1.2s infinite ease-in-out;
-        }
-        .cbn-thinking-dot:nth-child(1) { animation-delay: 0s;    }
-        .cbn-thinking-dot:nth-child(2) { animation-delay: 0.18s; }
-        .cbn-thinking-dot:nth-child(3) { animation-delay: 0.36s; }
-        @keyframes cbn-think {
-            0%,60%,100% { transform: translateY(0);   background: ${T.s4}; }
-            30%          { transform: translateY(-6px); background: ${T.lime}; }
-        }
 
-        /* ── STREAMING CURSOR ── */
-        .cbn-streaming .cbn-msg-bubble::after {
-            content: ''; display: inline-block;
-            width: 2px; height: 13px; vertical-align: middle;
-            background: ${T.lime}; margin-left: 3px; border-radius: 1px;
-            animation: cbn-blink 0.8s step-end infinite;
-        }
-        @keyframes cbn-blink { 0%,49% { opacity: 1; } 50%,100% { opacity: 0; } }
 
         /* ── INPUT AREA ── */
         #cbn-input-area {
@@ -603,7 +579,7 @@
     function showStreamingIndicator() {
         const container = document.getElementById('cbn-messages');
         const msgDiv    = document.createElement('div');
-        msgDiv.className = 'cbn-msg bot cbn-streaming';
+        msgDiv.className = 'cbn-msg bot';
 
         msgDiv.appendChild(createAvatarElement('bot'));
 
@@ -612,7 +588,6 @@
 
         const bubble = document.createElement('div');
         bubble.className = 'cbn-msg-bubble';
-        bubble.innerHTML = '<div class="cbn-thinking"><div class="cbn-thinking-dot"></div><div class="cbn-thinking-dot"></div><div class="cbn-thinking-dot"></div></div>';
 
         const time = document.createElement('div');
         time.className = 'cbn-msg-time';
@@ -627,23 +602,11 @@
     }
 
     function appendToBubble(bubble, text) {
-        if (bubble.querySelector('.cbn-thinking')) {
-            bubble.innerHTML = '';
-        }
-        const existingHtml = bubble.innerHTML.replace('<span class="cbn-cursor"></span>', '');
-        bubble.innerHTML = existingHtml + text + '<span class="cbn-cursor"></span>';
+        bubble.textContent = (bubble.textContent || '') + text;
         scrollToBottom();
     }
 
     function removeStreamingIndicator() {
-        const streaming = document.querySelector('.cbn-streaming');
-        if (streaming) {
-            streaming.classList.remove('cbn-streaming');
-            const bubble = streaming.querySelector('.cbn-msg-bubble');
-            if (bubble) {
-                bubble.innerHTML = bubble.innerHTML.replace('<span class="cbn-cursor"></span>', '');
-            }
-        }
     }
 
     function addMessageTime(msgDiv) {
