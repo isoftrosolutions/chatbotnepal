@@ -9,7 +9,7 @@ Header always set Access-Control-Max-Age "86400"
     </IfModule>
 
     RewriteEngine On
-    RewriteBase /ai
+    RewriteBase /
 
     RewriteCond %{REQUEST_METHOD} OPTIONS
     RewriteRule ^(.*)$ /index.php [L]
