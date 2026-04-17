@@ -71,13 +71,7 @@ class ValidateWidgetDomain
             ], 403)->withHeaders($denyHeaders);
         }
 
-        if (! $requestOrigin && ! app()->environment('local')) {
-            return response()->json([
-                'success' => false,
-                'error' => 'Origin verification failed',
-            ], 403);
-        }
-
+        // No origin header = server-side/tool call, not a browser cross-origin request — allow it through
         $response = $next($request);
 
         $successHeaders = [

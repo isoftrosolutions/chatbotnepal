@@ -249,6 +249,6 @@ class StreamChatController extends Controller
             return null;
         }
 
-        return $parsed['scheme'].'://'.$parsed['host'].($parsed['port'] ? ':'.$parsed['port'] : '');
+        return $parsed['scheme'].'://'.$parsed['host'].(isset($parsed['port']) ? ':'.$parsed['port'] : '');
     }
 }
