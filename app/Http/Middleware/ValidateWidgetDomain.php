@@ -27,7 +27,7 @@ class ValidateWidgetDomain
                 $headers['Access-Control-Allow-Credentials'] = 'true';
             }
 
-            return $response->withHeaders($headers);
+            return $this->applyHeaders($response, $headers);
         }
 
         // Valid session token means the widget already authenticated — skip domain check
@@ -47,7 +47,7 @@ class ValidateWidgetDomain
                     $headers['Access-Control-Allow-Credentials'] = 'true';
                 }
 
-                return $response->withHeaders($headers);
+                return $this->applyHeaders($response, $headers);
             }
         }
 
@@ -83,7 +83,16 @@ class ValidateWidgetDomain
             $successHeaders['Access-Control-Allow-Credentials'] = 'true';
         }
 
-        return $response->withHeaders($successHeaders);
+        return $this->applyHeaders($response, $successHeaders);
+    }
+
+    private function applyHeaders(Response $response, array $headers): Response
+    {
+        foreach ($headers as $key => $value) {
+            $response->headers->set($key, $value);
+        }
+
+        return $response;
     }
 
     private function getAllowedDomains(Request $request): array
