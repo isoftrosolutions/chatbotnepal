@@ -12,6 +12,30 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; }
+
+        @keyframes slide-in {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .animate-slide-in {
+            animation: slide-in 0.3s ease-out;
+        }
+
+        @keyframes fade-in {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .animate-fade-in {
+            animation: fade-in 0.2s ease-out;
+        }
     </style>
 </head>
 <body class="bg-[#F4F7FE] text-gray-800">
@@ -99,27 +123,93 @@
             </header>
 
             <!-- Scrollable Content -->
-            <div class="flex-1 overflow-y-auto p-8 pt-2">
-                @if(session('success'))
-                    <div class="mb-6 p-4 bg-green-50 border border-green-100 rounded-2xl text-green-600 text-sm flex items-center gap-3">
-                        <i data-lucide="check-circle" class="w-5 h-5"></i>
-                        {{ session('success') }}
-                    </div>
-                @endif
-                @if(session('error'))
-                    <div class="mb-6 p-4 bg-red-50 border border-red-100 rounded-2xl text-red-600 text-sm flex items-center gap-3">
-                        <i data-lucide="alert-circle" class="w-5 h-5"></i>
-                        {{ session('error') }}
-                    </div>
-                @endif
-                
+            <div class="flex-1 overflow-y-auto p-8 pt-2" id="main-content">
+                <!-- Toast Notifications -->
+                <div id="toast-container" class="fixed top-4 right-4 z-50 space-y-2">
+                    @if(session('success'))
+                        <div class="toast-notification animate-slide-in bg-[#E2FFF3] border border-[#05CD99]/20 rounded-2xl p-4 text-[#05CD99] shadow-lg flex items-center gap-3 max-w-md">
+                            <i data-lucide="check-circle" class="w-5 h-5 flex-shrink-0"></i>
+                            <span class="text-sm font-medium">{{ session('success') }}</span>
+                            <button onclick="closeToast(this)" class="ml-auto text-[#05CD99]/60 hover:text-[#05CD99] transition-colors">
+                                <i data-lucide="x" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    @endif
+                    @if(session('error'))
+                        <div class="toast-notification animate-slide-in bg-[#FEECEC] border border-[#EE5D50]/20 rounded-2xl p-4 text-[#EE5D50] shadow-lg flex items-center gap-3 max-w-md">
+                            <i data-lucide="alert-circle" class="w-5 h-5 flex-shrink-0"></i>
+                            <span class="text-sm font-medium">{{ session('error') }}</span>
+                            <button onclick="closeToast(this)" class="ml-auto text-[#EE5D50]/60 hover:text-[#EE5D50] transition-colors">
+                                <i data-lucide="x" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    @endif
+                </div>
+
                 @yield('content')
+            </div>
+
+            <!-- Loading Overlay -->
+            <div id="loading-overlay" class="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 hidden flex items-center justify-center">
+                <div class="bg-white rounded-3xl p-8 shadow-2xl flex items-center gap-4">
+                    <div class="animate-spin w-6 h-6 border-2 border-indigo-600 border-t-transparent rounded-full"></div>
+                    <span class="text-[#1B1B38] font-medium">Loading...</span>
+                </div>
             </div>
         </main>
     </div>
 
     <script>
+        // Initialize Lucide icons
         lucide.createIcons();
+
+        // Toast notification functions
+        function closeToast(button) {
+            const toast = button.closest('.toast-notification');
+            toast.style.transform = 'translateX(100%)';
+            toast.style.opacity = '0';
+            setTimeout(() => {
+                toast.remove();
+            }, 300);
+        }
+
+        // Auto-hide toasts after 5 seconds
+        document.addEventListener('DOMContentLoaded', function() {
+            const toasts = document.querySelectorAll('.toast-notification');
+            toasts.forEach((toast, index) => {
+                setTimeout(() => {
+                    if (toast.parentNode) {
+                        closeToast(toast.querySelector('button'));
+                    }
+                }, 5000 + (index * 500)); // Stagger the auto-hide
+            });
+        });
+
+        // Loading functions
+        function showLoading() {
+            document.getElementById('loading-overlay').classList.remove('hidden');
+        }
+
+        function hideLoading() {
+            document.getElementById('loading-overlay').classList.add('hidden');
+        }
+
+        // Form submission loading
+        document.addEventListener('DOMContentLoaded', function() {
+            const forms = document.querySelectorAll('form');
+            forms.forEach(form => {
+                form.addEventListener('submit', function() {
+                    // Only show loading for forms that might take time
+                    if (form.action.includes('request-update') || form.action.includes('pay')) {
+                        showLoading();
+                    }
+                });
+            });
+        });
+
+        // Global functions for pages to use
+        window.showLoading = showLoading;
+        window.hideLoading = hideLoading;
     </script>
 </body>
 </html>

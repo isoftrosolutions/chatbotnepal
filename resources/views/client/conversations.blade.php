@@ -35,23 +35,23 @@
 </div>
 
 <!-- Conversations Grid -->
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
     @forelse($conversations as $conv)
-    <div class="bg-white rounded-3xl shadow-sm border border-gray-100 hover:shadow-lg transition-all duration-300 cursor-pointer group conversation-card"
+    <div class="bg-white rounded-3xl shadow-sm border border-gray-100 hover:shadow-xl hover:scale-[1.02] transition-all duration-300 cursor-pointer group conversation-card transform"
          data-url="{{ route('client.conversations.show', $conv->id) }}">
-        <div class="p-6">
+        <div class="p-4 lg:p-6">
             <!-- Header -->
-            <div class="flex items-start justify-between mb-4">
-                <div class="flex items-center gap-3">
-                    <div class="w-12 h-12 bg-indigo-50 rounded-2xl flex items-center justify-center group-hover:bg-indigo-100 transition-colors">
-                        <i data-lucide="user" class="w-6 h-6 text-indigo-600"></i>
+            <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-4">
+                <div class="flex items-center gap-3 min-w-0 flex-1">
+                    <div class="w-10 h-10 lg:w-12 lg:h-12 bg-indigo-50 rounded-2xl flex items-center justify-center group-hover:bg-indigo-100 transition-colors flex-shrink-0">
+                        <i data-lucide="user" class="w-5 h-5 lg:w-6 lg:h-6 text-indigo-600"></i>
                     </div>
-                    <div>
-                        <h3 class="font-bold text-[#1B1B38] text-lg leading-none">{{ $conv->visitor_name ?? 'Anonymous Visitor' }}</h3>
-                        <p class="text-sm text-gray-400 mt-1">{{ $conv->visitor_email ?? 'No email provided' }}</p>
+                    <div class="min-w-0 flex-1">
+                        <h3 class="font-bold text-[#1B1B38] text-base lg:text-lg leading-tight truncate">{{ $conv->visitor_name ?? 'Anonymous Visitor' }}</h3>
+                        <p class="text-sm text-gray-400 mt-1 truncate">{{ $conv->visitor_email ?? 'No email provided' }}</p>
                     </div>
                 </div>
-                <div class="flex items-center gap-2">
+                <div class="flex items-center justify-end sm:justify-start flex-shrink-0">
                     <span class="px-2.5 py-1 rounded-xl text-[10px] font-bold uppercase tracking-wider {{ $conv->status === 'active' ? 'bg-[#E2FFF3] text-[#05CD99]' : 'bg-gray-100 text-gray-500' }}">
                         {{ ucfirst($conv->status) }}
                     </span>

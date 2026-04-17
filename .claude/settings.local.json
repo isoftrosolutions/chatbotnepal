@@ -56,7 +56,9 @@
       "Bash(python -c ' *)",
       "Bash(python3 -c ' *)",
       "Bash(python3 -c \"import sys,re; body=sys.stdin.read\\(\\); links=re.findall\\(r'href=[\\\\\"\\\\']\\(.*?\\)[\\\\\"\\\\']\\\\s*', body\\); [print\\(l\\) for l in links]\")",
-      "Bash(python *)"
+      "Bash(python *)",
+      "Bash(unzip -l \"/d/Downloads/stitch_chatbot_nepal_landing_page.zip\")",
+      "Bash(unzip *)"
     ]
   }
 }

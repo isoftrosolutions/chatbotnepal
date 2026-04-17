@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ChatBot Nepal | Himalayan Precision in AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary-container": "#783d01",
+                    "inverse-surface": "#2e3132",
+                    "tertiary-fixed-dim": "#ffb783",
+                    "surface-tint": "#006972",
+                    "on-error-container": "#93000a",
+                    "tertiary-fixed": "#ffdcc5",
+                    "on-surface-variant": "#3e494a",
+                    "surface-container": "#edeeef",
+                    "outline-variant": "#bec8ca",
+                    "on-primary-fixed-variant": "#004f56",
+                    "secondary": "#8e4e14",
+                    "primary": "#00535b",
+                    "secondary-fixed": "#ffdcc4",
+                    "outline": "#6f797a",
+                    "surface-container-low": "#f3f4f5",
+                    "on-secondary": "#ffffff",
+                    "on-primary": "#ffffff",
+                    "tertiary-container": "#8e5426",
+                    "primary-fixed": "#9ff0fb",
+                    "on-tertiary": "#ffffff",
+                    "inverse-on-surface": "#f0f1f2",
+                    "on-surface": "#191c1d",
+                    "on-primary-fixed": "#001f23",
+                    "on-tertiary-fixed": "#301400",
+                    "on-tertiary-container": "#ffd7bd",
+                    "surface-container-high": "#e7e8e9",
+                    "on-secondary-fixed": "#2f1400",
+                    "tertiary": "#713d10",
+                    "error": "#ba1a1a",
+                    "surface-variant": "#e1e3e4",
+                    "on-secondary-fixed-variant": "#6f3800",
+                    "primary-container": "#006d77",
+                    "surface-bright": "#f8f9fa",
+                    "on-primary-container": "#9becf7",
+                    "on-error": "#ffffff",
+                    "primary-fixed-dim": "#82d3de",
+                    "on-background": "#191c1d",
+                    "on-tertiary-fixed-variant": "#6d390c",
+                    "inverse-primary": "#82d3de",
+                    "secondary-container": "#ffab69",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-container-highest": "#e1e3e4",
+                    "secondary-fixed-dim": "#ffb780",
+                    "surface": "#f8f9fa",
+                    "surface-dim": "#d9dadb",
+                    "background": "#f8f9fa",
+                    "error-container": "#ffdad6"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Plus Jakarta Sans"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .tonal-transition {
+            transition: background-color 0.3s ease;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body selection:bg-primary-fixed selection:text-on-primary-fixed">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-slate-50/80 dark:bg-slate-950/80 backdrop-blur-xl shadow-sm dark:shadow-none">
+<div class="flex justify-between items-center px-6 h-16 w-full max-w-screen-xl mx-auto">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-teal-700 dark:text-teal-400 scale-95 active:duration-100" data-icon="menu">menu</span>
+<span class="text-xl font-bold tracking-tight text-teal-800 dark:text-teal-200 font-headline">ChatBot Nepal</span>
+</div>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="professional male portrait avatar with neutral background and soft studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDs5QDyVpP_TKFnvBDuhZeDygJWSrFI0OIwvb36sRkQmhTvMVuwrXOEVCzQFzOSIiLlNpnhThi3Q8P5WFJj8ncnefjeey2JHLwYAPbL3KVYngGbGFNnQnOtKmIxpGHpd6ZT5Y77AErRlAuApcJK1NFFghkYYymTbq_2q5kaIZ2CZLKTJFiogF66fEwxqT6kDTay5dk_jgXfvmY8t7eXaus97fnjSz4258Cr2104gyX9P2It2vdmREZZ7sGUJ7SeWmV5UBNpTGpqN54"/>
+</div>
+</div>
+</header>
+<!-- NavigationDrawer (Mobile Focus Overlay) - Initially Hidden for UI focus -->
+<div class="hidden fixed inset-0 bg-on-background/20 backdrop-blur-sm z-[55]"></div>
+<aside class="fixed inset-y-0 left-0 z-[60] flex flex-col p-6 bg-white dark:bg-slate-900 rounded-r-3xl h-full w-80 shadow-2xl shadow-teal-900/10 -translate-x-full transition-transform duration-300">
+<div class="mb-8">
+<h2 class="text-2xl font-black text-teal-900 dark:text-teal-100 font-headline">ChatBot Nepal</h2>
+</div>
+<nav class="flex flex-col gap-2">
+<a class="bg-teal-50 dark:bg-teal-950/30 text-teal-800 dark:text-teal-200 rounded-xl px-4 py-3 font-bold flex items-center gap-4" href="#">
+<span class="material-symbols-outlined" data-icon="lightbulb">lightbulb</span> Solutions
+            </a>
+<a class="text-slate-600 dark:text-slate-400 px-4 py-3 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl flex items-center gap-4" href="#">
+<span class="material-symbols-outlined" data-icon="payments">payments</span> Pricing
+            </a>
+<a class="text-slate-600 dark:text-slate-400 px-4 py-3 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl flex items-center gap-4" href="#">
+<span class="material-symbols-outlined" data-icon="landscape">landscape</span> About Nepal
+            </a>
+<a class="text-slate-600 dark:text-slate-400 px-4 py-3 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl flex items-center gap-4" href="#">
+<span class="material-symbols-outlined" data-icon="receipt_long">receipt_long</span> Case Studies
+            </a>
+<a class="text-slate-600 dark:text-slate-400 px-4 py-3 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl flex items-center gap-4" href="#">
+<span class="material-symbols-outlined" data-icon="mail">mail</span> Contact
+            </a>
+</nav>
+</aside>
+<main class="pt-16">
+<!-- Hero Section -->
+<section class="relative px-6 py-12 flex flex-col gap-8 overflow-hidden bg-surface-container-low">
+<div class="relative z-10 space-y-4">
+<span class="inline-block px-4 py-1.5 rounded-full bg-primary-container text-on-primary-container text-xs font-bold tracking-widest uppercase font-headline">AI for the Himalayas</span>
+<h1 class="text-4xl font-extrabold tracking-tight text-primary leading-[1.1] font-headline">Automate your Nepali business with precision.</h1>
+<p class="text-on-surface-variant text-lg leading-relaxed">Multilingual AI solutions crafted for the local market. Seamlessly speak Nepali and English with your customers.</p>
+<div class="flex flex-col gap-4 pt-4">
+<button class="w-full bg-primary-container text-on-primary-container font-bold py-4 rounded-xl shadow-lg shadow-primary-container/20 flex justify-center items-center gap-2">
+                        Get Started <span class="material-symbols-outlined text-lg" data-icon="arrow_forward">arrow_forward</span>
+</button>
+<button class="w-full bg-surface-container-lowest text-primary font-bold py-4 rounded-xl border border-primary/10">View Solutions</button>
+</div>
+</div>
+<!-- Chat Mockup -->
+<div class="relative mt-8">
+<div class="bg-surface-container-lowest rounded-2xl shadow-xl shadow-teal-900/5 p-4 border border-outline-variant/20">
+<div class="flex items-center gap-3 mb-6 pb-4 border-b border-surface-container">
+<div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined" data-icon="smart_toy">smart_toy</span>
+</div>
+<div>
+<p class="font-bold text-sm">NepalBot Assistant</p>
+<p class="text-[10px] text-green-600 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> Online</p>
+</div>
+</div>
+<div class="space-y-4 text-sm">
+<div class="flex flex-col items-start gap-1 max-w-[85%]">
+<div class="bg-surface-container-high text-on-surface p-3 rounded-2xl rounded-bl-none">
+                                Namaste! How can I help your business grow today?
+                            </div>
+</div>
+<div class="flex flex-col items-end gap-1 ml-auto max-w-[85%]">
+<div class="bg-primary-container text-on-primary p-3 rounded-2xl rounded-br-none">
+                                I want to automate my customer support in Nepali.
+                            </div>
+</div>
+<div class="flex flex-col items-start gap-1 max-w-[85%]">
+<div class="bg-surface-container-high text-on-surface p-3 rounded-2xl rounded-bl-none">
+                                हजुर, हामी नेपाली भाषामा पनि मद्दत गर्न सक्छौं!
+                            </div>
+</div>
+</div>
+</div>
+<!-- Decorative Elements -->
+<div class="absolute -top-4 -right-4 w-24 h-24 bg-secondary/10 rounded-full blur-3xl -z-10"></div>
+</div>
+</section>
+<!-- Problem/Solution Vertical Stack -->
+<section class="px-6 py-16 space-y-6">
+<div class="text-center mb-10">
+<h2 class="text-3xl font-bold font-headline text-primary">Bridge the Gap</h2>
+<p class="text-on-surface-variant mt-2">Solving real problems for Nepali entrepreneurs.</p>
+</div>
+<!-- Card 1 -->
+<div class="bg-surface-container-low p-8 rounded-3xl space-y-4">
+<div class="w-12 h-12 rounded-xl bg-error/10 text-error flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="language">language</span>
+</div>
+<h3 class="text-xl font-bold font-headline">Language Barrier</h3>
+<p class="text-on-surface-variant leading-relaxed">Standard AI models often fail to grasp the nuances of the Nepali language and local dialects.</p>
+</div>
+<!-- Card 2 -->
+<div class="bg-primary-container p-8 rounded-3xl space-y-4 text-on-primary-container">
+<div class="w-12 h-12 rounded-xl bg-white/20 text-white flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="verified">verified</span>
+</div>
+<h3 class="text-xl font-bold font-headline text-white">Precision Native NLP</h3>
+<p class="opacity-90 leading-relaxed">Our custom engines are trained specifically on Nepali syntax, ensuring natural and culturally relevant conversations.</p>
+</div>
+</section>
+<!-- Industries (Use Cases) 2-column Grid -->
+<section class="bg-surface px-6 py-16">
+<h2 class="text-2xl font-bold font-headline text-primary mb-8 text-center">Industry Solutions</h2>
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-surface-container-lowest p-6 rounded-2xl border border-outline-variant/10 text-center space-y-3">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="hotel">hotel</span>
+<p class="font-bold text-sm">Tourism</p>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-2xl border border-outline-variant/10 text-center space-y-3">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="shopping_bag">shopping_bag</span>
+<p class="font-bold text-sm">Retail</p>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-2xl border border-outline-variant/10 text-center space-y-3">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="account_balance">account_balance</span>
+<p class="font-bold text-sm">Banking</p>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-2xl border border-outline-variant/10 text-center space-y-3">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="health_and_safety">health_and_safety</span>
+<p class="font-bold text-sm">Health</p>
+</div>
+</div>
+</section>
+<!-- Chat Demo Section -->
+<section class="px-6 py-16 bg-surface-container-low">
+<div class="text-center mb-8">
+<h2 class="text-2xl font-bold font-headline text-primary">See it in Action</h2>
+<p class="text-on-surface-variant text-sm mt-1">Experience the precision of NepalBot</p>
+</div>
+<div class="bg-surface-container-lowest rounded-3xl overflow-hidden shadow-xl border border-outline-variant/20">
+<div class="bg-primary-container p-4 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-sm" data-icon="support_agent">support_agent</span>
+</div>
+<span class="text-white font-bold text-sm">Himalayan Support AI</span>
+</div>
+<span class="material-symbols-outlined text-white/70" data-icon="more_vert">more_vert</span>
+</div>
+<div class="h-80 p-6 flex flex-col gap-4 overflow-y-auto">
+<div class="flex items-start gap-2">
+<div class="bg-surface-container-high p-3 rounded-2xl rounded-tl-none text-xs max-w-[80%] leading-relaxed">
+                            Hello! I am here to help you navigate our services in Kathmandu. What's on your mind?
+                        </div>
+</div>
+<div class="flex items-end justify-end gap-2">
+<div class="bg-primary-container text-on-primary p-3 rounded-2xl rounded-tr-none text-xs max-w-[80%] leading-relaxed">
+                            मलाई एउटा होटल बुक गर्नु छ।
+                        </div>
+</div>
+<div class="flex items-start gap-2">
+<div class="bg-surface-container-high p-3 rounded-2xl rounded-tl-none text-xs max-w-[80%] leading-relaxed">
+                            हजुर, कुन ठाउँमा र कस्तो मूल्यमा होटल खोज्दै हुनुहुन्छ? म तपाइँलाई उत्कृष्ट विकल्पहरू देखाउन सक्छु।
+                        </div>
+</div>
+</div>
+<div class="p-4 border-t border-surface-container flex items-center gap-2">
+<div class="flex-1 bg-surface-container p-3 rounded-xl text-xs text-on-surface-variant">Type your message...</div>
+<button class="bg-primary-container w-10 h-10 rounded-xl flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-lg" data-icon="send">send</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Pricing Section -->
+<section class="px-6 py-16 bg-white">
+<div class="text-center mb-10">
+<h2 class="text-3xl font-bold font-headline text-primary">Flexible Growth</h2>
+<p class="text-on-surface-variant mt-2">Scalable plans for every scale of business.</p>
+</div>
+<div class="bg-surface-container-lowest p-8 rounded-[2rem] border-2 border-primary-container/20 relative">
+<div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-secondary text-white px-6 py-1 rounded-full text-xs font-bold uppercase tracking-wider">Most Popular</div>
+<h3 class="text-xl font-bold text-on-surface font-headline">Business Pro</h3>
+<div class="mt-4 flex items-baseline gap-1">
+<span class="text-4xl font-extrabold text-primary">रू २५,०००</span>
+<span class="text-on-surface-variant text-sm">/mo</span>
+</div>
+<p class="text-sm text-on-surface-variant mt-4">Perfect for growing hotels and e-commerce stores in Nepal.</p>
+<ul class="mt-8 space-y-4">
+<li class="flex items-center gap-3 text-sm">
+<span class="material-symbols-outlined text-primary" data-icon="check_circle">check_circle</span> 5,000 Chats per month
+                    </li>
+<li class="flex items-center gap-3 text-sm">
+<span class="material-symbols-outlined text-primary" data-icon="check_circle">check_circle</span> Advanced Nepali NLP
+                    </li>
+<li class="flex items-center gap-3 text-sm">
+<span class="material-symbols-outlined text-primary" data-icon="check_circle">check_circle</span> WhatsApp Integration
+                    </li>
+<li class="flex items-center gap-3 text-sm">
+<span class="material-symbols-outlined text-primary" data-icon="check_circle">check_circle</span> 24/7 Priority Support
+                    </li>
+</ul>
+<button class="w-full mt-10 bg-primary text-white font-bold py-4 rounded-2xl">Choose Business Pro</button>
+</div>
+</section>
+<!-- Footer -->
+<footer class="w-full px-6 py-12 flex flex-col items-center gap-6 text-center bg-slate-100 dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800">
+<div class="text-lg font-bold text-teal-800 dark:text-teal-200 font-headline">ChatBot Nepal</div>
+<p class="text-slate-500 dark:text-slate-500 font-body text-sm leading-relaxed">© 2024 ChatBot Nepal. Himalayan Precision in AI.</p>
+<div class="flex flex-wrap justify-center gap-4">
+<a class="text-teal-600 dark:text-teal-400 underline underline-offset-4 text-sm" href="#">Privacy Policy</a>
+<a class="text-slate-500 dark:text-slate-500 text-sm hover:text-teal-500 dark:hover:text-teal-300 transition-opacity opacity-80 hover:opacity-100" href="#">Terms of Service</a>
+<a class="text-slate-500 dark:text-slate-500 text-sm hover:text-teal-500 dark:hover:text-teal-300 transition-opacity opacity-80 hover:opacity-100" href="#">API Status</a>
+</div>
+<div class="flex gap-6 mt-4">
+<span class="material-symbols-outlined text-slate-400" data-icon="facebook">social_leaderboard</span>
+<span class="material-symbols-outlined text-slate-400" data-icon="alternate_email">alternate_email</span>
+<span class="material-symbols-outlined text-slate-400" data-icon="share">share</span>
+</div>
+</footer>
+</main>
+</body></html>
