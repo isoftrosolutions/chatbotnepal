@@ -13,9 +13,12 @@
         welcome_message: 'Namaste! How can I help you today?',
         primary_color: '#10b981',
         bot_name: 'Assistant',
-        bot_avatar_url: null
+        bot_avatar_url: null,
+        show_powered_by: true,
     };
-    let conversationId = sessionStorage.getItem('cbn_conversation_id');
+    let conversationId = sessionStorage.getItem('cbn_conversation_id')
+        ? parseInt(sessionStorage.getItem('cbn_conversation_id'), 10)
+        : null;
     let visitorId = localStorage.getItem('cbn_visitor_id') || uuidv4();
     localStorage.setItem('cbn_visitor_id', visitorId);
     let isWindowOpen = false;
@@ -25,22 +28,6 @@
     /* ─────────────────────────────────────────
        DESIGN TOKENS  (ChatBot Nepal Green)
     ───────────────────────────────────────── */
-    const T = {
-        green: '#10b981',
-        greenDark: '#059669',
-        greenDeep: '#065f46',
-        greenLight: '#d1fae5',
-        greenPale: '#f0fdf4',
-        white: '#ffffff',
-        gray50: '#f9fafb',
-        gray100: '#f3f4f6',
-        gray200: '#e5e7eb',
-        gray400: '#9ca3af',
-        gray500: '#6b7280',
-        gray700: '#374151',
-        gray900: '#111827',
-    };
-
     const styles = `
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
@@ -264,26 +251,6 @@
             30% { transform: translateY(-5px); background: #10b981; }
         }
 
-        /* ── QUICK REPLIES ── */
-        #cn-qr {
-            padding: 8px 14px 4px; display: flex; gap: 6px;
-            flex-wrap: wrap;
-        }
-        .cn-qr {
-            background: #fff; border: 1.5px solid #10b981;
-            color: #059669; border-radius: 999px;
-            padding: 6px 13px; font-size: .77rem;
-            font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 600;
-            cursor: pointer; transition: all .16s cubic-bezier(.34,1.4,.64,1);
-            white-space: nowrap; outline: none;
-        }
-        .cn-qr:hover {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            color: #fff; border-color: transparent;
-            transform: translateY(-2px); box-shadow: 0 4px 12px rgba(16,185,129,.3);
-        }
-        .cn-qr:active { transform: translateY(0); }
-
         /* ── INPUT AREA ── */
         #cn-input-area {
             padding: 10px 12px 12px; border-top: 1px solid #e5e7eb;
@@ -334,6 +301,11 @@
         .cn-footer a { color: #059669; text-decoration: none; font-weight: 600; }
         .cn-footer a:hover { color: #10b981; }
 
+        /* ── ERROR BUBBLE ── */
+        .cn-bubble.error {
+            background: #fef2f2; border-color: #fecaca; color: #b91c1c;
+        }
+
         /* ── MOBILE ── */
         @media (max-width: 480px) {
             #cn-widget { bottom: 18px; right: 18px; }
@@ -345,40 +317,6 @@
             #cn-launcher { bottom: 18px; right: 18px; }
         }
     `;
-
-    /* ─────────────────────────────────────────
-       FLOWS (Quick Reply Menu)
-    ───────────────────────────────────────── */
-    const FLOWS = {
-        __greeting: {
-            getMsg: () => `<strong>Namaste!</strong> Welcome to ${config.business_name}.\n\nI can help you with inquiries about our services. What would you like to know?`,
-            qr: ['Services', 'Pricing', 'Contact Us'],
-        },
-        'Services': {
-            msg: `Our AI chatbot services include:\n\n• Custom knowledge base building\n• 24/7 automated responses\n• Nepali, Hindi & English support\n• Works on any website\n• Monthly updates included`,
-            qr: ['Pricing', 'How It Works', 'Main Menu'],
-        },
-        'Pricing': {
-            msg: `We offer flexible plans:\n\n• <strong>Starter:</strong> Rs. 1,999/mo\n• <strong>Growth:</strong> Rs. 3,999/mo\n• <strong>Pro:</strong> Rs. 6,999/mo\n\nSetup fees vary. Pay yearly and get 2 months FREE!`,
-            qr: ['Services', 'Contact Us', 'Main Menu'],
-        },
-        'How It Works': {
-            msg: `Simple 4-step process:\n\n<strong>1.</strong> We interview you about your business\n<strong>2.</strong> We build your knowledge base\n<strong>3.</strong> We deploy (1 line of code)\n<strong>4.</strong> Your site answers 24/7`,
-            qr: ['Services', 'Contact Us', 'Main Menu'],
-        },
-        'Contact Us': {
-            msg: `We're here to help!\n\n• WhatsApp: 9779811144402\n• Email: info@isoftro.com\n• Based in Kathmandu, Nepal`,
-            qr: ['Services', 'Pricing', 'Main Menu'],
-        },
-        'Main Menu': {
-            msg: `How else can I help you?`,
-            qr: ['Services', 'Pricing', 'Contact Us'],
-        },
-        __default: {
-            msg: `Thanks for your message! A team member will get back to you soon.\n\nFor immediate help, contact us directly.`,
-            qr: ['Contact Us', 'Main Menu'],
-        },
-    };
 
     /* ─────────────────────────────────────────
        INIT — build DOM, inject styles
@@ -444,7 +382,7 @@
                     </div>
                     <div class="cn-intro-text">
                         <strong>AI Business Assistant</strong> — Serving Nepal<br/>
-                        Replies in Nepali, Hindi & English automatically
+                        Replies in Nepali, Hindi &amp; English automatically
                     </div>
                 </div>
 
@@ -465,8 +403,6 @@
                     </div>
                 </div>
 
-                <div id="cn-qr"></div>
-
                 <div id="cn-input-area">
                     <textarea id="cn-input" placeholder="Type your message…" rows="1" aria-label="Message" autocomplete="off"></textarea>
                     <div class="cn-action-btns">
@@ -484,49 +420,49 @@
                     </div>
                 </div>
 
-                <div class="cn-footer">
+                <div class="cn-footer" id="cn-footer">
                     Powered by <a href="https://chatbotnepal.isoftroerp.com/" target="_blank">ChatBot Nepal</a>
                 </div>
             </div>
         `;
         document.body.appendChild(container);
 
-        function initSession() {
-            return fetch(`${BASE_URL}/api/widget/session`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ site_id: SITE_ID })
-            })
-            .then(r => r.json())
-            .then(data => {
-                if (data.session_token) {
-                    sessionToken = data.session_token;
-                    config = { ...config, ...data.config };
-                    updateTheme();
-                    setTimeout(() => bootChat(), 500);
-                }
-            })
-            .catch(() => {
-                setTimeout(() => bootChat(), 500);
-            });
-        }
-
         initSession().then(() => setupEvents());
     }
 
     /* ─────────────────────────────────────────
-       BOOT — show greeting
+       SESSION — fetch token + config from API
+    ───────────────────────────────────────── */
+    function initSession() {
+        return fetch(`${BASE_URL}/api/widget/session`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ site_id: SITE_ID }),
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.session_token) {
+                sessionToken = data.session_token;
+                config = { ...config, ...data.config };
+                applyConfig();
+            }
+        })
+        .catch(() => {})
+        .finally(() => {
+            bootChat();
+        });
+    }
+
+    /* ─────────────────────────────────────────
+       BOOT — show welcome message from config
     ───────────────────────────────────────── */
     function bootChat() {
         const typingEl = document.getElementById('cn-typing');
-
         typingEl.classList.add('show');
         setTimeout(() => {
             typingEl.classList.remove('show');
-            const flow = FLOWS.__greeting;
-            addMsg(flow.getMsg ? flow.getMsg() : flow.msg, 'bot');
-            setQR(flow.qr);
-        }, 1000 + Math.random() * 400);
+            addMsg(config.welcome_message, 'bot');
+        }, 900 + Math.random() * 400);
     }
 
     /* ─────────────────────────────────────────
@@ -534,14 +470,14 @@
     ───────────────────────────────────────── */
     function setupEvents() {
         const launcher = document.getElementById('cn-launcher');
-        const liChat = document.getElementById('li-chat');
-        const liClose = document.getElementById('li-close');
-        const badge = document.getElementById('cn-badge');
-        const win = document.getElementById('cn-window');
+        const liChat   = document.getElementById('li-chat');
+        const liClose  = document.getElementById('li-close');
+        const badge    = document.getElementById('cn-badge');
+        const win      = document.getElementById('cn-window');
         const closeBtn = document.getElementById('cn-close');
-        const minBtn = document.getElementById('cn-min');
-        const input = document.getElementById('cn-input');
-        const sendBtn = document.getElementById('cn-send');
+        const minBtn   = document.getElementById('cn-min');
+        const input    = document.getElementById('cn-input');
+        const sendBtn  = document.getElementById('cn-send');
 
         function openChat() {
             isWindowOpen = true;
@@ -573,20 +509,19 @@
             autoResize();
         });
 
-        function handleInput(text) {
-            text = text.trim();
+        function handleSend() {
+            const text = input.value.trim();
             if (!text || busy) return;
             addMsg(text, 'user');
             input.value = '';
             sendBtn.disabled = true;
             autoResize();
-            setQR([]);
-            processUserMessage(text);
+            sendMessage(text);
         }
 
-        sendBtn.addEventListener('click', () => handleInput(input.value));
-        input.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleInput(input.value); }
+        sendBtn.addEventListener('click', handleSend);
+        input.addEventListener('keydown', e => {
+            if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); }
         });
 
         document.getElementById('cn-mic').addEventListener('click', () => {
@@ -599,32 +534,60 @@
     }
 
     /* ─────────────────────────────────────────
-       PROCESS MESSAGE
+       SEND MESSAGE — POST to /api/chat
     ───────────────────────────────────────── */
-    function processUserMessage(text) {
+    function sendMessage(text) {
         busy = true;
-        const sendBtn = document.getElementById('cn-send');
-        if (sendBtn) sendBtn.disabled = true;
-
         const typingEl = document.getElementById('cn-typing');
+        const sendBtn  = document.getElementById('cn-send');
         typingEl.classList.add('show');
         scrollToBottom();
 
-        setTimeout(() => {
+        const headers = { 'Content-Type': 'application/json' };
+        if (sessionToken) headers['X-Session-Token'] = sessionToken;
+
+        fetch(`${BASE_URL}/api/chat`, {
+            method: 'POST',
+            headers,
+            body: JSON.stringify({
+                site_id: SITE_ID,
+                message: text,
+                visitor_id: visitorId,
+                conversation_id: conversationId || undefined,
+                source_url: window.location.href,
+            }),
+        })
+        .then(r => {
+            if (!r.ok) return r.json().then(d => Promise.reject(d));
+            return r.json();
+        })
+        .then(data => {
+            if (data.reply) {
+                if (data.conversation_id) {
+                    conversationId = data.conversation_id;
+                    sessionStorage.setItem('cbn_conversation_id', conversationId);
+                }
+                addMsg(data.reply, 'bot');
+            } else {
+                addMsg('Sorry, I could not process that. Please try again.', 'bot', true);
+            }
+        })
+        .catch(err => {
+            const msg = (err && err.error) ? err.error : 'Unable to connect. Please check your connection.';
+            addMsg(msg, 'bot', true);
+        })
+        .finally(() => {
             typingEl.classList.remove('show');
             busy = false;
-
-            const key = text.trim();
-            const flow = FLOWS[key] || FLOWS.__default;
-            addMsg(flow.getMsg ? flow.getMsg() : flow.msg, 'bot');
-            setQR(flow.qr);
-        }, 800 + Math.random() * 600);
+            if (sendBtn) sendBtn.disabled = false;
+            scrollToBottom();
+        });
     }
 
     /* ─────────────────────────────────────────
        DOM HELPERS
     ───────────────────────────────────────── */
-    function addMsg(text, role) {
+    function addMsg(text, role, isError) {
         const container = document.getElementById('cn-messages');
         const row = document.createElement('div');
         row.className = `cn-row ${role}`;
@@ -640,8 +603,13 @@
         col.className = 'cn-col';
 
         const bubble = document.createElement('div');
-        bubble.className = 'cn-bubble';
-        bubble.innerHTML = text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
+        bubble.className = 'cn-bubble' + (isError ? ' error' : '');
+        bubble.innerHTML = text
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+            .replace(/\n/g, '<br>');
 
         const time = document.createElement('div');
         time.className = 'cn-ts';
@@ -652,47 +620,28 @@
         row.appendChild(col);
         container.appendChild(row);
         scrollToBottom();
-
         return row;
-    }
-
-    function setQR(replies) {
-        const qrEl = document.getElementById('cn-qr');
-        qrEl.innerHTML = '';
-        if (!replies?.length) return;
-
-        replies.forEach(label => {
-            const b = document.createElement('button');
-            b.className = 'cn-qr';
-            b.textContent = label;
-            b.addEventListener('click', () => {
-                addMsg(label, 'user');
-                const flow = FLOWS[label] || FLOWS.__default;
-                setTimeout(() => {
-                    addMsg(flow.getMsg ? flow.getMsg() : flow.msg, 'bot');
-                    setQR(flow.qr);
-                }, 600);
-            });
-            qrEl.appendChild(b);
-        });
     }
 
     function scrollToBottom() {
         const container = document.getElementById('cn-messages');
-        container.scrollTo({ top: container.scrollHeight, behavior: 'smooth' });
+        if (container) container.scrollTo({ top: container.scrollHeight, behavior: 'smooth' });
     }
 
     function formatTime(date) {
         return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     }
 
-    function updateTheme() {
+    function applyConfig() {
         const nameEl = document.querySelector('.cn-hdr-name');
         if (nameEl) nameEl.textContent = config.business_name;
 
+        const footer = document.getElementById('cn-footer');
+        if (footer && config.show_powered_by === false) footer.style.display = 'none';
+
         if (config.bot_avatar_url) {
-            const avatar = document.getElementById('cn-avatar');
-            if (avatar) avatar.innerHTML = `<img src="${config.bot_avatar_url}" alt="${config.bot_name}">`;
+            const av = document.querySelector('.cn-hdr-avatar');
+            if (av) av.innerHTML = `<img src="${config.bot_avatar_url}" alt="${config.bot_name}" style="width:100%;height:100%;border-radius:12px;object-fit:cover;">`;
         }
     }
 

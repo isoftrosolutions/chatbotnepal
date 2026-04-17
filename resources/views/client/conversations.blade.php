@@ -1,42 +1,161 @@
 @extends('layouts.client')
 @section('title', 'Conversations')
+@section('header', 'Chat History')
 
-<div class="mb-6 flex justify-between items-center">
-    <h2 class="text-xl font-semibold text-gray-900">Chat History</h2>
-    <form method="GET" class="flex gap-2">
-        <input type="text" name="search" value="{{ request('search') }}" placeholder="Search..." class="px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500">
-        <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">Search</button>
-    </form>
+@section('content')
+<!-- Search and Filters -->
+<div class="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 mb-8">
+    <div class="flex flex-col lg:flex-row gap-4 items-start lg:items-center justify-between">
+        <div class="flex-1 max-w-md">
+            <div class="relative">
+                <i data-lucide="search" class="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                <input type="text"
+                       name="search"
+                       value="{{ request('search') }}"
+                       placeholder="Search by visitor name or email..."
+                       class="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-indigo-100 focus:border-indigo-500 outline-none transition-all text-sm"
+                       onkeyup="filterConversations(this.value)">
+            </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+            <select name="status" onchange="filterByStatus(this.value)" class="px-4 py-3 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-indigo-100 focus:border-indigo-500 outline-none text-sm bg-white">
+                <option value="">All Status</option>
+                <option value="active" @if(request('status') === 'active') selected @endif>Active</option>
+                <option value="ended" @if(request('status') === 'ended') selected @endif>Ended</option>
+            </select>
+
+            <select name="sort" onchange="sortConversations(this.value)" class="px-4 py-3 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-indigo-100 focus:border-indigo-500 outline-none text-sm bg-white">
+                <option value="newest" @if(request('sort', 'newest') === 'newest') selected @endif>Newest First</option>
+                <option value="oldest" @if(request('sort') === 'oldest') selected @endif>Oldest First</option>
+                <option value="most_messages" @if(request('sort') === 'most_messages') selected @endif>Most Messages</option>
+            </select>
+        </div>
+    </div>
 </div>
 
-<div class="bg-white rounded-lg shadow overflow-hidden">
-    <table class="w-full">
-        <thead class="bg-gray-50">
-            <tr>
-                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Visitor</th>
-                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
-                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Messages</th>
-                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
-            </tr>
-        </thead>
-        <tbody class="divide-y divide-gray-200">
-            @forelse($conversations as $conv)
-            <tr class="hover:bg-gray-50 cursor-pointer" onclick="window.location='{{ route('client.conversations.show', $conv->id) }}'">
-                <td class="px-4 py-3 text-sm text-gray-900">{{ $conv->visitor_name ?? 'Anonymous' }}</td>
-                <td class="px-4 py-3 text-sm text-gray-500">{{ $conv->visitor_email ?? '-' }}</td>
-                <td class="px-4 py-3 text-sm text-gray-500">{{ $conv->messages->count() }}</td>
-                <td class="px-4 py-3 text-sm">
-                    <span class="px-2 py-1 rounded-full text-xs {{ $conv->status === 'active' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800' }}">
+<!-- Conversations Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    @forelse($conversations as $conv)
+    <div class="bg-white rounded-3xl shadow-sm border border-gray-100 hover:shadow-lg transition-all duration-300 cursor-pointer group conversation-card"
+         data-url="{{ route('client.conversations.show', $conv->id) }}">
+        <div class="p-6">
+            <!-- Header -->
+            <div class="flex items-start justify-between mb-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 bg-indigo-50 rounded-2xl flex items-center justify-center group-hover:bg-indigo-100 transition-colors">
+                        <i data-lucide="user" class="w-6 h-6 text-indigo-600"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-[#1B1B38] text-lg leading-none">{{ $conv->visitor_name ?? 'Anonymous Visitor' }}</h3>
+                        <p class="text-sm text-gray-400 mt-1">{{ $conv->visitor_email ?? 'No email provided' }}</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="px-2.5 py-1 rounded-xl text-[10px] font-bold uppercase tracking-wider {{ $conv->status === 'active' ? 'bg-[#E2FFF3] text-[#05CD99]' : 'bg-gray-100 text-gray-500' }}">
                         {{ ucfirst($conv->status) }}
                     </span>
-                </td>
-                <td class="px-4 py-3 text-sm text-gray-500">{{ $conv->created_at->format('M d, H:i') }}</td>
-            </tr>
-            @empty
-            <tr><td colspan="5" class="px-4 py-8 text-center text-gray-500">No conversations found</td></tr>
-            @endforelse
-        </tbody>
-    </table>
-    <div class="p-4 border-t">{{ $conversations->links() }}</div>
+                </div>
+            </div>
+
+            <!-- Stats -->
+            <div class="space-y-3 mb-4">
+                <div class="flex items-center justify-between">
+                    <span class="text-sm text-gray-500 font-medium">Messages</span>
+                    <span class="text-lg font-bold text-[#1B1B38]">{{ $conv->messages->count() }}</span>
+                </div>
+                <div class="flex items-center justify-between">
+                    <span class="text-sm text-gray-500 font-medium">Duration</span>
+                    <span class="text-sm font-bold text-[#1B1B38]">
+                        @if($conv->messages->count() > 0)
+                            {{ $conv->created_at->diffForHumans($conv->messages->last()->created_at ?? $conv->created_at, true) }}
+                        @else
+                            0 min
+                        @endif
+                    </span>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="flex items-center justify-between pt-4 border-t border-gray-50">
+                <div class="flex items-center gap-2 text-sm text-gray-400">
+                    <i data-lucide="clock" class="w-4 h-4"></i>
+                    <span>{{ $conv->created_at->format('M d, H:i') }}</span>
+                </div>
+                <div class="flex items-center gap-1 text-indigo-600 group-hover:text-indigo-700 transition-colors">
+                    <span class="text-sm font-bold">View Details</span>
+                    <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    @empty
+    <div class="col-span-full">
+        <div class="bg-white rounded-3xl p-12 shadow-sm border border-gray-100 text-center">
+            <div class="w-20 h-20 bg-gray-50 rounded-3xl flex items-center justify-center mx-auto mb-6">
+                <i data-lucide="message-square" class="w-10 h-10 text-gray-300"></i>
+            </div>
+            <h3 class="text-xl font-bold text-[#1B1B38] mb-2">No conversations yet</h3>
+            <p class="text-gray-400 mb-6">When visitors start chatting with your bot, they'll appear here.</p>
+            <a href="{{ route('client.embed-code') }}" class="inline-flex items-center gap-2 px-6 py-3 bg-indigo-600 text-white rounded-2xl font-bold hover:bg-indigo-700 transition-colors">
+                <i data-lucide="code" class="w-4 h-4"></i>
+                Set up your chatbot
+            </a>
+        </div>
+    </div>
+    @endforelse
 </div>
+
+<!-- Pagination -->
+@if($conversations->hasPages())
+<div class="mt-8 flex justify-center">
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-2">
+        {{ $conversations->appends(request()->query())->links() }}
+    </div>
+</div>
+@endif
+@endsection
+
+<script>
+function filterConversations(query) {
+    // Simple client-side filtering for instant feedback
+    const cards = document.querySelectorAll('.conversation-card');
+    cards.forEach(card => {
+        const name = card.querySelector('h3').textContent.toLowerCase();
+        const email = card.querySelector('p').textContent.toLowerCase();
+        const visible = name.includes(query.toLowerCase()) || email.includes(query.toLowerCase());
+        card.style.display = visible ? 'block' : 'none';
+    });
+}
+
+function filterByStatus(status) {
+    const url = new URL(window.location);
+    if (status) {
+        url.searchParams.set('status', status);
+    } else {
+        url.searchParams.delete('status');
+    }
+    window.location = url;
+}
+
+function sortConversations(sort) {
+    const url = new URL(window.location);
+    url.searchParams.set('sort', sort);
+    window.location = url;
+}
+
+// Initialize Lucide icons and card clicks
+document.addEventListener('DOMContentLoaded', function() {
+    lucide.createIcons();
+
+    // Handle conversation card clicks
+    document.querySelectorAll('.conversation-card').forEach(card => {
+        card.addEventListener('click', function() {
+            const url = this.getAttribute('data-url');
+            if (url) {
+                window.location = url;
+            }
+        });
+    });
+});
+</script>
