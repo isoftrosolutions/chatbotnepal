@@ -95,7 +95,7 @@ class StreamChatController extends Controller
         $fullResponse = '';
         $startTime = microtime(true);
 
-        return response()->stream(function () use ($messages, $client, $conversation, $startTime) {
+        return response()->stream(function () use ($messages, $client, $conversation, $startTime, &$fullResponse) {
             $this->grokService->streamChat(
                 $messages,
                 function ($chunk) use (&$fullResponse) {
