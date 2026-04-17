@@ -3,20 +3,19 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\ChatConversation;
 use App\Models\ChatMessage;
-use App\Models\KnowledgeBase;
-use App\Models\Setting;
 use App\Models\TokenUsageLog;
 use App\Models\User;
 use App\Models\WidgetSessionToken;
+use App\Services\ChatService;
 use App\Services\GrokService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
 
 class StreamChatController extends Controller
 {
     private GrokService $grokService;
+
+    private ChatService $chatService;
 
     private const BLOCKED_PATTERNS = [
         '/ignore\s+previous\s+instructions/i',
@@ -30,9 +29,10 @@ class StreamChatController extends Controller
         '/\\[system\\]/i',
     ];
 
-    public function __construct(GrokService $grokService)
+    public function __construct(GrokService $grokService, ChatService $chatService)
     {
         $this->grokService = $grokService;
+        $this->chatService = $chatService;
     }
 
     public function stream(Request $request)
@@ -42,15 +42,15 @@ class StreamChatController extends Controller
         }
 
         $request->validate([
-            'site_id' => 'required|string',
-            'message' => 'required|string|max:1000',
-            'visitor_id' => 'nullable|string|max:64',
+            'site_id'         => 'required|string',
+            'message'         => 'required|string|max:1000',
+            'visitor_id'      => 'nullable|string|max:64',
             'conversation_id' => 'nullable|integer',
-            'source_url' => 'nullable|string|max:500',
+            'source_url'      => 'nullable|string|max:500',
         ]);
 
         $sessionToken = $request->header('X-Session-Token');
-        $client = null;
+        $client       = null;
 
         if ($sessionToken) {
             $session = WidgetSessionToken::where('token', $sessionToken)
@@ -77,26 +77,34 @@ class StreamChatController extends Controller
         }
 
         $cleanedMessage = $this->sanitizeInput($request->message);
+        $conversation   = $this->chatService->getOrCreateConversation(
+            $client,
+            $request->conversation_id,
+            $request->visitor_id,
+            $this->sanitizeUrl($request->source_url)
+        );
 
-        $conversation = $this->getOrCreateConversation($client, $request->conversation_id, $request->visitor_id, $this->sanitizeUrl($request->source_url));
+        // Fetch history and build messages BEFORE saving visitor message to avoid duplication
+        $messages = $this->chatService->buildTokenBudgetedMessages($client, $conversation, $cleanedMessage);
 
-        $visitorMessage = ChatMessage::create([
+        ChatMessage::create([
             'conversation_id' => $conversation->id,
-            'role' => 'visitor',
-            'message' => $cleanedMessage,
-            'tokens_used' => 0,
-            'created_at' => now(),
+            'role'            => 'visitor',
+            'message'         => $cleanedMessage,
+            'tokens_used'     => 0,
+            'created_at'      => now(),
         ]);
 
-        $knowledgeBase = $this->buildKnowledgeBase($client);
-        $conversationHistory = $this->getConversationHistory($conversation);
-        $messages = $this->buildMessages($client, $knowledgeBase, $conversationHistory, $cleanedMessage);
-
+        $startTime    = microtime(true);
         $fullResponse = '';
-        $startTime = microtime(true);
+        $grokService  = $this->grokService;
+        $chatService  = $this->chatService;
 
-        return response()->stream(function () use ($messages, $client, $conversation, $startTime, &$fullResponse) {
-            $this->grokService->streamChat(
+        return response()->stream(function () use (
+            $messages, $client, $conversation, $startTime,
+            $grokService, $chatService, &$fullResponse
+        ) {
+            $grokService->streamChat(
                 $messages,
                 function ($chunk) use (&$fullResponse) {
                     $fullResponse .= $chunk;
@@ -106,29 +114,36 @@ class StreamChatController extends Controller
                     }
                     flush();
                 },
-                function () use (&$fullResponse, $client, $conversation, $startTime) {
-                    $endTime = microtime(true);
-                    $tokensUsed = (int) (strlen($fullResponse) / 4);
-                    $inputTokens = $tokensUsed;
-                    $outputTokens = $tokensUsed;
+                function () use (&$fullResponse, $client, $conversation, $startTime, $grokService, $chatService) {
+                    $endTime   = microtime(true);
+                    $tokensOut = (int) ceil(strlen($fullResponse) / 4);
 
-                    ChatMessage::create([
-                        'conversation_id' => $conversation->id,
-                        'role' => 'bot',
-                        'message' => $fullResponse,
-                        'tokens_used' => $tokensUsed,
-                        'created_at' => now(),
+                    if (! empty($fullResponse)) {
+                        ChatMessage::create([
+                            'conversation_id' => $conversation->id,
+                            'role'            => 'bot',
+                            'message'         => $fullResponse,
+                            'tokens_used'     => $tokensOut,
+                            'created_at'      => now(),
+                        ]);
+                    }
+
+                    $cost     = $grokService->estimateCost($tokensOut);
+                    $usageLog = TokenUsageLog::getOrCreateForToday($client->id);
+                    $usageLog->addUsage($tokensOut, $tokensOut, $cost);
+
+                    $chatService->logGroqUsage($client->id, $conversation->id, [
+                        'input_tokens'  => $tokensOut,
+                        'output_tokens' => $tokensOut,
+                        'tokens_used'   => $tokensOut * 2,
+                        'model'         => $grokService->getModel(),
                     ]);
 
-                    $cost = $this->grokService->estimateCost($tokensUsed);
-                    $usageLog = TokenUsageLog::getOrCreateForToday($client->id);
-                    $usageLog->addUsage($inputTokens, $outputTokens, $cost);
-
                     echo 'data: '.json_encode([
-                        'type' => 'done',
+                        'type'            => 'done',
                         'conversation_id' => $conversation->id,
-                        'tokens' => $tokensUsed,
-                        'time_ms' => round(($endTime - $startTime) * 1000),
+                        'tokens'          => $tokensOut,
+                        'time_ms'         => round(($endTime - $startTime) * 1000),
                     ])."\n\n";
                     if (ob_get_level()) {
                         ob_flush();
@@ -144,82 +159,11 @@ class StreamChatController extends Controller
                 }
             );
         }, 200, [
-            'Content-Type' => 'text/event-stream',
-            'Cache-Control' => 'no-cache',
-            'Connection' => 'keep-alive',
+            'Content-Type'      => 'text/event-stream',
+            'Cache-Control'     => 'no-cache',
+            'Connection'        => 'keep-alive',
             'X-Accel-Buffering' => 'no',
         ]);
-    }
-
-    private function getOrCreateConversation(User $client, ?string $conversationId, ?string $visitorId, ?string $sourceUrl): ChatConversation
-    {
-        if ($conversationId) {
-            $conversation = ChatConversation::where('id', $conversationId)
-                ->where('user_id', $client->id)
-                ->first();
-            if ($conversation) {
-                return $conversation;
-            }
-        }
-
-        return ChatConversation::create([
-            'user_id' => $client->id,
-            'visitor_id' => $visitorId ?? 'unknown',
-            'source_url' => $sourceUrl,
-            'status' => 'active',
-        ]);
-    }
-
-    private function buildKnowledgeBase(User $client): string
-    {
-        $files = KnowledgeBase::where('user_id', $client->id)
-            ->where('is_active', true)
-            ->get();
-
-        if ($files->isEmpty()) {
-            return 'No knowledge base available.';
-        }
-
-        return $files->map(fn ($file) => $file->content)->implode("\n\n---\n\n");
-    }
-
-    private function getConversationHistory(ChatConversation $conversation): Collection
-    {
-        return $conversation->messages()
-            ->orderBy('created_at', 'desc')
-            ->limit(10)
-            ->get()
-            ->reverse()
-            ->values();
-    }
-
-    private function buildMessages(User $client, string $knowledgeBase, Collection $history, string $newMessage): array
-    {
-        $systemPrompt = $this->buildSystemPrompt($client, $knowledgeBase);
-        $messages = [['role' => 'system', 'content' => $systemPrompt]];
-
-        foreach ($history as $msg) {
-            $messages[] = [
-                'role' => $msg->role === 'bot' ? 'assistant' : 'user',
-                'content' => $msg->message,
-            ];
-        }
-
-        $messages[] = ['role' => 'user', 'content' => $newMessage];
-
-        return $messages;
-    }
-
-    private function buildSystemPrompt(User $client, string $knowledgeBase): string
-    {
-        $businessName = $client->company_name ?? $client->name ?? 'the business';
-        $promptTemplate = Setting::get('grok_system_prompt',
-            "You are a helpful assistant for {business_name}. Answer questions using ONLY the provided knowledge base. Be friendly, concise, and helpful. If you don't know the answer, say so politely and suggest contacting the business directly."
-        );
-
-        $prompt = str_replace('{business_name}', $businessName, $promptTemplate);
-
-        return $prompt."\n\n--- KNOWLEDGE BASE ---\n".$knowledgeBase."\n--- END KNOWLEDGE BASE ---";
     }
 
     private function sanitizeInput(string $input): string

@@ -29,7 +29,7 @@ class AppSetup extends Command
             'db_key'   => 'grok_model',
             'secret'   => false,
             'required' => false,
-            'default'  => 'llama-3.1-8b-instant',
+            'default'  => 'llama-3.3-70b-versatile',
         ],
         'smtp_host' => [
             'label'    => 'SMTP Host',

@@ -28,7 +28,23 @@
       "Bash(php C:/Apache24/htdocs/ai/artisan config:clear)",
       "Bash(php C:/Apache24/htdocs/ai/artisan route:clear)",
       "Bash(php *)",
-      "Bash(find C:/Apache24/htdocs/ai/app -name \"*.php\" -exec php -l {} \\\\;)"
+      "Bash(find C:/Apache24/htdocs/ai/app -name \"*.php\" -exec php -l {} \\\\;)",
+      "WebFetch(domain:chatbotnepal.isoftroerp.com)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)",
+      "Bash(git config *)",
+      "Bash(git remote *)",
+      "Bash(composer update *)",
+      "Bash(where composer *)",
+      "Bash(cmd.exe /c \"composer update --ignore-platform-reqs 2>&1\")",
+      "Bash(cmd.exe *)",
+      "Bash(powershell.exe -Command \"cd 'C:\\\\Apache24\\\\htdocs\\\\ai'; & composer update --ignore-platform-reqs 2>&1\")",
+      "Bash(powershell.exe -Command \"Set-Location 'C:\\\\Apache24\\\\htdocs\\\\ai'; php C:\\\\php\\\\composer.phar update --ignore-platform-reqs 2>&1\")",
+      "Bash(powershell.exe *)",
+      "Bash(ssh *)",
+      "Bash(python deploy_fix.py --verbose)",
+      "Bash(git commit *)"
     ]
   }
 }
