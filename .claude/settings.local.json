@@ -44,7 +44,19 @@
       "Bash(powershell.exe *)",
       "Bash(ssh *)",
       "Bash(python deploy_fix.py --verbose)",
-      "Bash(git commit *)"
+      "Bash(git commit *)",
+      "Bash(gh repo *)",
+      "Bash(powershell *)",
+      "Bash(echo \"Exit: $?\")",
+      "Bash(sed 's/<[^>]*>//g')",
+      "Bash(curl -s -L \"https://chatbotnepal.isoftroerp.com/\" -A \"Mozilla/5.0 \\(Windows NT 10.0; Win64; x64\\) AppleWebKit/537.36\" --max-time 30)",
+      "Bash(echo \"EXIT:$?\")",
+      "Bash(python -m playwright install chromium)",
+      "Bash(mkdir -p \"C:/Apache24/htdocs/ai/screenshots\")",
+      "Bash(python -c ' *)",
+      "Bash(python3 -c ' *)",
+      "Bash(python3 -c \"import sys,re; body=sys.stdin.read\\(\\); links=re.findall\\(r'href=[\\\\\"\\\\']\\(.*?\\)[\\\\\"\\\\']\\\\s*', body\\); [print\\(l\\) for l in links]\")",
+      "Bash(python *)"
     ]
   }
 }
