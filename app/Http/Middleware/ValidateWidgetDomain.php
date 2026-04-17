@@ -18,12 +18,16 @@ class ValidateWidgetDomain
         if ($request->is('api/widget/*') || $request->is('api/widget/session')) {
             $response = $next($request);
 
-            return $response->withHeaders([
+            $headers = [
                 'Access-Control-Allow-Origin' => $origin ?: '*',
                 'Access-Control-Allow-Methods' => 'GET, POST, OPTIONS',
                 'Access-Control-Allow-Headers' => 'Content-Type, Authorization, X-Requested-With',
-                'Access-Control-Allow-Credentials' => 'true',
-            ]);
+            ];
+            if ($origin) {
+                $headers['Access-Control-Allow-Credentials'] = 'true';
+            }
+
+            return $response->withHeaders($headers);
         }
 
         // Valid session token means the widget already authenticated — skip domain check
@@ -34,12 +38,16 @@ class ValidateWidgetDomain
                 ->exists();
             if ($valid) {
                 $response = $next($request);
-                return $response->withHeaders([
+                $headers = [
                     'Access-Control-Allow-Origin' => $origin ?: '*',
                     'Access-Control-Allow-Methods' => 'GET, POST, OPTIONS',
                     'Access-Control-Allow-Headers' => 'Content-Type, Authorization, X-Session-Token',
-                    'Access-Control-Allow-Credentials' => 'true',
-                ]);
+                ];
+                if ($origin) {
+                    $headers['Access-Control-Allow-Credentials'] = 'true';
+                }
+
+                return $response->withHeaders($headers);
             }
         }
 
@@ -48,14 +56,19 @@ class ValidateWidgetDomain
         $requestOrigin = $origin ?: ($referer ? parse_url($referer, PHP_URL_HOST) : null);
 
         if ($requestOrigin && ! in_array($requestOrigin, $allowedDomains)) {
+            $denyHeaders = [
+                'Access-Control-Allow-Origin' => $origin ?: '*',
+                'Access-Control-Allow-Methods' => 'GET, POST, OPTIONS',
+                'Access-Control-Allow-Headers' => 'Content-Type, Authorization, X-Session-Token',
+            ];
+            if ($origin) {
+                $denyHeaders['Access-Control-Allow-Credentials'] = 'true';
+            }
+
             return response()->json([
                 'success' => false,
                 'error' => 'Domain not authorized',
-            ], 403)->withHeaders([
-                'Access-Control-Allow-Origin' => $origin,
-                'Access-Control-Allow-Methods' => 'GET, POST, OPTIONS',
-                'Access-Control-Allow-Headers' => 'Content-Type, Authorization, X-Session-Token',
-            ]);
+            ], 403)->withHeaders($denyHeaders);
         }
 
         if (! $requestOrigin && ! app()->environment('local')) {
@@ -67,12 +80,16 @@ class ValidateWidgetDomain
 
         $response = $next($request);
 
-        return $response->withHeaders([
+        $successHeaders = [
             'Access-Control-Allow-Origin' => $origin ?: '*',
             'Access-Control-Allow-Methods' => 'GET, POST, OPTIONS',
             'Access-Control-Allow-Headers' => 'Content-Type, Authorization, X-Session-Token',
-            'Access-Control-Allow-Credentials' => 'true',
-        ]);
+        ];
+        if ($origin) {
+            $successHeaders['Access-Control-Allow-Credentials'] = 'true';
+        }
+
+        return $response->withHeaders($successHeaders);
     }
 
     private function getAllowedDomains(Request $request): array
