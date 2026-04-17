@@ -478,6 +478,9 @@
     }
 
     function appendToBubble(bubble, text) {
+        if (bubble.querySelector('.cbn-thinking')) {
+            bubble.innerHTML = '';
+        }
         const existingHtml = bubble.innerHTML.replace('<span class="cbn-cursor"></span>', '');
         bubble.innerHTML = existingHtml + text + '<span class="cbn-cursor"></span>';
         scrollToBottom();
