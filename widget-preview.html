@@ -1,56 +1,126 @@
-(function() {
-    const SCRIPT_TAG = document.currentScript;
-    const SITE_ID = SCRIPT_TAG.getAttribute('data-token') || SCRIPT_TAG.getAttribute('data-site-id');
-    const BASE_URL = new URL(SCRIPT_TAG.src).origin;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatBot Nepal — Widget Preview</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+        }
+        .preview-header {
+            text-align: center;
+            color: #fff;
+            margin-bottom: 40px;
+        }
+        .preview-header h1 {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 10px;
+            letter-spacing: -0.02em;
+        }
+        .preview-header p {
+            color: rgba(255,255,255,0.7);
+            font-size: 16px;
+        }
+        .preview-container {
+            display: flex;
+            gap: 60px;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: flex-start;
+        }
 
-    if (!SITE_ID) {
-        console.error('ChatBot Nepal: Missing data-token or data-site-id attribute.');
-        return;
-    }
+        /* Demo Website */
+        .demo-website {
+            width: 800px;
+            height: 500px;
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 25px 80px rgba(0,0,0,0.4);
+        }
+        .demo-nav {
+            height: 60px;
+            background: #fff;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            padding: 0 30px;
+            gap: 40px;
+        }
+        .demo-logo {
+            font-weight: 700;
+            font-size: 18px;
+            color: #065f46;
+        }
+        .demo-nav-links {
+            display: flex;
+            gap: 25px;
+            flex: 1;
+        }
+        .demo-nav-links span {
+            color: #666;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .demo-cta {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: #fff;
+            font-weight: 600;
+            font-size: 13px;
+            padding: 8px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .demo-hero {
+            padding: 60px;
+            background: linear-gradient(180deg, #f8f9fa 0%, #fff 100%);
+        }
+        .demo-hero h2 {
+            font-size: 36px;
+            font-weight: 800;
+            color: #111827;
+            margin-bottom: 15px;
+            letter-spacing: -0.02em;
+            max-width: 500px;
+        }
+        .demo-hero p {
+            color: #666;
+            font-size: 16px;
+            max-width: 450px;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+        .demo-hero-btn {
+            background: #065f46;
+            color: #fff;
+            font-weight: 600;
+            font-size: 14px;
+            padding: 12px 28px;
+            border-radius: 10px;
+            display: inline-block;
+            cursor: pointer;
+        }
 
-    let config = {
-        business_name: 'ChatBot Nepal',
-        welcome_message: 'Namaste! How can I help you today?',
-        primary_color: '#10b981',
-        bot_name: 'Assistant',
-        bot_avatar_url: null
-    };
-    let conversationId = sessionStorage.getItem('cbn_conversation_id');
-    let visitorId = localStorage.getItem('cbn_visitor_id') || uuidv4();
-    localStorage.setItem('cbn_visitor_id', visitorId);
-    let isWindowOpen = false;
-    let sessionToken = null;
-    let busy = false;
-
-    /* ─────────────────────────────────────────
-       DESIGN TOKENS  (ChatBot Nepal Green)
-    ───────────────────────────────────────── */
-    const T = {
-        green: '#10b981',
-        greenDark: '#059669',
-        greenDeep: '#065f46',
-        greenLight: '#d1fae5',
-        greenPale: '#f0fdf4',
-        white: '#ffffff',
-        gray50: '#f9fafb',
-        gray100: '#f3f4f6',
-        gray200: '#e5e7eb',
-        gray400: '#9ca3af',
-        gray500: '#6b7280',
-        gray700: '#374151',
-        gray900: '#111827',
-    };
-
-    const styles = `
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
-
+        /* ═══════════════════════════════════
+           WIDGET STYLES (from widget.js)
+        ═══════════════════════════════════ */
         #cn-widget * { box-sizing: border-box; margin: 0; padding: 0; }
         #cn-widget {
             position: fixed; bottom: 24px; right: 24px; z-index: 999999;
             font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
         }
 
-        /* ── LAUNCHER BUTTON ── */
         #cn-launcher {
             width: 58px; height: 58px; border-radius: 50%;
             background: linear-gradient(135deg, #10b981 0%, #059669 100%);
@@ -58,8 +128,7 @@
             display: flex; align-items: center; justify-content: center;
             box-shadow: 0 8px 28px rgba(16,185,129,.50), 0 2px 8px rgba(0,0,0,.15);
             transition: transform .25s cubic-bezier(.34,1.56,.64,1), box-shadow .22s ease;
-            outline: none; -webkit-tap-highlight-color: transparent;
-            position: relative;
+            outline: none; position: relative;
         }
         #cn-launcher:hover {
             transform: scale(1.10);
@@ -82,23 +151,20 @@
         }
         .cn-l-icon.hidden { transform: rotate(80deg) scale(.5); opacity: 0; pointer-events: none; }
 
-        /* Badge */
         #cn-badge {
             position: absolute; top: 1px; right: 1px; min-width: 18px; height: 18px;
             background: #ef4444; border-radius: 999px;
             border: 2.5px solid #fff;
             font-size: 10px; font-weight: 700; color: #fff;
             display: flex; align-items: center; justify-content: center; padding: 0 3px;
-            transition: transform .3s cubic-bezier(.34,1.56,.64,1), opacity .2s;
         }
         #cn-badge.gone { transform: scale(0); opacity: 0; }
 
-        /* ── CHAT WINDOW ── */
         #cn-window {
             position: fixed; bottom: 96px; right: 24px;
             width: 370px; height: 570px; max-height: calc(100dvh - 110px);
             background: #fff; border-radius: 20px;
-            box-shadow: 0 24px 64px rgba(0,0,0,.18), 0 4px 16px rgba(0,0,0,.08), 0 0 0 1px rgba(0,0,0,.06);
+            box-shadow: 0 24px 64px rgba(0,0,0,.18), 0 4px 16px rgba(0,0,0,.08);
             display: flex; flex-direction: column; overflow: hidden;
             opacity: 0; transform: translateY(14px) scale(.97);
             pointer-events: none;
@@ -109,7 +175,6 @@
             pointer-events: all;
         }
 
-        /* ── HEADER ── */
         #cn-header {
             background: linear-gradient(135deg, #10b981 0%, #059669 100%);
             padding: 16px 18px; display: flex; align-items: center; gap: 12px;
@@ -133,7 +198,6 @@
             position: absolute; bottom: -2px; right: -2px;
             width: 12px; height: 12px; border-radius: 50%;
             background: #34d399; border: 2px solid #10b981;
-            box-shadow: 0 0 0 0 rgba(52,211,153,.7);
             animation: online-pulse 2.2s ease-in-out infinite;
         }
         @keyframes online-pulse {
@@ -145,7 +209,6 @@
         .cn-hdr-name {
             font-size: .95rem; font-weight: 700; color: #fff;
             white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-            letter-spacing: -.01em;
         }
         .cn-hdr-status {
             margin-top: 2px; font-size: .72rem; color: rgba(255,255,255,.82);
@@ -163,9 +226,7 @@
             transition: background .17s; outline: none;
         }
         .cn-hdr-btn:hover { background: rgba(255,255,255,.22); }
-        .cn-hdr-btn:active { background: rgba(255,255,255,.30); }
 
-        /* ── INTRO BANNER ── */
         #cn-intro {
             background: #f0fdf4; border-bottom: 1px solid #d1fae5;
             padding: 12px 18px; display: flex; align-items: center; gap: 10px;
@@ -179,7 +240,6 @@
         .cn-intro-text { font-size: .75rem; color: #374151; line-height: 1.5; }
         .cn-intro-text strong { color: #065f46; font-weight: 700; }
 
-        /* ── MESSAGES AREA ── */
         #cn-messages {
             flex: 1; overflow-y: auto; padding: 16px 14px 8px;
             display: flex; flex-direction: column; gap: 10px;
@@ -189,14 +249,12 @@
         #cn-messages::-webkit-scrollbar-track { background: transparent; }
         #cn-messages::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 4px; }
 
-        /* date pill */
         .cn-date-pill {
             align-self: center; background: #f3f4f6; border-radius: 999px;
             font-size: .65rem; font-weight: 600; color: #6b7280;
             padding: 3px 12px; letter-spacing: .05em; text-transform: uppercase;
         }
 
-        /* message row */
         .cn-row {
             display: flex; align-items: flex-end; gap: 7px;
             animation: row-in .25s cubic-bezier(.4,0,.2,1) both;
@@ -234,15 +292,12 @@
             box-shadow: 0 3px 12px rgba(16,185,129,.30);
         }
         .cn-bubble strong { font-weight: 700; }
-        .cn-bubble ul { padding-left: 16px; margin-top: 4px; }
-        .cn-bubble li { margin-bottom: 2px; }
 
         .cn-ts {
             font-size: .63rem; color: #9ca3af; margin-top: 4px;
             padding: 0 2px; font-weight: 500;
         }
 
-        /* ── TYPING INDICATOR ── */
         #cn-typing {
             display: none; align-items: flex-end; gap: 7px;
             padding: 0 14px 6px; animation: row-in .22s ease both;
@@ -264,7 +319,6 @@
             30% { transform: translateY(-5px); background: #10b981; }
         }
 
-        /* ── QUICK REPLIES ── */
         #cn-qr {
             padding: 8px 14px 4px; display: flex; gap: 6px;
             flex-wrap: wrap;
@@ -282,9 +336,7 @@
             color: #fff; border-color: transparent;
             transform: translateY(-2px); box-shadow: 0 4px 12px rgba(16,185,129,.3);
         }
-        .cn-qr:active { transform: translateY(0); }
 
-        /* ── INPUT AREA ── */
         #cn-input-area {
             padding: 10px 12px 12px; border-top: 1px solid #e5e7eb;
             background: #fff; display: flex; align-items: flex-end;
@@ -294,7 +346,7 @@
             flex: 1; background: #f9fafb; border: 1.5px solid #e5e7eb;
             border-radius: 12px; color: #111827;
             font-family: 'Plus Jakarta Sans', sans-serif; font-size: .875rem;
-            font-weight: 400; padding: 10px 13px; outline: none;
+            padding: 10px 13px; outline: none;
             resize: none; height: 42px; max-height: 96px; line-height: 1.45;
             transition: border-color .18s, box-shadow .18s;
         }
@@ -318,14 +370,12 @@
             background: linear-gradient(135deg, #10b981 0%, #059669 100%);
             color: #fff; cursor: pointer;
             display: flex; align-items: center; justify-content: center;
-            transition: transform .18s cubic-bezier(.34,1.56,.64,1), box-shadow .18s, opacity .18s;
+            transition: transform .18s cubic-bezier(.34,1.56,.64,1), box-shadow .18s;
             box-shadow: 0 3px 12px rgba(16,185,129,.4); outline: none; flex-shrink: 0;
         }
-        #cn-send:hover { transform: scale(1.09); box-shadow: 0 5px 18px rgba(16,185,129,.55); }
-        #cn-send:active { transform: scale(.93); }
-        #cn-send:disabled { opacity: .38; cursor: not-allowed; transform: none; box-shadow: none; }
+        #cn-send:hover { transform: scale(1.09); }
+        #cn-send:disabled { opacity: .38; cursor: not-allowed; }
 
-        /* ── FOOTER ── */
         .cn-footer {
             text-align: center; padding: 6px 0 10px;
             font-size: .63rem; color: #9ca3af; letter-spacing: .03em;
@@ -333,65 +383,34 @@
         }
         .cn-footer a { color: #059669; text-decoration: none; font-weight: 600; }
         .cn-footer a:hover { color: #10b981; }
+    </style>
+</head>
+<body>
+    <div class="preview-header">
+        <h1>ChatBot Nepal Widget</h1>
+        <p>Professional AI chatbot for your website</p>
+    </div>
 
-        /* ── MOBILE ── */
-        @media (max-width: 480px) {
-            #cn-widget { bottom: 18px; right: 18px; }
-            #cn-window {
-                position: fixed; bottom: 0; right: 0; left: 0;
-                width: 100%; max-height: 100dvh; height: 100dvh;
-                border-radius: 20px 20px 0 0;
-            }
-            #cn-launcher { bottom: 18px; right: 18px; }
-        }
-    `;
+    <div class="preview-container">
+        <div class="demo-website">
+            <div class="demo-nav">
+                <div class="demo-logo">TechStartup</div>
+                <div class="demo-nav-links">
+                    <span>Products</span>
+                    <span>Pricing</span>
+                    <span>Docs</span>
+                    <span>Blog</span>
+                </div>
+                <div class="demo-cta">Get Started</div>
+            </div>
+            <div class="demo-hero">
+                <h2>Build faster with our AI-powered platform</h2>
+                <p>Empower your business with intelligent automation and seamless integrations.</p>
+                <div class="demo-hero-btn">Start Free Trial</div>
+            </div>
 
-    /* ─────────────────────────────────────────
-       FLOWS (Quick Reply Menu)
-    ───────────────────────────────────────── */
-    const FLOWS = {
-        __greeting: {
-            getMsg: () => `<strong>Namaste!</strong> Welcome to ${config.business_name}.\n\nI can help you with inquiries about our services. What would you like to know?`,
-            qr: ['Services', 'Pricing', 'Contact Us'],
-        },
-        'Services': {
-            msg: `Our AI chatbot services include:\n\n• Custom knowledge base building\n• 24/7 automated responses\n• Nepali, Hindi & English support\n• Works on any website\n• Monthly updates included`,
-            qr: ['Pricing', 'How It Works', 'Main Menu'],
-        },
-        'Pricing': {
-            msg: `We offer flexible plans:\n\n• <strong>Starter:</strong> Rs. 1,999/mo\n• <strong>Growth:</strong> Rs. 3,999/mo\n• <strong>Pro:</strong> Rs. 6,999/mo\n\nSetup fees vary. Pay yearly and get 2 months FREE!`,
-            qr: ['Services', 'Contact Us', 'Main Menu'],
-        },
-        'How It Works': {
-            msg: `Simple 4-step process:\n\n<strong>1.</strong> We interview you about your business\n<strong>2.</strong> We build your knowledge base\n<strong>3.</strong> We deploy (1 line of code)\n<strong>4.</strong> Your site answers 24/7`,
-            qr: ['Services', 'Contact Us', 'Main Menu'],
-        },
-        'Contact Us': {
-            msg: `We're here to help!\n\n• WhatsApp: 9779811144402\n• Email: info@isoftro.com\n• Based in Kathmandu, Nepal`,
-            qr: ['Services', 'Pricing', 'Main Menu'],
-        },
-        'Main Menu': {
-            msg: `How else can I help you?`,
-            qr: ['Services', 'Pricing', 'Contact Us'],
-        },
-        __default: {
-            msg: `Thanks for your message! A team member will get back to you soon.\n\nFor immediate help, contact us directly.`,
-            qr: ['Contact Us', 'Main Menu'],
-        },
-    };
-
-    /* ─────────────────────────────────────────
-       INIT — build DOM, inject styles
-    ───────────────────────────────────────── */
-    function init() {
-        const styleEl = document.createElement('style');
-        styleEl.textContent = styles;
-        document.head.appendChild(styleEl);
-
-        const container = document.createElement('div');
-        container.id = 'cn-widget';
-        container.innerHTML = `
-            <button id="cn-launcher" aria-label="Open chat">
+            <!-- WIDGET -->
+            <button id="cn-launcher" onclick="toggleChat()">
                 <svg class="cn-l-icon" id="li-chat" width="24" height="24" fill="none" viewBox="0 0 24 24">
                     <path fill="#fff" fill-rule="evenodd" clip-rule="evenodd"
                         d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10a9.96 9.96 0 0 1-4.905-1.28L2 22l1.28-5.095A9.96 9.96 0 0 1 2 12Zm6.5-1.5a1 1 0 1 0 0 2 1 1 0 0 0 0-2Zm2.5 1a1 1 0 1 1 2 0 1 1 0 0 1-2 0Zm4.5-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2Z"/>
@@ -402,7 +421,7 @@
                 <span id="cn-badge">1</span>
             </button>
 
-            <div id="cn-window" role="dialog" aria-label="Chat Assistant">
+            <div id="cn-window" class="open">
                 <div id="cn-header">
                     <div class="cn-hdr-avatar">
                         <svg width="22" height="22" fill="none" viewBox="0 0 24 24">
@@ -416,19 +435,19 @@
                         <span class="cn-online-ring"></span>
                     </div>
                     <div class="cn-hdr-info">
-                        <div class="cn-hdr-name">${config.business_name}</div>
+                        <div class="cn-hdr-name">TechStartup</div>
                         <div class="cn-hdr-status">
                             <span class="cn-hdr-status-dot"></span>
                             Online — Replies instantly
                         </div>
                     </div>
                     <div class="cn-hdr-btns">
-                        <button class="cn-hdr-btn" id="cn-min" title="Minimize" aria-label="Minimize">
+                        <button class="cn-hdr-btn" onclick="toggleChat()">
                             <svg width="15" height="15" fill="none" viewBox="0 0 24 24">
                                 <path stroke="currentColor" stroke-width="2.2" stroke-linecap="round" d="M5 12h14"/>
                             </svg>
                         </button>
-                        <button class="cn-hdr-btn" id="cn-close" title="Close" aria-label="Close">
+                        <button class="cn-hdr-btn" onclick="toggleChat()">
                             <svg width="15" height="15" fill="none" viewBox="0 0 24 24">
                                 <path stroke="currentColor" stroke-width="2.2" stroke-linecap="round" d="M18 6 6 18M6 6l12 12"/>
                             </svg>
@@ -448,11 +467,42 @@
                     </div>
                 </div>
 
-                <div id="cn-messages" role="log" aria-live="polite">
+                <div id="cn-messages">
                     <div class="cn-date-pill">Today</div>
+
+                    <div class="cn-row bot" style="opacity: 1;">
+                        <div class="cn-avatar">
+                            <svg width="14" height="14" fill="none" viewBox="0 0 24 24">
+                                <path fill="#fff" d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.38 5.07L2 22l4.93-1.38A9.94 9.94 0 0 0 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2Z"/>
+                            </svg>
+                        </div>
+                        <div class="cn-col">
+                            <div class="cn-bubble"><strong>Namaste!</strong> Welcome to TechStartup. I can help you with inquiries about our services. What would you like to know?</div>
+                            <div class="cn-ts">10:30 AM</div>
+                        </div>
+                    </div>
+
+                    <div class="cn-row user" style="opacity: 1;">
+                        <div class="cn-col">
+                            <div class="cn-bubble">What are your pricing plans?</div>
+                            <div class="cn-ts">10:31 AM</div>
+                        </div>
+                    </div>
+
+                    <div class="cn-row bot" style="opacity: 1;">
+                        <div class="cn-avatar">
+                            <svg width="14" height="14" fill="none" viewBox="0 0 24 24">
+                                <path fill="#fff" d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.38 5.07L2 22l4.93-1.38A9.94 9.94 0 0 0 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2Z"/>
+                            </svg>
+                        </div>
+                        <div class="cn-col">
+                            <div class="cn-bubble">We offer flexible plans:<br><br>• <strong>Starter:</strong> Rs. 1,999/mo<br>• <strong>Growth:</strong> Rs. 3,999/mo<br>• <strong>Pro:</strong> Rs. 6,999/mo<br><br>Pay yearly and get 2 months FREE!</div>
+                            <div class="cn-ts">10:32 AM</div>
+                        </div>
+                    </div>
                 </div>
 
-                <div id="cn-typing" role="status" aria-label="Assistant is typing">
+                <div id="cn-typing">
                     <div class="cn-avatar">
                         <svg width="14" height="14" fill="none" viewBox="0 0 24 24">
                             <path fill="#fff" d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.38 5.07L2 22l4.93-1.38A9.94 9.94 0 0 0 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2Z"/>
@@ -465,18 +515,22 @@
                     </div>
                 </div>
 
-                <div id="cn-qr"></div>
+                <div id="cn-qr">
+                    <button class="cn-qr">Services</button>
+                    <button class="cn-qr">Pricing</button>
+                    <button class="cn-qr">Contact Us</button>
+                </div>
 
                 <div id="cn-input-area">
-                    <textarea id="cn-input" placeholder="Type your message…" rows="1" aria-label="Message" autocomplete="off"></textarea>
+                    <input type="text" id="cn-input" placeholder="Type your message…" value="Tell me about Pro features">
                     <div class="cn-action-btns">
-                        <button class="cn-act-btn" id="cn-mic" title="Voice input" aria-label="Voice input">
+                        <button class="cn-act-btn">
                             <svg width="16" height="16" fill="none" viewBox="0 0 24 24">
                                 <rect x="9" y="2" width="6" height="12" rx="3" stroke="currentColor" stroke-width="1.8"/>
                                 <path stroke="currentColor" stroke-width="1.8" stroke-linecap="round" d="M5 10a7 7 0 0 0 14 0M12 19v3M9 22h6"/>
                             </svg>
                         </button>
-                        <button id="cn-send" disabled aria-label="Send message">
+                        <button id="cn-send">
                             <svg width="17" height="17" fill="none" viewBox="0 0 24 24">
                                 <path fill="#fff" d="M2.01 21 23 12 2.01 3 2 10l15 2-15 2z"/>
                             </svg>
@@ -485,225 +539,24 @@
                 </div>
 
                 <div class="cn-footer">
-                    Powered by <a href="https://chatbotnepal.isoftroerp.com/" target="_blank">ChatBot Nepal</a>
+                    Powered by <a href="#">ChatBot Nepal</a>
                 </div>
             </div>
-        `;
-        document.body.appendChild(container);
+        </div>
+    </div>
 
-        function initSession() {
-            return fetch(`${BASE_URL}/api/widget/session`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ site_id: SITE_ID })
-            })
-            .then(r => r.json())
-            .then(data => {
-                if (data.session_token) {
-                    sessionToken = data.session_token;
-                    config = { ...config, ...data.config };
-                    updateTheme();
-                    setTimeout(() => bootChat(), 500);
-                }
-            })
-            .catch(() => {
-                setTimeout(() => bootChat(), 500);
-            });
-        }
-
-        initSession().then(() => setupEvents());
-    }
-
-    /* ─────────────────────────────────────────
-       BOOT — show greeting
-    ───────────────────────────────────────── */
-    function bootChat() {
-        const typingEl = document.getElementById('cn-typing');
-
-        typingEl.classList.add('show');
-        setTimeout(() => {
-            typingEl.classList.remove('show');
-            const flow = FLOWS.__greeting;
-            addMsg(flow.getMsg ? flow.getMsg() : flow.msg, 'bot');
-            setQR(flow.qr);
-        }, 1000 + Math.random() * 400);
-    }
-
-    /* ─────────────────────────────────────────
-       EVENTS
-    ───────────────────────────────────────── */
-    function setupEvents() {
-        const launcher = document.getElementById('cn-launcher');
+    <script>
+        const win = document.getElementById('cn-window');
         const liChat = document.getElementById('li-chat');
         const liClose = document.getElementById('li-close');
         const badge = document.getElementById('cn-badge');
-        const win = document.getElementById('cn-window');
-        const closeBtn = document.getElementById('cn-close');
-        const minBtn = document.getElementById('cn-min');
-        const input = document.getElementById('cn-input');
-        const sendBtn = document.getElementById('cn-send');
 
-        function openChat() {
-            isWindowOpen = true;
-            win.classList.add('open');
-            liChat.classList.add('hidden');
-            liClose.classList.remove('hidden');
-            badge.classList.add('gone');
-            input.focus();
+        function toggleChat() {
+            win.classList.toggle('open');
+            liChat.classList.toggle('hidden');
+            liClose.classList.toggle('hidden');
+            badge.classList.toggle('gone');
         }
-
-        function closeChat() {
-            isWindowOpen = false;
-            win.classList.remove('open');
-            liChat.classList.remove('hidden');
-            liClose.classList.add('hidden');
-        }
-
-        launcher.addEventListener('click', () => isWindowOpen ? closeChat() : openChat());
-        closeBtn.addEventListener('click', closeChat);
-        minBtn.addEventListener('click', closeChat);
-
-        function autoResize() {
-            input.style.height = '42px';
-            input.style.height = Math.min(input.scrollHeight, 96) + 'px';
-        }
-
-        input.addEventListener('input', () => {
-            sendBtn.disabled = !input.value.trim();
-            autoResize();
-        });
-
-        function handleInput(text) {
-            text = text.trim();
-            if (!text || busy) return;
-            addMsg(text, 'user');
-            input.value = '';
-            sendBtn.disabled = true;
-            autoResize();
-            setQR([]);
-            processUserMessage(text);
-        }
-
-        sendBtn.addEventListener('click', () => handleInput(input.value));
-        input.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleInput(input.value); }
-        });
-
-        document.getElementById('cn-mic').addEventListener('click', () => {
-            const t = document.createElement('div');
-            t.style.cssText = 'position:fixed;bottom:108px;right:28px;background:#065f46;color:#fff;font-family:Plus Jakarta Sans,sans-serif;font-size:.78rem;font-weight:600;padding:9px 16px;border-radius:10px;z-index:99999;pointer-events:none;animation:row-in .2s ease both;';
-            t.textContent = 'Voice input coming soon!';
-            document.body.appendChild(t);
-            setTimeout(() => t.remove(), 2000);
-        });
-    }
-
-    /* ─────────────────────────────────────────
-       PROCESS MESSAGE
-    ───────────────────────────────────────── */
-    function processUserMessage(text) {
-        busy = true;
-        const sendBtn = document.getElementById('cn-send');
-        if (sendBtn) sendBtn.disabled = true;
-
-        const typingEl = document.getElementById('cn-typing');
-        typingEl.classList.add('show');
-        scrollToBottom();
-
-        setTimeout(() => {
-            typingEl.classList.remove('show');
-            busy = false;
-
-            const key = text.trim();
-            const flow = FLOWS[key] || FLOWS.__default;
-            addMsg(flow.getMsg ? flow.getMsg() : flow.msg, 'bot');
-            setQR(flow.qr);
-        }, 800 + Math.random() * 600);
-    }
-
-    /* ─────────────────────────────────────────
-       DOM HELPERS
-    ───────────────────────────────────────── */
-    function addMsg(text, role) {
-        const container = document.getElementById('cn-messages');
-        const row = document.createElement('div');
-        row.className = `cn-row ${role}`;
-
-        if (role === 'bot') {
-            const av = document.createElement('div');
-            av.className = 'cn-avatar';
-            av.innerHTML = `<svg width="14" height="14" fill="none" viewBox="0 0 24 24"><path fill="#fff" d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.38 5.07L2 22l4.93-1.38A9.94 9.94 0 0 0 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2Z"/></svg>`;
-            row.appendChild(av);
-        }
-
-        const col = document.createElement('div');
-        col.className = 'cn-col';
-
-        const bubble = document.createElement('div');
-        bubble.className = 'cn-bubble';
-        bubble.innerHTML = text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
-
-        const time = document.createElement('div');
-        time.className = 'cn-ts';
-        time.textContent = formatTime(new Date());
-
-        col.appendChild(bubble);
-        col.appendChild(time);
-        row.appendChild(col);
-        container.appendChild(row);
-        scrollToBottom();
-
-        return row;
-    }
-
-    function setQR(replies) {
-        const qrEl = document.getElementById('cn-qr');
-        qrEl.innerHTML = '';
-        if (!replies?.length) return;
-
-        replies.forEach(label => {
-            const b = document.createElement('button');
-            b.className = 'cn-qr';
-            b.textContent = label;
-            b.addEventListener('click', () => {
-                addMsg(label, 'user');
-                const flow = FLOWS[label] || FLOWS.__default;
-                setTimeout(() => {
-                    addMsg(flow.getMsg ? flow.getMsg() : flow.msg, 'bot');
-                    setQR(flow.qr);
-                }, 600);
-            });
-            qrEl.appendChild(b);
-        });
-    }
-
-    function scrollToBottom() {
-        const container = document.getElementById('cn-messages');
-        container.scrollTo({ top: container.scrollHeight, behavior: 'smooth' });
-    }
-
-    function formatTime(date) {
-        return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    }
-
-    function updateTheme() {
-        const nameEl = document.querySelector('.cn-hdr-name');
-        if (nameEl) nameEl.textContent = config.business_name;
-
-        if (config.bot_avatar_url) {
-            const avatar = document.getElementById('cn-avatar');
-            if (avatar) avatar.innerHTML = `<img src="${config.bot_avatar_url}" alt="${config.bot_name}">`;
-        }
-    }
-
-    function uuidv4() {
-        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-            var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
-            return v.toString(16);
-        });
-    }
-
-    if (document.readyState === 'complete') init();
-    else window.addEventListener('load', init);
-
-})();
+    </script>
+</body>
+</html>

@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ChatBot Nepal — AI Chatbot Service for Your Website</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <style>
   :root {
     --green: #a3e635;
@@ -454,8 +455,28 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.1rem;
+    font-size: 1rem;
     flex-shrink: 0;
+    color: var(--green);
+  }
+
+  .widget-avatar i {
+    font-size: 1.2rem;
+    color: var(--bg);
+  }
+
+  .widget-input button i {
+    color: var(--bg);
+  }
+
+  .msg-bot i {
+    color: var(--green);
+    margin-right: 6px;
+  }
+
+  .cta-btns .btn-primary i,
+  .cta-btns .btn-secondary i {
+    margin-right: 8px;
   }
 
   .feature-text h4 {
@@ -937,6 +958,8 @@
 
   .footer-links a:hover { color: var(--green); }
 
+  .nepal-flag { font-size: 0.9em; }
+
   .footer-copy {
     color: var(--muted);
     font-size: 0.8rem;
@@ -1023,7 +1046,7 @@
   <div class="hero-inner">
     <div class="hero-badge">
       <span class="badge-dot"></span>
-      Now serving businesses across Nepal 🇳🇵
+      Now serving businesses across Nepal <span class="nepal-flag">🇳🇵</span>
     </div>
     <h1>Let Your Website<br><span class="accent">Answer Customers</span><br>Automatically</h1>
     <p class="hero-sub">Add an AI chatbot to your website in 24 hours. Answer customer questions 24/7, capture leads, and never miss a sale — even while you sleep.</p>
@@ -1053,18 +1076,18 @@
     <!-- Live Demo Widget -->
     <div class="demo-widget">
       <div class="widget-header">
-        <div class="widget-avatar">🤖</div>
+        <div class="widget-avatar"><i class="fas fa-robot"></i></div>
         <div>
           <div class="widget-name">AI Assistant</div>
           <div class="widget-status">● Online — Ready to help</div>
         </div>
       </div>
       <div class="widget-messages" id="demo-messages">
-        <div class="msg-bot">👋 Namaste! I'm your AI assistant. Ask me about services, pricing, or anything!</div>
+        <div class="msg-bot"><i class="fas fa-hand-wave"></i> Namaste! I'm your AI assistant. Ask me about services, pricing, or anything!</div>
       </div>
       <div class="widget-input">
         <input type="text" id="demo-input" placeholder="Type a question..." onkeypress="if(event.key==='Enter') sendDemo()"/>
-        <button onclick="sendDemo()">➤</button>
+        <button onclick="sendDemo()"><i class="fas fa-paper-plane"></i></button>
       </div>
     </div>
   </div>
@@ -1080,28 +1103,28 @@
       <div>
         <div class="about-features">
           <div class="about-feature reveal">
-            <div class="feature-icon">🎯</div>
+            <div class="feature-icon"><i class="fas fa-bullseye"></i></div>
             <div class="feature-text">
               <h4>Custom Knowledge Base</h4>
               <p>We interview you and build a chatbot that knows your exact services, pricing, FAQs, and contact info.</p>
             </div>
           </div>
           <div class="about-feature reveal">
-            <div class="feature-icon">🌐</div>
+            <div class="feature-icon"><i class="fas fa-globe"></i></div>
             <div class="feature-text">
               <h4>Works on Any Website</h4>
               <p>WordPress, custom sites, Laravel, HTML — just one line of code to install. No developer needed.</p>
             </div>
           </div>
           <div class="about-feature reveal">
-            <div class="feature-icon">🇳🇵</div>
+            <div class="feature-icon"><i class="fas fa-language"></i></div>
             <div class="feature-text">
               <h4>Nepali & Hindi Support</h4>
               <p>Your chatbot replies in Nepali, Hindi, or English automatically based on what your customer types.</p>
             </div>
           </div>
           <div class="about-feature reveal">
-            <div class="feature-icon">🔄</div>
+            <div class="feature-icon"><i class="fas fa-sync-alt"></i></div>
             <div class="feature-text">
               <h4>Monthly Updates Included</h4>
               <p>Changed your pricing? New service? Just message us and we update your chatbot same day.</p>
@@ -1221,7 +1244,7 @@
 
     </div>
     <p style="text-align:center; color:var(--muted); font-size:0.85rem; margin-top:2rem;" class="reveal">
-      💡 Pay yearly and get <strong style="color:var(--green)">2 months FREE</strong> on any plan
+      <i class="fas fa-lightbulb"></i> Pay yearly and get <strong style="color:var(--green)">2 months FREE</strong> on any plan
     </p>
   </div>
 </section>
@@ -1332,8 +1355,8 @@
       <h2>Ready to See Your<br><span style="color:var(--green)">Demo for Free?</span></h2>
       <p>Message us on WhatsApp. We'll show you a live demo built for your business — completely free. No payment needed to see it.</p>
       <div class="cta-btns">
-        <a href="https://wa.me/9779811144402" class="btn-primary" target="_blank">💬 WhatsApp Us Now</a>
-        <a href="mailto:info@isoftro.com" class="btn-secondary">✉️ Send Email</a>
+        <a href="https://wa.me/9779811144402" class="btn-primary" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp Us Now</a>
+        <a href="mailto:info@isoftro.com" class="btn-secondary"><i class="fas fa-envelope"></i> Send Email</a>
       </div>
       <p style="margin-top: 1.5rem; color: var(--muted); font-size: 0.85rem;">
         Already a client? <a href="{{ route('login') }}" style="color: var(--green); font-weight: 600; text-decoration: none;">Access Your Dashboard →</a>
@@ -1353,7 +1376,7 @@
       <li><a href="#faq">FAQ</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
-    <div class="footer-copy">© 2026 ChatBot Nepal. Kathmandu, Nepal 🇳🇵</div>
+    <div class="footer-copy">© 2026 ChatBot Nepal. Kathmandu, Nepal <span class="nepal-flag">🇳🇵</span></div>
   </div>
 </footer>
 
@@ -1371,11 +1394,11 @@
 
   // Demo chat
   const demoReplies = {
-    default: "That's a great question! Our AI chatbot can answer exactly this kind of query for your customers 24/7. Want to see a demo for your website? 😊",
+    default: "That's a great question! Our AI chatbot can answer exactly this kind of query for your customers 24/7. Want to see a demo for your website?",
     price: "Our plans start from Rs. 1,999/month + Rs. 3,000 one-time setup. You get unlimited updates and full support included!",
-    hello: "Namaste! 🙏 I'm a demo of what your website chatbot could look like. Try asking me about pricing or services!",
+    hello: "Namaste! I'm a demo of what your website chatbot could look like. Try asking me about pricing or services!",
     service: "We build AI chatbots for any business website in Nepal. We interview you, build a knowledge base, and install it in 24 hours!",
-    nepali: "जी, हाम्रो chatbot नेपाली, हिन्दी र अंग्रेजी तिनै भाषामा जवाफ दिन सक्छ! 🇳🇵",
+    nepali: "जी, हाम्रो chatbot नेपाली, हिन्दी र अंग्रेजी तिनै भाषामा जवाफ दिन सक्छ!",
   };
 
   function sendDemo() {
