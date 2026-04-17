@@ -11,7 +11,7 @@
     let config = {
         business_name: 'ChatBot Nepal',
         welcome_message: 'Namaste! How can I help you today?',
-        primary_color: '#4318FF',
+        primary_color: '#DAFF01',
         bot_name: 'Assistant',
         bot_avatar_url: null
     };
@@ -21,211 +21,337 @@
     let isWindowOpen = false;
     let sessionToken = null;
 
-    const styles = `
-        #cbn-widget * { box-sizing: border-box; margin: 0; padding: 0; }
-        #cbn-widget { position: fixed; bottom: 24px; right: 24px; z-index: 999999; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+    /* ─────────────────────────────────────────
+       DESIGN TOKENS  (Kinetic High-Performance)
+    ───────────────────────────────────────── */
+    const T = {
+        lime:       '#DAFF01',
+        limeText:   '#181E00',
+        limeDim:    'rgba(218,255,1,0.12)',
+        limeShadow: 'rgba(218,255,1,0.18)',
+        purple:     '#5602C9',
+        purpleDim:  'rgba(86,2,201,0.18)',
+        s0:         '#0D0D0D',   /* deepest bg         */
+        s1:         '#131313',   /* window bg          */
+        s2:         '#1C1B1B',   /* secondary surface  */
+        s3:         '#252525',   /* card / input       */
+        s4:         '#303030',   /* hover / active     */
+        textHi:     '#F0F0F0',
+        textMid:    '#888888',
+        textLo:     '#444444',
+    };
 
-        /* ===== TOGGLE BUTTON ===== */
+    const styles = `
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap');
+
+        #cbn-widget * { box-sizing: border-box; margin: 0; padding: 0; }
+        #cbn-widget {
+            position: fixed; bottom: 28px; right: 28px; z-index: 999999;
+            font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+        }
+
+        /* ── FAB ── */
         #cbn-button {
-            width: 58px; height: 58px; border-radius: 50%;
-            background: linear-gradient(135deg, ${config.primary_color} 0%, #6B5CE7 100%);
+            width: 60px; height: 60px; border-radius: 50%;
+            background: ${T.lime};
             cursor: pointer; display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 4px 20px rgba(67, 24, 255, 0.4), 0 2px 8px rgba(0,0,0,0.12);
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border: none; position: relative;
+            box-shadow: 0 8px 32px ${T.limeShadow}, 0 2px 8px rgba(0,0,0,0.4);
+            transition: transform 0.28s cubic-bezier(0.34,1.56,0.64,1),
+                        box-shadow 0.28s ease;
+            border: none; position: relative; overflow: visible;
         }
-        #cbn-button::after {
-            content: ''; position: absolute; inset: -5px; border-radius: 50%;
-            background: linear-gradient(135deg, ${config.primary_color}35, #6B5CE735);
-            animation: cbn-ripple 2.5s ease-in-out infinite; z-index: -1;
+        #cbn-button::before {
+            content: ''; position: absolute; inset: -6px; border-radius: 50%;
+            background: ${T.limeDim};
+            animation: cbn-pulse-ring 2.8s ease-in-out infinite;
+            pointer-events: none;
         }
-        @keyframes cbn-ripple { 0%,100% { transform: scale(1); opacity: 0.7; } 50% { transform: scale(1.2); opacity: 0; } }
-        #cbn-button.open::after { display: none; }
-        #cbn-button:hover { transform: scale(1.08); box-shadow: 0 8px 28px rgba(67, 24, 255, 0.5); }
-        #cbn-button svg { width: 26px; height: 26px; fill: white; }
+        #cbn-button.open::before { display: none; }
+        #cbn-button:hover {
+            transform: scale(1.08);
+            box-shadow: 0 12px 40px ${T.limeShadow}, 0 4px 12px rgba(0,0,0,0.5);
+        }
+        #cbn-button svg { width: 26px; height: 26px; }
         #cbn-button .cbn-close-icon { display: none; }
         #cbn-button.open .cbn-chat-icon { display: none; }
         #cbn-button.open .cbn-close-icon { display: block; }
+        @keyframes cbn-pulse-ring {
+            0%,100% { transform: scale(1); opacity: 0.6; }
+            50%      { transform: scale(1.28); opacity: 0; }
+        }
 
-        /* ===== CHAT WINDOW ===== */
+        /* ── WINDOW ── */
         #cbn-window {
-            position: absolute; bottom: 74px; right: 0;
-            width: 375px; height: 570px; max-height: calc(100vh - 110px);
-            background: #fff; border-radius: 20px;
-            box-shadow: 0 24px 64px rgba(0,0,0,0.13), 0 8px 24px rgba(0,0,0,0.07), 0 0 0 1px rgba(0,0,0,0.04);
+            position: absolute; bottom: 76px; right: 0;
+            width: 384px; height: 588px; max-height: calc(100vh - 116px);
+            background: ${T.s1}; border-radius: 20px;
+            box-shadow:
+                0 40px 80px rgba(0,0,0,0.55),
+                0 16px 40px ${T.purpleDim},
+                0 0 0 0.5px rgba(255,255,255,0.06);
             display: none; flex-direction: column; overflow: hidden;
             transform-origin: bottom right;
         }
         #cbn-window.open {
             display: flex;
-            animation: cbn-open 0.32s cubic-bezier(0.34, 1.5, 0.64, 1) forwards;
+            animation: cbn-open 0.36s cubic-bezier(0.34,1.42,0.64,1) forwards;
         }
-        @keyframes cbn-open { from { opacity: 0; transform: scale(0.82) translateY(16px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+        @keyframes cbn-open {
+            from { opacity: 0; transform: scale(0.78) translateY(20px); }
+            to   { opacity: 1; transform: scale(1)    translateY(0);    }
+        }
 
-        /* ===== HEADER ===== */
+        /* ── HEADER ── */
         #cbn-header {
-            padding: 15px 18px;
-            background: linear-gradient(135deg, ${config.primary_color} 0%, #6B5CE7 100%);
-            color: white; display: flex; align-items: center; justify-content: space-between;
-            flex-shrink: 0; position: relative; overflow: hidden;
+            padding: 16px 18px 14px;
+            background: rgba(19,19,19,0.88);
+            backdrop-filter: blur(24px) saturate(160%);
+            -webkit-backdrop-filter: blur(24px) saturate(160%);
+            color: ${T.textHi};
+            display: flex; align-items: center; justify-content: space-between;
+            flex-shrink: 0; position: relative;
         }
+        /* lime accent bar at very top of header */
         #cbn-header::before {
-            content: ''; position: absolute; top: -40px; right: -30px;
-            width: 140px; height: 140px;
-            background: rgba(255,255,255,0.07); border-radius: 50%; pointer-events: none;
+            content: ''; position: absolute; top: 0; left: 0; right: 0;
+            height: 2px; background: ${T.lime};
+            border-radius: 20px 20px 0 0;
         }
-        #cbn-header::after {
-            content: ''; position: absolute; bottom: -50px; right: 60px;
-            width: 100px; height: 100px;
-            background: rgba(255,255,255,0.04); border-radius: 50%; pointer-events: none;
-        }
-        #cbn-header-info { display: flex; align-items: center; gap: 12px; position: relative; }
-        #cbn-avatar {
-            width: 42px; height: 42px; border-radius: 50%;
-            background: rgba(255,255,255,0.18); display: flex; align-items: center; justify-content: center;
-            border: 2px solid rgba(255,255,255,0.32); overflow: hidden; flex-shrink: 0;
-        }
-        #cbn-avatar img { width: 100%; height: 100%; object-fit: cover; }
-        #cbn-avatar svg { width: 22px; height: 22px; fill: white; }
-        .cbn-business-name { font-weight: 700; font-size: 15px; line-height: 1.3; letter-spacing: -0.2px; }
-        .cbn-bot-name { font-size: 12px; opacity: 0.82; margin-top: 1px; font-weight: 400; }
-        .cbn-status { font-size: 11px; opacity: 0.78; display: flex; align-items: center; gap: 5px; margin-top: 3px; }
-        #cbn-status-dot {
-            width: 7px; height: 7px; background: #4ADE80; border-radius: 50%;
-            box-shadow: 0 0 0 2px rgba(74, 222, 128, 0.25);
-            animation: cbn-pulse 2.5s infinite;
-        }
-        @keyframes cbn-pulse { 0%,100% { box-shadow: 0 0 0 2px rgba(74,222,128,0.3); } 50% { box-shadow: 0 0 0 5px rgba(74,222,128,0); } }
-        #cbn-close-btn {
-            width: 30px; height: 30px; border-radius: 50%;
-            background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.2); cursor: pointer;
-            display: flex; align-items: center; justify-content: center;
-            transition: all 0.2s; color: white; flex-shrink: 0; position: relative;
-        }
-        #cbn-close-btn:hover { background: rgba(255,255,255,0.26); }
-        #cbn-close-btn svg { width: 15px; height: 15px; stroke: currentColor; stroke-width: 2.5; fill: none; }
+        #cbn-header-info { display: flex; align-items: center; gap: 13px; }
 
-        /* ===== MESSAGES AREA ===== */
+        #cbn-avatar {
+            width: 44px; height: 44px; border-radius: 12px; flex-shrink: 0;
+            background: ${T.s3};
+            display: flex; align-items: center; justify-content: center;
+            overflow: hidden; position: relative;
+        }
+        #cbn-avatar::after {
+            content: ''; position: absolute; inset: 0; border-radius: 12px;
+            box-shadow: inset 0 0 0 0.5px rgba(255,255,255,0.08);
+            pointer-events: none;
+        }
+        #cbn-avatar img  { width: 100%; height: 100%; object-fit: cover; }
+        #cbn-avatar svg  { width: 22px; height: 22px; }
+
+        #cbn-header-text { display: flex; flex-direction: column; gap: 2px; }
+        .cbn-business-name {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700; font-size: 15px;
+            letter-spacing: -0.03em; color: ${T.textHi};
+            line-height: 1.2;
+        }
+        .cbn-bot-name {
+            font-size: 11.5px; color: ${T.textMid};
+            font-weight: 500; line-height: 1;
+        }
+        .cbn-status {
+            display: flex; align-items: center; gap: 5px;
+            font-size: 11px; color: ${T.textMid}; margin-top: 2px;
+        }
+        #cbn-status-dot {
+            width: 6px; height: 6px; border-radius: 50%;
+            background: ${T.lime};
+            box-shadow: 0 0 0 0 ${T.limeDim};
+            animation: cbn-dot-pulse 2.4s ease-in-out infinite;
+            flex-shrink: 0;
+        }
+        @keyframes cbn-dot-pulse {
+            0%,100% { box-shadow: 0 0 0 0   ${T.limeDim}; }
+            50%      { box-shadow: 0 0 0 5px rgba(218,255,1,0); }
+        }
+
+        #cbn-close-btn {
+            width: 32px; height: 32px; border-radius: 8px;
+            background: ${T.s3}; border: none; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: background 0.18s; flex-shrink: 0;
+        }
+        #cbn-close-btn:hover { background: ${T.s4}; }
+        #cbn-close-btn svg {
+            width: 14px; height: 14px;
+            stroke: ${T.textMid}; stroke-width: 2.2; fill: none;
+        }
+
+        /* ── MESSAGES ── */
         #cbn-messages {
-            flex: 1; padding: 14px 14px; overflow-y: auto;
-            background: #F7F9FC;
-            display: flex; flex-direction: column; gap: 6px;
+            flex: 1; padding: 18px 16px; overflow-y: auto;
+            background: ${T.s0};
+            display: flex; flex-direction: column; gap: 10px;
             scroll-behavior: smooth;
         }
-        #cbn-messages::-webkit-scrollbar { width: 4px; }
+        #cbn-messages::-webkit-scrollbar { width: 3px; }
         #cbn-messages::-webkit-scrollbar-track { background: transparent; }
-        #cbn-messages::-webkit-scrollbar-thumb { background: #D1D9E6; border-radius: 2px; }
+        #cbn-messages::-webkit-scrollbar-thumb {
+            background: ${T.s4}; border-radius: 2px;
+        }
+
+        /* date chip */
+        .cbn-date-chip {
+            align-self: center;
+            font-size: 10px; font-weight: 600; letter-spacing: 0.06em;
+            text-transform: uppercase; color: ${T.textLo};
+            padding: 3px 10px; background: ${T.s2}; border-radius: 20px;
+            margin: 4px 0;
+        }
 
         .cbn-msg {
-            display: flex; gap: 8px; max-width: 86%;
-            animation: cbn-msg-in 0.22s ease forwards; opacity: 0;
+            display: flex; gap: 9px; max-width: 88%;
+            animation: cbn-msg-in 0.24s cubic-bezier(0.22,1,0.36,1) forwards;
+            opacity: 0;
         }
-        @keyframes cbn-msg-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
-        .cbn-msg.bot { align-self: flex-start; }
+        @keyframes cbn-msg-in {
+            from { opacity: 0; transform: translateY(10px) scale(0.97); }
+            to   { opacity: 1; transform: translateY(0)    scale(1);    }
+        }
+        .cbn-msg.bot     { align-self: flex-start; }
         .cbn-msg.visitor { align-self: flex-end; flex-direction: row-reverse; }
 
         .cbn-msg-avatar {
-            width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
-            background: linear-gradient(135deg, ${config.primary_color} 0%, #6B5CE7 100%);
+            width: 30px; height: 30px; border-radius: 8px; flex-shrink: 0;
+            background: ${T.s3};
             display: flex; align-items: center; justify-content: center;
-            align-self: flex-end; margin-bottom: 18px;
+            align-self: flex-end; margin-bottom: 20px;
         }
-        .cbn-msg-avatar svg { width: 15px; height: 15px; fill: white; }
-        .cbn-msg-avatar img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
-        .cbn-msg.visitor .cbn-msg-avatar { background: #94A3B8; }
+        .cbn-msg-avatar svg { width: 15px; height: 15px; }
+        .cbn-msg-avatar img { width: 100%; height: 100%; border-radius: 8px; object-fit: cover; }
+        .cbn-msg.visitor .cbn-msg-avatar { background: ${T.s4}; }
 
-        .cbn-msg-content { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
-        .cbn-msg-bubble {
-            padding: 10px 14px; font-size: 14px; line-height: 1.55;
-            word-wrap: break-word; white-space: pre-wrap;
-        }
+        .cbn-msg-content  { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+
+        /* Bot bubble — tonal layer */
         .cbn-msg.bot .cbn-msg-bubble {
-            background: white; color: #1E293B;
-            border-radius: 16px 16px 16px 4px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 0 0 1px rgba(0,0,0,0.04);
+            background: ${T.s2}; color: ${T.textHi};
+            border-radius: 4px 16px 16px 16px;
+            padding: 11px 15px;
+            font-size: 14px; line-height: 1.6;
+            word-wrap: break-word; white-space: pre-wrap;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
         }
+        /* Visitor bubble — lime accent */
         .cbn-msg.visitor .cbn-msg-bubble {
-            background: linear-gradient(135deg, ${config.primary_color} 0%, #6B5CE7 100%);
-            color: white; border-radius: 16px 16px 4px 16px;
-            box-shadow: 0 2px 8px rgba(67, 24, 255, 0.22);
+            background: ${T.lime}; color: ${T.limeText};
+            border-radius: 16px 4px 16px 16px;
+            padding: 11px 15px;
+            font-size: 14px; line-height: 1.6;
+            word-wrap: break-word; white-space: pre-wrap;
+            font-weight: 500;
+            box-shadow: 0 4px 24px ${T.limeShadow};
         }
-        .cbn-msg-time { font-size: 10px; color: #9CA3AF; padding: 0 3px; }
+        .cbn-msg-time {
+            font-size: 10px; color: ${T.textLo};
+            font-weight: 500; padding: 0 4px;
+        }
         .cbn-msg.visitor .cbn-msg-time { text-align: right; }
 
-        /* Thinking dots */
-        .cbn-thinking { display: flex; gap: 4px; padding: 3px 2px; align-items: center; }
+        /* ── THINKING DOTS ── */
+        .cbn-thinking {
+            display: flex; gap: 5px; padding: 4px 2px; align-items: center;
+        }
         .cbn-thinking-dot {
-            width: 7px; height: 7px; background: #BDC3CE; border-radius: 50%;
-            animation: cbn-think 1.1s infinite ease-in-out;
+            width: 6px; height: 6px; border-radius: 50%;
+            background: ${T.s4};
+            animation: cbn-think 1.2s infinite ease-in-out;
         }
-        .cbn-thinking-dot:nth-child(2) { animation-delay: 0.15s; }
-        .cbn-thinking-dot:nth-child(3) { animation-delay: 0.3s; }
+        .cbn-thinking-dot:nth-child(1) { animation-delay: 0s;    }
+        .cbn-thinking-dot:nth-child(2) { animation-delay: 0.18s; }
+        .cbn-thinking-dot:nth-child(3) { animation-delay: 0.36s; }
         @keyframes cbn-think {
-            0%, 60%, 100% { transform: translateY(0); background: #BDC3CE; }
-            30% { transform: translateY(-5px); background: ${config.primary_color}; }
+            0%,60%,100% { transform: translateY(0);   background: ${T.s4}; }
+            30%          { transform: translateY(-6px); background: ${T.lime}; }
         }
 
-        /* Streaming cursor */
+        /* ── STREAMING CURSOR ── */
         .cbn-streaming .cbn-msg-bubble::after {
-            content: ''; display: inline-block; width: 2px; height: 14px;
-            background: ${config.primary_color}; margin-left: 2px;
-            animation: cbn-blink 0.75s infinite; vertical-align: middle; border-radius: 1px;
+            content: ''; display: inline-block;
+            width: 2px; height: 13px; vertical-align: middle;
+            background: ${T.lime}; margin-left: 3px; border-radius: 1px;
+            animation: cbn-blink 0.8s step-end infinite;
         }
-        @keyframes cbn-blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+        @keyframes cbn-blink { 0%,49% { opacity: 1; } 50%,100% { opacity: 0; } }
 
-        /* ===== INPUT AREA ===== */
+        /* ── INPUT AREA ── */
         #cbn-input-area {
-            padding: 10px 12px 13px; background: white; border-top: 1px solid #EEF1F6;
+            padding: 12px 14px 14px;
+            background: ${T.s2};
             flex-shrink: 0;
         }
         #cbn-input-wrapper {
-            display: flex; gap: 8px; align-items: flex-end;
-            background: #F2F5FA; border: 1.5px solid #E4E9F2;
-            border-radius: 14px; padding: 7px 7px 7px 14px;
-            transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+            display: flex; gap: 10px; align-items: flex-end;
+            background: ${T.s3};
+            border-radius: 14px; padding: 8px 8px 8px 16px;
+            position: relative; overflow: hidden;
+            transition: box-shadow 0.2s;
+        }
+        #cbn-input-wrapper::before {
+            content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+            width: 3px; background: ${T.s3};
+            transition: background 0.2s, box-shadow 0.2s;
+            border-radius: 14px 0 0 14px;
+        }
+        #cbn-input-wrapper:focus-within::before {
+            background: ${T.lime};
+            box-shadow: 2px 0 12px ${T.limeShadow};
         }
         #cbn-input-wrapper:focus-within {
-            border-color: ${config.primary_color};
-            background: white;
-            box-shadow: 0 0 0 3px ${config.primary_color}1A;
+            box-shadow: 0 0 0 1.5px rgba(218,255,1,0.15);
         }
         #cbn-input {
-            flex: 1; border: none; background: transparent; font-size: 14px;
-            outline: none; resize: none; line-height: 1.5; max-height: 96px;
-            min-height: 22px; padding: 2px 0; color: #1E293B; font-family: inherit;
+            flex: 1; border: none; background: transparent;
+            font-size: 14px; font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+            outline: none; resize: none; line-height: 1.5;
+            max-height: 100px; min-height: 22px; padding: 2px 0;
+            color: ${T.textHi};
         }
-        #cbn-input::placeholder { color: #A8B3C4; }
+        #cbn-input::placeholder { color: ${T.textLo}; }
+
         #cbn-send {
-            width: 34px; height: 34px; border-radius: 10px; border: none;
-            background: linear-gradient(135deg, ${config.primary_color} 0%, #6B5CE7 100%);
-            cursor: pointer; display: flex; align-items: center; justify-content: center;
-            transition: all 0.2s; flex-shrink: 0;
+            width: 36px; height: 36px; border-radius: 50%; border: none;
+            background: ${T.lime}; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: transform 0.22s cubic-bezier(0.34,1.56,0.64,1),
+                        box-shadow 0.22s ease;
+            flex-shrink: 0;
         }
-        #cbn-send:hover:not(:disabled) { transform: scale(1.06); box-shadow: 0 3px 12px rgba(67, 24, 255, 0.38); }
-        #cbn-send:disabled { opacity: 0.42; cursor: not-allowed; }
-        #cbn-send svg { width: 17px; height: 17px; fill: white; }
+        #cbn-send:hover:not(:disabled) {
+            transform: scale(1.1);
+            box-shadow: 0 4px 16px ${T.limeShadow};
+        }
+        #cbn-send:active:not(:disabled) { transform: scale(0.96); }
+        #cbn-send:disabled { opacity: 0.35; cursor: not-allowed; }
+        #cbn-send svg { width: 16px; height: 16px; fill: ${T.limeText}; }
 
-        /* ===== BRANDING ===== */
+        /* ── BRANDING ── */
         #cbn-branding {
-            padding: 7px; text-align: center; font-size: 11px;
-            color: #A8B3C4; background: white; border-top: 1px solid #F2F5FA;
+            padding: 7px 0 9px; text-align: center;
+            font-size: 10.5px; font-weight: 500; letter-spacing: 0.01em;
+            color: ${T.textLo}; background: ${T.s2};
         }
-        #cbn-branding a { color: ${config.primary_color}; font-weight: 600; text-decoration: none; }
+        #cbn-branding a {
+            color: ${T.lime}; font-weight: 600; text-decoration: none;
+            transition: opacity 0.15s;
+        }
+        #cbn-branding a:hover { opacity: 0.75; }
 
-        /* ===== MOBILE ===== */
+        /* ── MOBILE ── */
         @media (max-width: 480px) {
-            #cbn-widget { bottom: 16px; right: 16px; left: 16px; }
-            #cbn-window { position: fixed; bottom: 0; right: 0; left: 0; top: 0; width: 100%; max-width: none; height: 100%; max-height: 100%; border-radius: 0; }
-            #cbn-button { width: 54px; height: 54px; }
-            .cbn-msg { max-width: 90%; }
-            .cbn-msg-avatar { width: 26px; height: 26px; }
+            #cbn-widget { bottom: 18px; right: 18px; left: 18px; }
+            #cbn-window {
+                position: fixed; bottom: 0; right: 0; left: 0; top: 0;
+                width: 100%; max-width: none; height: 100%; max-height: 100%;
+                border-radius: 0;
+            }
+            #cbn-button { width: 56px; height: 56px; }
+            .cbn-msg { max-width: 92%; }
         }
     `;
 
+    /* ─────────────────────────────────────
+       INIT — build DOM, inject styles
+    ───────────────────────────────────── */
     function init() {
-        const styleSheet = document.createElement("style");
-        styleSheet.innerText = styles;
-        document.head.appendChild(styleSheet);
+        const styleEl = document.createElement('style');
+        styleEl.textContent = styles;
+        document.head.appendChild(styleEl);
 
         const container = document.createElement('div');
         container.id = 'cbn-widget';
@@ -234,32 +360,57 @@
                 <div id="cbn-header">
                     <div id="cbn-header-info">
                         <div id="cbn-avatar">
-                            <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <circle cx="12" cy="8" r="4" fill="#DAFF01"/>
+                                <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="#DAFF01" stroke-width="1.8" stroke-linecap="round"/>
+                            </svg>
                         </div>
                         <div id="cbn-header-text">
                             <div class="cbn-business-name">${config.business_name}</div>
                             <div class="cbn-bot-name">${config.bot_name}</div>
-                            <div class="cbn-status"><span id="cbn-status-dot"></span> Online now</div>
+                            <div class="cbn-status">
+                                <span id="cbn-status-dot"></span>
+                                Online now
+                            </div>
                         </div>
                     </div>
                     <button id="cbn-close-btn" title="Close">
-                        <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                        <svg viewBox="0 0 24 24">
+                            <line x1="18" y1="6" x2="6" y2="18"/>
+                            <line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
                     </button>
                 </div>
-                <div id="cbn-messages"></div>
+
+                <div id="cbn-messages">
+                    <div class="cbn-date-chip">Today</div>
+                </div>
+
                 <div id="cbn-input-area">
                     <div id="cbn-input-wrapper">
-                        <textarea id="cbn-input" placeholder="Write a message..." rows="1"></textarea>
+                        <textarea id="cbn-input" placeholder="Ask me anything…" rows="1"></textarea>
                         <button id="cbn-send" title="Send">
-                            <svg viewBox="0 0 24 24"><path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z"/></svg>
+                            <svg viewBox="0 0 24 24">
+                                <path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z"/>
+                            </svg>
                         </button>
                     </div>
                 </div>
-                <div id="cbn-branding">Powered by <a href="https://chatbotnepal.isoftroerp.com/" target="_blank">ChatBot Nepal</a></div>
+
+                <div id="cbn-branding">
+                    Powered by <a href="https://chatbotnepal.isoftroerp.com/" target="_blank">ChatBot Nepal</a>
+                </div>
             </div>
-            <button id="cbn-button">
-                <svg class="cbn-chat-icon" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-                <svg class="cbn-close-icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18" stroke="white" stroke-width="2.5"/><line x1="6" y1="6" x2="18" y2="18" stroke="white" stroke-width="2.5"/></svg>
+
+            <button id="cbn-button" title="Chat">
+                <svg class="cbn-chat-icon" viewBox="0 0 24 24" fill="none">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+                          fill="#181E00"/>
+                </svg>
+                <svg class="cbn-close-icon" viewBox="0 0 24 24" fill="none">
+                    <line x1="18" y1="6" x2="6" y2="18" stroke="#181E00" stroke-width="2.5" stroke-linecap="round"/>
+                    <line x1="6" y1="6" x2="18" y2="18" stroke="#181E00" stroke-width="2.5" stroke-linecap="round"/>
+                </svg>
             </button>
         `;
         document.body.appendChild(container);
@@ -284,21 +435,21 @@
         initSession().then(() => setupEvents());
     }
 
+    /* ─────────────────────────────────────
+       EVENTS
+    ───────────────────────────────────── */
     function setupEvents() {
-        const btn = document.getElementById('cbn-button');
-        const win = document.getElementById('cbn-window');
+        const btn     = document.getElementById('cbn-button');
+        const win     = document.getElementById('cbn-window');
         const closeBtn = document.getElementById('cbn-close-btn');
-        const input = document.getElementById('cbn-input');
+        const input   = document.getElementById('cbn-input');
         const sendBtn = document.getElementById('cbn-send');
 
         function toggleWindow() {
             isWindowOpen = !isWindowOpen;
             win.classList.toggle('open', isWindowOpen);
             btn.classList.toggle('open', isWindowOpen);
-            if (isWindowOpen) {
-                input.focus();
-                scrollToBottom();
-            }
+            if (isWindowOpen) { input.focus(); scrollToBottom(); }
         }
 
         btn.onclick = toggleWindow;
@@ -308,23 +459,21 @@
             input.style.height = 'auto';
             input.style.height = Math.min(input.scrollHeight, 120) + 'px';
         }
-
         input.addEventListener('input', autoResize);
 
         function sendMessage() {
             const msg = input.value.trim();
             if (!msg) return;
             if (!sessionToken) {
-                addMessage('bot', "Chat not ready. Please refresh the page.");
+                addMessage('bot', 'Chat not ready. Please refresh the page.');
                 return;
             }
 
-            const visitorMsgDiv = addMessage('visitor', msg);
+            addMessage('visitor', msg);
             input.value = '';
             autoResize();
 
             const { msgDiv: botMsgDiv, bubble: botBubble } = showStreamingIndicator();
-
             sendBtn.disabled = true;
 
             let conversationIdValue = null;
@@ -345,10 +494,8 @@
                 })
             })
             .then(response => {
-                if (!response.ok) {
-                    throw new Error('Stream failed');
-                }
-                const reader = response.body.getReader();
+                if (!response.ok) throw new Error('Stream failed');
+                const reader  = response.body.getReader();
                 const decoder = new TextDecoder();
 
                 function read() {
@@ -372,9 +519,7 @@
                                         removeStreamingIndicator();
                                         botBubble.innerText = data.message || "I'm sorry, I'm having trouble connecting right now.";
                                     }
-                                } catch (e) {
-                                    // Skip invalid JSON
-                                }
+                                } catch (e) { /* skip invalid JSON */ }
                             }
                         }
 
@@ -400,13 +545,13 @@
 
         sendBtn.onclick = sendMessage;
         input.onkeydown = (e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                sendMessage();
-            }
+            if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
         };
     }
 
+    /* ─────────────────────────────────────
+       DOM HELPERS
+    ───────────────────────────────────── */
     function createAvatarElement(role) {
         const avatar = document.createElement('div');
         avatar.className = 'cbn-msg-avatar';
@@ -414,17 +559,23 @@
             if (config.bot_avatar_url) {
                 avatar.innerHTML = `<img src="${config.bot_avatar_url}" alt="Bot">`;
             } else {
-                avatar.innerHTML = `<svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 1 0-16 0"/></svg>`;
+                avatar.innerHTML = `<svg viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="8" r="4" fill="#DAFF01"/>
+                    <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="#DAFF01" stroke-width="1.8" stroke-linecap="round"/>
+                </svg>`;
             }
         } else {
-            avatar.innerHTML = `<svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`;
+            avatar.innerHTML = `<svg viewBox="0 0 24 24" fill="none">
+                <circle cx="12" cy="7" r="4" fill="#888"/>
+                <path d="M20 21a8 8 0 1 0-16 0" stroke="#888" stroke-width="1.8" stroke-linecap="round"/>
+            </svg>`;
         }
         return avatar;
     }
 
     function addMessage(role, text) {
         const container = document.getElementById('cbn-messages');
-        const msgDiv = document.createElement('div');
+        const msgDiv    = document.createElement('div');
         msgDiv.className = `cbn-msg ${role}`;
 
         msgDiv.appendChild(createAvatarElement(role));
@@ -443,7 +594,6 @@
         content.appendChild(bubble);
         content.appendChild(time);
         msgDiv.appendChild(content);
-
         container.appendChild(msgDiv);
         scrollToBottom();
 
@@ -452,7 +602,7 @@
 
     function showStreamingIndicator() {
         const container = document.getElementById('cbn-messages');
-        const msgDiv = document.createElement('div');
+        const msgDiv    = document.createElement('div');
         msgDiv.className = 'cbn-msg bot cbn-streaming';
 
         msgDiv.appendChild(createAvatarElement('bot'));
@@ -470,7 +620,6 @@
         content.appendChild(bubble);
         content.appendChild(time);
         msgDiv.appendChild(content);
-
         container.appendChild(msgDiv);
         scrollToBottom();
 
@@ -499,9 +648,7 @@
 
     function addMessageTime(msgDiv) {
         const time = msgDiv.querySelector('.cbn-msg-time');
-        if (time) {
-            time.innerText = formatTime(new Date());
-        }
+        if (time) time.innerText = formatTime(new Date());
     }
 
     function scrollToBottom() {
@@ -514,18 +661,20 @@
     }
 
     function updateTheme() {
-        document.querySelector('.cbn-business-name').textContent = config.business_name;
-        document.querySelector('.cbn-bot-name').textContent = config.bot_name;
+        const nameEl = document.querySelector('.cbn-business-name');
+        const botEl  = document.querySelector('.cbn-bot-name');
+        if (nameEl) nameEl.textContent = config.business_name;
+        if (botEl)  botEl.textContent  = config.bot_name;
 
         if (config.bot_avatar_url) {
             const avatar = document.getElementById('cbn-avatar');
-            avatar.innerHTML = `<img src="${config.bot_avatar_url}" alt="${config.bot_name}">`;
+            if (avatar) avatar.innerHTML = `<img src="${config.bot_avatar_url}" alt="${config.bot_name}">`;
         }
     }
 
     function uuidv4() {
         return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-            var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+            var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
             return v.toString(16);
         });
     }
