@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\KnowledgeBase;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -27,7 +28,7 @@ class KnowledgeBaseController extends Controller
     public function index(int $clientId): View
     {
         $client = User::where('role', 'client')->findOrFail($clientId);
-        $kbFiles = $client->knowledgeBases()->orderBy('file_type')->get();
+        $kbFiles = $client->knowledgeBases()->orderBy('sort_order')->orderBy('id')->get();
         $diskPath = $this->clientDiskPath($client);
 
         return view('admin.clients.knowledge-base', compact('client', 'kbFiles', 'diskPath'));
@@ -89,6 +90,15 @@ class KnowledgeBaseController extends Controller
         $kb->delete();
 
         return redirect()->back()->with('success', 'Knowledge base file deleted successfully');
+    }
+
+    public function reorder(Request $request, int $clientId): JsonResponse
+    {
+        $order = $request->input('order', []);
+        foreach ($order as $i => $id) {
+            KnowledgeBase::where('id', $id)->where('user_id', $clientId)->update(['sort_order' => $i]);
+        }
+        return response()->json(['success' => true]);
     }
 
     public function toggleActive(int $clientId, int $kbId): RedirectResponse

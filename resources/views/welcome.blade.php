@@ -923,5 +923,6 @@ document.querySelectorAll('.reveal').forEach(function(el) {
   revealObserver.observe(el);
 });
 </script>
+<script src="https://chatbotnepal.isoftroerp.com/widget.js" data-site-id="chatbotnepal-buwgr2" defer></script>
 </body>
 </html>

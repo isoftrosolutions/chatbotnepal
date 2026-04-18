@@ -16,6 +16,7 @@ class KnowledgeBase extends Model
         'file_type',
         'content',
         'is_active',
+        'sort_order',
     ];
 
     protected $casts = [

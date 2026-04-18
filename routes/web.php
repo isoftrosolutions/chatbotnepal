@@ -84,6 +84,7 @@ Route::middleware('auth')->group(function () {
         Route::put('/clients/{clientId}/knowledge-base/{kbId}', [KnowledgeBaseController::class, 'update'])->name('admin.clients.knowledge-base.update');
         Route::delete('/clients/{clientId}/knowledge-base/{kbId}', [KnowledgeBaseController::class, 'destroy'])->name('admin.clients.knowledge-base.destroy');
         Route::post('/clients/{clientId}/knowledge-base/{kbId}/toggle', [KnowledgeBaseController::class, 'toggleActive'])->name('admin.clients.knowledge-base.toggle');
+        Route::post('/clients/{clientId}/knowledge-base/reorder', [KnowledgeBaseController::class, 'reorder'])->name('admin.clients.knowledge-base.reorder');
 
         Route::get('/clients/{clientId}/conversations', [AdminConversationController::class, 'index'])->name('admin.clients.conversations');
         Route::get('/clients/{clientId}/conversations/{conversationId}', [AdminConversationController::class, 'show'])->name('admin.clients.conversations.show');
