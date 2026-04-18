@@ -818,12 +818,12 @@
     </p>
 
     <div class="flex flex-col sm:flex-row gap-4 justify-center">
-      <a href="https://wa.me/9779811144402?text=I%20want%20a%20free%20demo%20for%20my%20business"
+      <a href="https://wa.me/9779811144402?text=I%20want%20to%20talk%20to%20an%20agent"
          target="_blank" rel="noopener"
          class="inline-flex items-center justify-center gap-2 text-white font-bold py-4 px-8 rounded-xl transition-opacity hover:opacity-90"
          style="background:#25D366">
         <span class="material-symbols-outlined" style="font-size:20px">chat</span>
-        WhatsApp Us Now
+        Talk to Our Agent Now
       </a>
       <a href="mailto:info@isoftro.com"
          class="inline-flex items-center justify-center gap-2 border-2 border-white text-white font-bold py-4 px-8 rounded-xl hover:bg-white hover:text-primary transition-colors">
@@ -849,6 +849,9 @@
     </div>
     <div class="border-t border-outline-var/40 mt-6 pt-6 text-center">
       <p class="text-muted text-sm">&copy; 2026 ChatBot Nepal. Kathmandu, Nepal 🇳🇵</p>
+      <p class="text-muted text-xs mt-2">
+        Built by <a href="https://isoftroerp.com/" target="_blank" rel="noopener" class="text-primary font-semibold hover:underline">ISoftroERP</a>
+      </p>
     </div>
   </div>
 </footer>
