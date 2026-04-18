@@ -158,7 +158,7 @@
          class="text-sm font-semibold text-primary hover:text-primary-c transition-colors px-4 py-2.5">
         Login
       </a>
-      <a href="https://wa.me/9779811144402?text=I%20want%20a%20free%20demo%20for%20my%20business"
+      <a href="https://wa.me/9779811144402?text=Namaste%21%20Chatbot%20ko%20bare%20ma%20kura%20garnu%20tha%20%F0%9F%99%8F"
          target="_blank" rel="noopener"
          class="inline-flex items-center bg-primary-c hover:bg-primary text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-colors">
         Get Free Demo
@@ -191,7 +191,7 @@
        class="block text-center border-2 border-primary text-primary font-semibold py-3.5 rounded-xl hover:bg-primary hover:text-white transition-colors">
       Login
     </a>
-    <a href="https://wa.me/9779811144402?text=I%20want%20a%20free%20demo%20for%20my%20business"
+    <a href="https://wa.me/9779811144402?text=Namaste%21%20Chatbot%20ko%20bare%20ma%20kura%20garnu%20tha%20%F0%9F%99%8F"
        target="_blank" rel="noopener"
        class="block text-center bg-primary-c text-white font-semibold py-3.5 rounded-xl">
       Get Free Demo
@@ -209,32 +209,37 @@
       <!-- Left -->
       <div class="flex-1 lg:max-w-[58%] reveal">
         <span class="inline-flex items-center bg-primary-c text-white text-xs font-bold uppercase tracking-widest px-4 py-2 rounded-full mb-6">
-          Now serving businesses across Nepal&nbsp;🇳🇵
+          Built in Nepal 🇳🇵 · Serving Nepali SMEs
         </span>
 
         <h1 class="font-jakarta font-extrabold text-4xl md:text-5xl text-primary leading-[1.1] mb-5">
-          Your Customers Have Questions.<br>
-          Your Website Should<br>
-          Answer Them.
+          Your Website Should Answer Customers — Automatically
         </h1>
 
         <p class="text-lg text-muted leading-relaxed mb-8 max-w-lg">
-          We build AI chatbots that handle customer queries, capture leads, and work 24/7 — in Nepali, Hindi &amp; English. No technical skills needed.
+          Your website answers customers instantly — in Nepali, Hindi &amp; English — 24/7.<br>
+          We build it, manage it, update it. You just get more sales.
         </p>
 
-        <div class="flex flex-col sm:flex-row gap-3 mb-5">
-          <a href="https://wa.me/9779811144402?text=I%20want%20a%20free%20demo%20for%20my%20business"
+        <div class="flex flex-col sm:flex-row items-center gap-4 mb-5">
+          <a href="https://wa.me/9779811144402?text=Namaste%21%20Chatbot%20ko%20bare%20ma%20kura%20garnu%20tha%20%F0%9F%99%8F"
              target="_blank" rel="noopener"
-             class="inline-flex items-center justify-center gap-2 bg-primary-c hover:bg-primary text-white font-bold py-4 px-8 rounded-xl transition-colors text-base">
-            Get Free Demo &rarr;
+             class="inline-flex items-center justify-center gap-2 bg-primary-c hover:bg-primary text-white font-extrabold py-5 px-10 rounded-xl transition-colors text-lg shadow-teal">
+            Book Your Free Demo (30-min call) &rarr;
           </a>
-          <a href="#pricing"
-             class="inline-flex items-center justify-center border-2 border-primary text-primary font-semibold py-4 px-8 rounded-xl hover:bg-primary hover:text-white transition-colors text-base">
-            View Pricing
+          <a href="#how-it-works"
+             class="text-primary-c font-semibold text-sm hover:underline transition-colors">
+            See How It Works &rarr;
           </a>
         </div>
 
         <p class="text-sm text-muted/70">Setup in 24 hours &nbsp;&middot;&nbsp; No coding required &nbsp;&middot;&nbsp; Cancel anytime</p>
+        <div class="mt-4 inline-flex items-center gap-2 bg-white border border-outline-var/40 rounded-xl px-4 py-2 shadow-teal-sm">
+          <span class="material-symbols-outlined text-primary-c" style="font-size:18px">location_on</span>
+          <span class="text-sm font-semibold text-primary">Nepal Based</span>
+          <span class="text-outline-var mx-1">·</span>
+          <span class="text-sm text-muted">Local Support</span>
+        </div>
       </div>
 
       <!-- Right — Chat mockup -->
@@ -353,7 +358,7 @@
 <section class="bg-surf-low py-16 md:py-24">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="text-center mb-14 reveal">
-      <h2 class="font-jakarta font-bold text-3xl md:text-4xl text-primary mb-3">Here's What We Do</h2>
+      <h2 class="font-jakarta font-bold text-3xl md:text-4xl text-primary mb-3">Here's What Your Chatbot Does For You</h2>
     </div>
 
     <div class="grid md:grid-cols-3 gap-10 md:gap-16">
@@ -387,7 +392,7 @@
 <!-- ════════════════════════════════════
      HOW IT WORKS
 ════════════════════════════════════ -->
-<section class="bg-white py-16 md:py-24">
+<section class="bg-white py-16 md:py-24" id="how-it-works">
   <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="text-center mb-14 reveal">
       <h2 class="font-jakarta font-bold text-3xl md:text-4xl text-primary mb-3">Live in 24 Hours</h2>
@@ -497,8 +502,8 @@
       <p class="text-muted text-lg">Real conversation from a local coaching institute</p>
     </div>
 
-    <!-- Browser mockup -->
-    <div class="bg-white rounded-3xl shadow-teal overflow-hidden reveal">
+    <!-- Desktop: browser mockup (hidden on very small screens) -->
+    <div class="hidden sm:block bg-white rounded-3xl shadow-teal overflow-hidden reveal">
       <!-- Chrome bar -->
       <div class="bg-surf-container px-4 py-3 flex items-center gap-3 border-b border-outline-var/20">
         <div class="flex gap-1.5">
@@ -539,7 +544,6 @@
               </div>
             </div>
           </div>
-
           <div class="bg-white p-3 flex flex-col gap-2">
             <p class="bubble-bot px-3 py-2 text-xs text-[#191c1d] max-w-[90%]">Namaste! Hamro coaching center bare kei sodhnu cha?</p>
             <div class="flex justify-end">
@@ -555,7 +559,6 @@
             </div>
             <p class="bubble-bot px-3 py-2 text-xs text-[#191c1d] max-w-[90%]">IELTS Preparation <strong>Rs. 8,000/month</strong>. Mon-Fri 7–9 AM. Free trial class available. Book garnu huncha?</p>
           </div>
-
           <div class="bg-white border-t border-outline-var/20 px-3 py-2 flex gap-2">
             <input type="text" placeholder="Type your message..." disabled class="flex-1 bg-surf-low rounded-lg px-2.5 py-1.5 text-xs text-muted outline-none">
             <button class="bg-primary-c text-white p-1.5 rounded-lg">
@@ -566,9 +569,42 @@
       </div>
     </div>
 
+    <!-- Mobile: standalone chat widget (shown only on xs screens) -->
+    <div class="sm:hidden bg-white rounded-2xl overflow-hidden shadow-teal-lg reveal">
+      <div class="bg-primary-c px-4 py-3 flex items-center gap-3">
+        <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
+          <span class="material-symbols-outlined text-white" style="font-size:16px">smart_toy</span>
+        </div>
+        <div>
+          <p class="text-white font-jakarta font-semibold text-sm">Everest Coaching</p>
+          <div class="flex items-center gap-1.5 mt-0.5">
+            <span class="w-1.5 h-1.5 bg-green-400 rounded-full inline-block"></span>
+            <span class="text-white/70 text-xs">Online now</span>
+          </div>
+        </div>
+      </div>
+      <div class="bg-white p-4 flex flex-col gap-3">
+        <p class="bubble-bot px-3.5 py-2.5 text-sm text-[#191c1d] max-w-[90%]">Namaste! Hamro coaching center bare kei sodhnu cha?</p>
+        <div class="flex justify-end">
+          <p class="bubble-user px-3.5 py-2.5 text-sm max-w-[90%]">Morning batch ko fee kati ho?</p>
+        </div>
+        <p class="bubble-bot px-3.5 py-2.5 text-sm text-[#191c1d] max-w-[90%]">Monthly fee <strong>Rs. 3,500</strong>. Admission Rs. 1,000. Ahile open cha, join garnu huncha?</p>
+        <div class="flex justify-end">
+          <p class="bubble-user px-3.5 py-2.5 text-sm max-w-[90%]">IELTS course ni cha?</p>
+        </div>
+        <p class="bubble-bot px-3.5 py-2.5 text-sm text-[#191c1d] max-w-[90%]">IELTS Preparation <strong>Rs. 8,000/month</strong>. Mon-Fri 7–9 AM. Free trial class available. Book garnu huncha?</p>
+      </div>
+      <div class="bg-white border-t border-outline-var/20 px-4 py-3 flex gap-2">
+        <input type="text" placeholder="Type your message..." disabled class="flex-1 bg-surf-low rounded-xl px-3 py-2 text-sm text-muted outline-none">
+        <button class="bg-primary-c text-white p-2 rounded-xl">
+          <span class="material-symbols-outlined" style="font-size:18px">send</span>
+        </button>
+      </div>
+    </div>
+
     <div class="text-center mt-10 reveal">
       <p class="text-muted mb-6">This is a real AI chatbot we built. Want one for your business?</p>
-      <a href="https://wa.me/9779811144402?text=I%20want%20a%20free%20demo%20for%20my%20business"
+      <a href="https://wa.me/9779811144402?text=Namaste%21%20Chatbot%20ko%20bare%20ma%20kura%20garnu%20tha%20%F0%9F%99%8F"
          target="_blank" rel="noopener"
          class="inline-flex items-center gap-2 bg-primary-c hover:bg-primary text-white font-bold py-4 px-8 rounded-xl transition-colors">
         Get Your Free Demo
@@ -639,6 +675,21 @@
 </section>
 
 <!-- ════════════════════════════════════
+     PULL QUOTE
+════════════════════════════════════ -->
+<section class="bg-white py-10 md:py-14">
+  <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 text-center reveal">
+    <blockquote class="relative">
+      <span class="absolute -top-4 left-1/2 -translate-x-1/2 text-7xl text-primary-c/10 font-serif leading-none select-none">&ldquo;</span>
+      <p class="relative z-10 text-xl md:text-2xl font-jakarta font-semibold text-primary italic leading-relaxed px-4">
+        "That's exactly why our monthly fee exists — we maintain everything."
+      </p>
+      <footer class="mt-4 text-sm text-muted">— ChatBot Nepal's commitment to every client</footer>
+    </blockquote>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════
      PRICING
 ════════════════════════════════════ -->
 <section class="py-16 md:py-24" id="pricing" style="background:linear-gradient(150deg,#f3f4f5 0%,#e4eeef 100%)">
@@ -649,10 +700,11 @@
     </div>
 
     <div class="relative reveal">
-      <div class="absolute -top-4 inset-x-0 flex justify-center z-10">
-        <span class="bg-secondary text-white text-xs font-extrabold uppercase tracking-widest px-5 py-2 rounded-full">
-          Early Adopter Price
-        </span>
+      <div class="absolute -top-5 inset-x-0 flex justify-center z-10">
+        <div class="bg-secondary text-white font-extrabold px-5 py-2.5 rounded-full text-center">
+          <span class="text-xs uppercase tracking-widest">🔥 Early Adopter Price &nbsp;·&nbsp; Rs. 999/mo</span>
+          <span class="text-xs font-normal text-white/75 ml-2">Regular: <span class="line-through">Rs. 2,499/mo</span> · launching soon</span>
+        </div>
       </div>
 
       <div class="bg-white rounded-3xl shadow-teal-lg p-8 md:p-10 pt-12">
@@ -668,6 +720,10 @@
           </div>
         </div>
         <p class="text-center text-muted text-sm mb-8">+ Rs. 3,000 one-time setup &nbsp;·&nbsp; live in 24 hrs</p>
+
+        <div class="bg-primary-c/10 border border-primary-c/20 rounded-xl px-4 py-3 mb-6 text-center">
+          <p class="text-primary text-sm font-semibold italic">💡 Convert just 2 extra leads/month — chatbot pays for itself 3×</p>
+        </div>
 
         <ul class="flex flex-col gap-3.5 mb-8">
           <li class="flex items-center gap-3">
@@ -692,17 +748,30 @@
           </li>
         </ul>
 
-        <a href="https://wa.me/9779811144402?text=I%20want%20a%20free%20demo%20for%20my%20business"
+        <div class="flex items-center justify-center gap-2 mb-4">
+          <span class="material-symbols-outlined text-primary-c" style="font-size:20px">verified_user</span>
+          <p class="text-sm font-bold text-primary">No contracts &nbsp;·&nbsp; Cancel anytime &nbsp;·&nbsp; Zero lock-in</p>
+        </div>
+
+        <a href="https://wa.me/9779811144402?text=Namaste%21%20Chatbot%20ko%20bare%20ma%20kura%20garnu%20tha%20%F0%9F%99%8F"
            target="_blank" rel="noopener"
            class="block text-center w-full bg-secondary hover:opacity-90 text-white font-bold py-4 rounded-xl transition-opacity text-base">
           Claim This Offer Now
         </a>
+        <p class="text-center text-xs text-muted mt-3">💬 We reply on WhatsApp within 2 hours</p>
       </div>
     </div>
 
-    <p class="text-center text-sm text-muted mt-5">
-      Limited to first 10 clients &nbsp;&middot;&nbsp; No contracts &nbsp;&middot;&nbsp; Cancel anytime
-    </p>
+    <p class="text-center text-sm text-muted mt-5">Limited to first 10 clients</p>
+
+    <div class="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 mt-3 text-sm">
+      <span class="text-muted font-medium">Payment via:</span>
+      <span class="font-bold" style="color:#60BB46">eSewa</span>
+      <span class="text-muted">·</span>
+      <span class="font-bold" style="color:#5C2D91">Khalti</span>
+      <span class="text-muted">·</span>
+      <span class="font-semibold text-muted">Bank Transfer</span>
+    </div>
   </div>
 </section>
 
@@ -808,6 +877,16 @@
 
       <div class="faq-item bg-surf-low rounded-2xl overflow-hidden reveal">
         <button class="faq-btn w-full flex items-center justify-between px-5 py-4 text-left gap-4">
+          <span class="font-jakarta font-semibold text-primary text-sm md:text-base">How do I pay? Do you accept eSewa or Khalti?</span>
+          <span class="material-symbols-outlined faq-icon text-primary-c flex-shrink-0">add</span>
+        </button>
+        <div class="faq-answer">
+          <p class="px-5 pb-5 text-muted text-sm leading-relaxed">We accept <strong>eSewa</strong>, <strong>Khalti</strong>, and direct bank transfer. No international card needed. After your demo call we'll send you the payment details — setup begins immediately after payment.</p>
+        </div>
+      </div>
+
+      <div class="faq-item bg-surf-low rounded-2xl overflow-hidden reveal">
+        <button class="faq-btn w-full flex items-center justify-between px-5 py-4 text-left gap-4">
           <span class="font-jakarta font-semibold text-primary text-sm md:text-base">Will it slow my website?</span>
           <span class="material-symbols-outlined faq-icon text-primary-c flex-shrink-0">add</span>
         </button>
@@ -815,6 +894,35 @@
           <p class="px-5 pb-5 text-muted text-sm leading-relaxed">No. Single lightweight script, loads asynchronously. Zero impact on your site speed.</p>
         </div>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════
+     FOUNDER
+════════════════════════════════════ -->
+<section class="bg-surf-low py-16 md:py-20">
+  <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 reveal">
+    <div class="bg-white rounded-3xl shadow-teal p-8 md:p-12 text-center">
+      <img src="{{ asset('images/devbarat.jpg') }}" alt="Devbarat — Founder, ChatBot Nepal"
+           class="w-28 h-28 rounded-full object-cover mx-auto mb-5 border-4 border-primary-c/20 shadow-teal-sm">
+      <h3 class="font-jakarta font-bold text-xl text-primary mb-1">Devbarat</h3>
+      <p class="text-muted text-sm mb-1">Founder &amp; Developer — ChatBot Nepal</p>
+      <p class="text-muted text-xs mb-6">iSoftro · Kathmandu, Nepal 🇳🇵</p>
+      <blockquote class="relative">
+        <span class="absolute -top-3 left-0 text-6xl text-primary-c/10 font-serif leading-none select-none">&ldquo;</span>
+        <p class="relative z-10 text-muted text-sm md:text-base leading-relaxed italic px-4 text-left">
+          Maine yo service isliye banayi kyunki maine dekha ki Nepal ke acche businesses bhi sirf isliye customers kho rahe the kyunki unka website jawab nahi deta tha.
+          Main personally har chatbot setup karta hoon — mera number direct WhatsApp pe available hai.
+        </p>
+      </blockquote>
+      <p class="text-xs text-muted mt-4 mb-8">— Devbarat, PHP/Laravel Developer &nbsp;·&nbsp; iSoftro &nbsp;·&nbsp; Kathmandu, Nepal 🇳🇵</p>
+      <a href="https://wa.me/9779811144402?text=Namaste%21%20Chatbot%20ko%20bare%20ma%20kura%20garnu%20tha%20%F0%9F%99%8F"
+         target="_blank" rel="noopener"
+         class="inline-flex items-center gap-2 bg-primary-c hover:bg-primary text-white font-bold py-3.5 px-8 rounded-xl transition-colors">
+        <span class="material-symbols-outlined" style="font-size:18px">chat</span>
+        Message Devbarat Directly &rarr;
+      </a>
     </div>
   </div>
 </section>
@@ -832,7 +940,7 @@
     </p>
 
     <div class="flex flex-col sm:flex-row gap-4 justify-center">
-      <a href="https://wa.me/9779811144402?text=I%20want%20to%20talk%20to%20an%20agent"
+      <a href="https://wa.me/9779811144402?text=Namaste%21%20Chatbot%20ko%20bare%20ma%20kura%20garnu%20tha%20%F0%9F%99%8F"
          target="_blank" rel="noopener"
          class="inline-flex items-center justify-center gap-2 text-white font-bold py-4 px-8 rounded-xl transition-opacity hover:opacity-90"
          style="background:#25D366">
@@ -939,7 +1047,33 @@ var revealObserver = new IntersectionObserver(function(entries) {
 document.querySelectorAll('.reveal').forEach(function(el) {
   revealObserver.observe(el);
 });
+
+// ── Sticky mobile CTA bar ──
+var stickyCta = document.getElementById('sticky-cta');
+var heroSection = document.getElementById('about');
+if (stickyCta && heroSection) {
+  var heroObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        stickyCta.classList.add('translate-y-full');
+      } else {
+        stickyCta.classList.remove('translate-y-full');
+      }
+    });
+  }, { threshold: 0 });
+  heroObserver.observe(heroSection);
+}
 </script>
+<!-- ── Sticky mobile CTA bar ── -->
+<div id="sticky-cta" class="md:hidden fixed bottom-0 inset-x-0 z-50 bg-primary border-t-2 border-primary-c px-4 py-3 translate-y-full transition-transform duration-300">
+  <a href="https://wa.me/9779811144402?text=Namaste%21%20Chatbot%20ko%20bare%20ma%20kura%20garnu%20tha%20%F0%9F%99%8F"
+     target="_blank" rel="noopener"
+     class="flex items-center justify-center gap-2 bg-secondary text-white font-bold py-3.5 rounded-xl text-base w-full">
+    <span class="material-symbols-outlined" style="font-size:20px">chat</span>
+    💬 Get Free Demo &rarr;
+  </a>
+</div>
+
 <script src="https://chatbotnepal.isoftroerp.com/widget.js" data-site-id="chatbotnepal-buwgr2" defer></script>
 </body>
 </html>
