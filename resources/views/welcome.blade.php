@@ -57,7 +57,11 @@
   "provider": {"@id": "https://chatbotnepal.isoftroerp.com/#organization"},
   "areaServed": {"@type": "Country", "name": "Nepal"},
   "offers": [
-    {"@type": "Offer","name": "Starter Plan","price": "999","priceCurrency": "NPR","priceSpecification": {"@type": "UnitPriceSpecification","billingIncrement": 1,"unitCode": "MON"}}
+    {"@type": "Offer","name": "Starter Plan","price": "999","priceCurrency": "NPR",
+     "priceSpecification": [
+       {"@type": "UnitPriceSpecification","price": "999","priceCurrency": "NPR","billingIncrement": 1,"unitCode": "MON","name": "Monthly Subscription"},
+       {"@type": "UnitPriceSpecification","price": "3000","priceCurrency": "NPR","billingIncrement": 1,"unitCode": "C62","name": "One-time Setup Fee"}
+     ]}
   ]
 }
 @endverbatim
@@ -149,11 +153,17 @@
       <a href="#contact" class="hover:text-primary transition-colors">Contact</a>
     </div>
 
-    <a href="https://wa.me/9779811144402?text=I%20want%20a%20free%20demo%20for%20my%20business"
-       target="_blank" rel="noopener"
-       class="hidden md:inline-flex items-center bg-primary-c hover:bg-primary text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-colors">
-      Get Free Demo
-    </a>
+    <div class="hidden md:flex items-center gap-3">
+      <a href="{{ route('login') }}"
+         class="text-sm font-semibold text-primary hover:text-primary-c transition-colors px-4 py-2.5">
+        Login
+      </a>
+      <a href="https://wa.me/9779811144402?text=I%20want%20a%20free%20demo%20for%20my%20business"
+         target="_blank" rel="noopener"
+         class="inline-flex items-center bg-primary-c hover:bg-primary text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-colors">
+        Get Free Demo
+      </a>
+    </div>
 
     <button id="hamburger" class="md:hidden p-2 rounded-lg hover:bg-surf-low transition-colors" aria-label="Open menu">
       <span class="material-symbols-outlined text-primary">menu</span>
@@ -176,7 +186,11 @@
     <a href="#faq"     class="drawer-link px-4 py-3 rounded-xl text-muted hover:bg-surf-low hover:text-primary transition-colors">FAQ</a>
     <a href="#contact" class="drawer-link px-4 py-3 rounded-xl text-muted hover:bg-surf-low hover:text-primary transition-colors">Contact</a>
   </div>
-  <div class="mt-auto p-5">
+  <div class="mt-auto p-5 flex flex-col gap-3">
+    <a href="{{ route('login') }}"
+       class="block text-center border-2 border-primary text-primary font-semibold py-3.5 rounded-xl hover:bg-primary hover:text-white transition-colors">
+      Login
+    </a>
     <a href="https://wa.me/9779811144402?text=I%20want%20a%20free%20demo%20for%20my%20business"
        target="_blank" rel="noopener"
        class="block text-center bg-primary-c text-white font-semibold py-3.5 rounded-xl">
@@ -653,7 +667,7 @@
             <span class="text-muted text-sm mb-2">/month</span>
           </div>
         </div>
-        <p class="text-center text-muted text-sm mb-8">+ Rs. 3,000 one-time setup</p>
+        <p class="text-center text-muted text-sm mb-8">+ Rs. 3,000 one-time setup &nbsp;·&nbsp; live in 24 hrs</p>
 
         <ul class="flex flex-col gap-3.5 mb-8">
           <li class="flex items-center gap-3">
@@ -670,7 +684,7 @@
           </li>
           <li class="flex items-center gap-3">
             <span class="material-symbols-outlined text-primary-c flex-shrink-0" style="font-size:20px">check_circle</span>
-            <span class="text-muted text-sm">Monthly Analytics Report</span>
+            <span class="text-muted text-sm">Weekly Performance Audits</span>
           </li>
           <li class="flex items-center gap-3">
             <span class="material-symbols-outlined text-primary-c flex-shrink-0" style="font-size:20px">check_circle</span>
