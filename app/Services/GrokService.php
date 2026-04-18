@@ -20,9 +20,9 @@ class GrokService
 
     public function __construct()
     {
-        $this->apiKey = Setting::get('grok_api_key', env('GROQ_API_KEY', env('GROK_API_KEY', '')));
-        $this->apiUrl = env('GROQ_API_URL', env('GROK_API_URL', 'https://api.groq.com/openai/v1/chat/completions'));
-        $this->model = Setting::get('grok_model', env('GROQ_MODEL', env('GROK_MODEL', 'llama-3.3-70b-versatile')));
+        $this->apiKey = Setting::get('grok_api_key', env('GROQ_API_KEY', ''));
+        $this->apiUrl = env('GROQ_API_URL', 'https://api.groq.com/openai/v1/chat/completions');
+        $this->model = Setting::get('grok_model', env('GROQ_MODEL', 'llama-3.3-70b-versatile'));
         $this->maxTokens = (int) Setting::get('grok_max_tokens', env('GROK_MAX_TOKENS', 500));
         $this->temperature = (float) Setting::get('grok_temperature', env('GROK_TEMPERATURE', 0.7));
     }
@@ -151,7 +151,7 @@ class GrokService
             curl_close($ch);
 
             if ($error) {
-                Log::error('Grok streaming error', ['error' => $error]);
+                Log::error('Groq streaming error', ['error' => $error]);
                 $onError('Connection error');
 
                 return;
@@ -159,7 +159,7 @@ class GrokService
 
             $onComplete();
         } catch (\Exception $e) {
-            Log::error('Grok streaming exception', ['message' => $e->getMessage()]);
+            Log::error('Groq streaming exception', ['message' => $e->getMessage()]);
             $onError('AI service temporarily unavailable');
         }
     }

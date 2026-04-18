@@ -16,7 +16,7 @@ class SettingController extends Controller
 
         $defaults = [
             'grok_api_key' => '',
-            'grok_model' => 'grok-3-mini',
+            'grok_model' => 'llama-3.3-70b-versatile',
             'grok_max_tokens' => '500',
             'grok_temperature' => '0.7',
             'grok_system_prompt' => "You are a helpful assistant for {business_name}. Answer questions using ONLY the provided knowledge base. Be friendly, concise, and helpful. If you don't know the answer, say so politely and suggest contacting the business directly.",

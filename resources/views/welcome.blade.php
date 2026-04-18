@@ -21,6 +21,7 @@
 <meta name="twitter:image" content="https://chatbotnepal.com/og-image.png">
 
 <script type="application/ld+json">
+@verbatim
 {
   "@context": "https://schema.org",
   "@graph": [
@@ -65,9 +66,11 @@
     }
   ]
 }
+@endverbatim
 </script>
 
 <script type="application/ld+json">
+@verbatim
 {
   "@context": "https://schema.org",
   "@type": "Service",
@@ -87,6 +90,7 @@
     {"@type": "Review","author": {"@type": "Person","name": "Bikash Tamang"},"reviewRating": {"@type": "Rating","ratingValue": "5"},"reviewBody": "Setup was done in just one day. The team interviewed us, built the knowledge base, and installed it. Our customers get instant answers even at midnight. Amazing!"}
   ]
 }
+@endverbatim
 </script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
