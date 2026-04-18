@@ -3,22 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ChatBot Nepal — AI Chatbot Service for Your Website</title>
-<meta name="description" content="Add an AI chatbot to your business website in Nepal within 24 hours. Answers customers in Nepali, Hindi & English 24/7. Plans from Rs. 1,999/month. Free demo available.">
-<link rel="canonical" href="https://chatbotnepal.com/">
-
+<meta name="description" content="ChatBot Nepal — AI chatbots for Nepali businesses. Answer customer questions 24/7 in Nepali, Hindi & English. Setup in 24 hours. Rs. 999/month.">
+<title>ChatBot Nepal — AI Chatbot for Your Business Website</title>
+<link rel="canonical" href="https://chatbotnepal.isoftroerp.com">
+<meta property="og:title" content="ChatBot Nepal — AI Chatbot for Your Business Website">
+<meta property="og:description" content="Answer customer queries 24/7 in Nepali, Hindi & English. No coding. Setup in 24 hours.">
+<meta property="og:url" content="https://chatbotnepal.isoftroerp.com">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://chatbotnepal.com/">
-<meta property="og:title" content="ChatBot Nepal — AI Chatbot Service for Your Website">
-<meta property="og:description" content="Add an AI chatbot to your business website in Nepal within 24 hours. Answers customers in Nepali, Hindi & English 24/7. Plans from Rs. 1,999/month.">
-<meta property="og:image" content="https://chatbotnepal.com/og-image.png">
-<meta property="og:locale" content="ne_NP">
-<meta property="og:site_name" content="ChatBot Nepal">
-
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="ChatBot Nepal — AI Chatbot Service for Your Website">
-<meta name="twitter:description" content="Add an AI chatbot to your business website in Nepal within 24 hours. Plans from Rs. 1,999/month.">
-<meta name="twitter:image" content="https://chatbotnepal.com/og-image.png">
 
 <script type="application/ld+json">
 @verbatim
@@ -27,41 +18,28 @@
   "@graph": [
     {
       "@type": ["Organization", "LocalBusiness"],
-      "@id": "https://chatbotnepal.com/#organization",
+      "@id": "https://chatbotnepal.isoftroerp.com/#organization",
       "name": "ChatBot Nepal",
-      "url": "https://chatbotnepal.com",
-      "logo": "https://chatbotnepal.com/og-image.png",
-      "description": "AI chatbot service for business websites in Nepal. We build, deploy, and maintain custom AI chatbots that answer customers in Nepali, Hindi, and English 24/7.",
+      "url": "https://chatbotnepal.isoftroerp.com",
+      "telephone": "+9779811144402",
       "email": "info@isoftro.com",
-      "telephone": "+977-9811144402",
       "address": {
         "@type": "PostalAddress",
         "addressLocality": "Kathmandu",
+        "addressRegion": "Bagmati",
         "addressCountry": "NP"
       },
       "areaServed": { "@type": "Country", "name": "Nepal" },
-      "sameAs": ["https://wa.me/9779811144402"]
+      "description": "AI chatbot service for Nepali SMEs — coaching centers, clinics, hotels, retail stores",
+      "priceRange": "Rs. 999/month",
+      "sameAs": []
     },
     {
       "@type": "FAQPage",
       "mainEntity": [
-        {"@type": "Question","name": "Does my website need to be rebuilt to add a chatbot?","acceptedAnswer": {"@type": "Answer","text": "No. We just add one small line of code to your existing website. Works on WordPress, custom websites, Laravel, HTML — any website. Your developer can do it in 2 minutes."}},
-        {"@type": "Question","name": "How does the chatbot know about my business?","acceptedAnswer": {"@type": "Answer","text": "We interview you for 30 minutes and collect all information about your services, pricing, FAQs, and contact details. We build a custom knowledge base just for your business. The chatbot only answers using your information."}},
-        {"@type": "Question","name": "Can the chatbot reply in Nepali or Hindi?","acceptedAnswer": {"@type": "Answer","text": "Yes. The chatbot automatically detects the language your customer is typing in and replies in the same language — Nepali, Hindi, or English. No extra setup needed."}},
-        {"@type": "Question","name": "What if I change my pricing or services?","acceptedAnswer": {"@type": "Answer","text": "Just message us. We update your knowledge base same day. All Growth and Pro plans include unlimited updates."}},
-        {"@type": "Question","name": "Is there a contract or lock-in period?","acceptedAnswer": {"@type": "Answer","text": "No long-term contracts. Pay month to month. Cancel anytime."}}
-      ]
-    },
-    {
-      "@type": "HowTo",
-      "name": "How to Add an AI Chatbot to Your Website in Nepal",
-      "description": "Get a custom AI chatbot deployed on your business website within 24 hours.",
-      "totalTime": "PT24H",
-      "step": [
-        {"@type": "HowToStep","position": 1,"name": "We Interview You","text": "30 minute call — we learn everything about your business, services, pricing, and FAQs."},
-        {"@type": "HowToStep","position": 2,"name": "We Build Your Knowledge Base","text": "Services, pricing, FAQs — all loaded into a smart AI knowledge base customized for your business."},
-        {"@type": "HowToStep","position": 3,"name": "We Deploy the Chatbot","text": "One line of code added to your website. Works on any platform."},
-        {"@type": "HowToStep","position": 4,"name": "Your Website Answers 24/7","text": "Customers get instant answers in Nepali, Hindi, or English — even at midnight."}
+        {"@type": "Question","name": "How long does setup take?","acceptedAnswer": {"@type": "Answer","text": "24 hours from our interview call. We collect your info, build the knowledge base, and deploy. You paste one line of code."}},
+        {"@type": "Question","name": "Does it understand Nepali in Roman letters?","acceptedAnswer": {"@type": "Answer","text": "Yes. Customers can type 'fee kati ho?' in romanized Nepali. The chatbot understands and replies perfectly."}},
+        {"@type": "Question","name": "Is there a contract?","acceptedAnswer": {"@type": "Answer","text": "No. Month-to-month. Cancel anytime. No lock-in."}}
       ]
     }
   ]
@@ -76,18 +54,10 @@
   "@type": "Service",
   "name": "ChatBot Nepal AI Chatbot Service",
   "description": "Custom AI chatbot service for business websites in Nepal. Answers customers in Nepali, Hindi, and English 24/7.",
-  "provider": {"@id": "https://chatbotnepal.com/#organization"},
+  "provider": {"@id": "https://chatbotnepal.isoftroerp.com/#organization"},
   "areaServed": {"@type": "Country", "name": "Nepal"},
   "offers": [
-    {"@type": "Offer","name": "Starter Plan","price": "1999","priceCurrency": "NPR","priceSpecification": {"@type": "UnitPriceSpecification","billingIncrement": 1,"unitCode": "MON"}},
-    {"@type": "Offer","name": "Growth Plan","price": "3999","priceCurrency": "NPR","priceSpecification": {"@type": "UnitPriceSpecification","billingIncrement": 1,"unitCode": "MON"}},
-    {"@type": "Offer","name": "Pro Plan","price": "6999","priceCurrency": "NPR","priceSpecification": {"@type": "UnitPriceSpecification","billingIncrement": 1,"unitCode": "MON"}}
-  ],
-  "aggregateRating": {"@type": "AggregateRating","ratingValue": "5","reviewCount": "3","bestRating": "5","worstRating": "1"},
-  "review": [
-    {"@type": "Review","author": {"@type": "Person","name": "Ram Kumar Shrestha"},"reviewRating": {"@type": "Rating","ratingValue": "5"},"reviewBody": "Hamro website ma chatbot add gareko pachi customer haru aafai answer paune bhaye. Hami ko call aaune ghatyo, sales badhyo. Ekdam ramro service!"},
-    {"@type": "Review","author": {"@type": "Person","name": "Sushila Poudel"},"reviewRating": {"@type": "Rating","ratingValue": "5"},"reviewBody": "Our coaching center website now handles 100+ student inquiries daily without any staff. The chatbot knows everything about our courses and fees. Worth every rupee!"},
-    {"@type": "Review","author": {"@type": "Person","name": "Bikash Tamang"},"reviewRating": {"@type": "Rating","ratingValue": "5"},"reviewBody": "Setup was done in just one day. The team interviewed us, built the knowledge base, and installed it. Our customers get instant answers even at midnight. Amazing!"}
+    {"@type": "Offer","name": "Starter Plan","price": "999","priceCurrency": "NPR","priceSpecification": {"@type": "UnitPriceSpecification","billingIncrement": 1,"unitCode": "MON"}}
   ]
 }
 @endverbatim
@@ -96,1379 +66,862 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="preconnect" href="https://cdnjs.cloudflare.com">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          'primary': '#00535b',
+          'primary-c': '#006d77',
+          'secondary': '#8e4e14',
+          'surf-base': '#f8f9fa',
+          'surf-low': '#f3f4f5',
+          'surf-container': '#edeeef',
+          'muted': '#3e494a',
+          'outline-var': '#bec8ca',
+        },
+        fontFamily: {
+          jakarta: ['"Plus Jakarta Sans"', 'sans-serif'],
+          inter: ['Inter', 'sans-serif'],
+        },
+      }
+    }
+  }
+</script>
 
 <style>
-  :root {
-    --primary: #00535b;
-    --primary-container: #006d77;
-    --on-primary: #ffffff;
-    --secondary: #8e4e14;
-    --secondary-container: #ffab69;
-    --surface: #f8f9fa;
-    --surface-bright: #f8f9fa;
-    --surface-low: #f3f4f5;
-    --surface-mid: #edeeef;
-    --surface-high: #e7e8e9;
-    --surface-highest: #e1e3e4;
-    --surface-lowest: #ffffff;
-    --on-surface: #191c1d;
-    --on-surface-variant: #3e494a;
-    --outline-variant: #bec8ca;
-    --outline: #6f797a;
-    --teal-shadow: rgba(0, 109, 119, 0.08);
-    --teal-glow: rgba(0, 83, 91, 0.12);
-  }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+  *, *::before, *::after { box-sizing: border-box; }
   html { scroll-behavior: smooth; }
+  body { font-family: 'Inter', sans-serif; color: #191c1d; background: #f8f9fa; }
+  h1, h2, h3, h4, h5 { font-family: 'Plus Jakarta Sans', sans-serif; }
 
-  body {
-    font-family: 'Inter', sans-serif;
-    background: var(--surface);
-    color: var(--on-surface);
-    overflow-x: hidden;
-    -webkit-font-smoothing: antialiased;
-  }
-
-  /* ── TYPOGRAPHY ── */
-  .font-headline { font-family: 'Plus Jakarta Sans', sans-serif; }
-
-  h1, h2, h3, .section-title, .plan-name-text {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-  }
-
-  /* ── NAV ── */
-  nav {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 100;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 2.5rem;
-    height: 68px;
-    background: rgba(248, 249, 250, 0.80);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-  }
-
-  .logo {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-weight: 800;
-    font-size: 1.25rem;
-    color: var(--primary);
-    letter-spacing: -0.03em;
-    text-decoration: none;
-  }
-
-  .nav-links {
-    display: flex;
-    gap: 0.25rem;
-    list-style: none;
-  }
-
-  .nav-links a {
-    color: var(--on-surface-variant);
-    text-decoration: none;
-    font-size: 0.875rem;
-    font-weight: 500;
-    padding: 0.5rem 0.875rem;
-    border-radius: 8px;
-    transition: background 0.2s, color 0.2s;
-  }
-
-  .nav-links a:hover {
-    background: var(--surface-high);
-    color: var(--primary);
-  }
-
-  .nav-cta {
-    background: linear-gradient(160deg, var(--primary-container), var(--primary));
-    color: var(--on-primary);
-    padding: 0.6rem 1.4rem;
-    border-radius: 10px;
-    font-weight: 700;
-    font-size: 0.875rem;
-    text-decoration: none;
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    transition: opacity 0.2s, transform 0.2s;
-    box-shadow: 0 4px 16px var(--teal-glow);
-  }
-
-  .nav-cta:hover { opacity: 0.9; transform: translateY(-1px); }
-
-  .hamburger {
-    display: none;
-    flex-direction: column;
-    gap: 5px;
-    cursor: pointer;
-    padding: 6px;
-  }
-
-  .hamburger span {
-    display: block;
-    width: 22px;
-    height: 2px;
-    background: var(--primary);
-    border-radius: 2px;
-    transition: all 0.3s;
-  }
-
-  /* ── HERO ── */
-  .hero {
-    min-height: 100vh;
-    background: var(--surface-low);
-    display: flex;
-    align-items: center;
-    padding: 7rem 2.5rem 5rem;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .hero-ambient {
-    position: absolute;
-    inset: 0;
-    background:
-      radial-gradient(ellipse 55% 55% at 70% 40%, rgba(0,109,119,0.07) 0%, transparent 65%),
-      radial-gradient(ellipse 35% 35% at 20% 70%, rgba(142,78,20,0.04) 0%, transparent 60%);
-    pointer-events: none;
-  }
-
-  .hero-inner {
-    max-width: 1160px;
-    margin: 0 auto;
-    width: 100%;
-    display: grid;
-    grid-template-columns: 1fr 420px;
-    gap: 5rem;
-    align-items: center;
-    position: relative;
-    z-index: 2;
-  }
-
-  .hero-eyebrow {
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    vertical-align: middle;
     display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    background: rgba(0,109,119,0.08);
-    color: var(--primary-container);
-    border-radius: 100px;
-    padding: 0.4rem 1rem;
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    margin-bottom: 1.75rem;
-    animation: fadeUp 0.5s ease both;
   }
 
-  .eyebrow-dot {
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    background: var(--primary-container);
-    animation: pulse 2.5s infinite;
-  }
-
-  @keyframes pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.4; transform: scale(1.4); }
-  }
-
-  h1 {
-    font-size: clamp(2.6rem, 5vw, 4.2rem);
-    font-weight: 800;
-    line-height: 1.06;
-    letter-spacing: -0.035em;
-    color: var(--on-surface);
-    margin-bottom: 1.5rem;
-    animation: fadeUp 0.5s 0.08s ease both;
-  }
-
-  h1 .accent {
-    color: var(--primary-container);
-  }
-
-  .hero-sub {
-    font-size: 1.1rem;
-    color: var(--on-surface-variant);
-    line-height: 1.75;
-    font-weight: 400;
-    max-width: 480px;
-    margin-bottom: 2.5rem;
-    animation: fadeUp 0.5s 0.16s ease both;
-  }
-
-  .hero-btns {
-    display: flex;
-    gap: 0.875rem;
-    flex-wrap: wrap;
-    animation: fadeUp 0.5s 0.24s ease both;
-  }
-
-  .btn-primary {
-    background: linear-gradient(160deg, var(--primary-container), var(--primary));
-    color: var(--on-primary);
-    padding: 0.875rem 2rem;
-    border-radius: 12px;
-    font-weight: 700;
-    font-size: 0.975rem;
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    text-decoration: none;
-    transition: opacity 0.2s, transform 0.2s;
-    box-shadow: 0 8px 24px var(--teal-glow);
-  }
-
-  .btn-primary:hover { opacity: 0.92; transform: translateY(-2px); }
-
-  .btn-secondary-cta {
-    background: var(--secondary);
-    color: #fff;
-    padding: 0.875rem 2rem;
-    border-radius: 12px;
-    font-weight: 700;
-    font-size: 0.975rem;
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    text-decoration: none;
-    transition: opacity 0.2s, transform 0.2s;
-    box-shadow: 0 8px 20px rgba(142,78,20,0.18);
-  }
-
-  .btn-secondary-cta:hover { opacity: 0.9; transform: translateY(-2px); }
-
-  .btn-ghost {
-    background: transparent;
-    color: var(--primary);
-    padding: 0.875rem 1.75rem;
-    border-radius: 12px;
-    font-weight: 600;
-    font-size: 0.975rem;
-    text-decoration: none;
-    transition: background 0.2s;
-  }
-
-  .btn-ghost:hover { background: var(--surface-high); }
-
-  .hero-stats {
-    display: flex;
-    gap: 2.5rem;
-    margin-top: 3.5rem;
-    flex-wrap: wrap;
-    animation: fadeUp 0.5s 0.32s ease both;
-  }
-
-  .stat-num {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 2rem;
-    font-weight: 800;
-    color: var(--primary-container);
-    letter-spacing: -0.03em;
-    display: block;
-  }
-
-  .stat-label {
-    font-size: 0.78rem;
-    color: var(--on-surface-variant);
-    font-weight: 500;
-    margin-top: 0.15rem;
-  }
-
-  /* ── DEMO WIDGET ── */
-  .demo-widget {
-    background: var(--surface-lowest);
-    border-radius: 24px;
-    overflow: hidden;
-    box-shadow: 0 24px 64px var(--teal-shadow), 0 4px 16px rgba(0,0,0,0.04);
-    animation: fadeUp 0.5s 0.4s ease both;
-    position: relative;
-  }
-
-  .widget-header {
-    background: linear-gradient(135deg, var(--primary-container), var(--primary));
-    padding: 1rem 1.25rem;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-  }
-
-  .widget-avatar {
-    width: 36px; height: 36px;
-    background: rgba(255,255,255,0.2);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
-    font-size: 1rem;
-  }
-
-  .widget-name {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-weight: 700;
-    color: #fff;
-    font-size: 0.9rem;
-  }
-
-  .widget-status {
-    font-size: 0.7rem;
-    color: rgba(255,255,255,0.75);
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    margin-top: 1px;
-  }
-
-  .status-dot {
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    background: #4ade80;
-  }
-
-  .widget-messages {
-    padding: 1.25rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    min-height: 210px;
-    background: var(--surface-low);
-  }
-
-  .msg-bot {
-    background: var(--surface-highest);
-    color: var(--on-surface);
-    padding: 0.75rem 1rem;
-    border-radius: 0 16px 16px 16px;
-    font-size: 0.85rem;
-    max-width: 88%;
-    line-height: 1.55;
-  }
-
-  .msg-user {
-    background: var(--primary-container);
-    color: var(--on-primary);
-    padding: 0.75rem 1rem;
-    border-radius: 16px 0 16px 16px;
-    font-size: 0.85rem;
-    max-width: 88%;
-    align-self: flex-end;
-    font-weight: 500;
-  }
-
-  .widget-input {
-    display: flex;
-    gap: 0.5rem;
-    padding: 1rem 1.25rem;
-    background: var(--surface-lowest);
-  }
-
-  .widget-input input {
-    flex: 1;
-    background: var(--surface-mid);
-    border: none;
-    border-radius: 10px;
-    padding: 0.65rem 0.9rem;
-    color: var(--on-surface);
-    font-size: 0.82rem;
-    font-family: 'Inter', sans-serif;
-    outline: none;
-    transition: background 0.2s;
-  }
-
-  .widget-input input:focus { background: var(--surface-high); }
-
-  .widget-input button {
-    background: linear-gradient(135deg, var(--primary-container), var(--primary));
-    border: none;
-    border-radius: 10px;
-    padding: 0.65rem 1rem;
-    color: #fff;
-    cursor: pointer;
-    font-size: 0.9rem;
-    transition: opacity 0.2s;
-  }
-
-  .widget-input button:hover { opacity: 0.88; }
-
-  /* ── SECTIONS ── */
-  section { padding: 6rem 2.5rem; }
-
-  .section-inner { max-width: 1160px; margin: 0 auto; }
-
-  .section-eyebrow {
-    display: inline-block;
-    color: var(--primary-container);
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    margin-bottom: 1rem;
-    font-family: 'Plus Jakarta Sans', sans-serif;
-  }
-
-  .section-title {
-    font-size: clamp(1.9rem, 3.5vw, 2.75rem);
-    font-weight: 800;
-    letter-spacing: -0.025em;
-    line-height: 1.1;
-    margin-bottom: 1rem;
-    color: var(--on-surface);
-  }
-
-  .section-sub {
-    color: var(--on-surface-variant);
-    font-size: 1rem;
-    line-height: 1.75;
-    max-width: 520px;
-    font-weight: 400;
-  }
-
-  .accent { color: var(--primary-container); }
-
-  /* ── ABOUT ── */
-  .about { background: var(--surface-lowest); }
-
-  .about-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 5rem;
-    align-items: center;
-    margin-top: 3.5rem;
-  }
-
-  .about-features {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    margin-top: 2rem;
-  }
-
-  .about-feature {
-    display: flex;
-    gap: 1rem;
-    align-items: flex-start;
-  }
-
-  .feature-icon {
-    width: 44px; height: 44px;
-    background: rgba(0,109,119,0.08);
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.1rem;
-    flex-shrink: 0;
-    color: var(--primary-container);
-  }
-
-  .feature-text h4 {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-weight: 700;
-    font-size: 0.95rem;
-    margin-bottom: 0.3rem;
-    color: var(--on-surface);
-  }
-
-  .feature-text p {
-    font-size: 0.875rem;
-    color: var(--on-surface-variant);
-    line-height: 1.6;
-  }
-
-  .about-visual {
-    background: var(--surface-low);
-    border-radius: 24px;
-    padding: 2rem;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .about-visual::before {
-    content: '';
-    position: absolute;
-    top: -40%;
-    right: -40%;
-    width: 80%;
-    height: 80%;
-    background: radial-gradient(ellipse, rgba(0,109,119,0.06) 0%, transparent 70%);
-    pointer-events: none;
-  }
-
-  .process-steps {
-    display: flex;
-    flex-direction: column;
-    gap: 0.875rem;
-  }
-
-  .process-step {
-    display: flex;
-    gap: 1rem;
-    align-items: center;
-    padding: 1rem 1.25rem;
-    background: var(--surface-lowest);
-    border-radius: 14px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-    transition: box-shadow 0.2s, transform 0.2s;
-  }
-
-  .process-step:hover {
-    box-shadow: 0 8px 24px var(--teal-shadow);
-    transform: translateX(4px);
-  }
-
-  .step-num {
-    width: 34px; height: 34px;
-    background: linear-gradient(135deg, var(--primary-container), var(--primary));
-    color: #fff;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-weight: 800;
-    font-size: 0.9rem;
-    flex-shrink: 0;
-  }
-
-  .step-text {
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: var(--on-surface);
-    font-family: 'Plus Jakarta Sans', sans-serif;
-  }
-
-  .step-sub {
-    font-size: 0.775rem;
-    color: var(--on-surface-variant);
-    margin-top: 0.15rem;
-  }
-
-  /* ── PRICING ── */
-  .pricing { background: var(--surface-low); }
-
-  .pricing-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.5rem;
-    margin-top: 3.5rem;
-    align-items: start;
-  }
-
-  .pricing-card {
-    background: var(--surface-lowest);
-    border-radius: 24px;
-    padding: 2.25rem;
-    position: relative;
-    transition: transform 0.3s, box-shadow 0.3s;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.04);
-  }
+  /* Shadows */
+  .shadow-teal   { box-shadow: 0 20px 40px rgba(0,109,119,0.07); }
+  .shadow-teal-sm{ box-shadow: 0 4px 16px rgba(0,109,119,0.08); }
+  .shadow-teal-lg{ box-shadow: 0 32px 64px rgba(0,109,119,0.12); }
 
-  .pricing-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 20px 48px var(--teal-shadow);
-  }
-
-  .pricing-card.featured {
-    background: linear-gradient(160deg, rgba(0,109,119,0.06) 0%, var(--surface-lowest) 50%);
-    box-shadow: 0 8px 32px var(--teal-shadow);
-    transform: translateY(-4px);
-  }
-
-  .pricing-card.featured:hover {
-    transform: translateY(-10px);
-  }
-
-  .featured-badge {
-    position: absolute;
-    top: -14px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: var(--secondary);
-    color: #fff;
-    font-size: 0.68rem;
-    font-weight: 700;
-    padding: 0.3rem 1rem;
-    border-radius: 100px;
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    white-space: nowrap;
-  }
-
-  .plan-label {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-weight: 700;
-    font-size: 0.75rem;
-    color: var(--on-surface-variant);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    margin-bottom: 1.25rem;
-  }
-
-  .price-num {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 2.75rem;
-    font-weight: 800;
-    color: var(--on-surface);
-    letter-spacing: -0.04em;
-    line-height: 1;
-  }
-
-  .price-currency {
-    font-size: 1rem;
-    color: var(--on-surface-variant);
-    font-weight: 500;
-    vertical-align: super;
-    font-size: 0.875rem;
-    margin-right: 2px;
-  }
-
-  .price-period {
-    font-size: 0.82rem;
-    color: var(--on-surface-variant);
-    margin-top: 0.25rem;
-  }
-
-  .setup-fee {
-    font-size: 0.78rem;
-    color: var(--outline);
-    margin-top: 0.4rem;
-    margin-bottom: 1.75rem;
-  }
-
-  .plan-divider {
-    height: 1px;
-    background: var(--surface-high);
-    margin: 1.5rem 0;
-  }
-
-  .plan-features {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    margin-bottom: 2rem;
-  }
-
-  .plan-features li {
-    display: flex;
-    gap: 0.7rem;
-    align-items: flex-start;
-    font-size: 0.875rem;
-    color: var(--on-surface);
-    line-height: 1.45;
-  }
-
-  .plan-features li .check { color: var(--primary-container); font-size: 0.8rem; margin-top: 2px; flex-shrink: 0; }
-  .plan-features li.dim { color: var(--outline); }
-  .plan-features li.dim .check { color: var(--outline-variant); }
-
-  .plan-btn {
-    display: block;
-    text-align: center;
-    padding: 0.875rem;
-    border-radius: 12px;
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-weight: 700;
-    font-size: 0.9rem;
-    text-decoration: none;
-    transition: all 0.2s;
-    cursor: pointer;
-    border: none;
-    width: 100%;
-  }
-
-  .plan-btn-outline {
-    background: var(--surface-mid);
-    color: var(--primary);
-  }
-
-  .plan-btn-outline:hover { background: var(--surface-high); }
-
-  .plan-btn-solid {
-    background: linear-gradient(135deg, var(--primary-container), var(--primary));
-    color: #fff;
-    box-shadow: 0 6px 20px var(--teal-glow);
-  }
-
-  .plan-btn-solid:hover { opacity: 0.9; transform: translateY(-1px); }
-
-  /* ── TESTIMONIALS ── */
-  .testimonials { background: var(--surface-lowest); }
-
-  .testimonials-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.5rem;
-    margin-top: 3.5rem;
-  }
-
-  .testimonial-card {
-    background: var(--surface-low);
-    border-radius: 20px;
-    padding: 2rem;
-    transition: transform 0.2s, box-shadow 0.2s;
-  }
-
-  .testimonial-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 16px 40px var(--teal-shadow);
-  }
-
-  .stars { color: #f59e0b; font-size: 0.85rem; letter-spacing: 0.05em; margin-bottom: 1rem; }
-
-  .testimonial-text {
-    font-size: 0.9rem;
-    line-height: 1.75;
-    color: var(--on-surface-variant);
-    margin-bottom: 1.5rem;
-    font-style: italic;
-  }
-
-  .testimonial-author { display: flex; align-items: center; gap: 0.875rem; }
-
-  .author-avatar {
-    width: 42px; height: 42px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, var(--primary-container), var(--primary));
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-weight: 800;
-    font-size: 0.875rem;
-    color: #fff;
-    flex-shrink: 0;
-  }
-
-  .author-name { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 0.9rem; color: var(--on-surface); }
-  .author-role { font-size: 0.75rem; color: var(--outline); margin-top: 0.1rem; }
-
-  /* ── FAQ ── */
-  .faq { background: var(--surface-low); }
+  /* Chat bubbles */
+  .bubble-bot  { background:#e7e8e9; border-radius:1rem 1rem 1rem 0.2rem; }
+  .bubble-user { background:#006d77; color:#fff; border-radius:1rem 1rem 0.2rem 1rem; }
 
-  .faq-list {
-    max-width: 680px;
-    margin: 3.5rem auto 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-  }
-
-  .faq-item {
-    background: var(--surface-lowest);
-    border-radius: 14px;
-    overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-    transition: box-shadow 0.2s;
-  }
-
-  .faq-item:hover { box-shadow: 0 6px 20px var(--teal-shadow); }
-
-  .faq-q {
-    padding: 1.25rem 1.5rem;
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-weight: 600;
-    font-size: 0.95rem;
-    color: var(--on-surface);
-    user-select: none;
-  }
-
-  .faq-icon {
-    color: var(--primary-container);
-    font-size: 1.25rem;
-    transition: transform 0.3s;
-    flex-shrink: 0;
-  }
-
-  .faq-item.open .faq-icon { transform: rotate(45deg); }
-
-  .faq-a {
-    padding: 0 1.5rem;
-    max-height: 0;
-    overflow: hidden;
-    transition: all 0.3s ease;
-    font-size: 0.875rem;
-    color: var(--on-surface-variant);
-    line-height: 1.75;
-  }
-
-  .faq-item.open .faq-a { max-height: 220px; padding: 0 1.5rem 1.25rem; }
-
-  /* ── CTA SECTION ── */
-  .cta-section { background: var(--surface-lowest); text-align: center; }
-
-  .cta-box {
-    max-width: 680px;
-    margin: 0 auto;
-    background: linear-gradient(160deg, rgba(0,109,119,0.06) 0%, var(--surface-low) 100%);
-    border-radius: 32px;
-    padding: 5rem 3rem;
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 24px 64px var(--teal-shadow);
-  }
-
-  .cta-box::before {
-    content: '';
-    position: absolute;
-    top: -30%;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 500px;
-    height: 500px;
-    background: radial-gradient(ellipse, rgba(0,109,119,0.08) 0%, transparent 70%);
-    pointer-events: none;
-  }
-
-  .cta-box h2 {
-    font-size: clamp(1.9rem, 3.5vw, 2.5rem);
-    font-weight: 800;
-    letter-spacing: -0.025em;
-    margin-bottom: 1rem;
-    color: var(--on-surface);
-    position: relative;
-  }
-
-  .cta-box > p {
-    color: var(--on-surface-variant);
-    margin-bottom: 2.25rem;
-    font-size: 1rem;
-    line-height: 1.7;
-    position: relative;
-  }
-
-  .cta-btns {
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
-    flex-wrap: wrap;
-    position: relative;
-  }
-
-  /* ── FOOTER ── */
-  footer {
-    background: var(--surface-low);
-    padding: 3rem 2.5rem;
-  }
-
-  .footer-inner {
-    max-width: 1160px;
-    margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 1.25rem;
-  }
-
-  .footer-logo {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-weight: 800;
-    color: var(--primary);
-    font-size: 1.1rem;
-    text-decoration: none;
-  }
-
-  .footer-links { display: flex; gap: 1.5rem; list-style: none; flex-wrap: wrap; }
-
-  .footer-links a {
-    color: var(--on-surface-variant);
-    text-decoration: none;
-    font-size: 0.85rem;
-    transition: color 0.2s;
-  }
-
-  .footer-links a:hover { color: var(--primary); }
-
-  .footer-copy { color: var(--outline); font-size: 0.8rem; }
-
-  /* ── ANIMATIONS ── */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
+  /* FAQ */
+  .faq-answer { max-height:0; overflow:hidden; transition:max-height .35s ease; }
+  .faq-answer.open { max-height:220px; }
+  .faq-icon { transition:transform .3s ease; display:inline-block; }
+  .faq-item.open .faq-icon { transform:rotate(45deg); }
 
-  .reveal {
-    opacity: 0;
-    transform: translateY(24px);
-    transition: opacity 0.6s ease, transform 0.6s ease;
-  }
-
-  .reveal.visible { opacity: 1; transform: translateY(0); }
-
-  /* ── MOBILE ── */
-  @media (max-width: 1024px) {
-    .hero-inner { grid-template-columns: 1fr; gap: 3rem; }
-    .demo-widget { max-width: 420px; }
-    .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
-    .pricing-grid { grid-template-columns: 1fr; max-width: 420px; margin-left: auto; margin-right: auto; }
-    .testimonials-grid { grid-template-columns: 1fr; }
-  }
-
-  @media (max-width: 768px) {
-    nav { padding: 0 1.25rem; }
-    .nav-links, .nav-cta { display: none; }
-    .hamburger { display: flex; }
-    section { padding: 4rem 1.25rem; }
-
-    .nav-mobile-open .nav-links {
-      display: flex;
-      flex-direction: column;
-      position: fixed;
-      top: 68px;
-      left: 0; right: 0;
-      background: rgba(248,249,250,0.95);
-      backdrop-filter: blur(12px);
-      padding: 1.25rem;
-      gap: 0.25rem;
-      z-index: 99;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.06);
-    }
+  /* Reveal on scroll */
+  .reveal { opacity:0; transform:translateY(20px); transition:opacity .55s ease, transform .55s ease; }
+  .reveal.visible { opacity:1; transform:none; }
 
-    .nav-mobile-open .nav-links a { display: block; padding: 0.75rem 1rem; border-radius: 10px; }
-    .nav-mobile-open .nav-cta { display: block; margin: 0.5rem 1.25rem 1.25rem; text-align: center; padding: 0.75rem; }
-
-    .hero { padding: 6rem 1.25rem 3.5rem; }
-    .hero-stats { gap: 1.5rem; }
-    h1 { font-size: 2.2rem; }
-    .cta-box { padding: 3rem 1.5rem; }
-    .about-visual { display: none; }
-  }
-
-  @media (max-width: 480px) {
-    h1 { font-size: 1.9rem; }
-    .pricing-grid { max-width: 100%; }
-  }
-
-  /* Yearly savings badge */
-  .savings-note {
-    text-align: center;
-    color: var(--on-surface-variant);
-    font-size: 0.85rem;
-    margin-top: 2rem;
-  }
+  /* Nav drawer */
+  #nav-drawer { transform:translateX(100%); transition:transform .3s ease; }
+  #nav-drawer.open { transform:translateX(0); }
 
-  .savings-note strong { color: var(--primary-container); font-weight: 700; }
+  /* Industries card hover */
+  .ind-card { transition: box-shadow .2s ease, transform .2s ease; }
+  .ind-card:hover { box-shadow:0 12px 32px rgba(0,109,119,0.10); transform:translateY(-3px); }
 </style>
 </head>
-<body>
+<body class="bg-surf-base">
 
-<!-- NAV -->
-<nav id="navbar">
-  <a href="#" class="logo font-headline">ChatBot Nepal</a>
-  <ul class="nav-links">
-    <li><a href="#about">About</a></li>
-    <li><a href="#pricing">Pricing</a></li>
-    <li><a href="#testimonials">Reviews</a></li>
-    <li><a href="#faq">FAQ</a></li>
-    <li><a href="{{ route('login') }}" style="color: var(--primary-container); font-weight: 600;">Login</a></li>
-  </ul>
-  <a href="{{ route('login') }}" class="nav-cta">Login</a>
-  <div class="hamburger" onclick="toggleNav()">
-    <span></span><span></span><span></span>
+<!-- ════════════════════════════════════
+     NAV
+════════════════════════════════════ -->
+<nav class="fixed top-0 inset-x-0 z-50 bg-white/80 backdrop-blur-xl border-b border-outline-var/20">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
+
+    <a href="/" class="font-jakarta font-extrabold text-xl text-primary tracking-tight">ChatBot Nepal</a>
+
+    <div class="hidden md:flex items-center gap-8 text-sm font-medium text-muted">
+      <a href="#about"   class="hover:text-primary transition-colors">About</a>
+      <a href="#pricing" class="hover:text-primary transition-colors">Pricing</a>
+      <a href="#faq"     class="hover:text-primary transition-colors">FAQ</a>
+      <a href="#contact" class="hover:text-primary transition-colors">Contact</a>
+    </div>
+
+    <a href="https://wa.me/9779811144402?text=I%20want%20a%20free%20demo%20for%20my%20business"
+       target="_blank" rel="noopener"
+       class="hidden md:inline-flex items-center bg-primary-c hover:bg-primary text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-colors">
+      Get Free Demo
+    </a>
+
+    <button id="hamburger" class="md:hidden p-2 rounded-lg hover:bg-surf-low transition-colors" aria-label="Open menu">
+      <span class="material-symbols-outlined text-primary">menu</span>
+    </button>
   </div>
 </nav>
 
-<!-- HERO -->
-<section class="hero" id="home">
-  <div class="hero-ambient"></div>
-  <div class="hero-inner">
-    <div>
-      <div class="hero-eyebrow">
-        <span class="eyebrow-dot"></span>
-        Now serving businesses across Nepal 🇳🇵
+<!-- Mobile drawer -->
+<div id="drawer-overlay" class="fixed inset-0 z-40 bg-black/40 hidden"></div>
+<div id="nav-drawer" class="fixed top-0 right-0 bottom-0 w-72 z-50 bg-white shadow-2xl flex flex-col">
+  <div class="flex items-center justify-between px-5 py-4 border-b border-outline-var/20">
+    <span class="font-jakarta font-bold text-primary">ChatBot Nepal</span>
+    <button id="close-drawer" class="p-2 rounded-lg hover:bg-surf-low">
+      <span class="material-symbols-outlined text-muted">close</span>
+    </button>
+  </div>
+  <div class="flex flex-col gap-1 p-4 text-sm font-medium">
+    <a href="#about"   class="drawer-link px-4 py-3 rounded-xl text-muted hover:bg-surf-low hover:text-primary transition-colors">About</a>
+    <a href="#pricing" class="drawer-link px-4 py-3 rounded-xl text-muted hover:bg-surf-low hover:text-primary transition-colors">Pricing</a>
+    <a href="#faq"     class="drawer-link px-4 py-3 rounded-xl text-muted hover:bg-surf-low hover:text-primary transition-colors">FAQ</a>
+    <a href="#contact" class="drawer-link px-4 py-3 rounded-xl text-muted hover:bg-surf-low hover:text-primary transition-colors">Contact</a>
+  </div>
+  <div class="mt-auto p-5">
+    <a href="https://wa.me/9779811144402?text=I%20want%20a%20free%20demo%20for%20my%20business"
+       target="_blank" rel="noopener"
+       class="block text-center bg-primary-c text-white font-semibold py-3.5 rounded-xl">
+      Get Free Demo
+    </a>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════
+     HERO
+════════════════════════════════════ -->
+<section class="bg-surf-low pt-28 pb-16 md:pt-36 md:pb-24" id="about">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
+
+      <!-- Left -->
+      <div class="flex-1 lg:max-w-[58%] reveal">
+        <span class="inline-flex items-center bg-primary-c text-white text-xs font-bold uppercase tracking-widest px-4 py-2 rounded-full mb-6">
+          Now serving businesses across Nepal&nbsp;🇳🇵
+        </span>
+
+        <h1 class="font-jakarta font-extrabold text-4xl md:text-5xl text-primary leading-[1.1] mb-5">
+          Your Customers Have Questions.<br>
+          Your Website Should<br>
+          Answer Them.
+        </h1>
+
+        <p class="text-lg text-muted leading-relaxed mb-8 max-w-lg">
+          We build AI chatbots that handle customer queries, capture leads, and work 24/7 — in Nepali, Hindi &amp; English. No technical skills needed.
+        </p>
+
+        <div class="flex flex-col sm:flex-row gap-3 mb-5">
+          <a href="https://wa.me/9779811144402?text=I%20want%20a%20free%20demo%20for%20my%20business"
+             target="_blank" rel="noopener"
+             class="inline-flex items-center justify-center gap-2 bg-primary-c hover:bg-primary text-white font-bold py-4 px-8 rounded-xl transition-colors text-base">
+            Get Free Demo &rarr;
+          </a>
+          <a href="#pricing"
+             class="inline-flex items-center justify-center border-2 border-primary text-primary font-semibold py-4 px-8 rounded-xl hover:bg-primary hover:text-white transition-colors text-base">
+            View Pricing
+          </a>
+        </div>
+
+        <p class="text-sm text-muted/70">Setup in 24 hours &nbsp;&middot;&nbsp; No coding required &nbsp;&middot;&nbsp; Cancel anytime</p>
       </div>
-      <h1>Let Your Website<br><span class="accent">Answer Customers</span><br>Automatically</h1>
-      <p class="hero-sub">Add an AI chatbot to your website in 24 hours. Answer customer questions 24/7 in Nepali, Hindi &amp; English — capture leads and never miss a sale.</p>
-      <div class="hero-btns">
-        <a href="#contact" class="btn-primary">See Free Demo →</a>
-        <a href="#pricing" class="btn-ghost">View Pricing</a>
+
+      <!-- Right — Chat mockup -->
+      <div class="w-full max-w-sm mx-auto lg:mx-0 lg:flex-1 reveal" style="transition-delay:.15s">
+        <div class="bg-white rounded-2xl overflow-hidden shadow-teal-lg lg:[transform:rotate(2deg)]">
+          <!-- Header -->
+          <div class="bg-primary-c px-4 py-3 flex items-center gap-3">
+            <div class="w-9 h-9 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
+              <span class="material-symbols-outlined text-white" style="font-size:18px">support_agent</span>
+            </div>
+            <div>
+              <p class="text-white font-jakarta font-semibold text-sm">Everest Coaching Center</p>
+              <div class="flex items-center gap-1.5 mt-0.5">
+                <span class="w-1.5 h-1.5 bg-green-400 rounded-full"></span>
+                <span class="text-white/70 text-xs">Online now</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Messages -->
+          <div class="bg-white p-4 flex flex-col gap-3" style="min-height:280px">
+            <div class="flex gap-2 items-end">
+              <div class="w-6 h-6 bg-primary-c rounded-full flex-shrink-0 flex items-center justify-center">
+                <span class="material-symbols-outlined text-white" style="font-size:13px">smart_toy</span>
+              </div>
+              <p class="bubble-bot px-3.5 py-2.5 text-sm text-[#191c1d] max-w-[80%]">
+                Namaste! Everest Coaching Center ma swagat cha. Ke help chahiyo? 🙏
+              </p>
+            </div>
+
+            <div class="flex justify-end">
+              <p class="bubble-user px-3.5 py-2.5 text-sm max-w-[80%]">
+                Morning batch ko fee kati ho?
+              </p>
+            </div>
+
+            <div class="flex gap-2 items-end">
+              <div class="w-6 h-6 bg-primary-c rounded-full flex-shrink-0 flex items-center justify-center">
+                <span class="material-symbols-outlined text-white" style="font-size:13px">smart_toy</span>
+              </div>
+              <p class="bubble-bot px-3.5 py-2.5 text-sm text-[#191c1d] max-w-[80%]">
+                Monthly fee <strong>Rs. 3,500</strong> ho. Admission Rs. 1,000 one-time. Ahile open cha! 🎉
+              </p>
+            </div>
+
+            <div class="flex justify-end">
+              <p class="bubble-user px-3.5 py-2.5 text-sm max-w-[80%]">IELTS course ni cha?</p>
+            </div>
+
+            <div class="flex gap-2 items-end">
+              <div class="w-6 h-6 bg-primary-c rounded-full flex-shrink-0 flex items-center justify-center">
+                <span class="material-symbols-outlined text-white" style="font-size:13px">smart_toy</span>
+              </div>
+              <p class="bubble-bot px-3.5 py-2.5 text-sm text-[#191c1d] max-w-[80%]">
+                Cha! IELTS preparation course <strong>Rs. 8,000</strong>/month. Class Mon-Fri 7–9 AM. Free trial class available! 📚
+              </p>
+            </div>
+          </div>
+
+          <!-- Input -->
+          <div class="bg-white border-t border-outline-var/30 px-4 py-3 flex gap-2">
+            <input type="text" placeholder="Type your message..." disabled
+              class="flex-1 bg-surf-low rounded-xl px-3 py-2 text-sm text-muted outline-none">
+            <button class="bg-primary-c text-white p-2 rounded-xl flex-shrink-0">
+              <span class="material-symbols-outlined" style="font-size:18px">send</span>
+            </button>
+          </div>
+        </div>
       </div>
-      <div class="hero-stats">
-        <div class="stat">
-          <span class="stat-num">24/7</span>
-          <div class="stat-label">Always Online</div>
-        </div>
-        <div class="stat">
-          <span class="stat-num">&lt;1hr</span>
-          <div class="stat-label">Response Time</div>
-        </div>
-        <div class="stat">
-          <span class="stat-num">150+</span>
-          <div class="stat-label">Happy Clients</div>
-        </div>
-        <div class="stat">
-          <span class="stat-num">🇳🇵</span>
-          <div class="stat-label">Nepal Based</div>
-        </div>
-      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════
+     PROBLEM
+════════════════════════════════════ -->
+<section class="bg-white py-16 md:py-24">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12 reveal">
+      <h2 class="font-jakarta font-bold text-3xl md:text-4xl text-primary mb-3">You're Losing Customers Right Now</h2>
+      <p class="text-muted text-lg">Here's what happens every day on your website</p>
     </div>
 
-    <!-- Live Demo Widget -->
-    <div class="demo-widget">
-      <div class="widget-header">
-        <div class="widget-avatar"><i class="fas fa-robot"></i></div>
-        <div>
-          <div class="widget-name">AI Assistant</div>
-          <div class="widget-status"><span class="status-dot"></span> Online — Ready to help</div>
+    <div class="grid md:grid-cols-3 gap-6">
+      <div class="bg-white rounded-3xl shadow-teal p-8 reveal">
+        <div class="w-14 h-14 bg-surf-low rounded-2xl flex items-center justify-center mb-5">
+          <span class="material-symbols-outlined text-primary-c" style="font-size:28px">schedule</span>
         </div>
+        <h3 class="font-jakarta font-bold text-lg text-primary mb-2">Late-Night Queries</h3>
+        <p class="text-muted text-sm leading-relaxed">Customers message at 10 PM. Nobody replies until morning. They go to your competitor.</p>
       </div>
-      <div class="widget-messages" id="demo-messages">
-        <div class="msg-bot">Namaste! I'm your AI assistant. Ask me about services, pricing, or anything!</div>
+
+      <div class="bg-white rounded-3xl shadow-teal p-8 reveal" style="transition-delay:.1s">
+        <div class="w-14 h-14 bg-surf-low rounded-2xl flex items-center justify-center mb-5">
+          <span class="material-symbols-outlined text-primary-c" style="font-size:28px">repeat</span>
+        </div>
+        <h3 class="font-jakarta font-bold text-lg text-primary mb-2">Repetitive Questions</h3>
+        <p class="text-muted text-sm leading-relaxed">Your staff wastes hours answering the same 20 questions. "Kati parcha?" "Kata ho?" every single day.</p>
       </div>
-      <div class="widget-input">
-        <input type="text" id="demo-input" placeholder="Type a question..." onkeypress="if(event.key==='Enter') sendDemo()"/>
-        <button onclick="sendDemo()"><i class="fas fa-paper-plane"></i></button>
+
+      <div class="bg-white rounded-3xl shadow-teal p-8 reveal" style="transition-delay:.2s">
+        <div class="w-14 h-14 bg-surf-low rounded-2xl flex items-center justify-center mb-5">
+          <span class="material-symbols-outlined text-primary-c" style="font-size:28px">exit_to_app</span>
+        </div>
+        <h3 class="font-jakarta font-bold text-lg text-primary mb-2">Visitors Leaving</h3>
+        <p class="text-muted text-sm leading-relaxed">Without instant answers, visitors browse and leave. You paid for that traffic — and lost them.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ABOUT -->
-<section class="about" id="about">
-  <div class="section-inner">
-    <span class="section-eyebrow reveal">What We Do</span>
-    <h2 class="section-title reveal">Your Website,<br>Working <span class="accent">Smarter</span></h2>
-    <p class="section-sub reveal">We interview you about your business, build a custom knowledge base, and deploy an AI chatbot that knows everything about your services.</p>
-    <div class="about-grid">
-      <div>
-        <div class="about-features">
-          <div class="about-feature reveal">
-            <div class="feature-icon"><i class="fas fa-bullseye"></i></div>
-            <div class="feature-text">
-              <h4>Custom Knowledge Base</h4>
-              <p>We interview you and build a chatbot that knows your exact services, pricing, FAQs, and contact info.</p>
-            </div>
-          </div>
-          <div class="about-feature reveal">
-            <div class="feature-icon"><i class="fas fa-globe"></i></div>
-            <div class="feature-text">
-              <h4>Works on Any Website</h4>
-              <p>WordPress, custom sites, Laravel, HTML — just one line of code to install. No developer needed.</p>
-            </div>
-          </div>
-          <div class="about-feature reveal">
-            <div class="feature-icon"><i class="fas fa-language"></i></div>
-            <div class="feature-text">
-              <h4>Nepali &amp; Hindi Support</h4>
-              <p>Your chatbot replies in Nepali, Hindi, or English automatically based on what your customer types.</p>
-            </div>
-          </div>
-          <div class="about-feature reveal">
-            <div class="feature-icon"><i class="fas fa-sync-alt"></i></div>
-            <div class="feature-text">
-              <h4>Monthly Updates Included</h4>
-              <p>Changed your pricing? New service? Just message us and we update your chatbot same day.</p>
-            </div>
-          </div>
+<!-- ════════════════════════════════════
+     SOLUTION
+════════════════════════════════════ -->
+<section class="bg-surf-low py-16 md:py-24">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-14 reveal">
+      <h2 class="font-jakarta font-bold text-3xl md:text-4xl text-primary mb-3">Here's What We Do</h2>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-10 md:gap-16">
+      <div class="reveal">
+        <div class="font-jakarta font-extrabold text-[7rem] leading-none text-outline-var/50 select-none mb-[-2rem]">01</div>
+        <div class="relative z-10">
+          <h3 class="font-jakarta font-bold text-xl text-primary mb-3">Answers Customer Queries Instantly</h3>
+          <p class="text-muted leading-relaxed">No more "We'll get back to you." Your chatbot knows your services, pricing, FAQs and answers in seconds.</p>
         </div>
       </div>
-      <div class="about-visual reveal">
-        <div class="process-steps">
-          <div class="process-step">
-            <div class="step-num">1</div>
-            <div>
-              <div class="step-text">We Interview You</div>
-              <div class="step-sub">30 min call — we learn everything about your business</div>
-            </div>
-          </div>
-          <div class="process-step">
-            <div class="step-num">2</div>
-            <div>
-              <div class="step-text">We Build Knowledge Base</div>
-              <div class="step-sub">Services, pricing, FAQs — all in one smart system</div>
-            </div>
-          </div>
-          <div class="process-step">
-            <div class="step-num">3</div>
-            <div>
-              <div class="step-text">We Deploy Chatbot</div>
-              <div class="step-sub">One line of code added to your website</div>
-            </div>
-          </div>
-          <div class="process-step">
-            <div class="step-num">4</div>
-            <div>
-              <div class="step-text">Your Website Answers 24/7</div>
-              <div class="step-sub">Customers get instant answers, you get more sales</div>
-            </div>
-          </div>
+
+      <div class="reveal" style="transition-delay:.1s">
+        <div class="font-jakarta font-extrabold text-[7rem] leading-none text-outline-var/50 select-none mb-[-2rem]">02</div>
+        <div class="relative z-10">
+          <h3 class="font-jakarta font-bold text-xl text-primary mb-3">Captures Leads While You Sleep</h3>
+          <p class="text-muted leading-relaxed">Every midnight visitor becomes a potential customer. Chatbot collects their name, number, and what they need.</p>
+        </div>
+      </div>
+
+      <div class="reveal" style="transition-delay:.2s">
+        <div class="font-jakarta font-extrabold text-[7rem] leading-none text-outline-var/50 select-none mb-[-2rem]">03</div>
+        <div class="relative z-10">
+          <h3 class="font-jakarta font-bold text-xl text-primary mb-3">Speaks Your Customer's Language</h3>
+          <p class="text-muted leading-relaxed">Auto-detects Nepali, Hindi, or English. Customers type in their language, chatbot replies in the same.</p>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- PRICING -->
-<section class="pricing" id="pricing">
-  <div class="section-inner">
-    <div style="text-align:center">
-      <span class="section-eyebrow reveal">Simple Pricing</span>
-      <h2 class="section-title reveal">No Hidden Fees.<br><span class="accent">Just Results.</span></h2>
-      <p class="section-sub reveal" style="margin:0 auto">Start with a free demo. Pay only when you love it.</p>
+<!-- ════════════════════════════════════
+     HOW IT WORKS
+════════════════════════════════════ -->
+<section class="bg-white py-16 md:py-24">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-14 reveal">
+      <h2 class="font-jakarta font-bold text-3xl md:text-4xl text-primary mb-3">Live in 24 Hours</h2>
+      <p class="text-muted text-lg">We don't just give you a tool, we build the system for your business.</p>
     </div>
-    <div class="pricing-grid">
 
-      <div class="pricing-card reveal">
-        <div class="plan-label">Starter</div>
-        <div class="plan-price">
-          <span class="price-currency">Rs.</span><span class="price-num">1,999</span>
+    <!-- Desktop timeline -->
+    <div class="hidden md:grid grid-cols-4 gap-8 relative">
+      <div class="absolute top-10 left-[12.5%] right-[12.5%] border-t-2 border-dashed border-outline-var z-0"></div>
+
+      <div class="flex flex-col items-center text-center relative z-10 reveal">
+        <div class="w-20 h-20 bg-surf-low rounded-full flex items-center justify-center mb-5 shadow-teal-sm">
+          <span class="material-symbols-outlined text-primary-c" style="font-size:30px">mic</span>
         </div>
-        <div class="price-period">per month</div>
-        <div class="setup-fee">+ Rs. 3,000 one-time setup</div>
-        <div class="plan-divider"></div>
-        <ul class="plan-features">
-          <li><i class="fas fa-check check"></i> 1 AI Chatbot</li>
-          <li><i class="fas fa-check check"></i> Basic Knowledge Base</li>
-          <li><i class="fas fa-check check"></i> Nepali &amp; English Support</li>
-          <li><i class="fas fa-check check"></i> Email Support</li>
-          <li><i class="fas fa-check check"></i> Monthly Updates</li>
-          <li class="dim"><i class="fas fa-times check"></i> Lead Capture</li>
-          <li class="dim"><i class="fas fa-times check"></i> Analytics Dashboard</li>
-        </ul>
-        <a href="#contact" class="plan-btn plan-btn-outline">Get Started</a>
+        <h3 class="font-jakarta font-bold text-sm text-primary mb-2">We Interview You</h3>
+        <p class="text-muted text-sm">30 min call — we learn your business inside out</p>
       </div>
 
-      <div class="pricing-card featured reveal">
-        <div class="featured-badge">Most Popular</div>
-        <div class="plan-label">Growth</div>
-        <div class="plan-price">
-          <span class="price-currency">Rs.</span><span class="price-num">3,999</span>
+      <div class="flex flex-col items-center text-center relative z-10 reveal" style="transition-delay:.1s">
+        <div class="w-20 h-20 bg-primary-c rounded-full flex items-center justify-center mb-5 shadow-teal">
+          <span class="material-symbols-outlined text-white" style="font-size:30px">psychology</span>
         </div>
-        <div class="price-period">per month</div>
-        <div class="setup-fee">+ Rs. 3,000 one-time setup</div>
-        <div class="plan-divider"></div>
-        <ul class="plan-features">
-          <li><i class="fas fa-check check"></i> 1 AI Chatbot</li>
-          <li><i class="fas fa-check check"></i> Full Knowledge Base</li>
-          <li><i class="fas fa-check check"></i> Nepali, Hindi &amp; English</li>
-          <li><i class="fas fa-check check"></i> Priority Support</li>
-          <li><i class="fas fa-check check"></i> Unlimited Updates</li>
-          <li><i class="fas fa-check check"></i> Lead Capture</li>
-          <li class="dim"><i class="fas fa-times check"></i> Analytics Dashboard</li>
-        </ul>
-        <a href="#contact" class="plan-btn plan-btn-solid">Get Started</a>
+        <h3 class="font-jakarta font-bold text-sm text-primary mb-2">Knowledge Build</h3>
+        <p class="text-muted text-sm">We build an AI knowledge base with your exact info</p>
       </div>
 
-      <div class="pricing-card reveal">
-        <div class="plan-label">Pro</div>
-        <div class="plan-price">
-          <span class="price-currency">Rs.</span><span class="price-num">6,999</span>
+      <div class="flex flex-col items-center text-center relative z-10 reveal" style="transition-delay:.2s">
+        <div class="w-20 h-20 bg-surf-low rounded-full flex items-center justify-center mb-5 shadow-teal-sm">
+          <span class="material-symbols-outlined text-primary-c" style="font-size:30px">code</span>
         </div>
-        <div class="price-period">per month</div>
-        <div class="setup-fee">+ Rs. 5,000 one-time setup</div>
-        <div class="plan-divider"></div>
-        <ul class="plan-features">
-          <li><i class="fas fa-check check"></i> 2 AI Chatbots</li>
-          <li><i class="fas fa-check check"></i> Advanced Knowledge Base</li>
-          <li><i class="fas fa-check check"></i> All Languages</li>
-          <li><i class="fas fa-check check"></i> Dedicated Support</li>
-          <li><i class="fas fa-check check"></i> Unlimited Updates</li>
-          <li><i class="fas fa-check check"></i> Lead Capture</li>
-          <li><i class="fas fa-check check"></i> Analytics Dashboard</li>
-        </ul>
-        <a href="#contact" class="plan-btn plan-btn-outline">Get Started</a>
+        <h3 class="font-jakarta font-bold text-sm text-primary mb-2">One Line of Code</h3>
+        <p class="text-muted text-sm">Paste one line on your website. That's it.</p>
       </div>
 
+      <div class="flex flex-col items-center text-center relative z-10 reveal" style="transition-delay:.3s">
+        <div class="w-20 h-20 bg-surf-low rounded-full flex items-center justify-center mb-5 shadow-teal-sm">
+          <span class="material-symbols-outlined text-primary-c" style="font-size:30px">support_agent</span>
+        </div>
+        <h3 class="font-jakarta font-bold text-sm text-primary mb-2">24/7 Answers</h3>
+        <p class="text-muted text-sm">Customers get instant answers, you get more sales</p>
+      </div>
     </div>
-    <p class="savings-note reveal">
-      Pay yearly and get <strong>2 months FREE</strong> on any plan
+
+    <!-- Mobile timeline -->
+    <div class="md:hidden flex flex-col">
+      <div class="flex gap-5">
+        <div class="flex flex-col items-center">
+          <div class="w-14 h-14 bg-surf-low rounded-full flex items-center justify-center flex-shrink-0">
+            <span class="material-symbols-outlined text-primary-c" style="font-size:22px">mic</span>
+          </div>
+          <div class="w-0.5 flex-1 bg-outline-var/40 my-2" style="border-left:2px dashed #bec8ca; width:0;"></div>
+        </div>
+        <div class="pt-2 pb-8">
+          <h3 class="font-jakarta font-bold text-primary mb-1">We Interview You</h3>
+          <p class="text-muted text-sm">30 min call — we learn your business</p>
+        </div>
+      </div>
+
+      <div class="flex gap-5">
+        <div class="flex flex-col items-center">
+          <div class="w-14 h-14 bg-primary-c rounded-full flex items-center justify-center flex-shrink-0 shadow-teal-sm">
+            <span class="material-symbols-outlined text-white" style="font-size:22px">psychology</span>
+          </div>
+          <div class="w-0.5 flex-1 my-2" style="border-left:2px dashed #bec8ca; width:0;"></div>
+        </div>
+        <div class="pt-2 pb-8">
+          <h3 class="font-jakarta font-bold text-primary mb-1">Knowledge Build</h3>
+          <p class="text-muted text-sm">We build AI knowledge base with your exact info</p>
+        </div>
+      </div>
+
+      <div class="flex gap-5">
+        <div class="flex flex-col items-center">
+          <div class="w-14 h-14 bg-surf-low rounded-full flex items-center justify-center flex-shrink-0">
+            <span class="material-symbols-outlined text-primary-c" style="font-size:22px">code</span>
+          </div>
+          <div class="w-0.5 flex-1 my-2" style="border-left:2px dashed #bec8ca; width:0;"></div>
+        </div>
+        <div class="pt-2 pb-8">
+          <h3 class="font-jakarta font-bold text-primary mb-1">One Line of Code</h3>
+          <p class="text-muted text-sm">Paste one line on your website. Done.</p>
+        </div>
+      </div>
+
+      <div class="flex gap-5">
+        <div class="flex flex-col items-center">
+          <div class="w-14 h-14 bg-surf-low rounded-full flex items-center justify-center flex-shrink-0">
+            <span class="material-symbols-outlined text-primary-c" style="font-size:22px">support_agent</span>
+          </div>
+        </div>
+        <div class="pt-2">
+          <h3 class="font-jakarta font-bold text-primary mb-1">24/7 Answers</h3>
+          <p class="text-muted text-sm">Customers get instant answers, you get more sales</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════
+     LIVE DEMO
+════════════════════════════════════ -->
+<section class="bg-surf-low py-16 md:py-24">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12 reveal">
+      <h2 class="font-jakarta font-bold text-3xl md:text-4xl text-primary mb-3">See It in Action</h2>
+      <p class="text-muted text-lg">Real conversation from a local coaching institute</p>
+    </div>
+
+    <!-- Browser mockup -->
+    <div class="bg-white rounded-3xl shadow-teal overflow-hidden reveal">
+      <!-- Chrome bar -->
+      <div class="bg-surf-container px-4 py-3 flex items-center gap-3 border-b border-outline-var/20">
+        <div class="flex gap-1.5">
+          <span class="w-3 h-3 rounded-full bg-red-400 inline-block"></span>
+          <span class="w-3 h-3 rounded-full bg-yellow-400 inline-block"></span>
+          <span class="w-3 h-3 rounded-full bg-green-400 inline-block"></span>
+        </div>
+        <div class="flex-1 bg-white rounded-lg px-3 py-1.5 text-xs text-muted font-mono border border-outline-var/30">
+          everestcoaching.com.np
+        </div>
+      </div>
+
+      <!-- Page body -->
+      <div class="relative bg-surf-low overflow-hidden" style="min-height:440px">
+        <!-- Blurred fake page -->
+        <div class="p-8 opacity-20 select-none pointer-events-none">
+          <div class="h-5 bg-primary rounded w-48 mb-4"></div>
+          <div class="h-3 bg-muted rounded w-72 mb-2"></div>
+          <div class="h-3 bg-muted rounded w-64 mb-2"></div>
+          <div class="h-3 bg-muted rounded w-56 mb-8"></div>
+          <div class="flex gap-3">
+            <div class="h-8 w-28 bg-primary rounded-xl"></div>
+            <div class="h-8 w-24 bg-muted/40 rounded-xl"></div>
+          </div>
+        </div>
+
+        <!-- Floating chat widget bottom-right -->
+        <div class="absolute bottom-4 right-4 w-72 bg-white rounded-2xl overflow-hidden" style="box-shadow:0 8px 32px rgba(0,109,119,0.16)">
+          <div class="bg-primary-c px-3 py-2.5 flex items-center gap-2">
+            <div class="w-7 h-7 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
+              <span class="material-symbols-outlined text-white" style="font-size:14px">smart_toy</span>
+            </div>
+            <div>
+              <p class="text-white font-jakarta font-semibold text-xs">Everest Coaching</p>
+              <div class="flex items-center gap-1">
+                <span class="w-1.5 h-1.5 bg-green-400 rounded-full inline-block"></span>
+                <span class="text-white/70 text-[10px]">Online</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-white p-3 flex flex-col gap-2">
+            <p class="bubble-bot px-3 py-2 text-xs text-[#191c1d] max-w-[90%]">Namaste! Hamro coaching center bare kei sodhnu cha?</p>
+            <div class="flex justify-end">
+              <p class="bubble-user px-3 py-2 text-xs max-w-[90%]">Timro coaching ma class kati bajey suru huncha?</p>
+            </div>
+            <p class="bubble-bot px-3 py-2 text-xs text-[#191c1d] max-w-[90%]">Morning batch <strong>6:30 AM</strong>, evening batch <strong>4:00 PM</strong>. Kun batch ma interest cha?</p>
+            <div class="flex justify-end">
+              <p class="bubble-user px-3 py-2 text-xs max-w-[90%]">Morning batch ko fee kati ho?</p>
+            </div>
+            <p class="bubble-bot px-3 py-2 text-xs text-[#191c1d] max-w-[90%]">Monthly fee <strong>Rs. 3,500</strong>. Admission Rs. 1,000. Ahile open cha, join garnu huncha?</p>
+            <div class="flex justify-end">
+              <p class="bubble-user px-3 py-2 text-xs max-w-[90%]">IELTS course ko bare ma bhannu na</p>
+            </div>
+            <p class="bubble-bot px-3 py-2 text-xs text-[#191c1d] max-w-[90%]">IELTS Preparation <strong>Rs. 8,000/month</strong>. Mon-Fri 7–9 AM. Free trial class available. Book garnu huncha?</p>
+          </div>
+
+          <div class="bg-white border-t border-outline-var/20 px-3 py-2 flex gap-2">
+            <input type="text" placeholder="Type your message..." disabled class="flex-1 bg-surf-low rounded-lg px-2.5 py-1.5 text-xs text-muted outline-none">
+            <button class="bg-primary-c text-white p-1.5 rounded-lg">
+              <span class="material-symbols-outlined" style="font-size:14px">send</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center mt-10 reveal">
+      <p class="text-muted mb-6">This is a real AI chatbot we built. Want one for your business?</p>
+      <a href="https://wa.me/9779811144402?text=I%20want%20a%20free%20demo%20for%20my%20business"
+         target="_blank" rel="noopener"
+         class="inline-flex items-center gap-2 bg-primary-c hover:bg-primary text-white font-bold py-4 px-8 rounded-xl transition-colors">
+        Get Your Free Demo
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════
+     INDUSTRIES
+════════════════════════════════════ -->
+<section class="bg-white py-16 md:py-24">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12 reveal">
+      <h2 class="font-jakarta font-bold text-3xl md:text-4xl text-primary mb-3">Built for Businesses Like Yours</h2>
+    </div>
+
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
+      <div class="ind-card bg-white border border-outline-var/30 rounded-2xl p-6 text-center reveal">
+        <div class="w-12 h-12 bg-surf-low rounded-xl flex items-center justify-center mx-auto mb-4">
+          <span class="material-symbols-outlined text-primary-c">school</span>
+        </div>
+        <h3 class="font-jakarta font-semibold text-primary text-sm mb-1">Coaching Centers</h3>
+        <p class="text-muted text-xs leading-relaxed">Course fees, schedules, admission queries</p>
+      </div>
+
+      <div class="ind-card bg-white border border-outline-var/30 rounded-2xl p-6 text-center reveal" style="transition-delay:.05s">
+        <div class="w-12 h-12 bg-surf-low rounded-xl flex items-center justify-center mx-auto mb-4">
+          <span class="material-symbols-outlined text-primary-c">hotel</span>
+        </div>
+        <h3 class="font-jakarta font-semibold text-primary text-sm mb-1">Hotels &amp; Restaurants</h3>
+        <p class="text-muted text-xs leading-relaxed">Booking, menu, room availability</p>
+      </div>
+
+      <div class="ind-card bg-white border border-outline-var/30 rounded-2xl p-6 text-center reveal" style="transition-delay:.1s">
+        <div class="w-12 h-12 bg-surf-low rounded-xl flex items-center justify-center mx-auto mb-4">
+          <span class="material-symbols-outlined text-primary-c">local_hospital</span>
+        </div>
+        <h3 class="font-jakarta font-semibold text-primary text-sm mb-1">Clinics</h3>
+        <p class="text-muted text-xs leading-relaxed">Appointments, doctor schedules, services</p>
+      </div>
+
+      <div class="ind-card bg-white border border-outline-var/30 rounded-2xl p-6 text-center reveal" style="transition-delay:.15s">
+        <div class="w-12 h-12 bg-surf-low rounded-xl flex items-center justify-center mx-auto mb-4">
+          <span class="material-symbols-outlined text-primary-c">storefront</span>
+        </div>
+        <h3 class="font-jakarta font-semibold text-primary text-sm mb-1">Retail</h3>
+        <p class="text-muted text-xs leading-relaxed">Product info, pricing, store hours</p>
+      </div>
+
+      <div class="ind-card bg-white border border-outline-var/30 rounded-2xl p-6 text-center reveal" style="transition-delay:.2s">
+        <div class="w-12 h-12 bg-surf-low rounded-xl flex items-center justify-center mx-auto mb-4">
+          <span class="material-symbols-outlined text-primary-c">campaign</span>
+        </div>
+        <h3 class="font-jakarta font-semibold text-primary text-sm mb-1">Marketing Agencies</h3>
+        <p class="text-muted text-xs leading-relaxed">Service details, portfolio, booking</p>
+      </div>
+
+      <div class="ind-card bg-white border border-outline-var/30 rounded-2xl p-6 text-center reveal" style="transition-delay:.25s">
+        <div class="w-12 h-12 bg-surf-low rounded-xl flex items-center justify-center mx-auto mb-4">
+          <span class="material-symbols-outlined text-primary-c">real_estate_agent</span>
+        </div>
+        <h3 class="font-jakarta font-semibold text-primary text-sm mb-1">Real Estate</h3>
+        <p class="text-muted text-xs leading-relaxed">Property details, pricing, visits</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════
+     PRICING
+════════════════════════════════════ -->
+<section class="py-16 md:py-24" id="pricing" style="background:linear-gradient(150deg,#f3f4f5 0%,#e4eeef 100%)">
+  <div class="max-w-xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-14 reveal">
+      <h2 class="font-jakarta font-bold text-3xl md:text-4xl text-primary mb-3">Simple, Honest Pricing</h2>
+      <p class="text-muted">One plan. Everything included. No surprises.</p>
+    </div>
+
+    <div class="relative reveal">
+      <div class="absolute -top-4 inset-x-0 flex justify-center z-10">
+        <span class="bg-secondary text-white text-xs font-extrabold uppercase tracking-widest px-5 py-2 rounded-full">
+          Early Adopter Price
+        </span>
+      </div>
+
+      <div class="bg-white rounded-3xl shadow-teal-lg p-8 md:p-10 pt-12">
+        <div class="text-center mb-6">
+          <h3 class="font-jakarta font-bold text-2xl text-primary mb-1">Starter Plan</h3>
+          <p class="text-muted text-sm">Everything you need. No hidden fees.</p>
+        </div>
+
+        <div class="text-center mb-2">
+          <div class="inline-flex items-end gap-1">
+            <span class="font-jakarta font-extrabold text-6xl text-primary leading-none">Rs. 999</span>
+            <span class="text-muted text-sm mb-2">/month</span>
+          </div>
+        </div>
+        <p class="text-center text-muted text-sm mb-8">+ Rs. 3,000 one-time setup</p>
+
+        <ul class="flex flex-col gap-3.5 mb-8">
+          <li class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-primary-c flex-shrink-0" style="font-size:20px">check_circle</span>
+            <span class="text-muted text-sm">Custom AI Training on your data</span>
+          </li>
+          <li class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-primary-c flex-shrink-0" style="font-size:20px">check_circle</span>
+            <span class="text-muted text-sm">Nepali &amp; English Support</span>
+          </li>
+          <li class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-primary-c flex-shrink-0" style="font-size:20px">check_circle</span>
+            <span class="text-muted text-sm">Lead Capture Dashboard</span>
+          </li>
+          <li class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-primary-c flex-shrink-0" style="font-size:20px">check_circle</span>
+            <span class="text-muted text-sm">Monthly Analytics Report</span>
+          </li>
+          <li class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-primary-c flex-shrink-0" style="font-size:20px">check_circle</span>
+            <span class="text-muted text-sm">Monthly Knowledge Base Updates</span>
+          </li>
+        </ul>
+
+        <a href="https://wa.me/9779811144402?text=I%20want%20a%20free%20demo%20for%20my%20business"
+           target="_blank" rel="noopener"
+           class="block text-center w-full bg-secondary hover:opacity-90 text-white font-bold py-4 rounded-xl transition-opacity text-base">
+          Claim This Offer Now
+        </a>
+      </div>
+    </div>
+
+    <p class="text-center text-sm text-muted mt-5">
+      Limited to first 10 clients &nbsp;&middot;&nbsp; No contracts &nbsp;&middot;&nbsp; Cancel anytime
     </p>
   </div>
 </section>
 
-<!-- TESTIMONIALS -->
-<section class="testimonials" id="testimonials">
-  <div class="section-inner">
-    <div style="text-align:center">
-      <span class="section-eyebrow reveal">Testimonials</span>
-      <h2 class="section-title reveal">Businesses Love It.<br><span class="accent">See Why.</span></h2>
-    </div>
-    <div class="testimonials-grid">
-
-      <div class="testimonial-card reveal">
-        <div class="stars">★★★★★</div>
-        <p class="testimonial-text">"Hamro website ma chatbot add gareko pachi customer haru aafai answer paune bhaye. Hami ko call aaune ghatyo, sales badhyo. Ekdam ramro service!"</p>
-        <div class="testimonial-author">
-          <div class="author-avatar">RK</div>
-          <div>
-            <div class="author-name">Ram Kumar Shrestha</div>
-            <div class="author-role">Owner, Kathmandu Digital Store</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="testimonial-card reveal">
-        <div class="stars">★★★★★</div>
-        <p class="testimonial-text">"Our coaching center website now handles 100+ student inquiries daily without any staff. The chatbot knows everything about our courses and fees. Worth every rupee!"</p>
-        <div class="testimonial-author">
-          <div class="author-avatar">SP</div>
-          <div>
-            <div class="author-name">Sushila Poudel</div>
-            <div class="author-role">Director, Pokhara Coaching Center</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="testimonial-card reveal">
-        <div class="stars">★★★★★</div>
-        <p class="testimonial-text">"Setup was done in just one day. The team interviewed us, built the knowledge base, and installed it. Our customers get instant answers even at midnight. Amazing!"</p>
-        <div class="testimonial-author">
-          <div class="author-avatar">BT</div>
-          <div>
-            <div class="author-name">Bikash Tamang</div>
-            <div class="author-role">CEO, Lalitpur Tech Solutions</div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- FAQ -->
-<section class="faq" id="faq">
-  <div class="section-inner">
-    <div style="text-align:center">
-      <span class="section-eyebrow reveal">FAQ</span>
-      <h2 class="section-title reveal">Common <span class="accent">Questions</span></h2>
-    </div>
-    <div class="faq-list">
-      <div class="faq-item reveal">
-        <div class="faq-q" onclick="toggleFaq(this)">
-          Does my website need to be rebuilt?
-          <span class="faq-icon">+</span>
-        </div>
-        <div class="faq-a">No! We just add one small line of code to your existing website. Works on WordPress, custom websites, Laravel, HTML — any website. Your developer can do it in 2 minutes.</div>
-      </div>
-      <div class="faq-item reveal">
-        <div class="faq-q" onclick="toggleFaq(this)">
-          How does the chatbot know about my business?
-          <span class="faq-icon">+</span>
-        </div>
-        <div class="faq-a">We interview you for 30 minutes and collect all information about your services, pricing, FAQs, and contact details. We build a custom knowledge base just for your business. The chatbot only answers using your information.</div>
-      </div>
-      <div class="faq-item reveal">
-        <div class="faq-q" onclick="toggleFaq(this)">
-          Can it reply in Nepali or Hindi?
-          <span class="faq-icon">+</span>
-        </div>
-        <div class="faq-a">Yes! The chatbot automatically detects the language your customer is typing in and replies in the same language — Nepali, Hindi, or English. No extra setup needed.</div>
-      </div>
-      <div class="faq-item reveal">
-        <div class="faq-q" onclick="toggleFaq(this)">
-          What if I change my pricing or services?
-          <span class="faq-icon">+</span>
-        </div>
-        <div class="faq-a">Just message us! We update your knowledge base same day. All Growth and Pro plans include unlimited updates. This is exactly why our monthly fee makes sense — we maintain everything for you.</div>
-      </div>
-      <div class="faq-item reveal">
-        <div class="faq-q" onclick="toggleFaq(this)">
-          Is there a contract or lock-in?
-          <span class="faq-icon">+</span>
-        </div>
-        <div class="faq-a">No long-term contracts. Pay month to month. Cancel anytime. We're confident you'll love the results — so we don't need to lock you in.</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CTA -->
-<section class="cta-section" id="contact">
-  <div class="section-inner">
-    <div class="cta-box reveal">
-      <h2>Ready to See Your<br><span class="accent">Demo for Free?</span></h2>
-      <p>Message us on WhatsApp. We'll show you a live demo built for your business — completely free. No payment needed to see it.</p>
-      <div class="cta-btns">
-        <a href="https://wa.me/9779811144402" class="btn-primary" target="_blank"><i class="fab fa-whatsapp" style="margin-right:8px"></i>WhatsApp Us Now</a>
-        <a href="mailto:info@isoftro.com" class="btn-secondary-cta"><i class="fas fa-envelope" style="margin-right:8px"></i>Send Email</a>
-      </div>
-      <p style="margin-top: 1.75rem; color: var(--on-surface-variant); font-size: 0.85rem;">
-        Already a client? <a href="{{ route('login') }}" style="color: var(--primary-container); font-weight: 600; text-decoration: none;">Access Your Dashboard →</a>
+<!-- ════════════════════════════════════
+     SOCIAL PROOF (Honest)
+════════════════════════════════════ -->
+<section class="bg-surf-low py-16 md:py-20">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <div class="reveal mb-10">
+      <h2 class="font-jakarta font-bold text-3xl text-primary mb-4">Be One of Our First 10 Clients</h2>
+      <p class="text-muted text-lg leading-relaxed max-w-2xl mx-auto">
+        We are currently in beta and looking for 10 visionary Nepali businesses to be our early partners. You'll get VIP support, the lowest rate locked in permanently, and a chatbot built with extra care.
       </p>
     </div>
+
+    <div class="grid md:grid-cols-3 gap-5">
+      <div class="bg-white rounded-2xl p-6 flex flex-col items-center gap-3 shadow-teal-sm reveal">
+        <div class="w-12 h-12 bg-surf-low rounded-xl flex items-center justify-center">
+          <span class="material-symbols-outlined text-primary-c">priority_high</span>
+        </div>
+        <h3 class="font-jakarta font-semibold text-primary text-sm">Priority 24/7 Support</h3>
+        <p class="text-muted text-xs">Direct access to our team, always</p>
+      </div>
+
+      <div class="bg-white rounded-2xl p-6 flex flex-col items-center gap-3 shadow-teal-sm reveal" style="transition-delay:.1s">
+        <div class="w-12 h-12 bg-surf-low rounded-xl flex items-center justify-center">
+          <span class="material-symbols-outlined text-primary-c">monitoring</span>
+        </div>
+        <h3 class="font-jakarta font-semibold text-primary text-sm">Weekly Performance Audits</h3>
+        <p class="text-muted text-xs">We review your chatbot every week</p>
+      </div>
+
+      <div class="bg-white rounded-2xl p-6 flex flex-col items-center gap-3 shadow-teal-sm reveal" style="transition-delay:.2s">
+        <div class="w-12 h-12 bg-surf-low rounded-xl flex items-center justify-center">
+          <span class="material-symbols-outlined text-primary-c">location_on</span>
+        </div>
+        <h3 class="font-jakarta font-semibold text-primary text-sm">Nepal-Based Team</h3>
+        <p class="text-muted text-xs">We speak your language, literally</p>
+      </div>
+    </div>
   </div>
 </section>
 
-<!-- FOOTER -->
-<footer>
-  <div class="footer-inner">
-    <a href="#" class="footer-logo">ChatBot Nepal</a>
-    <ul class="footer-links">
-      <li><a href="#about">About</a></li>
-      <li><a href="#pricing">Pricing</a></li>
-      <li><a href="#testimonials">Reviews</a></li>
-      <li><a href="#faq">FAQ</a></li>
-      <li><a href="#contact">Contact</a></li>
-      <li><a href="/privacy-policy">Privacy Policy</a></li>
-      <li><a href="/terms">Terms</a></li>
-    </ul>
-    <div class="footer-copy">© 2026 ChatBot Nepal. Kathmandu, Nepal 🇳🇵</div>
+<!-- ════════════════════════════════════
+     FAQ
+════════════════════════════════════ -->
+<section class="bg-white py-16 md:py-24" id="faq">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12 reveal">
+      <h2 class="font-jakarta font-bold text-3xl md:text-4xl text-primary mb-3">Common Questions</h2>
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <div class="faq-item bg-surf-low rounded-2xl overflow-hidden reveal">
+        <button class="faq-btn w-full flex items-center justify-between px-5 py-4 text-left gap-4">
+          <span class="font-jakarta font-semibold text-primary text-sm md:text-base">How long does setup take?</span>
+          <span class="material-symbols-outlined faq-icon text-primary-c flex-shrink-0">add</span>
+        </button>
+        <div class="faq-answer">
+          <p class="px-5 pb-5 text-muted text-sm leading-relaxed">24 hours from our interview call. We collect your info, build the knowledge base, and deploy. You paste one line of code.</p>
+        </div>
+      </div>
+
+      <div class="faq-item bg-surf-low rounded-2xl overflow-hidden reveal">
+        <button class="faq-btn w-full flex items-center justify-between px-5 py-4 text-left gap-4">
+          <span class="font-jakarta font-semibold text-primary text-sm md:text-base">Does it understand Nepali in Roman letters?</span>
+          <span class="material-symbols-outlined faq-icon text-primary-c flex-shrink-0">add</span>
+        </button>
+        <div class="faq-answer">
+          <p class="px-5 pb-5 text-muted text-sm leading-relaxed">Yes. Customers can type "fee kati ho?" in romanized Nepali. The chatbot understands and replies perfectly.</p>
+        </div>
+      </div>
+
+      <div class="faq-item bg-surf-low rounded-2xl overflow-hidden reveal">
+        <button class="faq-btn w-full flex items-center justify-between px-5 py-4 text-left gap-4">
+          <span class="font-jakarta font-semibold text-primary text-sm md:text-base">Can I track leads and queries?</span>
+          <span class="material-symbols-outlined faq-icon text-primary-c flex-shrink-0">add</span>
+        </button>
+        <div class="faq-answer">
+          <p class="px-5 pb-5 text-muted text-sm leading-relaxed">Yes. You get a dashboard showing every visitor query, every lead captured, and every contact detail collected.</p>
+        </div>
+      </div>
+
+      <div class="faq-item bg-surf-low rounded-2xl overflow-hidden reveal">
+        <button class="faq-btn w-full flex items-center justify-between px-5 py-4 text-left gap-4">
+          <span class="font-jakarta font-semibold text-primary text-sm md:text-base">Is there a contract?</span>
+          <span class="material-symbols-outlined faq-icon text-primary-c flex-shrink-0">add</span>
+        </button>
+        <div class="faq-answer">
+          <p class="px-5 pb-5 text-muted text-sm leading-relaxed">No. Month-to-month. Cancel anytime. No lock-in.</p>
+        </div>
+      </div>
+
+      <div class="faq-item bg-surf-low rounded-2xl overflow-hidden reveal">
+        <button class="faq-btn w-full flex items-center justify-between px-5 py-4 text-left gap-4">
+          <span class="font-jakarta font-semibold text-primary text-sm md:text-base">What if my pricing or services change?</span>
+          <span class="material-symbols-outlined faq-icon text-primary-c flex-shrink-0">add</span>
+        </button>
+        <div class="faq-answer">
+          <p class="px-5 pb-5 text-muted text-sm leading-relaxed">Message us. We update your chatbot's knowledge base same day. That's exactly why our monthly fee exists — we maintain everything.</p>
+        </div>
+      </div>
+
+      <div class="faq-item bg-surf-low rounded-2xl overflow-hidden reveal">
+        <button class="faq-btn w-full flex items-center justify-between px-5 py-4 text-left gap-4">
+          <span class="font-jakarta font-semibold text-primary text-sm md:text-base">Will it slow my website?</span>
+          <span class="material-symbols-outlined faq-icon text-primary-c flex-shrink-0">add</span>
+        </button>
+        <div class="faq-answer">
+          <p class="px-5 pb-5 text-muted text-sm leading-relaxed">No. Single lightweight script, loads asynchronously. Zero impact on your site speed.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════
+     FINAL CTA
+════════════════════════════════════ -->
+<section class="bg-primary py-16 md:py-24" id="contact">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center reveal">
+    <h2 class="font-jakarta font-extrabold text-3xl md:text-4xl text-white mb-4">
+      Ready to Stop Losing Customers?
+    </h2>
+    <p class="text-white/80 text-lg mb-10 max-w-xl mx-auto">
+      Join the 10 exclusive beta partners today and bring your website to life.
+    </p>
+
+    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+      <a href="https://wa.me/9779811144402?text=I%20want%20a%20free%20demo%20for%20my%20business"
+         target="_blank" rel="noopener"
+         class="inline-flex items-center justify-center gap-2 text-white font-bold py-4 px-8 rounded-xl transition-opacity hover:opacity-90"
+         style="background:#25D366">
+        <span class="material-symbols-outlined" style="font-size:20px">chat</span>
+        WhatsApp Us Now
+      </a>
+      <a href="mailto:info@isoftro.com"
+         class="inline-flex items-center justify-center gap-2 border-2 border-white text-white font-bold py-4 px-8 rounded-xl hover:bg-white hover:text-primary transition-colors">
+        <span class="material-symbols-outlined" style="font-size:20px">mail</span>
+        Send Email
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════
+     FOOTER
+════════════════════════════════════ -->
+<footer class="bg-surf-container py-10">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex flex-col md:flex-row items-center justify-between gap-5">
+      <span class="font-jakarta font-extrabold text-xl text-primary">ChatBot Nepal</span>
+      <div class="flex flex-wrap items-center justify-center gap-6 text-sm text-muted">
+        <a href="{{ route('privacy-policy') }}" class="hover:text-primary transition-colors">Privacy Policy</a>
+        <a href="{{ route('terms') }}" class="hover:text-primary transition-colors">Terms of Service</a>
+        <a href="mailto:info@isoftro.com" class="hover:text-primary transition-colors">Contact Support</a>
+      </div>
+    </div>
+    <div class="border-t border-outline-var/40 mt-6 pt-6 text-center">
+      <p class="text-muted text-sm">&copy; 2026 ChatBot Nepal. Kathmandu, Nepal 🇳🇵</p>
+    </div>
   </div>
 </footer>
 
 <script>
-  function toggleNav() {
-    document.getElementById('navbar').classList.toggle('nav-mobile-open');
-  }
-
-  function toggleFaq(el) {
-    el.parentElement.classList.toggle('open');
-  }
-
-  const demoReplies = {
-    default: "That's a great question! Our AI chatbot can answer exactly this kind of query for your customers 24/7. Want to see a demo for your website?",
-    price: "Our plans start from Rs. 1,999/month + Rs. 3,000 one-time setup. You get unlimited updates and full support included!",
-    hello: "Namaste! I'm a demo of what your website chatbot could look like. Try asking me about pricing or services!",
-    service: "We build AI chatbots for any business website in Nepal. We interview you, build a knowledge base, and install it in 24 hours!",
-    nepali: "जी, हाम्रो chatbot नेपाली, हिन्दी र अंग्रेजी तिनै भाषामा जवाफ दिन सक्छ!",
-  };
-
-  function sendDemo() {
-    const input = document.getElementById('demo-input');
-    const messages = document.getElementById('demo-messages');
-    const text = input.value.trim();
-    if (!text) return;
-
-    const userDiv = document.createElement('div');
-    userDiv.className = 'msg-user';
-    userDiv.textContent = text;
-    messages.appendChild(userDiv);
-    input.value = '';
-
-    setTimeout(() => {
-      const lower = text.toLowerCase();
-      let reply = demoReplies.default;
-      if (lower.includes('price') || lower.includes('cost') || lower.includes('kati') || lower.includes('paisa')) reply = demoReplies.price;
-      else if (lower.includes('hello') || lower.includes('hi') || lower.includes('namaste') || lower.includes('नमस्')) reply = demoReplies.hello;
-      else if (lower.includes('service') || lower.includes('what') || lower.includes('chatbot')) reply = demoReplies.service;
-      else if (lower.includes('nepali') || lower.includes('नेपाली') || lower.includes('nepal')) reply = demoReplies.nepali;
-
-      const botDiv = document.createElement('div');
-      botDiv.className = 'msg-bot';
-      botDiv.textContent = reply;
-      messages.appendChild(botDiv);
-      messages.scrollTop = messages.scrollHeight;
-    }, 600);
-
-    messages.scrollTop = messages.scrollHeight;
-  }
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry, i) => {
-      if (entry.isIntersecting) {
-        setTimeout(() => entry.target.classList.add('visible'), i * 70);
-        observer.unobserve(entry.target);
-      }
+// ── FAQ accordion ──
+document.querySelectorAll('.faq-btn').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    var item = btn.closest('.faq-item');
+    var answer = item.querySelector('.faq-answer');
+    var isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(function(i) {
+      i.classList.remove('open');
+      i.querySelector('.faq-answer').classList.remove('open');
     });
-  }, { threshold: 0.1 });
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    if (!isOpen) {
+      item.classList.add('open');
+      answer.classList.add('open');
+    }
+  });
+});
+
+// ── Mobile nav ──
+var hamburger    = document.getElementById('hamburger');
+var drawer       = document.getElementById('nav-drawer');
+var overlay      = document.getElementById('drawer-overlay');
+var closeDrawer  = document.getElementById('close-drawer');
+
+function openNav() {
+  drawer.classList.add('open');
+  overlay.classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+}
+function closeNav() {
+  drawer.classList.remove('open');
+  overlay.classList.add('hidden');
+  document.body.style.overflow = '';
+}
+
+hamburger.addEventListener('click', openNav);
+closeDrawer.addEventListener('click', closeNav);
+overlay.addEventListener('click', closeNav);
+document.querySelectorAll('.drawer-link').forEach(function(link) {
+  link.addEventListener('click', closeNav);
+});
+
+// ── Smooth scroll ──
+document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+  anchor.addEventListener('click', function(e) {
+    var target = document.querySelector(anchor.getAttribute('href'));
+    if (target) {
+      e.preventDefault();
+      var top = target.getBoundingClientRect().top + window.scrollY - 70;
+      window.scrollTo({ top: top, behavior: 'smooth' });
+    }
+  });
+});
+
+// ── Reveal on scroll ──
+var revealObserver = new IntersectionObserver(function(entries) {
+  entries.forEach(function(entry, i) {
+    if (entry.isIntersecting) {
+      setTimeout(function() {
+        entry.target.classList.add('visible');
+      }, i * 60);
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.08 });
+
+document.querySelectorAll('.reveal').forEach(function(el) {
+  revealObserver.observe(el);
+});
 </script>
 </body>
 </html>
