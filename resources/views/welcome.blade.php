@@ -912,8 +912,7 @@
       <blockquote class="relative">
         <span class="absolute -top-3 left-0 text-6xl text-primary-c/10 font-serif leading-none select-none">&ldquo;</span>
         <p class="relative z-10 text-muted text-sm md:text-base leading-relaxed italic px-4 text-left">
-          Maine yo service isliye banayi kyunki maine dekha ki Nepal ke acche businesses bhi sirf isliye customers kho rahe the kyunki unka website jawab nahi deta tha.
-          Main personally har chatbot setup karta hoon — mera number direct WhatsApp pe available hai.
+          मैले यो सेवा यसकारण बनाएँ किनभने मैले देखेँ कि नेपालका राम्रा व्यवसायहरू पनि केवल यसकारण ग्राहक गुमाइरहेका थिए किनभने उनीहरूको वेबसाइटले जवाफ दिँदैनथ्यो। म आफैं प्रत्येक च्याटबोट सेटअप गर्छु — मेरो नम्बर प्रत्यक्ष WhatsApp मा उपलब्ध छ।
         </p>
       </blockquote>
       <p class="text-xs text-muted mt-4 mb-8">— Devbarat, PHP/Laravel Developer &nbsp;·&nbsp; iSoftro &nbsp;·&nbsp; Kathmandu, Nepal 🇳🇵</p>
