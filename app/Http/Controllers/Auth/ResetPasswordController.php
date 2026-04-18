@@ -67,8 +67,8 @@ class ResetPasswordController extends Controller
         Auth::login($user);
         $request->session()->regenerate();
 
-        return redirect()->intended(
-            $user->isAdmin() ? route('admin.dashboard') : route('client.dashboard')
-        )->with('success', 'Your password has been reset successfully.');
+        return redirect()->route('password.success', [
+            'redirect' => $user->isAdmin() ? route('admin.dashboard') : route('client.dashboard')
+        ]);
     }
 }

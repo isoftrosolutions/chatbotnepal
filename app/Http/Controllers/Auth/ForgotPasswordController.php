@@ -26,13 +26,10 @@ class ForgotPasswordController extends Controller
 
         $email = $request->input('email');
 
-        // Always respond identically regardless of whether the email exists
-        // (prevents user enumeration)
         $user = User::where('email', $email)->first();
 
         if ($user) {
             if (! $this->otp->checkSendRateLimit($email)) {
-                // Still return success message — don't reveal rate limit per-email
                 return back()->with('status', 'If that email is registered, a verification code has been sent.');
             }
 
@@ -42,6 +39,8 @@ class ForgotPasswordController extends Controller
             Mail::to($email)->send(new OtpMail($code, 'password_reset'));
         }
 
-        return back()->with('status', 'If that email is registered, a verification code has been sent.');
+        return redirect()->route('password.reset', ['email' => $email])
+            ->with('status', 'Verification code sent! Check your email.')
+            ->with('email', $email);
     }
 }

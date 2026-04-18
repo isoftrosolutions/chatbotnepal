@@ -60,10 +60,14 @@
     <h1 class="card-title">Forgot your password?</h1>
     <p class="card-sub">Enter your account email and we'll send you a one-time code.</p>
 
-    @if(session('status'))
-      <div class="alert-success">
+    @php $showSuccess = session('status'); @endphp
+    @if($showSuccess)
+      <div class="alert-success" id="success-message">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-        {{ session('status') }}
+        <div>
+          {{ session('status') }}
+          <div style="margin-top:8px;font-size:13px;">Redirecting to enter code in <span id="countdown" style="font-weight:700;color:#4f46e5;">3</span> seconds...</div>
+        </div>
       </div>
     @endif
 
@@ -89,18 +93,31 @@
     </form>
 
     <p class="back-link"><a href="{{ route('login') }}">← Back to sign in</a></p>
-
-    @if(session('status'))
-      <div style="margin-top:24px;padding:16px;background:#f0f0ff;border-radius:8px;text-align:center;">
-        <p style="font-size:13px;color:#4f46e5;font-weight:600;">Code sent! Proceed to enter it:</p>
-        <a href="{{ route('password.reset') }}?email={{ urlencode(old('email', '')) }}" style="display:inline-block;margin-top:10px;padding:10px 20px;background:#4f46e5;color:#fff;border-radius:6px;font-size:14px;font-weight:600;text-decoration:none;">Enter verification code →</a>
-      </div>
-    @endif
   </div>
   <div class="right-footer">
     <span class="copy">© {{ date('Y') }} ChatBot Nepal by iSoftro</span>
   </div>
 </div>
 
+@if($showSuccess)
+<script>var resetEmail = "{{ session('email', '') }}";</script>
+@endif
+
 </body>
+<script>
+const successMsg = document.getElementById('success-message');
+if (successMsg) {
+  const email = typeof resetEmail !== 'undefined' ? resetEmail : '';
+  let seconds = 3;
+  const countdownEl = document.getElementById('countdown');
+  const interval = setInterval(() => {
+    seconds--;
+    countdownEl.textContent = seconds;
+    if (seconds <= 0) {
+      clearInterval(interval);
+      window.location.href = '{{ route("password.reset") }}?email=' + encodeURIComponent(email);
+    }
+  }, 1000);
+}
+</script>
 </html>

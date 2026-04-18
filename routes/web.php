@@ -50,6 +50,10 @@ Route::middleware('guest')->group(function () {
     Route::post('forgot-password', [ForgotPasswordController::class, 'store'])->name('password.email');
     Route::get('reset-password', [ResetPasswordController::class, 'create'])->name('password.reset');
     Route::post('reset-password', [ResetPasswordController::class, 'store'])->name('password.update');
+    Route::get('password-reset-success', function (\Illuminate\Http\Request $request) {
+        $redirect = $request->query('redirect', route('client.dashboard'));
+        return view('auth.password-reset-success', ['redirectUrl' => $redirect]);
+    })->name('password.success');
 });
 
 Route::middleware('auth')->group(function () {
