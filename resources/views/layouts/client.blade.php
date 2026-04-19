@@ -149,7 +149,6 @@
                             <img src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name) }}&background=6366f1&color=fff" alt="Avatar">
                         </div>
                     </div>
-                </div>
             </header>
 
             <!-- Scrollable Content -->
