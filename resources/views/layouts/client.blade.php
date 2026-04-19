@@ -38,10 +38,31 @@
         }
     </style>
 </head>
-<body class="bg-[#F4F7FE] text-gray-800">
+<body class="bg-[#F4F7FE] text-gray-800" x-data="{ sidebarOpen: false }">
     <div class="flex h-screen overflow-hidden">
+        <!-- Mobile Overlay -->
+        <div 
+            x-show="sidebarOpen" 
+            x-transition:enter="transition-opacity ease-out duration-300"
+            x-transition:enter-start="opacity-0"
+            x-transition:enter-end="opacity-100"
+            x-transition:leave="transition-opacity ease-in duration-200"
+            x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0"
+            @click="sidebarOpen = false"
+            class="fixed inset-0 bg-black/50 z-40 lg:hidden"
+        ></div>
+
         <!-- Sidebar -->
-        <aside class="w-72 bg-[#1B1B38] text-gray-400 flex flex-col shrink-0">
+        <aside 
+            class="w-72 bg-[#1B1B38] text-gray-400 flex flex-col shrink-0 fixed lg:relative inset-y-0 left-0 z-50 transform transition-transform duration-300 lg:transform-none"
+            :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'"
+        >
+            <!-- Mobile Close Button -->
+            <button @click="sidebarOpen = false" class="lg:hidden absolute top-4 right-4 p-2 rounded-lg hover:bg-white/10 transition-colors">
+                <i data-lucide="x" class="w-5 h-5 text-white"></i>
+            </button>
+
             <div class="p-8 flex items-center gap-3">
                 <div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center">
                     <i data-lucide="bot" class="text-white w-6 h-6"></i>
@@ -61,6 +82,11 @@
                 <a href="{{ route('client.conversations') }}" class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all {{ request()->routeIs('client.conversations*') ? 'bg-indigo-600 text-white shadow-[0_10px_20px_-5px_rgba(79,70,229,0.4)]' : 'hover:bg-white/5' }}">
                     <i data-lucide="message-square" class="w-5 h-5"></i>
                     <span class="font-medium">Chat History</span>
+                </a>
+
+                <a href="{{ route('client.visitors') }}" class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all {{ request()->routeIs('client.visitors*') ? 'bg-indigo-600 text-white shadow-[0_10px_20px_-5px_rgba(79,70,229,0.4)]' : 'hover:bg-white/5' }}">
+                    <i data-lucide="users" class="w-5 h-5"></i>
+                    <span class="font-medium">Visitors</span>
                 </a>
 
                 <a href="{{ route('client.invoices') }}" class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all {{ request()->routeIs('client.invoices*') ? 'bg-indigo-600 text-white shadow-[0_10px_20px_-5px_rgba(79,70,229,0.4)]' : 'hover:bg-white/5' }}">
@@ -106,10 +132,14 @@
         <!-- Main Content -->
         <main class="flex-1 flex flex-col min-w-0 overflow-hidden">
             <!-- Top Header -->
-            <header class="h-20 flex items-center justify-between px-8 shrink-0">
-                <h2 class="text-2xl font-bold text-[#1B1B38]">@yield('header', 'Dashboard')</h2>
-
-                <div class="flex items-center gap-6">
+            <header class="h-20 flex items-center justify-between px-4 lg:px-8 shrink-0">
+                <div class="flex items-center gap-4">
+                    <!-- Mobile Menu Toggle -->
+                    <button @click="sidebarOpen = !sidebarOpen" class="lg:hidden p-2 rounded-xl hover:bg-gray-100 transition-colors">
+                        <i data-lucide="menu" class="w-6 h-6 text-[#1B1B38]"></i>
+                    </button>
+                    <h2 class="text-xl lg:text-2xl font-bold text-[#1B1B38]">@yield('header', 'Dashboard')</h2>
+                </div>
                     <div class="flex items-center gap-3 pl-4 border-l border-gray-200">
                         <div class="text-right">
                             <p class="text-sm font-bold text-[#1B1B38] leading-none">{{ auth()->user()->name }}</p>
@@ -123,7 +153,7 @@
             </header>
 
             <!-- Scrollable Content -->
-            <div class="flex-1 overflow-y-auto p-8 pt-2" id="main-content">
+            <div class="flex-1 overflow-y-auto p-4 lg:p-8 pt-2" id="main-content">
                 <!-- Toast Notifications -->
                 <div id="toast-container" class="fixed top-4 right-4 z-50 space-y-2">
                     @if(session('success'))

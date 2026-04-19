@@ -16,6 +16,7 @@ class ChatConversation extends Model
         'visitor_id',
         'visitor_name',
         'visitor_email',
+        'visitor_phone',
         'source_url',
         'status',
     ];

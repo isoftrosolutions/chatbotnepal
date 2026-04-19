@@ -45,6 +45,59 @@
         </div>
     </div>
 
+    <!-- Widget Configuration Form -->
+    <div class="bg-white rounded-3xl p-8 shadow-sm border border-gray-100">
+        <div class="flex items-center gap-4 mb-6">
+            <div class="w-12 h-12 bg-violet-50 rounded-2xl flex items-center justify-center">
+                <i data-lucide="settings-2" class="text-violet-600 w-6 h-6"></i>
+            </div>
+            <div>
+                <h4 class="text-lg font-bold text-[#1B1B38]">Chatbot Features</h4>
+                <p class="text-sm text-gray-400">Enable or disable features for your chatbot</p>
+            </div>
+        </div>
+
+        <form action="{{ route('client.embed-code.update') }}" method="POST">
+            @csrf
+
+            {{-- Hidden fields to carry over existing config values --}}
+            <input type="hidden" name="welcome_message" value="{{ $config->welcome_message ?? 'Namaste! How can I help you today?' }}">
+            <input type="hidden" name="primary_color" value="{{ $config->primary_color ?? '#4F46E5' }}">
+            <input type="hidden" name="position" value="{{ $config->position ?? 'bottom-right' }}">
+            <input type="hidden" name="bot_name" value="{{ $config->bot_name ?? 'Assistant' }}">
+            <input type="hidden" name="show_powered_by" value="{{ $config->show_powered_by ?? 1 }}">
+
+            <label class="flex items-start gap-4 cursor-pointer p-4 rounded-2xl border border-gray-100 hover:border-indigo-200 hover:bg-indigo-50/30 transition-all group">
+                <div class="relative mt-0.5 flex-shrink-0">
+                    <input type="hidden" name="prechat_enabled" value="0">
+                    <input type="checkbox" name="prechat_enabled" value="1" id="prechat_toggle"
+                           {{ ($config->prechat_enabled ?? false) ? 'checked' : '' }}
+                           class="sr-only peer">
+                    <div class="w-11 h-6 bg-gray-200 peer-checked:bg-indigo-600 rounded-full transition-colors duration-200"></div>
+                    <div class="absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform duration-200 peer-checked:translate-x-5"></div>
+                </div>
+                <div class="flex-1">
+                    <p class="font-semibold text-[#1B1B38] text-sm group-hover:text-indigo-700 transition-colors">Pre-Chat Visitor Form</p>
+                    <p class="text-xs text-gray-400 mt-1 leading-relaxed">Show a brief form asking visitors for their name, email, and phone number before the first message. All fields are optional — visitors can skip at any time.</p>
+                </div>
+            </label>
+
+            @if(session('success'))
+            <div class="mt-4 bg-[#E2FFF3] border border-[#05CD99]/20 text-[#05CD99] rounded-xl px-4 py-3 text-sm font-semibold flex items-center gap-2">
+                <i data-lucide="check-circle" class="w-4 h-4"></i>
+                {{ session('success') }}
+            </div>
+            @endif
+
+            <div class="mt-5 flex justify-end">
+                <button type="submit" class="flex items-center gap-2 px-6 py-3 bg-indigo-600 text-white rounded-2xl font-bold text-sm hover:bg-indigo-700 active:scale-95 transition-all shadow-[0_4px_14px_rgba(79,70,229,0.35)]">
+                    <i data-lucide="save" class="w-4 h-4"></i>
+                    Save Settings
+                </button>
+            </div>
+        </form>
+    </div>
+
     <!-- Instructions Grid -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div class="bg-white rounded-3xl p-8 shadow-sm border border-gray-100">

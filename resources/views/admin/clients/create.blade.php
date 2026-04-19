@@ -110,6 +110,35 @@
                 </div>
             </div>
 
+            <!-- Chatbot Features -->
+            <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+                <div class="p-8 border-b border-gray-50 flex items-center gap-4">
+                    <div class="w-12 h-12 bg-violet-50 rounded-2xl flex items-center justify-center">
+                        <i data-lucide="settings-2" class="text-violet-600 w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-[#1B1B38]">Chatbot Features</h3>
+                        <p class="text-xs text-gray-400 mt-0.5">Configure which features are active for this client</p>
+                    </div>
+                </div>
+                <div class="p-8">
+                    <label class="flex items-start gap-4 cursor-pointer group">
+                        <div class="relative mt-0.5 flex-shrink-0">
+                            <input type="hidden" name="prechat_enabled" value="0">
+                            <input type="checkbox" name="prechat_enabled" value="1" id="prechat_enabled_create"
+                                   {{ old('prechat_enabled') ? 'checked' : '' }}
+                                   class="sr-only peer">
+                            <div class="w-11 h-6 bg-gray-200 peer-checked:bg-indigo-600 rounded-full transition-colors duration-200 peer-focus:ring-2 peer-focus:ring-indigo-300"></div>
+                            <div class="absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform duration-200 peer-checked:translate-x-5"></div>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-[#1B1B38] text-sm">Pre-Chat Visitor Form</p>
+                            <p class="text-xs text-gray-400 mt-1 leading-relaxed">Ask visitors for their name, email, and phone number before the conversation starts. All fields are optional for the visitor.</p>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
             <!-- Form Actions -->
             <div class="flex items-center justify-end gap-4 pb-12">
                 <a href="{{ route('admin.clients.index') }}" class="px-8 py-4 rounded-2xl text-sm font-bold text-gray-500 hover:bg-gray-100 transition-all">

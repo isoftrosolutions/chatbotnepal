@@ -47,13 +47,14 @@ class WidgetSessionController extends Controller
             'session_token' => $sessionToken->token,
             'expires_at' => $sessionToken->expires_at->toIso8601String(),
             'config' => [
-                'business_name' => $user->company_name ?? $user->name,
+                'business_name'   => $user->company_name ?? $user->name,
                 'welcome_message' => $config?->welcome_message ?? 'Namaste! How can I help you today?',
-                'primary_color' => $config?->primary_color ?? '#4318FF',
-                'position' => $config?->position ?? 'bottom-right',
-                'bot_name' => $config?->bot_name ?? 'Assistant',
-                'bot_avatar_url' => $config?->bot_avatar_url,
+                'primary_color'   => $config?->primary_color ?? '#4318FF',
+                'position'        => $config?->position ?? 'bottom-right',
+                'bot_name'        => $config?->bot_name ?? 'Assistant',
+                'bot_avatar_url'  => $config?->bot_avatar_url,
                 'show_powered_by' => $config?->show_powered_by ?? true,
+                'prechat_enabled' => $config?->prechat_enabled ?? false,
             ],
         ]);
     }

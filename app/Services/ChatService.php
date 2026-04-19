@@ -9,6 +9,7 @@ use App\Models\KnowledgeBase;
 use App\Models\Setting;
 use App\Models\TokenUsageLog;
 use App\Models\User;
+use App\Models\Visitor;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 
@@ -32,7 +33,12 @@ class ChatService
         string $message,
         ?string $conversationId = null,
         ?string $visitorId = null,
-        ?string $sourceUrl = null
+        ?string $sourceUrl = null,
+        ?string $visitorName = null,
+        ?string $visitorEmail = null,
+        ?string $visitorPhone = null,
+        ?string $ipAddress = null,
+        ?string $userAgent = null
     ): array {
         if (! $client->chatbot_enabled) {
             return ['success' => false, 'error' => 'Chatbot is currently offline'];
@@ -42,7 +48,12 @@ class ChatService
             return ['success' => false, 'error' => 'Chatbot is currently unavailable'];
         }
 
-        $conversation = $this->getOrCreateConversation($client, $conversationId, $visitorId, $sourceUrl);
+        $conversation = $this->getOrCreateConversation(
+            $client, $conversationId, $visitorId, $sourceUrl,
+            $visitorName, $visitorEmail, $visitorPhone
+        );
+
+        $this->upsertVisitor($client, $visitorId, $visitorName, $visitorEmail, $visitorPhone, $ipAddress, $userAgent, $sourceUrl);
 
         // Fetch history before saving visitor message so current turn isn't duplicated
         $messages = $this->buildTokenBudgetedMessages($client, $conversation, $message);
@@ -101,23 +112,67 @@ class ChatService
         User $client,
         ?string $conversationId,
         ?string $visitorId,
-        ?string $sourceUrl
+        ?string $sourceUrl,
+        ?string $visitorName = null,
+        ?string $visitorEmail = null,
+        ?string $visitorPhone = null
     ): ChatConversation {
         if ($conversationId) {
             $conversation = ChatConversation::where('id', $conversationId)
                 ->where('user_id', $client->id)
                 ->first();
             if ($conversation) {
+                $updates = [];
+                if ($visitorName && ! $conversation->visitor_name)   $updates['visitor_name']  = $visitorName;
+                if ($visitorEmail && ! $conversation->visitor_email)  $updates['visitor_email'] = $visitorEmail;
+                if ($visitorPhone && ! $conversation->visitor_phone)  $updates['visitor_phone'] = $visitorPhone;
+                if ($updates) $conversation->update($updates);
                 return $conversation;
             }
         }
 
         return ChatConversation::create([
-            'user_id'    => $client->id,
-            'visitor_id' => $visitorId ?? 'unknown',
-            'source_url' => $sourceUrl,
-            'status'     => 'active',
+            'user_id'       => $client->id,
+            'visitor_id'    => $visitorId ?? 'unknown',
+            'visitor_name'  => $visitorName,
+            'visitor_email' => $visitorEmail,
+            'visitor_phone' => $visitorPhone,
+            'source_url'    => $sourceUrl,
+            'status'        => 'active',
         ]);
+    }
+
+    public function upsertVisitor(
+        User $client,
+        ?string $visitorId,
+        ?string $name,
+        ?string $email,
+        ?string $phone,
+        ?string $ipAddress,
+        ?string $userAgent,
+        ?string $pageUrl
+    ): void {
+        if (! $visitorId || $visitorId === 'unknown') {
+            return;
+        }
+
+        $visitor = Visitor::firstOrNew([
+            'user_id'      => $client->id,
+            'visitor_uuid' => $visitorId,
+        ]);
+
+        if (! $visitor->exists) {
+            $visitor->first_seen_at = now();
+        }
+
+        if ($name)     $visitor->name          = $name;
+        if ($email)    $visitor->email         = $email;
+        if ($phone)    $visitor->phone         = $phone;
+        if ($ipAddress) $visitor->ip_address   = $ipAddress;
+        if ($userAgent) $visitor->user_agent   = $userAgent;
+        if ($pageUrl)  $visitor->last_page_url = $pageUrl;
+        $visitor->last_seen_at = now();
+        $visitor->save();
     }
 
     public function logGroqUsage(int $userId, int $conversationId, array $result): void

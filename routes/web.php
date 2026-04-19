@@ -17,6 +17,7 @@ use App\Http\Controllers\Client\EmbedController;
 use App\Http\Controllers\Client\InvoiceController;
 use App\Http\Controllers\Client\ProfileController;
 use App\Http\Controllers\Client\UpdateRequestController;
+use App\Http\Controllers\Client\VisitorsController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -110,6 +111,8 @@ Route::middleware('auth')->group(function () {
 
         Route::get('/conversations', [ConversationController::class, 'index'])->name('client.conversations');
         Route::get('/conversations/{id}', [ConversationController::class, 'show'])->name('client.conversations.show');
+
+        Route::get('/visitors', [VisitorsController::class, 'index'])->name('client.visitors');
 
         Route::get('/invoices', [InvoiceController::class, 'index'])->name('client.invoices');
         Route::get('/invoices/{invoice}/pay', [InvoiceController::class, 'pay'])->name('client.invoices.pay');

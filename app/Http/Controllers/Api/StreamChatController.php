@@ -47,6 +47,9 @@ class StreamChatController extends Controller
             'visitor_id'      => 'nullable|string|max:64',
             'conversation_id' => 'nullable|integer',
             'source_url'      => 'nullable|string|max:500',
+            'visitor_name'    => 'nullable|string|max:100',
+            'visitor_email'   => 'nullable|email|max:191',
+            'visitor_phone'   => 'nullable|string|max:30',
         ]);
 
         $sessionToken = $request->header('X-Session-Token');
@@ -81,6 +84,19 @@ class StreamChatController extends Controller
             $client,
             $request->conversation_id,
             $request->visitor_id,
+            $this->sanitizeUrl($request->source_url),
+            $request->visitor_name,
+            $request->visitor_email,
+            $request->visitor_phone
+        );
+        $this->chatService->upsertVisitor(
+            $client,
+            $request->visitor_id,
+            $request->visitor_name,
+            $request->visitor_email,
+            $request->visitor_phone,
+            $request->ip(),
+            $request->userAgent(),
             $this->sanitizeUrl($request->source_url)
         );
 

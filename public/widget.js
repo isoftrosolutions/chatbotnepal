@@ -15,15 +15,18 @@
         bot_name: 'Assistant',
         bot_avatar_url: null,
         show_powered_by: true,
+        prechat_enabled: false,
     };
     let conversationId = sessionStorage.getItem('cbn_conversation_id')
         ? parseInt(sessionStorage.getItem('cbn_conversation_id'), 10)
         : null;
     let visitorId = localStorage.getItem('cbn_visitor_id') || uuidv4();
     localStorage.setItem('cbn_visitor_id', visitorId);
+    let visitorInfo = JSON.parse(localStorage.getItem('cbn_visitor_info') || 'null') || { name: '', email: '', phone: '' };
     let isWindowOpen = false;
     let sessionToken = null;
     let busy = false;
+    let prechatShown = false;
 
     /* ─────────────────────────────────────────
        DESIGN TOKENS  (ChatBot Nepal Green)
@@ -306,6 +309,51 @@
             background: #fef2f2; border-color: #fecaca; color: #b91c1c;
         }
 
+        /* ── PRE-CHAT FORM ── */
+        #cn-prechat {
+            position: absolute; inset: 0; z-index: 10;
+            background: rgba(255,255,255,.97); backdrop-filter: blur(6px);
+            display: flex; flex-direction: column; justify-content: center;
+            padding: 28px 24px; border-radius: 20px;
+            animation: row-in .25s cubic-bezier(.4,0,.2,1) both;
+        }
+        #cn-prechat.gone { display: none; }
+        .cn-pcf-title {
+            font-size: 1.05rem; font-weight: 800; color: #1B1B38;
+            margin-bottom: 4px; letter-spacing: -.02em;
+        }
+        .cn-pcf-sub {
+            font-size: .78rem; color: #6b7280; margin-bottom: 20px; line-height: 1.5;
+        }
+        .cn-pcf-field { margin-bottom: 12px; }
+        .cn-pcf-label {
+            display: block; font-size: .72rem; font-weight: 600; color: #374151;
+            margin-bottom: 5px; text-transform: uppercase; letter-spacing: .05em;
+        }
+        .cn-pcf-input {
+            width: 100%; padding: 10px 13px; border: 1.5px solid #e5e7eb;
+            border-radius: 11px; font-size: .875rem; font-family: 'Plus Jakarta Sans',sans-serif;
+            color: #111827; outline: none; transition: border-color .18s, box-shadow .18s;
+            background: #f9fafb;
+        }
+        .cn-pcf-input:focus { border-color: #10b981; box-shadow: 0 0 0 3px rgba(16,185,129,.15); background: #fff; }
+        .cn-pcf-btn {
+            width: 100%; padding: 12px; border: none; border-radius: 12px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: #fff; font-size: .9rem; font-weight: 700;
+            font-family: 'Plus Jakarta Sans',sans-serif;
+            cursor: pointer; margin-top: 4px;
+            box-shadow: 0 4px 14px rgba(16,185,129,.4);
+            transition: transform .18s, box-shadow .18s;
+        }
+        .cn-pcf-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(16,185,129,.5); }
+        .cn-pcf-skip {
+            display: block; text-align: center; margin-top: 12px;
+            font-size: .75rem; color: #9ca3af; cursor: pointer;
+            text-decoration: underline; text-underline-offset: 2px;
+        }
+        .cn-pcf-skip:hover { color: #6b7280; }
+
         /* ── MOBILE ── */
         @media (max-width: 480px) {
             #cn-widget { bottom: 18px; right: 18px; }
@@ -384,6 +432,25 @@
                         <strong>AI Business Assistant</strong> — Serving Nepal<br/>
                         Replies in Nepali, Hindi &amp; English automatically
                     </div>
+                </div>
+
+                <div id="cn-prechat" class="gone">
+                    <div class="cn-pcf-title">Before we start 👋</div>
+                    <div class="cn-pcf-sub">Tell us a little about yourself — all fields are optional.</div>
+                    <div class="cn-pcf-field">
+                        <label class="cn-pcf-label">Your Name</label>
+                        <input id="cn-pcf-name" class="cn-pcf-input" type="text" placeholder="e.g. Ram Prasad" autocomplete="name">
+                    </div>
+                    <div class="cn-pcf-field">
+                        <label class="cn-pcf-label">Email Address</label>
+                        <input id="cn-pcf-email" class="cn-pcf-input" type="email" placeholder="you@example.com" autocomplete="email">
+                    </div>
+                    <div class="cn-pcf-field">
+                        <label class="cn-pcf-label">Phone Number</label>
+                        <input id="cn-pcf-phone" class="cn-pcf-input" type="tel" placeholder="+977 98XXXXXXXX" autocomplete="tel">
+                    </div>
+                    <button class="cn-pcf-btn" id="cn-pcf-submit">Start Chat</button>
+                    <span class="cn-pcf-skip" id="cn-pcf-skip">Skip for now</span>
                 </div>
 
                 <div id="cn-messages" role="log" aria-live="polite">
@@ -485,7 +552,15 @@
             liChat.classList.add('hidden');
             liClose.classList.remove('hidden');
             badge.classList.add('gone');
-            input.focus();
+
+            // Show pre-chat form only if enabled by client and visitor hasn't identified yet
+            const prechat = document.getElementById('cn-prechat');
+            if (config.prechat_enabled && !prechatShown && !conversationId && !visitorInfo.name && !visitorInfo.email && !visitorInfo.phone) {
+                prechatShown = true;
+                prechat.classList.remove('gone');
+            } else {
+                input.focus();
+            }
         }
 
         function closeChat() {
@@ -524,6 +599,32 @@
             if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); }
         });
 
+        function dismissPrechat() {
+            const prechat = document.getElementById('cn-prechat');
+            prechat.classList.add('gone');
+            input.focus();
+        }
+
+        document.getElementById('cn-pcf-submit').addEventListener('click', () => {
+            const name  = document.getElementById('cn-pcf-name').value.trim();
+            const email = document.getElementById('cn-pcf-email').value.trim();
+            const phone = document.getElementById('cn-pcf-phone').value.trim();
+            visitorInfo = { name, email, phone };
+            localStorage.setItem('cbn_visitor_info', JSON.stringify(visitorInfo));
+            dismissPrechat();
+        });
+
+        document.getElementById('cn-pcf-skip').addEventListener('click', () => {
+            dismissPrechat();
+        });
+
+        // Allow Enter key in pre-chat fields to submit
+        ['cn-pcf-name','cn-pcf-email','cn-pcf-phone'].forEach(id => {
+            document.getElementById(id).addEventListener('keydown', e => {
+                if (e.key === 'Enter') document.getElementById('cn-pcf-submit').click();
+            });
+        });
+
         document.getElementById('cn-mic').addEventListener('click', () => {
             const t = document.createElement('div');
             t.style.cssText = 'position:fixed;bottom:108px;right:28px;background:#065f46;color:#fff;font-family:Plus Jakarta Sans,sans-serif;font-size:.78rem;font-weight:600;padding:9px 16px;border-radius:10px;z-index:99999;pointer-events:none;animation:row-in .2s ease both;';
@@ -550,11 +651,14 @@
             method: 'POST',
             headers,
             body: JSON.stringify({
-                site_id: SITE_ID,
-                message: text,
-                visitor_id: visitorId,
+                site_id:        SITE_ID,
+                message:        text,
+                visitor_id:     visitorId,
                 conversation_id: conversationId || undefined,
-                source_url: window.location.href,
+                source_url:     window.location.href,
+                visitor_name:   visitorInfo.name  || undefined,
+                visitor_email:  visitorInfo.email || undefined,
+                visitor_phone:  visitorInfo.phone || undefined,
             }),
         })
         .then(r => {

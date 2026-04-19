@@ -18,6 +18,7 @@ class WidgetConfig extends Model
         'bot_name',
         'bot_avatar_url',
         'show_powered_by',
+        'prechat_enabled',
     ];
 
     public function user(): BelongsTo
@@ -34,6 +35,7 @@ class WidgetConfig extends Model
             'bot_name' => 'Assistant',
             'bot_avatar_url' => null,
             'show_powered_by' => true,
+            'prechat_enabled' => false,
         ];
     }
 }

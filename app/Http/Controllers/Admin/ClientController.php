@@ -30,26 +30,28 @@ class ClientController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
-            'phone' => 'nullable|string|max:20',
-            'password' => 'required|min:8',
-            'company_name' => 'nullable|string|max:255',
-            'website_url' => 'nullable|url|max:500',
-            'plan' => 'required|in:basic,standard,growth,pro',
-            'status' => 'required|in:active,inactive,suspended',
+            'name'             => 'required|string|max:255',
+            'email'            => 'required|email|unique:users,email',
+            'phone'            => 'nullable|string|max:20',
+            'password'         => 'required|min:8',
+            'company_name'     => 'nullable|string|max:255',
+            'website_url'      => 'nullable|url|max:500',
+            'plan'             => 'required|in:basic,standard,growth,pro',
+            'status'           => 'required|in:active,inactive,suspended',
+            'prechat_enabled'  => 'boolean',
         ]);
 
         $client = User::create([
-            ...$validated,
-            'role' => 'client',
-            'api_token' => Str::random(64),
-            'chatbot_enabled' => true,
+            ...collect($validated)->except('prechat_enabled')->all(),
+            'role'             => 'client',
+            'api_token'        => Str::random(64),
+            'chatbot_enabled'  => true,
         ]);
 
         WidgetConfig::create([
-            'user_id' => $client->id,
+            'user_id'         => $client->id,
             ...WidgetConfig::getDefaultConfig(),
+            'prechat_enabled' => $request->boolean('prechat_enabled'),
         ]);
 
         return redirect()->route('admin.clients.index')
@@ -58,7 +60,7 @@ class ClientController extends Controller
 
     public function edit(int $id): View
     {
-        $client = User::where('role', 'client')->findOrFail($id);
+        $client = User::where('role', 'client')->with('widgetConfig')->findOrFail($id);
 
         return view('admin.clients.edit', compact('client'));
     }
@@ -68,21 +70,27 @@ class ClientController extends Controller
         $client = User::where('role', 'client')->findOrFail($id);
 
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,'.$id,
-            'phone' => 'nullable|string|max:20',
-            'password' => 'nullable|min:8',
-            'company_name' => 'nullable|string|max:255',
-            'website_url' => 'nullable|url|max:500',
-            'plan' => 'required|in:basic,standard,growth,pro',
-            'status' => 'required|in:active,inactive,suspended',
+            'name'            => 'required|string|max:255',
+            'email'           => 'required|email|unique:users,email,'.$id,
+            'phone'           => 'nullable|string|max:20',
+            'password'        => 'nullable|min:8',
+            'company_name'    => 'nullable|string|max:255',
+            'website_url'     => 'nullable|url|max:500',
+            'plan'            => 'required|in:basic,standard,growth,pro',
+            'status'          => 'required|in:active,inactive,suspended',
+            'prechat_enabled' => 'boolean',
         ]);
 
         if (empty($validated['password'])) {
             unset($validated['password']);
         }
 
-        $client->update($validated);
+        $client->update(collect($validated)->except('prechat_enabled')->all());
+
+        WidgetConfig::updateOrCreate(
+            ['user_id' => $client->id],
+            ['prechat_enabled' => $request->boolean('prechat_enabled')]
+        );
 
         return redirect()->route('admin.clients.index')
             ->with('success', 'Client updated successfully');

@@ -25,10 +25,11 @@ class EmbedController extends Controller
 
         $validated = $request->validate([
             'welcome_message' => 'required|string|max:500',
-            'primary_color' => 'required|string|regex:/^#[0-9A-Fa-f]{6}$/',
-            'position' => 'required|in:bottom-right,bottom-left',
-            'bot_name' => 'required|string|max:100',
+            'primary_color'   => 'required|string|regex:/^#[0-9A-Fa-f]{6}$/',
+            'position'        => 'required|in:bottom-right,bottom-left',
+            'bot_name'        => 'required|string|max:100',
             'show_powered_by' => 'boolean',
+            'prechat_enabled' => 'boolean',
         ]);
 
         $config = WidgetConfig::updateOrCreate(
