@@ -20,17 +20,30 @@ class DashboardController extends Controller
     {
         $user = auth()->user();
 
+        $messagesToday = $user->conversations()
+            ->whereDate('created_at', Carbon::today())
+            ->withCount('messages')
+            ->get()
+            ->sum('messages_count');
+
+        $messagesYesterday = $user->conversations()
+            ->whereDate('created_at', Carbon::yesterday())
+            ->withCount('messages')
+            ->get()
+            ->sum('messages_count');
+
+        $todayTrend = $messagesYesterday > 0
+            ? round((($messagesToday - $messagesYesterday) / $messagesYesterday) * 100)
+            : ($messagesToday > 0 ? 100 : 0);
+
         $stats = [
             'chatbot_online' => $user->chatbot_enabled,
             'total_conversations' => $user->conversations()->count(),
             'conversations_this_month' => $user->conversations()
                 ->whereMonth('created_at', Carbon::now()->month)
                 ->count(),
-            'messages_today' => $user->conversations()
-                ->whereDate('created_at', Carbon::today())
-                ->withCount('messages')
-                ->get()
-                ->sum('messages_count'),
+            'messages_today' => $messagesToday,
+            'messages_trend' => $todayTrend,
             'current_plan' => strtoupper($user->plan),
             'next_billing' => $user->invoices()
                 ->where('status', 'pending')

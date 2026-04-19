@@ -37,7 +37,14 @@
         </div>
         <div class="flex-1">
             <p class="text-[12px] text-gray-400 font-bold uppercase tracking-wider">Today's Activity</p>
-            <h3 class="text-2xl font-bold text-[#1B1B38] mt-1">{{ $stats['messages_today'] }}</h3>
+            <div class="flex items-center gap-2">
+                <h3 class="text-2xl font-bold text-[#1B1B38] mt-1">{{ $stats['messages_today'] }}</h3>
+                @if(isset($stats['messages_trend']))
+                <span class="text-xs font-semibold {{ $stats['messages_trend'] >= 0 ? 'text-[#05CD99]' : 'text-[#EE5D50]' }}">
+                    {{ $stats['messages_trend'] >= 0 ? '+' : '' }}{{ $stats['messages_trend'] }}%
+                </span>
+                @endif
+            </div>
         </div>
     </div>
 

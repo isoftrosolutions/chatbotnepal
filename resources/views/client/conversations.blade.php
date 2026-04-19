@@ -14,7 +14,7 @@
                        value="{{ request('search') }}"
                        placeholder="Search by visitor name or email..."
                        class="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-indigo-100 focus:border-indigo-500 outline-none transition-all text-sm"
-                       onkeyup="filterConversations(this.value)">
+                       onkeyup="debounceSearch(this.value)">
             </div>
         </div>
 
@@ -64,17 +64,23 @@
                     <span class="text-sm text-gray-500 font-medium">Messages</span>
                     <span class="text-lg font-bold text-[#1B1B38]">{{ $conv->messages->count() }}</span>
                 </div>
-                <div class="flex items-center justify-between">
-                    <span class="text-sm text-gray-500 font-medium">Duration</span>
-                    <span class="text-sm font-bold text-[#1B1B38]">
-                        @if($conv->messages->count() > 0)
-                            {{ $conv->created_at->diffForHumans($conv->messages->last()->created_at ?? $conv->created_at, true) }}
-                        @else
-                            0 min
-                        @endif
-                    </span>
+<div class="flex items-center justify-between">
+                        <span class="text-sm text-gray-500 font-medium">Duration</span>
+                        <span class="text-sm font-bold text-[#1B1B38]">
+                            @if($conv->messages->count() > 0)
+                                {{ $conv->created_at->diffForHumans($conv->messages->last()->created_at ?? $conv->created_at, true) }}
+                            @else
+                                0 min
+                            @endif
+                        </span>
+                    </div>
+                    @php $lastMsg = $conv->messages->last(); @endphp
+                    @if($lastMsg)
+                    <div class="mt-2 pt-3 border-t border-gray-50">
+                        <p class="text-xs text-gray-400 font-medium truncate">{{ Str::limit($lastMsg->message, 60) }}</p>
+                    </div>
+                    @endif
                 </div>
-            </div>
 
             <!-- Footer -->
             <div class="flex items-center justify-between pt-4 border-t border-gray-50">
@@ -117,15 +123,18 @@
 @endsection
 
 <script>
-function filterConversations(query) {
-    // Simple client-side filtering for instant feedback
-    const cards = document.querySelectorAll('.conversation-card');
-    cards.forEach(card => {
-        const name = card.querySelector('h3').textContent.toLowerCase();
-        const email = card.querySelector('p').textContent.toLowerCase();
-        const visible = name.includes(query.toLowerCase()) || email.includes(query.toLowerCase());
-        card.style.display = visible ? 'block' : 'none';
-    });
+let searchTimeout;
+function debounceSearch(query) {
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(() => {
+        const url = new URL(window.location);
+        if (query) {
+            url.searchParams.set('search', query);
+        } else {
+            url.searchParams.delete('search');
+        }
+        window.location = url;
+    }, 400);
 }
 
 function filterByStatus(status) {

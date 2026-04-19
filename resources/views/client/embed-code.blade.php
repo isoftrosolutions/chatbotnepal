@@ -127,11 +127,12 @@
             </div>
             <h4 class="text-lg font-bold text-[#1B1B38] mb-4">Platform Guides</h4>
             <div class="grid grid-cols-2 gap-3">
-                <button class="p-3 border border-gray-100 rounded-xl text-xs font-bold text-gray-500 hover:border-[#4318FF] hover:text-[#4318FF] transition-all">WordPress</button>
-                <button class="p-3 border border-gray-100 rounded-xl text-xs font-bold text-gray-500 hover:border-[#4318FF] hover:text-[#4318FF] transition-all">Wix / Shopify</button>
-                <button class="p-3 border border-gray-100 rounded-xl text-xs font-bold text-gray-500 hover:border-[#4318FF] hover:text-[#4318FF] transition-all">Laravel / PHP</button>
-                <button class="p-3 border border-gray-100 rounded-xl text-xs font-bold text-gray-500 hover:border-[#4318FF] hover:text-[#4318FF] transition-all">React / Vue</button>
+                <button class="p-3 border border-gray-100 rounded-xl text-xs font-bold text-gray-400 cursor-not-allowed opacity-50" disabled>WordPress</button>
+                <button class="p-3 border border-gray-100 rounded-xl text-xs font-bold text-gray-400 cursor-not-allowed opacity-50" disabled>Wix / Shopify</button>
+                <button class="p-3 border border-gray-100 rounded-xl text-xs font-bold text-gray-400 cursor-not-allowed opacity-50" disabled>Laravel / PHP</button>
+                <button class="p-3 border border-gray-100 rounded-xl text-xs font-bold text-gray-400 cursor-not-allowed opacity-50" disabled>React / Vue</button>
             </div>
+            <p class="text-xs text-gray-400 mt-3 text-center">Platform guides coming soon</p>
         </div>
     </div>
 </div>

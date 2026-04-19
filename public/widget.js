@@ -29,7 +29,7 @@
     let prechatShown = false;
 
     /* ─────────────────────────────────────────
-       DESIGN TOKENS  (ChatBot Nepal Green)
+       DESIGN TOKENS — WhatsApp-style Chat
     ───────────────────────────────────────── */
     const styles = `
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
@@ -37,28 +37,28 @@
         #cn-widget * { box-sizing: border-box; margin: 0; padding: 0; }
         #cn-widget {
             position: fixed; bottom: 24px; right: 24px; z-index: 999999;
-            font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+            font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
         }
 
         /* ── LAUNCHER BUTTON ── */
         #cn-launcher {
             width: 58px; height: 58px; border-radius: 50%;
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            background: #25d366;
             border: none; cursor: pointer;
             display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 8px 28px rgba(16,185,129,.50), 0 2px 8px rgba(0,0,0,.15);
+            box-shadow: 0 6px 24px rgba(37,211,102,.50), 0 2px 8px rgba(0,0,0,.12);
             transition: transform .25s cubic-bezier(.34,1.56,.64,1), box-shadow .22s ease;
             outline: none; -webkit-tap-highlight-color: transparent;
             position: relative;
         }
         #cn-launcher:hover {
             transform: scale(1.10);
-            box-shadow: 0 12px 36px rgba(16,185,129,.65), 0 2px 10px rgba(0,0,0,.18);
+            box-shadow: 0 10px 32px rgba(37,211,102,.60), 0 2px 10px rgba(0,0,0,.15);
         }
         #cn-launcher:active { transform: scale(.95); }
         #cn-launcher::before {
             content: ''; position: absolute; inset: -6px; border-radius: 50%;
-            border: 2.5px solid rgba(16,185,129,.4);
+            border: 2.5px solid rgba(37,211,102,.35);
             animation: launcher-ring 2.5s ease-out infinite;
         }
         @keyframes launcher-ring {
@@ -87,8 +87,8 @@
         #cn-window {
             position: fixed; bottom: 96px; right: 24px;
             width: 370px; height: 570px; max-height: calc(100dvh - 110px);
-            background: #fff; border-radius: 20px;
-            box-shadow: 0 24px 64px rgba(0,0,0,.18), 0 4px 16px rgba(0,0,0,.08), 0 0 0 1px rgba(0,0,0,.06);
+            background: #fff; border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,.22), 0 2px 12px rgba(0,0,0,.08);
             display: flex; flex-direction: column; overflow: hidden;
             opacity: 0; transform: translateY(14px) scale(.97);
             pointer-events: none;
@@ -99,149 +99,180 @@
             pointer-events: all;
         }
 
-        /* ── HEADER ── */
+        /* ── HEADER — WhatsApp teal ── */
         #cn-header {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            padding: 16px 18px; display: flex; align-items: center; gap: 12px;
-            flex-shrink: 0; position: relative; overflow: hidden;
+            background: #075e54;
+            padding: 10px 14px; display: flex; align-items: center; gap: 10px;
+            flex-shrink: 0; position: relative;
         }
-        #cn-header::before, #cn-header::after {
-            content: ''; position: absolute; border-radius: 50%;
-            background: rgba(255,255,255,.08);
-        }
-        #cn-header::before { width: 100px; height: 100px; top: -30px; right: 60px; }
-        #cn-header::after { width: 60px; height: 60px; bottom: -20px; right: 20px; }
 
         .cn-hdr-avatar {
-            width: 42px; height: 42px; border-radius: 12px;
-            background: rgba(255,255,255,.22);
-            border: 1.5px solid rgba(255,255,255,.35);
+            width: 40px; height: 40px; border-radius: 50%;
+            background: rgba(255,255,255,.15);
+            border: none;
             display: flex; align-items: center; justify-content: center;
             flex-shrink: 0; position: relative; z-index: 1;
+            overflow: hidden;
         }
         .cn-online-ring {
-            position: absolute; bottom: -2px; right: -2px;
+            position: absolute; bottom: 0px; right: 0px;
             width: 12px; height: 12px; border-radius: 50%;
-            background: #34d399; border: 2px solid #10b981;
-            box-shadow: 0 0 0 0 rgba(52,211,153,.7);
-            animation: online-pulse 2.2s ease-in-out infinite;
-        }
-        @keyframes online-pulse {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(52,211,153,.7); }
-            60% { box-shadow: 0 0 0 5px rgba(52,211,153,0); }
+            background: #25d366; border: 2px solid #075e54;
         }
 
         .cn-hdr-info { flex: 1; min-width: 0; z-index: 1; }
         .cn-hdr-name {
-            font-size: .95rem; font-weight: 700; color: #fff;
+            font-size: .92rem; font-weight: 600; color: #fff;
             white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-            letter-spacing: -.01em;
         }
         .cn-hdr-status {
-            margin-top: 2px; font-size: .72rem; color: rgba(255,255,255,.82);
-            display: flex; align-items: center; gap: 5px; font-weight: 500;
-        }
-        .cn-hdr-status-dot {
-            width: 6px; height: 6px; border-radius: 50%; background: #a7f3d0;
+            margin-top: 1px; font-size: .7rem; color: rgba(255,255,255,.72);
+            display: flex; align-items: center; gap: 0; font-weight: 400;
         }
 
-        .cn-hdr-btns { display: flex; gap: 3px; z-index: 1; }
+        .cn-hdr-btns { display: flex; gap: 2px; z-index: 1; }
         .cn-hdr-btn {
-            width: 32px; height: 32px; border-radius: 9px; border: none;
-            background: rgba(255,255,255,.12); color: rgba(255,255,255,.9);
+            width: 34px; height: 34px; border-radius: 50%; border: none;
+            background: transparent; color: rgba(255,255,255,.85);
             cursor: pointer; display: flex; align-items: center; justify-content: center;
             transition: background .17s; outline: none;
         }
-        .cn-hdr-btn:hover { background: rgba(255,255,255,.22); }
-        .cn-hdr-btn:active { background: rgba(255,255,255,.30); }
+        .cn-hdr-btn:hover { background: rgba(255,255,255,.12); }
+        .cn-hdr-btn:active { background: rgba(255,255,255,.2); }
 
-        /* ── INTRO BANNER ── */
-        #cn-intro {
-            background: #f0fdf4; border-bottom: 1px solid #d1fae5;
-            padding: 12px 18px; display: flex; align-items: center; gap: 10px;
-            flex-shrink: 0;
-        }
-        .cn-intro-icon {
-            width: 34px; height: 34px; border-radius: 9px;
-            background: #d1fae5; display: flex; align-items: center; justify-content: center;
-            flex-shrink: 0; color: #059669;
-        }
-        .cn-intro-text { font-size: .75rem; color: #374151; line-height: 1.5; }
-        .cn-intro-text strong { color: #065f46; font-weight: 700; }
-
-        /* ── MESSAGES AREA ── */
+        /* ── MESSAGES AREA — WhatsApp wallpaper ── */
         #cn-messages {
-            flex: 1; overflow-y: auto; padding: 16px 14px 8px;
-            display: flex; flex-direction: column; gap: 10px;
-            scroll-behavior: smooth; background: #fff;
+            flex: 1; overflow-y: auto; padding: 8px 12px 8px;
+            display: flex; flex-direction: column; gap: 3px;
+            scroll-behavior: smooth;
+            background-color: #efeae2;
+            background-image: url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3Cpattern id='p' width='40' height='40' patternUnits='userSpaceOnUse'%3E%3Cpath d='M20 2a2 2 0 110 4 2 2 0 010-4z' fill='%23d6cfc5' opacity='.35'/%3E%3Cpath d='M8 15l4-3 4 3' stroke='%23d6cfc5' fill='none' stroke-width='.8' opacity='.3'/%3E%3Ccircle cx='32' cy='28' r='1.5' fill='%23d6cfc5' opacity='.25'/%3E%3Cpath d='M2 32l3 3h-6z' fill='%23d6cfc5' opacity='.2'/%3E%3Crect x='28' y='8' width='4' height='3' rx='1' fill='%23d6cfc5' opacity='.2'/%3E%3Cpath d='M16 34a3 3 0 016 0' stroke='%23d6cfc5' fill='none' stroke-width='.7' opacity='.25'/%3E%3Cpath d='M35 18l2 4h-4z' fill='%23d6cfc5' opacity='.18'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width='200' height='200' fill='url(%23p)'/%3E%3C/svg%3E");
         }
-        #cn-messages::-webkit-scrollbar { width: 4px; }
+        #cn-messages::-webkit-scrollbar { width: 5px; }
         #cn-messages::-webkit-scrollbar-track { background: transparent; }
-        #cn-messages::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 4px; }
+        #cn-messages::-webkit-scrollbar-thumb { background: rgba(0,0,0,.15); border-radius: 4px; }
 
         /* date pill */
         .cn-date-pill {
-            align-self: center; background: #f3f4f6; border-radius: 999px;
-            font-size: .65rem; font-weight: 600; color: #6b7280;
-            padding: 3px 12px; letter-spacing: .05em; text-transform: uppercase;
+            align-self: center;
+            background: rgba(225,218,208,.9);
+            border-radius: 8px;
+            font-size: .68rem; font-weight: 500; color: #54656f;
+            padding: 5px 12px;
+            margin: 6px 0;
+            box-shadow: 0 1px 1px rgba(0,0,0,.06);
         }
 
-        /* message row */
+        /* ── MESSAGE BUBBLES — WhatsApp style ── */
         .cn-row {
-            display: flex; align-items: flex-end; gap: 7px;
-            animation: row-in .25s cubic-bezier(.4,0,.2,1) both;
+            display: flex; 
+            flex-direction: column;
+            animation: row-in .2s ease both;
+            padding: 1px 0;
         }
         @keyframes row-in {
-            from { opacity: 0; transform: translateY(7px); }
+            from { opacity: 0; transform: translateY(5px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        .cn-row.user { flex-direction: row-reverse; }
-
-        .cn-avatar {
-            width: 28px; height: 28px; border-radius: 9px;
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            flex-shrink: 0; display: flex; align-items: center; justify-content: center;
-            margin-bottom: 18px; box-shadow: 0 2px 8px rgba(16,185,129,.3);
-        }
-        .cn-row.user .cn-avatar { display: none; }
+        .cn-row.user { align-items: flex-end; }
+        .cn-row.bot { align-items: flex-start; }
 
         .cn-col {
-            display: flex; flex-direction: column; max-width: 80%;
+            max-width: 78%;
+            position: relative;
         }
-        .cn-row.user .cn-col { align-items: flex-end; }
 
         .cn-bubble {
-            padding: 10px 13px; border-radius: 14px;
-            font-size: .865rem; line-height: 1.58; word-break: break-word;
-        }
-        .cn-row.bot .cn-bubble {
-            background: #f9fafb; border: 1px solid #e5e7eb; color: #111827;
-            border-bottom-left-radius: 4px;
-        }
-        .cn-row.user .cn-bubble {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            color: #fff; border-bottom-right-radius: 4px;
-            box-shadow: 0 3px 12px rgba(16,185,129,.30);
+            padding: 6px 8px 8px 9px;
+            font-size: .855rem; line-height: 1.5; word-break: break-word;
+            position: relative;
+            min-width: 80px;
         }
         .cn-bubble strong { font-weight: 700; }
         .cn-bubble ul { padding-left: 16px; margin-top: 4px; }
         .cn-bubble li { margin-bottom: 2px; }
 
-        .cn-ts {
-            font-size: .63rem; color: #9ca3af; margin-top: 4px;
-            padding: 0 2px; font-weight: 500;
+        /* Bot (incoming) bubble — white with left tail */
+        .cn-row.bot .cn-bubble {
+            background: #fff;
+            color: #111b21;
+            border-radius: 0 8px 8px 8px;
+            box-shadow: 0 1px 1px rgba(0,0,0,.06);
         }
+        .cn-row.bot .cn-col::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -8px;
+            width: 0; height: 0;
+            border-top: 0px solid transparent;
+            border-bottom: 10px solid transparent;
+            border-right: 8px solid #fff;
+        }
+
+        /* User (outgoing) bubble — WhatsApp green with right tail */
+        .cn-row.user .cn-bubble {
+            background: #d9fdd3;
+            color: #111b21;
+            border-radius: 8px 0 8px 8px;
+            box-shadow: 0 1px 1px rgba(0,0,0,.06);
+        }
+        .cn-row.user .cn-col::before {
+            content: '';
+            position: absolute;
+            top: 0; right: -8px;
+            width: 0; height: 0;
+            border-top: 0px solid transparent;
+            border-bottom: 10px solid transparent;
+            border-left: 8px solid #d9fdd3;
+        }
+
+        /* Timestamp row inside bubble */
+        .cn-ts-row {
+            display: flex; align-items: center; justify-content: flex-end;
+            gap: 3px; margin-top: 2px;
+            float: right;
+            margin-left: 10px;
+            position: relative;
+            top: 4px;
+        }
+        .cn-ts {
+            font-size: .625rem; color: #667781; font-weight: 400;
+            white-space: nowrap;
+        }
+        /* Double check marks (read receipts) */
+        .cn-check {
+            display: inline-flex; color: #53bdeb;
+        }
+        .cn-check.cn-check-pending { color: #667781; }
+        .cn-row.bot .cn-check { display: none; }
 
         /* ── TYPING INDICATOR ── */
         #cn-typing {
-            display: none; align-items: flex-end; gap: 7px;
-            padding: 0 14px 6px; animation: row-in .22s ease both;
+            display: none; 
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 1px 0;
+            animation: row-in .2s ease both;
         }
         #cn-typing.show { display: flex; }
+        .cn-typing-wrap {
+            position: relative;
+            max-width: 78%;
+        }
+        .cn-typing-wrap::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -8px;
+            width: 0; height: 0;
+            border-top: 0px solid transparent;
+            border-bottom: 10px solid transparent;
+            border-right: 8px solid #fff;
+        }
         .cn-typing-bub {
-            background: #f9fafb; border: 1px solid #e5e7eb;
-            border-radius: 14px; border-bottom-left-radius: 4px;
+            background: #fff;
+            border-radius: 0 8px 8px 8px;
             padding: 12px 15px; display: flex; gap: 5px; align-items: center;
+            box-shadow: 0 1px 1px rgba(0,0,0,.06);
         }
         .cn-dot {
             width: 7px; height: 7px; border-radius: 50%;
@@ -251,79 +282,108 @@
         .cn-dot:nth-child(3) { animation-delay: .32s; }
         @keyframes tdot {
             0%, 60%, 100% { transform: translateY(0); background: #9ca3af; }
-            30% { transform: translateY(-5px); background: #10b981; }
+            30% { transform: translateY(-5px); background: #25d366; }
         }
 
-        /* ── INPUT AREA ── */
+        /* ── INPUT AREA — WhatsApp style ── */
         #cn-input-area {
-            padding: 10px 12px 12px; border-top: 1px solid #e5e7eb;
-            background: #fff; display: flex; align-items: flex-end;
-            gap: 7px; flex-shrink: 0;
+            padding: 6px 8px 8px;
+            background: #efeae2;
+            display: flex; align-items: flex-end;
+            gap: 6px; flex-shrink: 0;
+        }
+        .cn-input-wrap {
+            flex: 1;
+            background: #fff;
+            border-radius: 24px;
+            display: flex; align-items: flex-end;
+            padding: 4px 6px 4px 12px;
+            box-shadow: 0 1px 2px rgba(0,0,0,.08);
         }
         #cn-input {
-            flex: 1; background: #f9fafb; border: 1.5px solid #e5e7eb;
-            border-radius: 12px; color: #111827;
+            flex: 1; background: transparent; border: none;
+            color: #111b21;
             font-family: 'Plus Jakarta Sans', sans-serif; font-size: .875rem;
-            font-weight: 400; padding: 10px 13px; outline: none;
-            resize: none; height: 42px; max-height: 96px; line-height: 1.45;
-            transition: border-color .18s, box-shadow .18s;
+            font-weight: 400; padding: 7px 4px; outline: none;
+            resize: none; height: 38px; max-height: 96px; line-height: 1.4;
         }
-        #cn-input::placeholder { color: #9ca3af; }
-        #cn-input:focus {
-            border-color: #10b981; box-shadow: 0 0 0 3px rgba(16,185,129,.15);
-            background: #fff;
+        #cn-input::placeholder { color: #8696a0; }
+
+        .cn-input-actions {
+            display: flex; align-items: center; gap: 0; padding-right: 4px;
         }
-        .cn-action-btns { display: flex; gap: 5px; align-items: center; }
-        .cn-act-btn {
-            width: 38px; height: 38px; border-radius: 10px;
-            border: 1.5px solid #e5e7eb; background: #fff;
-            color: #9ca3af; cursor: pointer;
+        .cn-in-btn {
+            width: 34px; height: 34px; border-radius: 50%;
+            border: none; background: transparent;
+            color: #8696a0; cursor: pointer;
             display: flex; align-items: center; justify-content: center;
-            transition: border-color .17s, color .17s, background .17s;
-            outline: none; flex-shrink: 0;
+            transition: color .15s; outline: none; flex-shrink: 0;
         }
-        .cn-act-btn:hover { border-color: #10b981; color: #10b981; background: #f0fdf4; }
+        .cn-in-btn:hover { color: #54656f; }
+
+        /* Send button — green circle */
         #cn-send {
-            width: 38px; height: 38px; border-radius: 10px; border: none;
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            width: 42px; height: 42px; border-radius: 50%; border: none;
+            background: #00a884;
             color: #fff; cursor: pointer;
             display: flex; align-items: center; justify-content: center;
-            transition: transform .18s cubic-bezier(.34,1.56,.64,1), box-shadow .18s, opacity .18s;
-            box-shadow: 0 3px 12px rgba(16,185,129,.4); outline: none; flex-shrink: 0;
+            transition: transform .15s ease, background .15s;
+            box-shadow: 0 2px 8px rgba(0,168,132,.35); outline: none; flex-shrink: 0;
         }
-        #cn-send:hover { transform: scale(1.09); box-shadow: 0 5px 18px rgba(16,185,129,.55); }
-        #cn-send:active { transform: scale(.93); }
-        #cn-send:disabled { opacity: .38; cursor: not-allowed; transform: none; box-shadow: none; }
+        #cn-send:hover { background: #008f72; transform: scale(1.06); }
+        #cn-send:active { transform: scale(.94); }
+        #cn-send:disabled { background: #a0aeb6; cursor: not-allowed; transform: none; box-shadow: none; }
+
+        /* Character counter */
+        #cn-char-count {
+            position: absolute; bottom: 2px; right: 60px;
+            font-size: .65rem; color: #8696a0;
+        }
+        #cn-char-count.warning { color: #f59e0b; }
+        #cn-char-count.error { color: #ef4444; font-weight: 600; }
 
         /* ── FOOTER ── */
         .cn-footer {
-            text-align: center; padding: 6px 0 10px;
-            font-size: .63rem; color: #9ca3af; letter-spacing: .03em;
-            background: #fff;
+            text-align: center; padding: 5px 0 7px;
+            font-size: .6rem; color: #8696a0; letter-spacing: .02em;
+            background: #efeae2;
         }
-        .cn-footer a { color: #059669; text-decoration: none; font-weight: 600; }
-        .cn-footer a:hover { color: #10b981; }
+        .cn-footer a { color: #027d5a; text-decoration: none; font-weight: 600; }
+        .cn-footer a:hover { color: #00a884; }
 
         /* ── ERROR BUBBLE ── */
         .cn-bubble.error {
-            background: #fef2f2; border-color: #fecaca; color: #b91c1c;
+            background: #fff; border-left: 3px solid #ef4444;
         }
+
+        /* ── SCROLL TO BOTTOM BUTTON ── */
+        #cn-scroll-btn {
+            position: absolute; bottom: 8px; right: 12px;
+            background: #075e54; color: #fff;
+            border: none; border-radius: 20px;
+            padding: 8px 14px; font-size: .75rem; font-weight: 600;
+            cursor: pointer; display: none;
+            box-shadow: 0 2px 8px rgba(0,0,0,.2);
+            z-index: 5;
+        }
+        #cn-scroll-btn.show { display: flex; align-items: center; gap: 4px; }
+        #cn-scroll-btn:hover { background: #0a6e68; }
 
         /* ── PRE-CHAT FORM ── */
         #cn-prechat {
             position: absolute; inset: 0; z-index: 10;
             background: rgba(255,255,255,.97); backdrop-filter: blur(6px);
             display: flex; flex-direction: column; justify-content: center;
-            padding: 28px 24px; border-radius: 20px;
+            padding: 28px 24px; border-radius: 12px;
             animation: row-in .25s cubic-bezier(.4,0,.2,1) both;
         }
         #cn-prechat.gone { display: none; }
         .cn-pcf-title {
-            font-size: 1.05rem; font-weight: 800; color: #1B1B38;
+            font-size: 1.05rem; font-weight: 800; color: #111b21;
             margin-bottom: 4px; letter-spacing: -.02em;
         }
         .cn-pcf-sub {
-            font-size: .78rem; color: #6b7280; margin-bottom: 20px; line-height: 1.5;
+            font-size: .78rem; color: #667781; margin-bottom: 20px; line-height: 1.5;
         }
         .cn-pcf-field { margin-bottom: 12px; }
         .cn-pcf-label {
@@ -333,26 +393,40 @@
         .cn-pcf-input {
             width: 100%; padding: 10px 13px; border: 1.5px solid #e5e7eb;
             border-radius: 11px; font-size: .875rem; font-family: 'Plus Jakarta Sans',sans-serif;
-            color: #111827; outline: none; transition: border-color .18s, box-shadow .18s;
+            color: #111b21; outline: none; transition: border-color .18s, box-shadow .18s;
             background: #f9fafb;
         }
-        .cn-pcf-input:focus { border-color: #10b981; box-shadow: 0 0 0 3px rgba(16,185,129,.15); background: #fff; }
+        .cn-pcf-input:focus { border-color: #00a884; box-shadow: 0 0 0 3px rgba(0,168,132,.15); background: #fff; }
+        .cn-pcf-input.invalid { border-color: #ef4444; background: #fef2f2; }
         .cn-pcf-btn {
             width: 100%; padding: 12px; border: none; border-radius: 12px;
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            background: #00a884;
             color: #fff; font-size: .9rem; font-weight: 700;
             font-family: 'Plus Jakarta Sans',sans-serif;
             cursor: pointer; margin-top: 4px;
-            box-shadow: 0 4px 14px rgba(16,185,129,.4);
+            box-shadow: 0 4px 14px rgba(0,168,132,.35);
             transition: transform .18s, box-shadow .18s;
         }
-        .cn-pcf-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(16,185,129,.5); }
+        .cn-pcf-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(0,168,132,.45); }
         .cn-pcf-skip {
             display: block; text-align: center; margin-top: 12px;
-            font-size: .75rem; color: #9ca3af; cursor: pointer;
+            font-size: .75rem; color: #8696a0; cursor: pointer;
             text-decoration: underline; text-underline-offset: 2px;
         }
-        .cn-pcf-skip:hover { color: #6b7280; }
+        .cn-pcf-skip:hover { color: #54656f; }
+
+        /* ── ENCRYPTION NOTICE ── */
+        .cn-encrypt-notice {
+            align-self: center;
+            background: rgba(255,234,170,.6);
+            border-radius: 7px;
+            font-size: .65rem; font-weight: 400; color: #54656f;
+            padding: 5px 12px;
+            margin: 4px 0 6px;
+            display: flex; align-items: center; gap: 5px;
+            text-align: center;
+            line-height: 1.4;
+        }
 
         /* ── MOBILE ── */
         @media (max-width: 480px) {
@@ -360,9 +434,15 @@
             #cn-window {
                 position: fixed; bottom: 0; right: 0; left: 0;
                 width: 100%; max-height: 100dvh; height: 100dvh;
-                border-radius: 20px 20px 0 0;
+                border-radius: 0;
             }
             #cn-launcher { bottom: 18px; right: 18px; }
+            .cn-drag-handle {
+                display: flex; width: 100%; justify-content: center; padding: 8px 0 6px;
+            }
+            .cn-drag-pill {
+                width: 36px; height: 4px; background: #d1d5db; border-radius: 2px;
+            }
         }
     `;
 
@@ -378,9 +458,8 @@
         container.id = 'cn-widget';
         container.innerHTML = `
             <button id="cn-launcher" aria-label="Open chat">
-                <svg class="cn-l-icon" id="li-chat" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                    <path fill="#fff" fill-rule="evenodd" clip-rule="evenodd"
-                        d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10a9.96 9.96 0 0 1-4.905-1.28L2 22l1.28-5.095A9.96 9.96 0 0 1 2 12Zm6.5-1.5a1 1 0 1 0 0 2 1 1 0 0 0 0-2Zm2.5 1a1 1 0 1 1 2 0 1 1 0 0 1-2 0Zm4.5-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2Z"/>
+                <svg class="cn-l-icon" id="li-chat" width="26" height="26" fill="none" viewBox="0 0 24 24">
+                    <path fill="#fff" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347ZM12.05 21.785h-.013A9.872 9.872 0 0 1 6.7 20.15l-.383-.228-3.971 1.042 1.06-3.873-.25-.397A9.86 9.86 0 0 1 1.63 12.05C1.63 6.315 6.315 1.63 12.05 1.63c2.772 0 5.378 1.08 7.336 3.04a10.3 10.3 0 0 1 3.034 7.348c-.003 5.736-4.688 10.42-10.37 10.42v-.653Z"/>
                 </svg>
                 <svg class="cn-l-icon hidden" id="li-close" width="20" height="20" fill="none" viewBox="0 0 24 24">
                     <path stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" d="M18 6 6 18M6 6l12 12"/>
@@ -389,48 +468,34 @@
             </button>
 
             <div id="cn-window" role="dialog" aria-label="Chat Assistant">
+                <div class="cn-drag-handle" style="display:none"><div class="cn-drag-pill"></div></div>
                 <div id="cn-header">
                     <div class="cn-hdr-avatar">
-                        <svg width="22" height="22" fill="none" viewBox="0 0 24 24">
-                            <rect x="3" y="8" width="18" height="13" rx="4" fill="rgba(255,255,255,.9)"/>
-                            <circle cx="9" cy="14" r="1.5" fill="#10b981"/>
-                            <circle cx="15" cy="14" r="1.5" fill="#10b981"/>
-                            <rect x="10.5" y="4" width="3" height="4" rx="1.5" fill="rgba(255,255,255,.9)"/>
-                            <circle cx="12" cy="4" r="1.5" fill="rgba(255,255,255,.9)"/>
-                            <path stroke="rgba(255,255,255,.9)" stroke-width="1.5" stroke-linecap="round" d="M9 18h6"/>
+                        <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
+                            <rect x="3" y="8" width="18" height="13" rx="4" fill="rgba(255,255,255,.85)"/>
+                            <circle cx="9" cy="14" r="1.5" fill="#075e54"/>
+                            <circle cx="15" cy="14" r="1.5" fill="#075e54"/>
+                            <rect x="10.5" y="4" width="3" height="4" rx="1.5" fill="rgba(255,255,255,.85)"/>
+                            <circle cx="12" cy="4" r="1.5" fill="rgba(255,255,255,.85)"/>
+                            <path stroke="rgba(255,255,255,.85)" stroke-width="1.5" stroke-linecap="round" d="M9 18h6"/>
                         </svg>
                         <span class="cn-online-ring"></span>
                     </div>
                     <div class="cn-hdr-info">
                         <div class="cn-hdr-name">${config.business_name}</div>
-                        <div class="cn-hdr-status">
-                            <span class="cn-hdr-status-dot"></span>
-                            Online — Replies instantly
-                        </div>
+                        <div class="cn-hdr-status">online</div>
                     </div>
                     <div class="cn-hdr-btns">
                         <button class="cn-hdr-btn" id="cn-min" title="Minimize" aria-label="Minimize">
-                            <svg width="15" height="15" fill="none" viewBox="0 0 24 24">
-                                <path stroke="currentColor" stroke-width="2.2" stroke-linecap="round" d="M5 12h14"/>
+                            <svg width="18" height="18" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M5 12h14"/>
                             </svg>
                         </button>
                         <button class="cn-hdr-btn" id="cn-close" title="Close" aria-label="Close">
-                            <svg width="15" height="15" fill="none" viewBox="0 0 24 24">
-                                <path stroke="currentColor" stroke-width="2.2" stroke-linecap="round" d="M18 6 6 18M6 6l12 12"/>
+                            <svg width="18" height="18" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M18 6 6 18M6 6l12 12"/>
                             </svg>
                         </button>
-                    </div>
-                </div>
-
-                <div id="cn-intro">
-                    <div class="cn-intro-icon">
-                        <svg width="18" height="18" fill="none" viewBox="0 0 24 24">
-                            <path fill="currentColor" d="M12 2 3 6v6c0 5.25 3.75 10.15 9 11.35C17.25 22.15 21 17.25 21 12V6l-9-4Zm-1 13-3-3 1.41-1.41L11 12.17l4.59-4.58L17 9l-6 6Z"/>
-                        </svg>
-                    </div>
-                    <div class="cn-intro-text">
-                        <strong>AI Business Assistant</strong> — Serving Nepal<br/>
-                        Replies in Nepali, Hindi &amp; English automatically
                     </div>
                 </div>
 
@@ -454,37 +519,45 @@
                 </div>
 
                 <div id="cn-messages" role="log" aria-live="polite">
+                    <div class="cn-encrypt-notice">
+                        <svg width="12" height="12" fill="none" viewBox="0 0 24 24"><path fill="#8696a0" d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2Zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2ZM9 8V6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9Z"/></svg>
+                        Messages are AI-generated. Powered by ChatBot Nepal.
+                    </div>
                     <div class="cn-date-pill">Today</div>
+                    <button id="cn-scroll-btn" type="button">
+                        <svg width="14" height="14" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-width="2" d="M12 5v14M5 12l7 7 7-7"/></svg>
+                        Down
+                    </button>
                 </div>
 
                 <div id="cn-typing" role="status" aria-label="Assistant is typing">
-                    <div class="cn-avatar">
-                        <svg width="14" height="14" fill="none" viewBox="0 0 24 24">
-                            <path fill="#fff" d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.38 5.07L2 22l4.93-1.38A9.94 9.94 0 0 0 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2Z"/>
-                        </svg>
-                    </div>
-                    <div class="cn-typing-bub">
-                        <span class="cn-dot"></span>
-                        <span class="cn-dot"></span>
-                        <span class="cn-dot"></span>
+                    <div class="cn-typing-wrap">
+                        <div class="cn-typing-bub">
+                            <span class="cn-dot"></span>
+                            <span class="cn-dot"></span>
+                            <span class="cn-dot"></span>
+                        </div>
                     </div>
                 </div>
 
                 <div id="cn-input-area">
-                    <textarea id="cn-input" placeholder="Type your message…" rows="1" aria-label="Message" autocomplete="off"></textarea>
-                    <div class="cn-action-btns">
-                        <button class="cn-act-btn" id="cn-mic" title="Voice input" aria-label="Voice input">
-                            <svg width="16" height="16" fill="none" viewBox="0 0 24 24">
-                                <rect x="9" y="2" width="6" height="12" rx="3" stroke="currentColor" stroke-width="1.8"/>
-                                <path stroke="currentColor" stroke-width="1.8" stroke-linecap="round" d="M5 10a7 7 0 0 0 14 0M12 19v3M9 22h6"/>
-                            </svg>
-                        </button>
-                        <button id="cn-send" disabled aria-label="Send message">
-                            <svg width="17" height="17" fill="none" viewBox="0 0 24 24">
-                                <path fill="#fff" d="M2.01 21 23 12 2.01 3 2 10l15 2-15 2z"/>
-                            </svg>
-                        </button>
+                    <div class="cn-input-wrap">
+                        <span id="cn-char-count"></span>
+                        <textarea id="cn-input" placeholder="Type a message" rows="1" aria-label="Message" autocomplete="off"></textarea>
+                        <div class="cn-input-actions">
+                            <button class="cn-in-btn" id="cn-mic" title="Voice input" aria-label="Voice input">
+                                <svg width="20" height="20" fill="none" viewBox="0 0 24 24">
+                                    <rect x="9" y="2" width="6" height="12" rx="3" stroke="currentColor" stroke-width="1.6"/>
+                                    <path stroke="currentColor" stroke-width="1.6" stroke-linecap="round" d="M5 10a7 7 0 0 0 14 0M12 19v3"/>
+                                </svg>
+                            </button>
+                        </div>
                     </div>
+                    <button id="cn-send" disabled aria-label="Send message">
+                        <svg width="20" height="20" fill="none" viewBox="0 0 24 24">
+                            <path fill="#fff" d="M2.01 21 23 12 2.01 3 2 10l15 2-15 2z"/>
+                        </svg>
+                    </button>
                 </div>
 
                 <div class="cn-footer" id="cn-footer">
@@ -552,8 +625,10 @@
             liChat.classList.add('hidden');
             liClose.classList.remove('hidden');
             badge.classList.add('gone');
+            if (window.innerWidth <= 480) {
+                document.querySelector('.cn-drag-handle').style.display = 'flex';
+            }
 
-            // Show pre-chat form only if enabled by client and visitor hasn't identified yet
             const prechat = document.getElementById('cn-prechat');
             if (config.prechat_enabled && !prechatShown && !conversationId && !visitorInfo.name && !visitorInfo.email && !visitorInfo.phone) {
                 prechatShown = true;
@@ -568,6 +643,9 @@
             win.classList.remove('open');
             liChat.classList.remove('hidden');
             liClose.classList.add('hidden');
+            badge.classList.remove('gone');
+            badge.textContent = '1';
+            document.querySelector('.cn-drag-handle').style.display = 'none';
         }
 
         launcher.addEventListener('click', () => isWindowOpen ? closeChat() : openChat());
@@ -575,18 +653,34 @@
         minBtn.addEventListener('click', closeChat);
 
         function autoResize() {
-            input.style.height = '42px';
+            input.style.height = '38px';
             input.style.height = Math.min(input.scrollHeight, 96) + 'px';
         }
 
         input.addEventListener('input', () => {
-            sendBtn.disabled = !input.value.trim();
+            const len = input.value.length;
+            const charCount = document.getElementById('cn-char-count');
+            const remaining = 1000 - len;
+            if (remaining <= 100 && remaining > 0) {
+                charCount.textContent = remaining + ' / 1000';
+                charCount.classList.add('warning');
+            } else if (remaining <= 0) {
+                charCount.textContent = '0 / 1000';
+                charCount.classList.remove('warning');
+                charCount.classList.add('error');
+                sendBtn.disabled = true;
+            } else {
+                charCount.textContent = '';
+                charCount.classList.remove('warning', 'error');
+            }
+            sendBtn.disabled = !input.value.trim() || remaining <= 0;
             autoResize();
         });
 
         function handleSend() {
             const text = input.value.trim();
             if (!text || busy) return;
+            window.lastUserMsg = text;
             addMsg(text, 'user');
             input.value = '';
             sendBtn.disabled = true;
@@ -607,18 +701,32 @@
 
         document.getElementById('cn-pcf-submit').addEventListener('click', () => {
             const name  = document.getElementById('cn-pcf-name').value.trim();
-            const email = document.getElementById('cn-pcf-email').value.trim();
+            let email = document.getElementById('cn-pcf-email').value.trim();
             const phone = document.getElementById('cn-pcf-phone').value.trim();
+            const emailInput = document.getElementById('cn-pcf-email');
+            if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                emailInput.style.borderColor = '#ef4444';
+                emailInput.focus();
+                return;
+            }
             visitorInfo = { name, email, phone };
             localStorage.setItem('cbn_visitor_info', JSON.stringify(visitorInfo));
             dismissPrechat();
+        });
+
+        document.getElementById('cn-pcf-email').addEventListener('blur', function() {
+            const val = this.value.trim();
+            if (val && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) {
+                this.classList.add('invalid');
+            } else {
+                this.classList.remove('invalid');
+            }
         });
 
         document.getElementById('cn-pcf-skip').addEventListener('click', () => {
             dismissPrechat();
         });
 
-        // Allow Enter key in pre-chat fields to submit
         ['cn-pcf-name','cn-pcf-email','cn-pcf-phone'].forEach(id => {
             document.getElementById(id).addEventListener('keydown', e => {
                 if (e.key === 'Enter') document.getElementById('cn-pcf-submit').click();
@@ -627,10 +735,28 @@
 
         document.getElementById('cn-mic').addEventListener('click', () => {
             const t = document.createElement('div');
-            t.style.cssText = 'position:fixed;bottom:108px;right:28px;background:#065f46;color:#fff;font-family:Plus Jakarta Sans,sans-serif;font-size:.78rem;font-weight:600;padding:9px 16px;border-radius:10px;z-index:99999;pointer-events:none;animation:row-in .2s ease both;';
+            t.style.cssText = 'position:fixed;bottom:108px;right:28px;background:#075e54;color:#fff;font-family:Plus Jakarta Sans,sans-serif;font-size:.78rem;font-weight:600;padding:9px 16px;border-radius:10px;z-index:99999;pointer-events:none;animation:row-in .2s ease both;';
             t.textContent = 'Voice input coming soon!';
             document.body.appendChild(t);
             setTimeout(() => t.remove(), 2000);
+        });
+
+        const messages = document.getElementById('cn-messages');
+        const scrollBtn = document.getElementById('cn-scroll-btn');
+        messages.addEventListener('scroll', () => {
+            const atBottom = messages.scrollHeight - messages.scrollTop <= messages.clientHeight + 50;
+            scrollBtn.classList.toggle('show', !atBottom);
+        });
+        scrollBtn.addEventListener('click', scrollToBottom);
+
+        messages.addEventListener('click', e => {
+            if (e.target.classList.contains('cn-retry')) {
+                e.preventDefault();
+                if (window.lastUserMsg) {
+                    addMsg(window.lastUserMsg, 'user');
+                    sendMessage(window.lastUserMsg);
+                }
+            }
         });
     }
 
@@ -672,6 +798,7 @@
                     sessionStorage.setItem('cbn_conversation_id', conversationId);
                 }
                 addMsg(data.reply, 'bot');
+                updateChecksToRead();
             } else {
                 addMsg('Sorry, I could not process that. Please try again.', 'bot', true);
             }
@@ -696,31 +823,31 @@
         const row = document.createElement('div');
         row.className = `cn-row ${role}`;
 
-        if (role === 'bot') {
-            const av = document.createElement('div');
-            av.className = 'cn-avatar';
-            av.innerHTML = `<svg width="14" height="14" fill="none" viewBox="0 0 24 24"><path fill="#fff" d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.38 5.07L2 22l4.93-1.38A9.94 9.94 0 0 0 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2Z"/></svg>`;
-            row.appendChild(av);
-        }
-
         const col = document.createElement('div');
         col.className = 'cn-col';
 
         const bubble = document.createElement('div');
         bubble.className = 'cn-bubble' + (isError ? ' error' : '');
-        bubble.innerHTML = text
+
+        const content = text
             .replace(/&/g, '&amp;')
             .replace(/</g, '&lt;')
             .replace(/>/g, '&gt;')
             .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
             .replace(/\n/g, '<br>');
 
-        const time = document.createElement('div');
-        time.className = 'cn-ts';
-        time.textContent = formatTime(new Date());
+        const timeStr = formatTime(new Date());
+        const checkSvg = role === 'user'
+            ? `<span class="cn-check cn-check-pending"><svg width="16" height="11" viewBox="0 0 16 11" fill="none"><path d="M11.07.66 4.88 6.85 2.41 4.38.94 5.85l3.94 3.94 7.66-7.66L11.07.66Z" fill="#667781"/><path d="M14.07.66 7.88 6.85l-.53-.53-1.47 1.47 2 2 7.66-7.66L14.07.66Z" fill="#667781"/></svg></span>`
+            : '';
+
+        let footer = `<span class="cn-ts-row"><span class="cn-ts">${timeStr}</span>${checkSvg}</span>`;
+        if (isError) {
+            footer += `<a href="#" class="cn-retry" style="margin-left:8px;color:#4318FF;font-size:.65rem;font-weight:600;text-decoration:underline;">Try again</a>`;
+        }
+        bubble.innerHTML = `${content}${footer}`;
 
         col.appendChild(bubble);
-        col.appendChild(time);
         row.appendChild(col);
         container.appendChild(row);
         scrollToBottom();
@@ -730,6 +857,15 @@
     function scrollToBottom() {
         const container = document.getElementById('cn-messages');
         if (container) container.scrollTo({ top: container.scrollHeight, behavior: 'smooth' });
+    }
+
+    function updateChecksToRead() {
+        document.querySelectorAll('.cn-check-pending').forEach(el => {
+            el.classList.remove('cn-check-pending');
+            const paths = el.querySelectorAll('path');
+            paths[0].setAttribute('fill', '#53bdeb');
+            paths[1].setAttribute('fill', '#53bdeb');
+        });
     }
 
     function formatTime(date) {
@@ -745,7 +881,7 @@
 
         if (config.bot_avatar_url) {
             const av = document.querySelector('.cn-hdr-avatar');
-            if (av) av.innerHTML = `<img src="${config.bot_avatar_url}" alt="${config.bot_name}" style="width:100%;height:100%;border-radius:12px;object-fit:cover;">`;
+            if (av) av.innerHTML = `<img src="${config.bot_avatar_url}" alt="${config.bot_name}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;"><span class="cn-online-ring"></span>`;
         }
     }
 
