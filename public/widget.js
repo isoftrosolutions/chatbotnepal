@@ -630,8 +630,8 @@
             }
 
             const prechat = document.getElementById('cn-prechat');
-            if (config.prechat_enabled && !prechatShown && !conversationId && !visitorInfo.name && !visitorInfo.email && !visitorInfo.phone) {
-                prechatShown = true;
+            const needsPrechat = config.prechat_enabled && (!visitorInfo.name || !visitorInfo.email || !visitorInfo.phone);
+            if (needsPrechat) {
                 prechat.classList.remove('gone');
             } else {
                 input.focus();
@@ -882,6 +882,11 @@
         if (config.bot_avatar_url) {
             const av = document.querySelector('.cn-hdr-avatar');
             if (av) av.innerHTML = `<img src="${config.bot_avatar_url}" alt="${config.bot_name}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;"><span class="cn-online-ring"></span>`;
+        }
+
+        const prechat = document.getElementById('cn-prechat');
+        if (prechat && !config.prechat_enabled) {
+            prechat.style.display = 'none';
         }
     }
 
