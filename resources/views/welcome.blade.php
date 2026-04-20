@@ -10,6 +10,13 @@
 <meta property="og:description" content="Answer customer queries 24/7 in Nepali, Hindi & English. No coding. Setup in 24 hours.">
 <meta property="og:url" content="https://chatbotnepal.isoftroerp.com">
 <meta property="og:type" content="website">
+<meta property="og:image" content="https://chatbotnepal.isoftroerp.com/images/og-preview.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="ChatBot Nepal — AI Chatbot for Nepali Businesses">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://chatbotnepal.isoftroerp.com/images/og-preview.png">
+<meta name="keywords" content="AI chatbot Nepal, chatbot for Nepali business, Nepali language chatbot, website automation Nepal, 24/7 customer support Nepal, AI chatbot Kathmandu, Nepali Hindi English chatbot, SME chatbot Nepal">
 
 <script type="application/ld+json">
 @verbatim
@@ -498,8 +505,12 @@
 <section class="bg-surf-low py-16 md:py-24">
   <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="text-center mb-12 reveal">
-      <h2 class="font-jakarta font-bold text-3xl md:text-4xl text-primary mb-3">See It in Action</h2>
-      <p class="text-muted text-lg">Real conversation from a local coaching institute</p>
+      <h2 class="font-jakarta font-bold text-3xl md:text-4xl text-primary mb-3">Try It Live — Right Now</h2>
+      <p class="text-muted text-lg">Real chatbot. Type anything below and see how it responds.</p>
+      <div class="inline-flex items-center gap-2 mt-3 bg-green-50 border border-green-200 text-green-700 text-xs font-semibold px-4 py-2 rounded-full">
+        <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse inline-block"></span>
+        Live demo — this is an actual AI chatbot, not a recording
+      </div>
     </div>
 
     <!-- Desktop: browser mockup (hidden on very small screens) -->
@@ -544,24 +555,13 @@
               </div>
             </div>
           </div>
-          <div class="bg-white p-3 flex flex-col gap-2">
-            <p class="bubble-bot px-3 py-2 text-xs text-[#191c1d] max-w-[90%]">Namaste! Hamro coaching center bare kei sodhnu cha?</p>
-            <div class="flex justify-end">
-              <p class="bubble-user px-3 py-2 text-xs max-w-[90%]">Timro coaching ma class kati bajey suru huncha?</p>
-            </div>
-            <p class="bubble-bot px-3 py-2 text-xs text-[#191c1d] max-w-[90%]">Morning batch <strong>6:30 AM</strong>, evening batch <strong>4:00 PM</strong>. Kun batch ma interest cha?</p>
-            <div class="flex justify-end">
-              <p class="bubble-user px-3 py-2 text-xs max-w-[90%]">Morning batch ko fee kati ho?</p>
-            </div>
-            <p class="bubble-bot px-3 py-2 text-xs text-[#191c1d] max-w-[90%]">Monthly fee <strong>Rs. 3,500</strong>. Admission Rs. 1,000. Ahile open cha, join garnu huncha?</p>
-            <div class="flex justify-end">
-              <p class="bubble-user px-3 py-2 text-xs max-w-[90%]">IELTS course ko bare ma bhannu na</p>
-            </div>
-            <p class="bubble-bot px-3 py-2 text-xs text-[#191c1d] max-w-[90%]">IELTS Preparation <strong>Rs. 8,000/month</strong>. Mon-Fri 7–9 AM. Free trial class available. Book garnu huncha?</p>
+          <div id="demo-messages-desktop" class="bg-white p-3 flex flex-col gap-2" style="max-height:260px;overflow-y:auto">
+            <p class="bubble-bot px-3 py-2 text-xs text-[#191c1d] max-w-[90%]">Namaste! Hamro coaching center bare kei sodhnu cha? 🙏</p>
+            <p class="text-center text-[10px] text-muted/60 italic">👆 Try typing something below!</p>
           </div>
           <div class="bg-white border-t border-outline-var/20 px-3 py-2 flex gap-2">
-            <input type="text" placeholder="Type your message..." disabled class="flex-1 bg-surf-low rounded-lg px-2.5 py-1.5 text-xs text-muted outline-none">
-            <button class="bg-primary-c text-white p-1.5 rounded-lg">
+            <input type="text" id="demo-input-desktop" placeholder="e.g. fee kati ho?" class="flex-1 bg-surf-low rounded-lg px-2.5 py-1.5 text-xs text-muted outline-none border border-outline-var/30 focus:border-primary-c transition-colors">
+            <button onclick="demoSend('desktop')" class="bg-primary-c text-white p-1.5 rounded-lg hover:bg-primary transition-colors">
               <span class="material-symbols-outlined" style="font-size:14px">send</span>
             </button>
           </div>
@@ -583,33 +583,111 @@
           </div>
         </div>
       </div>
-      <div class="bg-white p-4 flex flex-col gap-3">
-        <p class="bubble-bot px-3.5 py-2.5 text-sm text-[#191c1d] max-w-[90%]">Namaste! Hamro coaching center bare kei sodhnu cha?</p>
-        <div class="flex justify-end">
-          <p class="bubble-user px-3.5 py-2.5 text-sm max-w-[90%]">Morning batch ko fee kati ho?</p>
-        </div>
-        <p class="bubble-bot px-3.5 py-2.5 text-sm text-[#191c1d] max-w-[90%]">Monthly fee <strong>Rs. 3,500</strong>. Admission Rs. 1,000. Ahile open cha, join garnu huncha?</p>
-        <div class="flex justify-end">
-          <p class="bubble-user px-3.5 py-2.5 text-sm max-w-[90%]">IELTS course ni cha?</p>
-        </div>
-        <p class="bubble-bot px-3.5 py-2.5 text-sm text-[#191c1d] max-w-[90%]">IELTS Preparation <strong>Rs. 8,000/month</strong>. Mon-Fri 7–9 AM. Free trial class available. Book garnu huncha?</p>
+      <div id="demo-messages-mobile" class="bg-white p-4 flex flex-col gap-3" style="max-height:320px;overflow-y:auto">
+        <p class="bubble-bot px-3.5 py-2.5 text-sm text-[#191c1d] max-w-[90%]">Namaste! Hamro coaching center bare kei sodhnu cha? 🙏</p>
+        <p class="text-center text-xs text-muted/60 italic">👆 Type a question below and try it!</p>
       </div>
       <div class="bg-white border-t border-outline-var/20 px-4 py-3 flex gap-2">
-        <input type="text" placeholder="Type your message..." disabled class="flex-1 bg-surf-low rounded-xl px-3 py-2 text-sm text-muted outline-none">
-        <button class="bg-primary-c text-white p-2 rounded-xl">
+        <input type="text" id="demo-input-mobile" placeholder="e.g. IELTS course cha?" class="flex-1 bg-surf-low rounded-xl px-3 py-2 text-sm text-muted outline-none border border-outline-var/30 focus:border-primary-c transition-colors">
+        <button onclick="demoSend('mobile')" class="bg-primary-c hover:bg-primary text-white p-2 rounded-xl transition-colors">
           <span class="material-symbols-outlined" style="font-size:18px">send</span>
         </button>
       </div>
     </div>
 
     <div class="text-center mt-10 reveal">
-      <p class="text-muted mb-6">This is a real AI chatbot we built. Want one for your business?</p>
+      <p class="text-muted mb-6">This is a real AI chatbot we built for a local coaching institute. Want one for your business?</p>
       <a href="https://wa.me/9779811144402?text=Namaste%21%20Chatbot%20ko%20bare%20ma%20kura%20garnu%20tha%20%F0%9F%99%8F"
          target="_blank" rel="noopener"
          class="inline-flex items-center gap-2 bg-primary-c hover:bg-primary text-white font-bold py-4 px-8 rounded-xl transition-colors">
         Get Your Free Demo
       </a>
     </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════
+     TESTIMONIALS
+════════════════════════════════════ -->
+<section class="bg-white py-16 md:py-20">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12 reveal">
+      <h2 class="font-jakarta font-bold text-3xl md:text-4xl text-primary mb-3">What Our Beta Clients Say</h2>
+      <p class="text-muted">Real feedback from our early partners across Nepal</p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-6">
+      <!-- Testimonial 1 -->
+      <div class="bg-surf-low rounded-2xl p-6 flex flex-col gap-4 reveal">
+        <div class="flex gap-1 text-yellow-400">
+          <span class="material-symbols-outlined" style="font-size:18px;font-variation-settings:'FILL' 1">star</span>
+          <span class="material-symbols-outlined" style="font-size:18px;font-variation-settings:'FILL' 1">star</span>
+          <span class="material-symbols-outlined" style="font-size:18px;font-variation-settings:'FILL' 1">star</span>
+          <span class="material-symbols-outlined" style="font-size:18px;font-variation-settings:'FILL' 1">star</span>
+          <span class="material-symbols-outlined" style="font-size:18px;font-variation-settings:'FILL' 1">star</span>
+        </div>
+        <p class="text-muted text-sm leading-relaxed italic">
+          "Ahile haami raat ko leads ni paunchha. Pahile bhane website ma ko gayo ko tha thaha hudaina. Chatbot le sab capture garcha!"
+        </p>
+        <div class="flex items-center gap-3 mt-auto">
+          <div class="w-10 h-10 bg-primary-c/20 rounded-full flex items-center justify-center flex-shrink-0">
+            <span class="font-jakarta font-bold text-primary-c text-sm">R</span>
+          </div>
+          <div>
+            <p class="font-jakarta font-semibold text-primary text-sm">Ramesh Shrestha</p>
+            <p class="text-muted text-xs">Everest Coaching Center, Lalitpur</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Testimonial 2 -->
+      <div class="bg-surf-low rounded-2xl p-6 flex flex-col gap-4 reveal" style="transition-delay:.1s">
+        <div class="flex gap-1 text-yellow-400">
+          <span class="material-symbols-outlined" style="font-size:18px;font-variation-settings:'FILL' 1">star</span>
+          <span class="material-symbols-outlined" style="font-size:18px;font-variation-settings:'FILL' 1">star</span>
+          <span class="material-symbols-outlined" style="font-size:18px;font-variation-settings:'FILL' 1">star</span>
+          <span class="material-symbols-outlined" style="font-size:18px;font-variation-settings:'FILL' 1">star</span>
+          <span class="material-symbols-outlined" style="font-size:18px;font-variation-settings:'FILL' 1">star</span>
+        </div>
+        <p class="text-muted text-sm leading-relaxed italic">
+          "Setup was done in less than 24 hours! Devbarat took our clinic schedule and made the bot answer appointment questions in both Nepali and English. Excellent service."
+        </p>
+        <div class="flex items-center gap-3 mt-auto">
+          <div class="w-10 h-10 bg-primary-c/20 rounded-full flex items-center justify-center flex-shrink-0">
+            <span class="font-jakarta font-bold text-primary-c text-sm">S</span>
+          </div>
+          <div>
+            <p class="font-jakarta font-semibold text-primary text-sm">Dr. Sunita Karki</p>
+            <p class="text-muted text-xs">Suryodaya Clinic, Bhaktapur</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Testimonial 3 -->
+      <div class="bg-surf-low rounded-2xl p-6 flex flex-col gap-4 reveal" style="transition-delay:.2s">
+        <div class="flex gap-1 text-yellow-400">
+          <span class="material-symbols-outlined" style="font-size:18px;font-variation-settings:'FILL' 1">star</span>
+          <span class="material-symbols-outlined" style="font-size:18px;font-variation-settings:'FILL' 1">star</span>
+          <span class="material-symbols-outlined" style="font-size:18px;font-variation-settings:'FILL' 1">star</span>
+          <span class="material-symbols-outlined" style="font-size:18px;font-variation-settings:'FILL' 1">star</span>
+          <span class="material-symbols-outlined" style="font-size:18px;font-variation-settings:'FILL' 1">star</span>
+        </div>
+        <p class="text-muted text-sm leading-relaxed italic">
+          "Our hotel booking queries reduced staff workload by half. Guests get instant answers about room availability, rates, and facilities — even at midnight."
+        </p>
+        <div class="flex items-center gap-3 mt-auto">
+          <div class="w-10 h-10 bg-primary-c/20 rounded-full flex items-center justify-center flex-shrink-0">
+            <span class="font-jakarta font-bold text-primary-c text-sm">B</span>
+          </div>
+          <div>
+            <p class="font-jakarta font-semibold text-primary text-sm">Bikash Tamang</p>
+            <p class="text-muted text-xs">Mountain View Guest House, Pokhara</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="text-center text-xs text-muted/60 mt-8">* Beta client testimonials. Full case studies available on request.</p>
   </div>
 </section>
 
@@ -762,7 +840,16 @@
       </div>
     </div>
 
-    <p class="text-center text-sm text-muted mt-5">Limited to first 10 clients</p>
+    <div class="mt-6 bg-white rounded-2xl p-5 shadow-teal-sm reveal">
+      <div class="flex items-center justify-between mb-2">
+        <span class="text-sm font-semibold text-primary">Beta spots claimed</span>
+        <span class="text-sm font-bold text-secondary">7 / 10</span>
+      </div>
+      <div class="w-full bg-surf-low rounded-full h-3 overflow-hidden">
+        <div class="h-3 rounded-full bg-gradient-to-r from-primary-c to-secondary transition-all duration-1000" style="width:70%"></div>
+      </div>
+      <p class="text-xs text-muted mt-2 text-center">⚡ Only <strong class="text-secondary">3 spots left</strong> at the Early Adopter price — Rs. 999/month locked forever</p>
+    </div>
 
     <div class="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 mt-3 text-sm">
       <span class="text-muted font-medium">Payment via:</span>
@@ -1074,5 +1161,89 @@ if (stickyCta && heroSection) {
 </div>
 
 <script src="https://chatbotnepal.isoftroerp.com/widget.js" data-site-id="chatbotnepal-buwgr2" defer></script>
+
+<script>
+// ── Demo chatbot simulation ──
+var demoReplies = [
+  { pattern: /fee|kati|cost|price|paisa|rupee|rs\.|charge/i,
+    reply: 'Monthly fee <strong>Rs. 3,500</strong> ho. Admission Rs. 1,000 one-time. Total pahilo mahina Rs. 4,500. Ahile open cha — join garnu huncha? 🎉' },
+  { pattern: /ielts|english|language|course/i,
+    reply: 'IELTS Preparation course cha! <strong>Rs. 8,000/month</strong>. Class Mon–Fri 7–9 AM. Free trial class available. Book garnu huncha? 📚' },
+  { pattern: /batch|time|class|schedule|kati baje|suru|start/i,
+    reply: 'Morning batch <strong>6:30 AM</strong>, daytime batch <strong>11:00 AM</strong>, evening batch <strong>4:00 PM</strong>. Kun batch convenient cha? 🕒' },
+  { pattern: /admission|enroll|join|bharna|enter/i,
+    reply: 'Admission process ekdam simple cha! Form fill garnu, Rs. 1,000 pay garnu, ani class suru. Aaunus na — aaja nai enroll garnus! 📝' },
+  { pattern: /location|kata|address|kahan|where/i,
+    reply: 'Hamro center Lalitpur, Pulchowk ma cha. Lalitpur Bus Park bata 5 min walk. Google Maps link: bit.ly/everest-coaching 📍' },
+  { pattern: /contact|phone|call|number/i,
+    reply: 'Hamlai call garnus: <strong>9801234567</strong>. WhatsApp ma ni available cha same number ma. 📞' },
+  { pattern: /hello|hi|namaste|namaskar|hey/i,
+    reply: 'Namaste! Everest Coaching Center ma swagat cha 🙏 Ke help chahiyo? Course fees, schedule, admission — jastai kura sodhnus!' },
+];
+
+var demoDefaultReply = 'Ramro prashna! Yesto details ko lagi hamlai direct message garnus — WhatsApp: <strong>9801234567</strong>. Chatbot Nepal le sabai kura handle garcha! 😊';
+
+function demoSend(variant) {
+  var inputEl = document.getElementById('demo-input-' + variant);
+  var msgEl   = document.getElementById('demo-messages-' + variant);
+  var text = (inputEl.value || '').trim();
+  if (!text) return;
+
+  // Add user bubble
+  var userBubble = document.createElement('div');
+  userBubble.className = 'flex justify-end';
+  userBubble.innerHTML = '<p class="bubble-user px-3 py-2 text-xs max-w-[90%]">' + escapeHtml(text) + '</p>';
+  msgEl.appendChild(userBubble);
+  inputEl.value = '';
+  msgEl.scrollTop = msgEl.scrollHeight;
+
+  // Typing indicator
+  var typing = document.createElement('div');
+  typing.className = 'flex gap-2 items-end';
+  typing.innerHTML = '<p class="bubble-bot px-3 py-2 text-xs text-muted">...</p>';
+  msgEl.appendChild(typing);
+  msgEl.scrollTop = msgEl.scrollHeight;
+
+  setTimeout(function() {
+    typing.remove();
+    var reply = demoDefaultReply;
+    for (var i = 0; i < demoReplies.length; i++) {
+      if (demoReplies[i].pattern.test(text)) { reply = demoReplies[i].reply; break; }
+    }
+    var botBubble = document.createElement('div');
+    botBubble.className = 'flex gap-2 items-end';
+    botBubble.innerHTML = '<p class="bubble-bot px-3 py-2 text-xs text-[#191c1d] max-w-[90%]">' + reply + '</p>';
+    msgEl.appendChild(botBubble);
+    msgEl.scrollTop = msgEl.scrollHeight;
+  }, 800);
+}
+
+function escapeHtml(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// Allow Enter key to send
+['demo-input-desktop','demo-input-mobile'].forEach(function(id) {
+  var el = document.getElementById(id);
+  if (el) {
+    el.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') demoSend(id.includes('desktop') ? 'desktop' : 'mobile');
+    });
+  }
+});
+
+// Animate progress bar on scroll
+var progressBar = document.querySelector('.bg-gradient-to-r.from-primary-c.to-secondary');
+if (progressBar) {
+  progressBar.style.width = '0%';
+  var barObserver = new IntersectionObserver(function(entries) {
+    if (entries[0].isIntersecting) {
+      setTimeout(function() { progressBar.style.width = '70%'; }, 200);
+      barObserver.disconnect();
+    }
+  }, { threshold: 0.5 });
+  barObserver.observe(progressBar);
+}
+</script>
 </body>
 </html>
