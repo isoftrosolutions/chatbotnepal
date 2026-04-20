@@ -369,51 +369,108 @@
         #cn-scroll-btn.show { display: flex; align-items: center; gap: 4px; }
         #cn-scroll-btn:hover { background: #0a6e68; }
 
-        /* ── PRE-CHAT FORM ── */
+        /* ── PRE-CHAT FORM — WhatsApp themed ── */
         #cn-prechat {
-            position: absolute; inset: 0; z-index: 10;
-            background: rgba(255,255,255,.97); backdrop-filter: blur(6px);
-            display: flex; flex-direction: column; justify-content: center;
-            padding: 28px 24px; border-radius: 12px;
+            position: absolute; left: 0; right: 0; bottom: 0;
+            top: 61px; /* sit below the header */
+            z-index: 10;
+            display: flex; flex-direction: column;
+            background-color: #efeae2;
+            background-image: url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3Cpattern id='p' width='40' height='40' patternUnits='userSpaceOnUse'%3E%3Cpath d='M20 2a2 2 0 110 4 2 2 0 010-4z' fill='%23d6cfc5' opacity='.35'/%3E%3Cpath d='M8 15l4-3 4 3' stroke='%23d6cfc5' fill='none' stroke-width='.8' opacity='.3'/%3E%3Ccircle cx='32' cy='28' r='1.5' fill='%23d6cfc5' opacity='.25'/%3E%3Cpath d='M2 32l3 3h-6z' fill='%23d6cfc5' opacity='.2'/%3E%3Crect x='28' y='8' width='4' height='3' rx='1' fill='%23d6cfc5' opacity='.2'/%3E%3Cpath d='M16 34a3 3 0 016 0' stroke='%23d6cfc5' fill='none' stroke-width='.7' opacity='.25'/%3E%3Cpath d='M35 18l2 4h-4z' fill='%23d6cfc5' opacity='.18'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width='200' height='200' fill='url(%23p)'/%3E%3C/svg%3E");
+            overflow-y: auto;
             animation: row-in .25s cubic-bezier(.4,0,.2,1) both;
         }
         #cn-prechat.gone { display: none; }
-        .cn-pcf-title {
-            font-size: 1.05rem; font-weight: 800; color: #111b21;
-            margin-bottom: 4px; letter-spacing: -.02em;
+
+        /* Scrollable inner content */
+        .cn-pcf-scroll {
+            flex: 1; display: flex; flex-direction: column; padding: 12px 12px 16px; gap: 10px;
         }
-        .cn-pcf-sub {
-            font-size: .78rem; color: #667781; margin-bottom: 20px; line-height: 1.5;
+
+        /* Bot greeting bubble */
+        .cn-pcf-greeting {
+            align-self: flex-start; position: relative; max-width: 85%;
         }
-        .cn-pcf-field { margin-bottom: 12px; }
+        .cn-pcf-greeting::before {
+            content: '';
+            position: absolute; top: 0; left: -8px;
+            width: 0; height: 0;
+            border-top: 0px solid transparent;
+            border-bottom: 10px solid transparent;
+            border-right: 8px solid #fff;
+        }
+        .cn-pcf-greeting-bub {
+            background: #fff; border-radius: 0 8px 8px 8px;
+            padding: 8px 10px 10px; font-size: .855rem; color: #111b21; line-height: 1.5;
+            box-shadow: 0 1px 1px rgba(0,0,0,.06);
+        }
+        .cn-pcf-greeting-bub strong { font-weight: 700; }
+        .cn-pcf-greeting-ts {
+            font-size: .625rem; color: #667781; margin-top: 3px; text-align: right;
+        }
+
+        /* Form card — user bubble style */
+        .cn-pcf-card {
+            align-self: flex-end; width: 88%; position: relative;
+        }
+        .cn-pcf-card::before {
+            content: '';
+            position: absolute; top: 0; right: -8px;
+            width: 0; height: 0;
+            border-top: 0px solid transparent;
+            border-bottom: 10px solid transparent;
+            border-left: 8px solid #d9fdd3;
+        }
+        .cn-pcf-card-inner {
+            background: #d9fdd3; border-radius: 8px 0 8px 8px;
+            padding: 12px 12px 10px;
+            box-shadow: 0 1px 1px rgba(0,0,0,.06);
+        }
+        .cn-pcf-field { margin-bottom: 9px; }
         .cn-pcf-label {
-            display: block; font-size: .72rem; font-weight: 600; color: #374151;
-            margin-bottom: 5px; text-transform: uppercase; letter-spacing: .05em;
+            display: block; font-size: .68rem; font-weight: 700; color: #075e54;
+            margin-bottom: 4px; text-transform: uppercase; letter-spacing: .05em;
         }
         .cn-pcf-input {
-            width: 100%; padding: 10px 13px; border: 1.5px solid #e5e7eb;
-            border-radius: 11px; font-size: .875rem; font-family: 'Plus Jakarta Sans',sans-serif;
+            width: 100%; padding: 8px 11px; border: 1.5px solid rgba(0,168,132,.25);
+            border-radius: 8px; font-size: .84rem; font-family: 'Plus Jakarta Sans',sans-serif;
             color: #111b21; outline: none; transition: border-color .18s, box-shadow .18s;
-            background: #f9fafb;
+            background: rgba(255,255,255,.75);
         }
-        .cn-pcf-input:focus { border-color: #00a884; box-shadow: 0 0 0 3px rgba(0,168,132,.15); background: #fff; }
+        .cn-pcf-input:focus {
+            border-color: #00a884; box-shadow: 0 0 0 3px rgba(0,168,132,.18); background: #fff;
+        }
         .cn-pcf-input.invalid { border-color: #ef4444; background: #fef2f2; }
+        .cn-pcf-input::placeholder { color: #8696a0; font-size: .82rem; }
+
+        /* Submit button — WhatsApp send style */
+        .cn-pcf-btn-row {
+            display: flex; align-items: center; gap: 8px; margin-top: 10px;
+        }
         .cn-pcf-btn {
-            width: 100%; padding: 12px; border: none; border-radius: 12px;
+            flex: 1; padding: 9px 12px; border: none; border-radius: 20px;
             background: #00a884;
-            color: #fff; font-size: .9rem; font-weight: 700;
+            color: #fff; font-size: .84rem; font-weight: 700;
             font-family: 'Plus Jakarta Sans',sans-serif;
-            cursor: pointer; margin-top: 4px;
-            box-shadow: 0 4px 14px rgba(0,168,132,.35);
-            transition: transform .18s, box-shadow .18s;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center; gap: 6px;
+            transition: background .18s, transform .15s;
         }
-        .cn-pcf-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(0,168,132,.45); }
+        .cn-pcf-btn:hover { background: #008f72; transform: scale(1.02); }
+        .cn-pcf-btn:active { transform: scale(.97); }
         .cn-pcf-skip {
-            display: block; text-align: center; margin-top: 12px;
-            font-size: .75rem; color: #8696a0; cursor: pointer;
+            font-size: .72rem; color: #54656f; cursor: pointer; white-space: nowrap;
             text-decoration: underline; text-underline-offset: 2px;
+            background: none; border: none; font-family: 'Plus Jakarta Sans',sans-serif;
+            padding: 0;
         }
-        .cn-pcf-skip:hover { color: #54656f; }
+        .cn-pcf-skip:hover { color: #111b21; }
+
+        /* Privacy note inside form */
+        .cn-pcf-privacy {
+            font-size: .64rem; color: #667781; margin-top: 6px; line-height: 1.4;
+            display: flex; align-items: flex-start; gap: 5px;
+        }
 
         /* ── ENCRYPTION NOTICE ── */
         .cn-encrypt-notice {
@@ -500,22 +557,53 @@
                 </div>
 
                 <div id="cn-prechat" class="gone">
-                    <div class="cn-pcf-title">Before we start 👋</div>
-                    <div class="cn-pcf-sub">Tell us a little about yourself — all fields are optional.</div>
-                    <div class="cn-pcf-field">
-                        <label class="cn-pcf-label">Your Name</label>
-                        <input id="cn-pcf-name" class="cn-pcf-input" type="text" placeholder="e.g. Ram Prasad" autocomplete="name">
+                    <div class="cn-pcf-scroll">
+                        <!-- Bot greeting bubble -->
+                        <div class="cn-pcf-greeting">
+                            <div class="cn-pcf-greeting-bub">
+                                Namaste! 👋 <strong>Before we start</strong>, share a bit about yourself so we can help you better.<br><br>All fields are optional — skip anytime.
+                            </div>
+                            <div class="cn-pcf-greeting-ts" id="cn-pcf-time"></div>
+                        </div>
+
+                        <!-- Form as user bubble -->
+                        <div class="cn-pcf-card">
+                            <div class="cn-pcf-card-inner">
+                                <div class="cn-pcf-field">
+                                    <label class="cn-pcf-label">
+                                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;margin-right:3px"><path fill="#075e54" d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12Zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8Z"/></svg>
+                                        Your Name
+                                    </label>
+                                    <input id="cn-pcf-name" class="cn-pcf-input" type="text" placeholder="e.g. Ram Prasad" autocomplete="name">
+                                </div>
+                                <div class="cn-pcf-field">
+                                    <label class="cn-pcf-label">
+                                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;margin-right:3px"><path fill="#075e54" d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2Zm0 4-8 5-8-5V6l8 5 8-5v2Z"/></svg>
+                                        Email Address
+                                    </label>
+                                    <input id="cn-pcf-email" class="cn-pcf-input" type="email" placeholder="you@example.com" autocomplete="email">
+                                </div>
+                                <div class="cn-pcf-field">
+                                    <label class="cn-pcf-label">
+                                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;margin-right:3px"><path fill="#075e54" d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1-9.4 0-17-7.6-17-17 0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8Z"/></svg>
+                                        Phone Number
+                                    </label>
+                                    <input id="cn-pcf-phone" class="cn-pcf-input" type="tel" placeholder="+977 98XXXXXXXX" autocomplete="tel">
+                                </div>
+                                <div class="cn-pcf-privacy">
+                                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" style="flex-shrink:0;margin-top:1px"><path fill="#667781" d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2Zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2ZM9 8V6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9Z"/></svg>
+                                    Your info is private and used only to improve your support experience.
+                                </div>
+                                <div class="cn-pcf-btn-row">
+                                    <button class="cn-pcf-btn" id="cn-pcf-submit">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path fill="#fff" d="M2.01 21 23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+                                        Start Chat
+                                    </button>
+                                    <button class="cn-pcf-skip" id="cn-pcf-skip" type="button">Skip</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="cn-pcf-field">
-                        <label class="cn-pcf-label">Email Address</label>
-                        <input id="cn-pcf-email" class="cn-pcf-input" type="email" placeholder="you@example.com" autocomplete="email">
-                    </div>
-                    <div class="cn-pcf-field">
-                        <label class="cn-pcf-label">Phone Number</label>
-                        <input id="cn-pcf-phone" class="cn-pcf-input" type="tel" placeholder="+977 98XXXXXXXX" autocomplete="tel">
-                    </div>
-                    <button class="cn-pcf-btn" id="cn-pcf-submit">Start Chat</button>
-                    <span class="cn-pcf-skip" id="cn-pcf-skip">Skip for now</span>
                 </div>
 
                 <div id="cn-messages" role="log" aria-live="polite">
@@ -633,6 +721,12 @@
             const needsPrechat = config.prechat_enabled && (!visitorInfo.name || !visitorInfo.email || !visitorInfo.phone);
             if (needsPrechat) {
                 prechat.classList.remove('gone');
+                const tsEl = document.getElementById('cn-pcf-time');
+                if (tsEl) tsEl.textContent = formatTime(new Date());
+                setTimeout(() => {
+                    const firstInput = document.getElementById('cn-pcf-name');
+                    if (firstInput) firstInput.focus();
+                }, 200);
             } else {
                 input.focus();
             }
