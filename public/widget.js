@@ -445,10 +445,10 @@
 
         /* Submit button — WhatsApp send style */
         .cn-pcf-btn-row {
-            display: flex; align-items: center; gap: 8px; margin-top: 10px;
+            display: flex; flex-direction: column; gap: 7px; margin-top: 10px;
         }
         .cn-pcf-btn {
-            flex: 1; padding: 9px 12px; border: none; border-radius: 20px;
+            width: 100%; padding: 9px 12px; border: none; border-radius: 20px;
             background: #00a884;
             color: #fff; font-size: .84rem; font-weight: 700;
             font-family: 'Plus Jakarta Sans',sans-serif;
@@ -456,15 +456,17 @@
             display: flex; align-items: center; justify-content: center; gap: 6px;
             transition: background .18s, transform .15s;
         }
-        .cn-pcf-btn:hover { background: #008f72; transform: scale(1.02); }
+        .cn-pcf-btn:hover { background: #008f72; transform: scale(1.01); }
         .cn-pcf-btn:active { transform: scale(.97); }
         .cn-pcf-skip {
-            font-size: .72rem; color: #54656f; cursor: pointer; white-space: nowrap;
-            text-decoration: underline; text-underline-offset: 2px;
-            background: none; border: none; font-family: 'Plus Jakarta Sans',sans-serif;
-            padding: 0;
+            width: 100%; padding: 7px 12px; border: 1.5px solid rgba(0,0,0,.15);
+            border-radius: 20px; background: rgba(255,255,255,.55);
+            font-size: .78rem; font-weight: 600; color: #54656f;
+            font-family: 'Plus Jakarta Sans',sans-serif;
+            cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px;
+            transition: background .17s, color .17s, border-color .17s;
         }
-        .cn-pcf-skip:hover { color: #111b21; }
+        .cn-pcf-skip:hover { background: rgba(255,255,255,.85); color: #111b21; border-color: rgba(0,0,0,.25); }
 
         /* Privacy note inside form */
         .cn-pcf-privacy {
@@ -599,7 +601,10 @@
                                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path fill="#fff" d="M2.01 21 23 12 2.01 3 2 10l15 2-15 2z"/></svg>
                                         Start Chat
                                     </button>
-                                    <button class="cn-pcf-skip" id="cn-pcf-skip" type="button">Skip</button>
+                                    <button class="cn-pcf-skip" id="cn-pcf-skip" type="button">
+                                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7"/></svg>
+                                        No thanks, just chat
+                                    </button>
                                 </div>
                             </div>
                         </div>
