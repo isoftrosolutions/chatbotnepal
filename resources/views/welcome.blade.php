@@ -5,17 +5,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="ChatBot Nepal — AI chatbots for Nepali businesses. Answer customer questions 24/7 in Nepali, Hindi & English. Setup in 24 hours. Rs. 999/month.">
 <title>ChatBot Nepal — AI Chatbot for Your Business Website</title>
-<link rel="canonical" href="https://chatbotnepal.isoftroerp.com">
+<link rel="canonical" href="{{ config('app.url') }}">
 <meta property="og:title" content="ChatBot Nepal — AI Chatbot for Your Business Website">
 <meta property="og:description" content="Answer customer queries 24/7 in Nepali, Hindi & English. No coding. Setup in 24 hours.">
-<meta property="og:url" content="https://chatbotnepal.isoftroerp.com">
+<meta property="og:url" content="{{ config('app.url') }}">
 <meta property="og:type" content="website">
-<meta property="og:image" content="https://chatbotnepal.isoftroerp.com/images/og-preview.png">
+<meta property="og:image" content="{{ asset('images/og-preview.png') }}">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="ChatBot Nepal — AI Chatbot for Nepali Businesses">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://chatbotnepal.isoftroerp.com/images/og-preview.png">
+<meta name="twitter:image" content="{{ asset('images/og-preview.png') }}">
 <meta name="keywords" content="AI chatbot Nepal, chatbot for Nepali business, Nepali language chatbot, website automation Nepal, 24/7 customer support Nepal, AI chatbot Kathmandu, Nepali Hindi English chatbot, SME chatbot Nepal">
 
 <script type="application/ld+json">
@@ -151,7 +151,7 @@
 <nav class="fixed top-0 inset-x-0 z-50 bg-white/80 backdrop-blur-xl border-b border-outline-var/20">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
 
-    <a href="/" class="font-jakarta font-extrabold text-xl text-primary tracking-tight">ChatBot Nepal</a>
+    <a href="{{ url('/') }}" class="font-jakarta font-extrabold text-xl text-primary tracking-tight">ChatBot Nepal</a>
 
     <div class="hidden md:flex items-center gap-8 text-sm font-medium text-muted">
       <a href="#about"   class="hover:text-primary transition-colors">About</a>
@@ -1134,21 +1134,6 @@ document.querySelectorAll('.reveal').forEach(function(el) {
   revealObserver.observe(el);
 });
 
-// ── Sticky mobile CTA bar ──
-var stickyCta = document.getElementById('sticky-cta');
-var heroSection = document.getElementById('about');
-if (stickyCta && heroSection) {
-  var heroObserver = new IntersectionObserver(function(entries) {
-    entries.forEach(function(entry) {
-      if (entry.isIntersecting) {
-        stickyCta.classList.add('translate-y-full');
-      } else {
-        stickyCta.classList.remove('translate-y-full');
-      }
-    });
-  }, { threshold: 0 });
-  heroObserver.observe(heroSection);
-}
 </script>
 <!-- ── Sticky mobile CTA bar ── -->
 <div id="sticky-cta" class="md:hidden fixed bottom-0 inset-x-0 z-50 bg-primary border-t-2 border-primary-c px-4 py-3 translate-y-full transition-transform duration-300">
@@ -1160,7 +1145,7 @@ if (stickyCta && heroSection) {
   </a>
 </div>
 
-<script src="https://chatbotnepal.isoftroerp.com/widget.js" data-site-id="chatbotnepal-buwgr2" defer></script>
+<script src="{{ asset('widget.js') }}" data-site-id="chatbotnepal-buwgr2" defer></script>
 
 <script>
 // ── Demo chatbot simulation ──
@@ -1243,6 +1228,22 @@ if (progressBar) {
     }
   }, { threshold: 0.5 });
   barObserver.observe(progressBar);
+}
+
+// ── Sticky mobile CTA bar ──
+var stickyCta = document.getElementById('sticky-cta');
+var heroSection = document.getElementById('about');
+if (stickyCta && heroSection) {
+  var heroObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        stickyCta.classList.add('translate-y-full');
+      } else {
+        stickyCta.classList.remove('translate-y-full');
+      }
+    });
+  }, { threshold: 0 });
+  heroObserver.observe(heroSection);
 }
 </script>
 </body>

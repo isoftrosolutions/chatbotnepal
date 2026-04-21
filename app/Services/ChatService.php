@@ -31,7 +31,7 @@ class ChatService
     public function processChat(
         User $client,
         string $message,
-        ?string $conversationId = null,
+        ?int $conversationId = null,
         ?string $visitorId = null,
         ?string $sourceUrl = null,
         ?string $visitorName = null,
@@ -110,7 +110,7 @@ class ChatService
 
     public function getOrCreateConversation(
         User $client,
-        ?string $conversationId,
+        ?int $conversationId,
         ?string $visitorId,
         ?string $sourceUrl,
         ?string $visitorName = null,
@@ -133,7 +133,7 @@ class ChatService
 
         return ChatConversation::create([
             'user_id'       => $client->id,
-            'visitor_id'    => $visitorId ?? 'unknown',
+            'visitor_id'    => $visitorId ?? \Illuminate\Support\Str::uuid()->toString(),
             'visitor_name'  => $visitorName,
             'visitor_email' => $visitorEmail,
             'visitor_phone' => $visitorPhone,

@@ -18,6 +18,10 @@ Route::post('/widget/session', [WidgetSessionController::class, 'createSession']
     ->middleware('throttle:session')
     ->withoutMiddleware('widget.domain');
 
+Route::post('/widget/session/verify', [WidgetSessionController::class, 'verifySession'])
+    ->middleware('throttle:session')
+    ->withoutMiddleware('widget.domain');
+
 Route::post('/chat', [ChatController::class, 'chat'])
     ->middleware(['throttle:chat', 'widget.domain']);
 

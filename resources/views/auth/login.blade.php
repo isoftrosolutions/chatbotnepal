@@ -628,8 +628,8 @@
   <div class="right-footer">
     <span class="copy">© 2026 ChatBot Nepal by iSoftro</span>
     <div class="footer-links">
-      <a href="#">Privacy</a>
-      <a href="#">Terms</a>
+      <a href="{{ route('privacy-policy') }}">Privacy</a>
+      <a href="{{ route('terms') }}">Terms</a>
       <a href="https://wa.me/9779811144402" target="_blank">Support</a>
     </div>
   </div>

@@ -28,8 +28,8 @@
 </head>
 <body>
 <nav>
-  <a href="/" class="logo">ChatBot Nepal</a>
-  <a href="/" class="back">← Back to Home</a>
+  <a href="{{ url('/') }}" class="logo">ChatBot Nepal</a>
+  <a href="{{ url('/') }}" class="back">← Back to Home</a>
 </nav>
 <main>
   <h1>Privacy Policy</h1>

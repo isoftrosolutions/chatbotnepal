@@ -124,8 +124,5 @@ Route::middleware('auth')->group(function () {
         Route::get('/request-update', [UpdateRequestController::class, 'create'])->name('client.request-update.create');
         Route::post('/request-update', [UpdateRequestController::class, 'store'])->name('client.request-update.store');
 
-        Route::get('/profile', [ProfileController::class, 'edit'])->name('client.profile');
-        Route::put('/profile', [ProfileController::class, 'update'])->name('client.profile.update');
-        Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('client.profile.password');
     });
 });
