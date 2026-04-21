@@ -42,10 +42,10 @@ Route::get('/sitemap.xml', function () {
 })->name('sitemap');
 
 Route::middleware('guest')->group(function () {
-    Route::get('login', [AuthenticatedSessionController::class, 'create'])->name('login');
-    Route::get('auth/login', [AuthenticatedSessionController::class, 'create']);
-    Route::post('login', [AuthenticatedSessionController::class, 'store']);
+    Route::get('auth/login', [AuthenticatedSessionController::class, 'create'])->name('login');
+    Route::get('login', [AuthenticatedSessionController::class, 'create']);
     Route::post('auth/login', [AuthenticatedSessionController::class, 'store']);
+    Route::post('login', [AuthenticatedSessionController::class, 'store']);
 
     Route::get('forgot-password', [ForgotPasswordController::class, 'create'])->name('password.request');
     Route::post('forgot-password', [ForgotPasswordController::class, 'store'])->name('password.email');
