@@ -58,7 +58,20 @@
       "Bash(python3 -c \"import sys,re; body=sys.stdin.read\\(\\); links=re.findall\\(r'href=[\\\\\"\\\\']\\(.*?\\)[\\\\\"\\\\']\\\\s*', body\\); [print\\(l\\) for l in links]\")",
       "Bash(python *)",
       "Bash(unzip -l \"/d/Downloads/stitch_chatbot_nepal_landing_page.zip\")",
-      "Bash(unzip *)"
+      "Bash(unzip *)",
+      "Bash(find /c/Apache24/htdocs/ai/resources/views -name \"*.blade.php\" -exec php -l {} \\\\;)",
+      "Bash(git *)",
+      "Bash(find /c/Apache24/htdocs/ai/app /c/Apache24/htdocs/ai/routes -name \"*.php\" -exec php -l {} \\\\;)",
+      "Bash(find /c/Apache24/htdocs/ai/storage/framework/views -name \"*.php\" -exec php -l {} \\\\;)",
+      "Bash(GIT_PAGER=cat git diff *)",
+      "Bash(GIT_PAGER=cat git add app/Http/Controllers/Admin/SettingController.php app/Services/GrokService.php public/.htaccess resources/views/welcome.blade.php)",
+      "Bash(GIT_PAGER=cat git push *)",
+      "Bash(GIT_PAGER=cat git add resources/views/welcome.blade.php)",
+      "Bash(GIT_PAGER=cat git *)",
+      "Bash(GIT_PAGER=cat grep -n \"reorder\\\\|sort_order\\\\|order\" /c/Apache24/htdocs/ai/routes/web.php)",
+      "WebFetch(domain:github.com)",
+      "Bash(npx skills *)",
+      "Bash(python3 -c \"import paramiko; import cryptography; print\\('Dependencies OK'\\)\")"
     ]
   }
 }
