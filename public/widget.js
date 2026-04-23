@@ -20,6 +20,7 @@
         watermark_enabled: false,
         watermark_opacity: 0.1,
         watermark_position: 'center',
+        message_meta_enabled: false,
     };
     let conversationId = sessionStorage.getItem('cbn_conversation_id')
         ? parseInt(sessionStorage.getItem('cbn_conversation_id'), 10)
@@ -32,6 +33,37 @@
     let busy = false;
     let prechatShown = false;
 
+    function normalizeAssetUrl(maybeUrl) {
+        if (!maybeUrl || typeof maybeUrl !== 'string') return null;
+        try { return new URL(maybeUrl, BASE_URL).href; } catch { return maybeUrl; }
+    }
+
+    function normalizeHexColor(maybeHex) {
+        if (!maybeHex || typeof maybeHex !== 'string') return null;
+        const hex = maybeHex.trim();
+        if (!hex) return null;
+        if (/^#[0-9a-fA-F]{6}$/.test(hex)) return hex.toLowerCase();
+        if (/^#[0-9a-fA-F]{3}$/.test(hex)) {
+            const r = hex[1], g = hex[2], b = hex[3];
+            return (`#${r}${r}${g}${g}${b}${b}`).toLowerCase();
+        }
+        return null;
+    }
+
+    function darkenHex(hex, amount01) {
+        const normalized = normalizeHexColor(hex);
+        if (!normalized) return null;
+        const amt = Math.max(0, Math.min(1, amount01 || 0));
+        const r = parseInt(normalized.slice(1, 3), 16);
+        const g = parseInt(normalized.slice(3, 5), 16);
+        const b = parseInt(normalized.slice(5, 7), 16);
+        const dr = Math.round(r * (1 - amt));
+        const dg = Math.round(g * (1 - amt));
+        const db = Math.round(b * (1 - amt));
+        const toHex = (n) => n.toString(16).padStart(2, '0');
+        return `#${toHex(dr)}${toHex(dg)}${toHex(db)}`;
+    }
+
     /* ─────────────────────────────────────────
        DESIGN TOKENS — WhatsApp-style Chat
     ───────────────────────────────────────── */
@@ -42,27 +74,36 @@
         #cn-widget {
             position: fixed; bottom: 24px; right: 24px; z-index: 999999;
             font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+            --cn-primary: #075e54;
+            --cn-primary-dark: #064a43;
+            --cn-surface: #ffffff;
+            --cn-text: #0f172a;
+            --cn-muted: #6b7280;
+            --cn-bot-bubble: #e8e8e8;
+            --cn-user-bubble: var(--cn-primary);
+            --cn-input-bg: #f3f4f6;
         }
 
         /* ── LAUNCHER BUTTON ── */
         #cn-launcher {
             width: 58px; height: 58px; border-radius: 50%;
-            background: #25d366;
+            background: var(--cn-primary);
             border: none; cursor: pointer;
             display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 6px 24px rgba(37,211,102,.50), 0 2px 8px rgba(0,0,0,.12);
+            box-shadow: 0 10px 28px rgba(15,23,42,.16), 0 2px 8px rgba(0,0,0,.12);
             transition: transform .25s cubic-bezier(.34,1.56,.64,1), box-shadow .22s ease;
             outline: none; -webkit-tap-highlight-color: transparent;
             position: relative;
         }
         #cn-launcher:hover {
             transform: scale(1.10);
-            box-shadow: 0 10px 32px rgba(37,211,102,.60), 0 2px 10px rgba(0,0,0,.15);
+            box-shadow: 0 14px 40px rgba(15,23,42,.18), 0 2px 10px rgba(0,0,0,.15);
         }
         #cn-launcher:active { transform: scale(.95); }
         #cn-launcher::before {
             content: ''; position: absolute; inset: -6px; border-radius: 50%;
-            border: 2.5px solid rgba(37,211,102,.35);
+            border: 2.5px solid var(--cn-primary);
+            opacity: .28;
             animation: launcher-ring 2.5s ease-out infinite;
         }
         @keyframes launcher-ring {
@@ -91,8 +132,8 @@
         #cn-window {
             position: fixed; bottom: 96px; right: 24px;
             width: 370px; height: 570px; max-height: calc(100dvh - 110px);
-            background: #fff; border-radius: 12px;
-            box-shadow: 0 20px 60px rgba(0,0,0,.22), 0 2px 12px rgba(0,0,0,.08);
+            background: var(--cn-surface); border-radius: 22px;
+            box-shadow: 0 24px 64px rgba(15,23,42,.18), 0 6px 18px rgba(15,23,42,.08);
             display: flex; flex-direction: column; overflow: hidden;
             opacity: 0; transform: translateY(14px) scale(.97);
             pointer-events: none;
@@ -105,8 +146,8 @@
 
         /* ── HEADER — WhatsApp teal ── */
         #cn-header {
-            background: #075e54;
-            padding: 10px 14px; display: flex; align-items: center; gap: 10px;
+            background: var(--cn-primary);
+            padding: 12px 14px; display: flex; align-items: center; gap: 12px;
             flex-shrink: 0; position: relative;
         }
 
@@ -121,7 +162,7 @@
         .cn-online-ring {
             position: absolute; bottom: 0px; right: 0px;
             width: 12px; height: 12px; border-radius: 50%;
-            background: #25d366; border: 2px solid #075e54;
+            background: #22c55e; border: 2px solid var(--cn-primary);
         }
 
         .cn-hdr-info { flex: 1; min-width: 0; z-index: 1; }
@@ -130,8 +171,14 @@
             white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
         }
         .cn-hdr-status {
-            margin-top: 1px; font-size: .7rem; color: rgba(255,255,255,.72);
-            display: flex; align-items: center; gap: 0; font-weight: 400;
+            margin-top: 2px; font-size: .72rem; color: rgba(255,255,255,.82);
+            display: flex; align-items: center; gap: 7px; font-weight: 500;
+            line-height: 1;
+        }
+        .cn-status-dot {
+            width: 8px; height: 8px; border-radius: 999px;
+            background: #22c55e;
+            box-shadow: 0 0 0 3px rgba(34,197,94,.18);
         }
 
         .cn-hdr-btns { display: flex; gap: 2px; z-index: 1; }
@@ -146,11 +193,10 @@
 
         /* ── MESSAGES AREA — WhatsApp wallpaper ── */
         #cn-messages {
-            flex: 1; overflow-y: auto; padding: 8px 12px 8px;
-            display: flex; flex-direction: column; gap: 3px;
+            flex: 1; overflow-y: auto; padding: 14px 16px 12px;
+            display: flex; flex-direction: column; gap: 0;
             scroll-behavior: smooth;
-            background-color: #efeae2;
-            background-image: url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3Cpattern id='p' width='40' height='40' patternUnits='userSpaceOnUse'%3E%3Cpath d='M20 2a2 2 0 110 4 2 2 0 010-4z' fill='%23d6cfc5' opacity='.35'/%3E%3Cpath d='M8 15l4-3 4 3' stroke='%23d6cfc5' fill='none' stroke-width='.8' opacity='.3'/%3E%3Ccircle cx='32' cy='28' r='1.5' fill='%23d6cfc5' opacity='.25'/%3E%3Cpath d='M2 32l3 3h-6z' fill='%23d6cfc5' opacity='.2'/%3E%3Crect x='28' y='8' width='4' height='3' rx='1' fill='%23d6cfc5' opacity='.2'/%3E%3Cpath d='M16 34a3 3 0 016 0' stroke='%23d6cfc5' fill='none' stroke-width='.7' opacity='.25'/%3E%3Cpath d='M35 18l2 4h-4z' fill='%23d6cfc5' opacity='.18'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width='200' height='200' fill='url(%23p)'/%3E%3C/svg%3E");
+            background: var(--cn-surface);
             position: relative;
         }
 
@@ -163,15 +209,13 @@
             z-index: 1;
             opacity: 0;
             transition: opacity 0.3s ease;
+            background-image: var(--watermark-image, none);
+            background-position: var(--watermark-position, center);
+            background-repeat: no-repeat;
+            background-size: 180px 180px;
         }
         #cn-messages.has-watermark::before {
             opacity: var(--watermark-opacity, 0.1);
-            background-position: var(--watermark-position, center);
-            background-repeat: no-repeat;
-            background-size: contain;
-            max-width: 200px;
-            max-height: 200px;
-            margin: auto;
         }
         #cn-messages::-webkit-scrollbar { width: 5px; }
         #cn-messages::-webkit-scrollbar-track { background: transparent; }
@@ -179,6 +223,7 @@
 
         /* date pill */
         .cn-date-pill {
+            display: none;
             align-self: center;
             background: rgba(225,218,208,.9);
             border-radius: 8px;
@@ -191,27 +236,28 @@
         /* ── MESSAGE BUBBLES — WhatsApp style ── */
         .cn-row {
             display: flex; 
-            flex-direction: column;
+            align-items: flex-end;
+            gap: 10px;
             animation: row-in .2s ease both;
-            padding: 1px 0;
+            padding: 7px 0;
         }
         @keyframes row-in {
             from { opacity: 0; transform: translateY(5px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        .cn-row.user { align-items: flex-end; }
-        .cn-row.bot { align-items: flex-start; }
+        .cn-row.user { justify-content: flex-end; }
+        .cn-row.bot { justify-content: flex-start; }
 
         .cn-col {
-            max-width: 78%;
+            max-width: 76%;
             position: relative;
         }
 
         .cn-bubble {
-            padding: 6px 8px 8px 9px;
-            font-size: .855rem; line-height: 1.5; word-break: break-word;
+            padding: 12px 14px;
+            font-size: .92rem; line-height: 1.55; word-break: break-word;
             position: relative;
-            min-width: 80px;
+            min-width: 72px;
         }
         .cn-bubble strong { font-weight: 700; }
         .cn-bubble ul { padding-left: 16px; margin-top: 4px; }
@@ -219,37 +265,40 @@
 
         /* Bot (incoming) bubble — white with left tail */
         .cn-row.bot .cn-bubble {
-            background: #fff;
-            color: #111b21;
-            border-radius: 0 8px 8px 8px;
-            box-shadow: 0 1px 1px rgba(0,0,0,.06);
+            background: var(--cn-bot-bubble);
+            color: var(--cn-text);
+            border-radius: 18px;
+            box-shadow: none;
         }
         .cn-row.bot .cn-col::before {
-            content: '';
-            position: absolute;
-            top: 0; left: -8px;
-            width: 0; height: 0;
-            border-top: 0px solid transparent;
-            border-bottom: 10px solid transparent;
-            border-right: 8px solid #fff;
+            display: none;
+            content: none;
         }
 
         /* User (outgoing) bubble — WhatsApp green with right tail */
         .cn-row.user .cn-bubble {
-            background: #d9fdd3;
-            color: #111b21;
-            border-radius: 8px 0 8px 8px;
-            box-shadow: 0 1px 1px rgba(0,0,0,.06);
+            background: var(--cn-user-bubble);
+            color: #fff;
+            border-radius: 18px;
+            box-shadow: none;
         }
         .cn-row.user .cn-col::before {
-            content: '';
-            position: absolute;
-            top: 0; right: -8px;
-            width: 0; height: 0;
-            border-top: 0px solid transparent;
-            border-bottom: 10px solid transparent;
-            border-left: 8px solid #d9fdd3;
+            display: none;
+            content: none;
         }
+
+        /* Bot message avatar badge */
+        .cn-msg-avatar {
+            width: 34px; height: 34px;
+            border-radius: 999px;
+            background: var(--cn-primary);
+            color: #fff;
+            display: flex; align-items: center; justify-content: center;
+            flex: 0 0 auto;
+            box-shadow: 0 2px 10px rgba(15,23,42,.10);
+            overflow: hidden;
+        }
+        .cn-msg-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 999px; }
 
         /* Timestamp row inside bubble */
         .cn-ts-row {
@@ -285,19 +334,14 @@
             max-width: 78%;
         }
         .cn-typing-wrap::before {
-            content: '';
-            position: absolute;
-            top: 0; left: -8px;
-            width: 0; height: 0;
-            border-top: 0px solid transparent;
-            border-bottom: 10px solid transparent;
-            border-right: 8px solid #fff;
+            display: none;
+            content: none;
         }
         .cn-typing-bub {
-            background: #fff;
-            border-radius: 0 8px 8px 8px;
+            background: var(--cn-bot-bubble);
+            border-radius: 18px;
             padding: 12px 15px; display: flex; gap: 5px; align-items: center;
-            box-shadow: 0 1px 1px rgba(0,0,0,.06);
+            box-shadow: none;
         }
         .cn-dot {
             width: 7px; height: 7px; border-radius: 50%;
@@ -307,32 +351,33 @@
         .cn-dot:nth-child(3) { animation-delay: .32s; }
         @keyframes tdot {
             0%, 60%, 100% { transform: translateY(0); background: #9ca3af; }
-            30% { transform: translateY(-5px); background: #25d366; }
+            30% { transform: translateY(-5px); background: var(--cn-primary); }
         }
 
         /* ── INPUT AREA — WhatsApp style ── */
         #cn-input-area {
-            padding: 6px 8px 8px;
-            background: #efeae2;
+            padding: 12px 12px 14px;
+            background: var(--cn-surface);
             display: flex; align-items: flex-end;
-            gap: 6px; flex-shrink: 0;
+            gap: 10px; flex-shrink: 0;
         }
         .cn-input-wrap {
             flex: 1;
-            background: #fff;
-            border-radius: 24px;
+            background: var(--cn-input-bg);
+            border-radius: 18px;
             display: flex; align-items: flex-end;
-            padding: 4px 6px 4px 12px;
-            box-shadow: 0 1px 2px rgba(0,0,0,.08);
+            position: relative;
+            padding: 8px 10px 8px 14px;
+            box-shadow: 0 2px 10px rgba(15,23,42,.06);
         }
         #cn-input {
             flex: 1; background: transparent; border: none;
-            color: #111b21;
-            font-family: 'Plus Jakarta Sans', sans-serif; font-size: .875rem;
-            font-weight: 400; padding: 7px 4px; outline: none;
+            color: var(--cn-text);
+            font-family: 'Plus Jakarta Sans', sans-serif; font-size: .92rem;
+            font-weight: 500; padding: 8px 6px; outline: none;
             resize: none; height: 38px; max-height: 96px; line-height: 1.4;
         }
-        #cn-input::placeholder { color: #8696a0; }
+        #cn-input::placeholder { color: #9ca3af; font-weight: 500; }
 
         .cn-input-actions {
             display: flex; align-items: center; gap: 0; padding-right: 4px;
@@ -348,20 +393,20 @@
 
         /* Send button — green circle */
         #cn-send {
-            width: 42px; height: 42px; border-radius: 50%; border: none;
-            background: #00a884;
+            width: 44px; height: 44px; border-radius: 12px; border: none;
+            background: var(--cn-primary);
             color: #fff; cursor: pointer;
             display: flex; align-items: center; justify-content: center;
             transition: transform .15s ease, background .15s;
-            box-shadow: 0 2px 8px rgba(0,168,132,.35); outline: none; flex-shrink: 0;
+            box-shadow: 0 8px 18px rgba(15,23,42,.12); outline: none; flex-shrink: 0;
         }
-        #cn-send:hover { background: #008f72; transform: scale(1.06); }
+        #cn-send:hover { background: var(--cn-primary-dark); transform: translateY(-1px); }
         #cn-send:active { transform: scale(.94); }
         #cn-send:disabled { background: #a0aeb6; cursor: not-allowed; transform: none; box-shadow: none; }
 
         /* Character counter */
         #cn-char-count {
-            position: absolute; bottom: 2px; right: 60px;
+            position: absolute; bottom: 6px; right: 12px;
             font-size: .65rem; color: #8696a0;
         }
         #cn-char-count.warning { color: #f59e0b; }
@@ -371,10 +416,10 @@
         .cn-footer {
             text-align: center; padding: 5px 0 7px;
             font-size: .6rem; color: #8696a0; letter-spacing: .02em;
-            background: #efeae2;
+            background: var(--cn-surface);
         }
-        .cn-footer a { color: #027d5a; text-decoration: none; font-weight: 600; }
-        .cn-footer a:hover { color: #00a884; }
+        .cn-footer a { color: var(--cn-primary); text-decoration: none; font-weight: 600; }
+        .cn-footer a:hover { color: var(--cn-primary); }
 
         /* ── ERROR BUBBLE ── */
         .cn-bubble.error {
@@ -384,7 +429,7 @@
         /* ── SCROLL TO BOTTOM BUTTON ── */
         #cn-scroll-btn {
             position: absolute; bottom: 8px; right: 12px;
-            background: #075e54; color: #fff;
+            background: var(--cn-primary); color: #fff;
             border: none; border-radius: 20px;
             padding: 8px 14px; font-size: .75rem; font-weight: 600;
             cursor: pointer; display: none;
@@ -392,7 +437,7 @@
             z-index: 5;
         }
         #cn-scroll-btn.show { display: flex; align-items: center; gap: 4px; }
-        #cn-scroll-btn:hover { background: #0a6e68; }
+        #cn-scroll-btn:hover { background: var(--cn-primary-dark); }
 
         /* ── PRE-CHAT FORM — Enhanced UX ── */
         #cn-prechat {
@@ -610,11 +655,11 @@
         /* ── ENCRYPTION NOTICE ── */
         .cn-encrypt-notice {
             align-self: center;
-            background: rgba(255,234,170,.6);
-            border-radius: 7px;
-            font-size: .65rem; font-weight: 400; color: #54656f;
-            padding: 5px 12px;
-            margin: 4px 0 6px;
+            background: rgba(15,23,42,.04);
+            border-radius: 12px;
+            font-size: .72rem; font-weight: 500; color: var(--cn-muted);
+            padding: 7px 12px;
+            margin: 2px 0 8px;
             display: flex; align-items: center; gap: 5px;
             text-align: center;
             line-height: 1.4;
@@ -678,7 +723,7 @@
                     </div>
                     <div class="cn-hdr-info">
                         <div class="cn-hdr-name">${config.business_name}</div>
-                        <div class="cn-hdr-status">online</div>
+                        <div class="cn-hdr-status"><span class="cn-status-dot"></span><span>Online now</span></div>
                     </div>
                     <div class="cn-hdr-btns">
                         <button class="cn-hdr-btn" id="cn-min" title="Minimize" aria-label="Minimize">
@@ -820,7 +865,7 @@
                 <div id="cn-input-area">
                     <div class="cn-input-wrap">
                         <span id="cn-char-count"></span>
-                        <textarea id="cn-input" placeholder="Type a message" rows="1" aria-label="Message" autocomplete="off"></textarea>
+                        <textarea id="cn-input" placeholder="Type your message..." rows="1" aria-label="Message" autocomplete="off"></textarea>
                         <div class="cn-input-actions">
                             <button class="cn-in-btn" id="cn-mic" title="Voice input" aria-label="Voice input">
                                 <svg width="20" height="20" fill="none" viewBox="0 0 24 24">
@@ -844,6 +889,7 @@
         `;
         document.body.appendChild(container);
 
+        applyConfig();
         initSession().then(() => setupEvents());
     }
 
@@ -860,7 +906,11 @@
         .then(data => {
             if (data.session_token) {
                 sessionToken = data.session_token;
-                config = { ...config, ...data.config };
+                const incomingConfig = { ...(data.config || {}) };
+                if (incomingConfig.company_logo_url) incomingConfig.company_logo_url = normalizeAssetUrl(incomingConfig.company_logo_url);
+                if (incomingConfig.bot_avatar_url) incomingConfig.bot_avatar_url = normalizeAssetUrl(incomingConfig.bot_avatar_url);
+                if (incomingConfig.primary_color) incomingConfig.primary_color = normalizeHexColor(incomingConfig.primary_color) || incomingConfig.primary_color;
+                config = { ...config, ...incomingConfig };
                 applyConfig();
             }
         })
@@ -907,7 +957,8 @@
             }
 
             const prechat = document.getElementById('cn-prechat');
-            const needsPrechat = config.prechat_enabled && (!visitorInfo.name || !visitorInfo.email || !visitorInfo.phone);
+            const skipPrechat = sessionStorage.getItem('cbn_prechat_skipped') === '1';
+            const needsPrechat = config.prechat_enabled && !skipPrechat && (!visitorInfo.name || !visitorInfo.email);
             if (needsPrechat) {
                 prechat.classList.remove('gone');
                 const tsEl = document.getElementById('cn-pcf-time');
@@ -979,6 +1030,12 @@
         function dismissPrechat() {
             const prechat = document.getElementById('cn-prechat');
             prechat.classList.add('gone');
+            const submitBtn = document.getElementById('cn-pcf-submit');
+            if (submitBtn && submitBtn.dataset && submitBtn.dataset.originalHtml) {
+                submitBtn.innerHTML = submitBtn.dataset.originalHtml;
+                submitBtn.disabled = false;
+                delete submitBtn.dataset.originalHtml;
+            }
             input.focus();
         }
 
@@ -1014,7 +1071,7 @@
 
             // Show loading state
             const submitBtn = document.getElementById('cn-pcf-submit');
-            const originalText = submitBtn.innerHTML;
+            if (!submitBtn.dataset.originalHtml) submitBtn.dataset.originalHtml = submitBtn.innerHTML;
             submitBtn.innerHTML = '<span>Starting Chat...</span>';
             submitBtn.disabled = true;
 
@@ -1033,6 +1090,7 @@
         });
 
         document.getElementById('cn-pcf-skip').addEventListener('click', () => {
+            sessionStorage.setItem('cbn_prechat_skipped', '1');
             dismissPrechat();
         });
 
@@ -1234,6 +1292,17 @@
         const row = document.createElement('div');
         row.className = `cn-row ${role}`;
 
+        if (role === 'bot') {
+            const avatar = document.createElement('div');
+            avatar.className = 'cn-msg-avatar';
+            if (config.company_logo_url) {
+                avatar.innerHTML = `<img src="${config.company_logo_url}" alt="${config.business_name}">`;
+            } else {
+                avatar.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path fill="currentColor" d="M12 2a7 7 0 0 0-7 7v3a6 6 0 0 0 6 6h2a6 6 0 0 0 6-6V9a7 7 0 0 0-7-7Zm-4 9a2 2 0 1 1 0-4 2 2 0 0 1 0 4Zm8 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4Zm-8.5 9.5A2.5 2.5 0 0 1 10 18h4a2.5 2.5 0 0 1 2.5 2.5c0 .83-.67 1.5-1.5 1.5H9c-.83 0-1.5-.67-1.5-1.5Z"/></svg>`;
+            }
+            row.appendChild(avatar);
+        }
+
         const col = document.createElement('div');
         col.className = 'cn-col';
 
@@ -1247,14 +1316,16 @@
             .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
             .replace(/\n/g, '<br>');
 
-        const timeStr = formatTime(new Date());
-        const checkSvg = role === 'user'
-            ? `<span class="cn-check cn-check-pending"><svg width="16" height="11" viewBox="0 0 16 11" fill="none"><path d="M11.07.66 4.88 6.85 2.41 4.38.94 5.85l3.94 3.94 7.66-7.66L11.07.66Z" fill="#667781"/><path d="M14.07.66 7.88 6.85l-.53-.53-1.47 1.47 2 2 7.66-7.66L14.07.66Z" fill="#667781"/></svg></span>`
-            : '';
-
-        let footer = `<span class="cn-ts-row"><span class="cn-ts">${timeStr}</span>${checkSvg}</span>`;
+        let footer = '';
+        if (config.message_meta_enabled) {
+            const timeStr = formatTime(new Date());
+            const checkSvg = role === 'user'
+                ? `<span class="cn-check cn-check-pending"><svg width="16" height="11" viewBox="0 0 16 11" fill="none"><path d="M11.07.66 4.88 6.85 2.41 4.38.94 5.85l3.94 3.94 7.66-7.66L11.07.66Z" fill="#667781"/><path d="M14.07.66 7.88 6.85l-.53-.53-1.47 1.47 2 2 7.66-7.66L14.07.66Z" fill="#667781"/></svg></span>`
+                : '';
+            footer = `<span class="cn-ts-row"><span class="cn-ts">${timeStr}</span>${checkSvg}</span>`;
+        }
         if (isError) {
-            footer += `<a href="#" class="cn-retry" style="margin-left:8px;color:#4318FF;font-size:.65rem;font-weight:600;text-decoration:underline;">Try again</a>`;
+            footer += `<a href="#" class="cn-retry" style="margin-left:8px;color:#4318FF;font-size:.75rem;font-weight:600;text-decoration:underline;">Try again</a>`;
         }
         bubble.innerHTML = `${content}${footer}`;
 
@@ -1284,15 +1355,40 @@
     }
 
     function applyConfig() {
+        const widgetRoot = document.getElementById('cn-widget');
+        if (widgetRoot) {
+            const primary = normalizeHexColor(config.primary_color) || '#075e54';
+            const primaryDark = darkenHex(primary, 0.12) || primary;
+            widgetRoot.style.setProperty('--cn-primary', primary);
+            widgetRoot.style.setProperty('--cn-primary-dark', primaryDark);
+            widgetRoot.style.setProperty('--cn-user-bubble', primary);
+        }
+
         const nameEl = document.querySelector('.cn-hdr-name');
         if (nameEl) nameEl.textContent = config.business_name;
 
         const footer = document.getElementById('cn-footer');
         if (footer && config.show_powered_by === false) footer.style.display = 'none';
 
-        if (config.bot_avatar_url) {
-            const av = document.querySelector('.cn-hdr-avatar');
-            if (av) av.innerHTML = `<img src="${config.bot_avatar_url}" alt="${config.bot_name}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;"><span class="cn-online-ring"></span>`;
+        const resolvedCompanyLogoUrl = normalizeAssetUrl(config.company_logo_url);
+        if (resolvedCompanyLogoUrl) config.company_logo_url = resolvedCompanyLogoUrl;
+        const resolvedBotAvatarUrl = normalizeAssetUrl(config.bot_avatar_url);
+        if (resolvedBotAvatarUrl) config.bot_avatar_url = resolvedBotAvatarUrl;
+
+        const headerAvatar = document.querySelector('.cn-hdr-avatar');
+        if (headerAvatar) {
+            if (config.company_logo_url) {
+                headerAvatar.innerHTML = `<img src="${config.company_logo_url}" alt="${config.business_name}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;"><span class="cn-online-ring"></span>`;
+            } else if (config.bot_avatar_url) {
+                headerAvatar.innerHTML = `<img src="${config.bot_avatar_url}" alt="${config.bot_name}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;"><span class="cn-online-ring"></span>`;
+            }
+        }
+
+        const prechatLogo = document.querySelector('.cn-pcf-company-logo');
+        if (prechatLogo) {
+            if (config.company_logo_url) {
+                prechatLogo.innerHTML = `<img src="${config.company_logo_url}" alt="${config.business_name}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">`;
+            }
         }
 
         const prechat = document.getElementById('cn-prechat');
@@ -1318,11 +1414,10 @@
                 }
                 messagesEl.style.setProperty('--watermark-position', position);
 
-                // Set the watermark image
-                messagesEl.style.backgroundImage = `url("${config.company_logo_url}"), url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3Cpattern id='p' width='40' height='40' patternUnits='userSpaceOnUse'%3E%3Cpath d='M20 2a2 2 0 110 4 2 2 0 010-4z' fill='%23d6cfc5' opacity='.35'/%3E%3Cpath d='M8 15l4-3 4 3' stroke='%23d6cfc5' fill='none' stroke-width='.8' opacity='.3'/%3E%3Ccircle cx='32' cy='28' r='1.5' fill='%23d6cfc5' opacity='.25'/%3E%3Cpath d='M2 32l3 3h-6z' fill='%23d6cfc5' opacity='.2'/%3E%3Crect x='28' y='8' width='4' height='3' rx='1' fill='%23d6cfc5' opacity='.2'/%3E%3Cpath d='M16 34a3 3 0 016 0' stroke='%23d6cfc5' fill='none' stroke-width='.7' opacity='.25'/%3E%3Cpath d='M35 18l2 4h-4z' fill='%23d6cfc5' opacity='.18'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width='200' height='200' fill='url(%23p)'/%3E%3C/svg%3E")`;
+                messagesEl.style.setProperty('--watermark-image', `url("${config.company_logo_url}")`);
             } else {
                 messagesEl.classList.remove('has-watermark');
-                messagesEl.style.backgroundImage = `url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3Cpattern id='p' width='40' height='40' patternUnits='userSpaceOnUse'%3E%3Cpath d='M20 2a2 2 0 110 4 2 2 0 010-4z' fill='%23d6cfc5' opacity='.35'/%3E%3Cpath d='M8 15l4-3 4 3' stroke='%23d6cfc5' fill='none' stroke-width='.8' opacity='.3'/%3E%3Ccircle cx='32' cy='28' r='1.5' fill='%23d6cfc5' opacity='.25'/%3E%3Cpath d='M2 32l3 3h-6z' fill='%23d6cfc5' opacity='.2'/%3E%3Crect x='28' y='8' width='4' height='3' rx='1' fill='%23d6cfc5' opacity='.2'/%3E%3Cpath d='M16 34a3 3 0 016 0' stroke='%23d6cfc5' fill='none' stroke-width='.7' opacity='.25'/%3E%3Cpath d='M35 18l2 4h-4z' fill='%23d6cfc5' opacity='.18'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width='200' height='200' fill='url(%23p)'/%3E%3C/svg%3E")`;
+                messagesEl.style.removeProperty('--watermark-image');
             }
         }
     }
