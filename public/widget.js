@@ -16,6 +16,10 @@
         bot_avatar_url: null,
         show_powered_by: true,
         prechat_enabled: false,
+        company_logo_url: null,
+        watermark_enabled: false,
+        watermark_opacity: 0.1,
+        watermark_position: 'center',
     };
     let conversationId = sessionStorage.getItem('cbn_conversation_id')
         ? parseInt(sessionStorage.getItem('cbn_conversation_id'), 10)
@@ -147,6 +151,27 @@
             scroll-behavior: smooth;
             background-color: #efeae2;
             background-image: url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3Cpattern id='p' width='40' height='40' patternUnits='userSpaceOnUse'%3E%3Cpath d='M20 2a2 2 0 110 4 2 2 0 010-4z' fill='%23d6cfc5' opacity='.35'/%3E%3Cpath d='M8 15l4-3 4 3' stroke='%23d6cfc5' fill='none' stroke-width='.8' opacity='.3'/%3E%3Ccircle cx='32' cy='28' r='1.5' fill='%23d6cfc5' opacity='.25'/%3E%3Cpath d='M2 32l3 3h-6z' fill='%23d6cfc5' opacity='.2'/%3E%3Crect x='28' y='8' width='4' height='3' rx='1' fill='%23d6cfc5' opacity='.2'/%3E%3Cpath d='M16 34a3 3 0 016 0' stroke='%23d6cfc5' fill='none' stroke-width='.7' opacity='.25'/%3E%3Cpath d='M35 18l2 4h-4z' fill='%23d6cfc5' opacity='.18'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width='200' height='200' fill='url(%23p)'/%3E%3C/svg%3E");
+            position: relative;
+        }
+
+        /* Watermark overlay */
+        #cn-messages::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        #cn-messages.has-watermark::before {
+            opacity: var(--watermark-opacity, 0.1);
+            background-position: var(--watermark-position, center);
+            background-repeat: no-repeat;
+            background-size: contain;
+            max-width: 200px;
+            max-height: 200px;
+            margin: auto;
         }
         #cn-messages::-webkit-scrollbar { width: 5px; }
         #cn-messages::-webkit-scrollbar-track { background: transparent; }
@@ -369,7 +394,7 @@
         #cn-scroll-btn.show { display: flex; align-items: center; gap: 4px; }
         #cn-scroll-btn:hover { background: #0a6e68; }
 
-        /* ── PRE-CHAT FORM — WhatsApp themed ── */
+        /* ── PRE-CHAT FORM — Enhanced UX ── */
         #cn-prechat {
             position: absolute; left: 0; right: 0; bottom: 0;
             top: 61px; /* sit below the header */
@@ -382,96 +407,204 @@
         }
         #cn-prechat.gone { display: none; }
 
+        /* Company branding header */
+        .cn-pcf-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px 16px 16px;
+            color: white;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .cn-pcf-header::before {
+            content: '';
+            position: absolute; top: -50%; left: -50%; right: -50%; bottom: -50%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: pulse 3s ease-in-out infinite;
+        }
+        .cn-pcf-company-logo {
+            width: 48px; height: 48px; border-radius: 50%;
+            background: rgba(255,255,255,0.2); border: 3px solid rgba(255,255,255,0.3);
+            margin: 0 auto 12px; display: flex; align-items: center; justify-content: center;
+            backdrop-filter: blur(10px);
+        }
+        .cn-pcf-company-name {
+            font-size: 1.1rem; font-weight: 700; margin-bottom: 4px;
+        }
+        .cn-pcf-company-tagline {
+            font-size: 0.8rem; opacity: 0.9; font-weight: 400;
+        }
+
+        /* Progress indicator */
+        .cn-pcf-progress {
+            display: flex; justify-content: center; gap: 8px; margin: 16px 0 8px;
+        }
+        .cn-pcf-progress-step {
+            width: 8px; height: 8px; border-radius: 50%;
+            background: rgba(255,255,255,0.3); transition: all 0.3s ease;
+        }
+        .cn-pcf-progress-step.active {
+            background: #00a884; transform: scale(1.2);
+        }
+        .cn-pcf-progress-step.completed {
+            background: #00a884;
+        }
+
         /* Scrollable inner content */
         .cn-pcf-scroll {
-            flex: 1; display: flex; flex-direction: column; padding: 12px 12px 16px; gap: 10px;
+            flex: 1; display: flex; flex-direction: column; padding: 0; gap: 0;
         }
 
-        /* Bot greeting bubble */
-        .cn-pcf-greeting {
-            align-self: flex-start; position: relative; max-width: 85%;
+        /* Step-based form */
+        .cn-pcf-step {
+            display: none; flex-direction: column; min-height: 100%;
+            animation: step-in 0.3s ease-out both;
         }
-        .cn-pcf-greeting::before {
-            content: '';
-            position: absolute; top: 0; left: -8px;
-            width: 0; height: 0;
-            border-top: 0px solid transparent;
-            border-bottom: 10px solid transparent;
-            border-right: 8px solid #fff;
-        }
-        .cn-pcf-greeting-bub {
-            background: #fff; border-radius: 0 8px 8px 8px;
-            padding: 8px 10px 10px; font-size: .855rem; color: #111b21; line-height: 1.5;
-            box-shadow: 0 1px 1px rgba(0,0,0,.06);
-        }
-        .cn-pcf-greeting-bub strong { font-weight: 700; }
-        .cn-pcf-greeting-ts {
-            font-size: .625rem; color: #667781; margin-top: 3px; text-align: right;
+        .cn-pcf-step.active { display: flex; }
+        @keyframes step-in {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Form card — user bubble style */
-        .cn-pcf-card {
-            align-self: flex-end; width: 88%; position: relative;
+        .cn-pcf-step-content {
+            padding: 20px 16px; flex: 1;
         }
-        .cn-pcf-card::before {
-            content: '';
-            position: absolute; top: 0; right: -8px;
-            width: 0; height: 0;
-            border-top: 0px solid transparent;
-            border-bottom: 10px solid transparent;
-            border-left: 8px solid #d9fdd3;
+
+        /* Enhanced form fields with floating labels */
+        .cn-pcf-field {
+            margin-bottom: 20px; position: relative;
         }
-        .cn-pcf-card-inner {
-            background: #d9fdd3; border-radius: 8px 0 8px 8px;
-            padding: 12px 12px 10px;
-            box-shadow: 0 1px 1px rgba(0,0,0,.06);
-        }
-        .cn-pcf-field { margin-bottom: 9px; }
-        .cn-pcf-label {
-            display: block; font-size: .68rem; font-weight: 700; color: #075e54;
-            margin-bottom: 4px; text-transform: uppercase; letter-spacing: .05em;
+        .cn-pcf-input-wrapper {
+            position: relative;
         }
         .cn-pcf-input {
-            width: 100%; padding: 8px 11px; border: 1.5px solid rgba(0,168,132,.25);
-            border-radius: 8px; font-size: .84rem; font-family: 'Plus Jakarta Sans',sans-serif;
-            color: #111b21; outline: none; transition: border-color .18s, box-shadow .18s;
-            background: rgba(255,255,255,.75);
+            width: 100%; padding: 16px 16px 8px; border: 2px solid rgba(0,168,132,.2);
+            border-radius: 12px; font-size: 1rem; font-family: 'Plus Jakarta Sans',sans-serif;
+            color: #111b21; outline: none; transition: all 0.3s ease;
+            background: rgba(255,255,255,.95); backdrop-filter: blur(10px);
+            box-sizing: border-box;
         }
         .cn-pcf-input:focus {
-            border-color: #00a884; box-shadow: 0 0 0 3px rgba(0,168,132,.18); background: #fff;
+            border-color: #00a884; box-shadow: 0 0 0 4px rgba(0,168,132,.1);
+            background: #fff;
         }
-        .cn-pcf-input.invalid { border-color: #ef4444; background: #fef2f2; }
-        .cn-pcf-input::placeholder { color: #8696a0; font-size: .82rem; }
+        .cn-pcf-input.invalid {
+            border-color: #ef4444; box-shadow: 0 0 0 4px rgba(239,68,68,.1);
+            background: #fef2f2;
+        }
+        .cn-pcf-input.filled { border-color: #00a884; }
+        .cn-pcf-input::placeholder { color: transparent; }
 
-        /* Submit button — WhatsApp send style */
+        /* Floating labels */
+        .cn-pcf-label {
+            position: absolute; top: 16px; left: 16px;
+            font-size: 1rem; color: #8696a0; pointer-events: none;
+            transition: all 0.3s ease; background: transparent;
+            padding: 0 4px;
+        }
+        .cn-pcf-input:focus + .cn-pcf-label,
+        .cn-pcf-input.filled + .cn-pcf-label {
+            top: 8px; left: 12px; font-size: 0.75rem; color: #00a884;
+            font-weight: 600; background: rgba(255,255,255,.95);
+        }
+        .cn-pcf-input.invalid + .cn-pcf-label {
+            color: #ef4444;
+        }
+
+        /* Field icons */
+        .cn-pcf-field-icon {
+            position: absolute; right: 16px; top: 50%; transform: translateY(-50%);
+            font-size: 1.2rem; color: #8696a0; pointer-events: none;
+        }
+        .cn-pcf-input:focus + .cn-pcf-label + .cn-pcf-field-icon {
+            color: #00a884;
+        }
+
+        /* Field hints and errors */
+        .cn-pcf-field-hint {
+            font-size: 0.75rem; color: #8696a0; margin-top: 4px;
+            padding-left: 4px; opacity: 0; transition: opacity 0.3s ease;
+        }
+        .cn-pcf-input:focus ~ .cn-pcf-field-hint { opacity: 1; }
+        .cn-pcf-field-error {
+            font-size: 0.75rem; color: #ef4444; margin-top: 4px;
+            padding-left: 4px; display: none;
+        }
+        .cn-pcf-input.invalid ~ .cn-pcf-field-error { display: block; }
+
+        /* Enhanced CTA buttons */
+        .cn-pcf-actions {
+            padding: 16px; background: rgba(255,255,255,.9);
+            backdrop-filter: blur(10px); border-top: 1px solid rgba(0,0,0,.05);
+        }
         .cn-pcf-btn-row {
-            display: flex; flex-direction: column; gap: 7px; margin-top: 10px;
+            display: flex; flex-direction: column; gap: 12px;
         }
-        .cn-pcf-btn {
-            width: 100%; padding: 9px 12px; border: none; border-radius: 20px;
-            background: #00a884;
-            color: #fff; font-size: .84rem; font-weight: 700;
+        .cn-pcf-btn.primary {
+            width: 100%; padding: 14px 20px; border: none; border-radius: 12px;
+            background: linear-gradient(135deg, #00a884 0%, #008f72 100%);
+            color: #fff; font-size: 1rem; font-weight: 700;
             font-family: 'Plus Jakarta Sans',sans-serif;
-            cursor: pointer;
-            display: flex; align-items: center; justify-content: center; gap: 6px;
-            transition: background .18s, transform .15s;
+            cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
+            transition: all 0.3s ease; box-shadow: 0 4px 12px rgba(0,168,132,.3);
+            position: relative; overflow: hidden;
         }
-        .cn-pcf-btn:hover { background: #008f72; transform: scale(1.01); }
-        .cn-pcf-btn:active { transform: scale(.97); }
-        .cn-pcf-skip {
-            width: 100%; padding: 7px 12px; border: 1.5px solid rgba(0,0,0,.15);
-            border-radius: 20px; background: rgba(255,255,255,.55);
-            font-size: .78rem; font-weight: 600; color: #54656f;
-            font-family: 'Plus Jakarta Sans',sans-serif;
-            cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px;
-            transition: background .17s, color .17s, border-color .17s;
+        .cn-pcf-btn.primary::before {
+            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s ease;
         }
-        .cn-pcf-skip:hover { background: rgba(255,255,255,.85); color: #111b21; border-color: rgba(0,0,0,.25); }
+        .cn-pcf-btn.primary:hover::before { left: 100%; }
+        .cn-pcf-btn.primary:hover {
+            transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,168,132,.4);
+        }
+        .cn-pcf-btn.primary:active { transform: translateY(0); }
+        .cn-pcf-btn.primary:disabled {
+            background: #a0aeb6; cursor: not-allowed; transform: none; box-shadow: none;
+        }
 
-        /* Privacy note inside form */
+        .cn-pcf-btn.secondary {
+            width: 100%; padding: 12px 20px; border: 2px solid rgba(0,168,132,.3);
+            border-radius: 12px; background: rgba(255,255,255,.8);
+            color: #00a884; font-size: 0.95rem; font-weight: 600;
+            font-family: 'Plus Jakarta Sans',sans-serif;
+            cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;
+            transition: all 0.3s ease;
+        }
+        .cn-pcf-btn.secondary:hover {
+            background: #00a884; color: white; border-color: #00a884;
+            transform: translateY(-1px);
+        }
+
+        /* Trust indicators */
+        .cn-pcf-trust {
+            display: flex; flex-direction: column; gap: 8px; margin-top: 16px;
+        }
+        .cn-pcf-trust-item {
+            display: flex; align-items: center; gap: 8px;
+            font-size: 0.75rem; color: #54656f;
+        }
+        .cn-pcf-trust-item svg {
+            width: 14px; height: 14px; flex-shrink: 0;
+        }
+
+        /* Privacy note */
         .cn-pcf-privacy {
-            font-size: .64rem; color: #667781; margin-top: 6px; line-height: 1.4;
-            display: flex; align-items: flex-start; gap: 5px;
+            font-size: 0.7rem; color: #8696a0; margin-top: 12px; line-height: 1.4;
+            display: flex; align-items: flex-start; gap: 6px; text-align: center;
+            padding: 8px; background: rgba(0,168,132,.05); border-radius: 8px;
+        }
+
+        /* Animations */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
         }
 
         /* ── ENCRYPTION NOTICE ── */
@@ -530,14 +663,17 @@
                 <div class="cn-drag-handle" style="display:none"><div class="cn-drag-pill"></div></div>
                 <div id="cn-header">
                     <div class="cn-hdr-avatar">
-                        <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
-                            <rect x="3" y="8" width="18" height="13" rx="4" fill="rgba(255,255,255,.85)"/>
-                            <circle cx="9" cy="14" r="1.5" fill="#075e54"/>
-                            <circle cx="15" cy="14" r="1.5" fill="#075e54"/>
-                            <rect x="10.5" y="4" width="3" height="4" rx="1.5" fill="rgba(255,255,255,.85)"/>
-                            <circle cx="12" cy="4" r="1.5" fill="rgba(255,255,255,.85)"/>
-                            <path stroke="rgba(255,255,255,.85)" stroke-width="1.5" stroke-linecap="round" d="M9 18h6"/>
-                        </svg>
+                        ${config.company_logo_url ?
+                            `<img src="${config.company_logo_url}" alt="${config.business_name}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">` :
+                            `<svg width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                <rect x="3" y="8" width="18" height="13" rx="4" fill="rgba(255,255,255,.85)"/>
+                                <circle cx="9" cy="14" r="1.5" fill="#075e54"/>
+                                <circle cx="15" cy="14" r="1.5" fill="#075e54"/>
+                                <rect x="10.5" y="4" width="3" height="4" rx="1.5" fill="rgba(255,255,255,.85)"/>
+                                <circle cx="12" cy="4" r="1.5" fill="rgba(255,255,255,.85)"/>
+                                <path stroke="rgba(255,255,255,.85)" stroke-width="1.5" stroke-linecap="round" d="M9 18h6"/>
+                            </svg>`
+                        }
                         <span class="cn-online-ring"></span>
                     </div>
                     <div class="cn-hdr-info">
@@ -560,51 +696,99 @@
 
                 <div id="cn-prechat" class="gone">
                     <div class="cn-pcf-scroll">
-                        <!-- Bot greeting bubble -->
-                        <div class="cn-pcf-greeting">
-                            <div class="cn-pcf-greeting-bub">
-                                Namaste! 👋 <strong>Before we start</strong>, share a bit about yourself so we can help you better.<br><br>All fields are optional — skip anytime.
+                        <!-- Company branding header -->
+                        <div class="cn-pcf-header">
+                            <div class="cn-pcf-company-logo">
+                                ${config.company_logo_url ?
+                                    `<img src="${config.company_logo_url}" alt="${config.business_name}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">` :
+                                    `<svg width="28" height="28" fill="none" viewBox="0 0 24 24">
+                                        <rect x="3" y="8" width="18" height="13" rx="4" fill="rgba(255,255,255,.9)"/>
+                                        <circle cx="9" cy="14" r="1.5" fill="#667eea"/>
+                                        <circle cx="15" cy="14" r="1.5" fill="#667eea"/>
+                                        <rect x="10.5" y="4" width="3" height="4" rx="1.5" fill="rgba(255,255,255,.9)"/>
+                                        <circle cx="12" cy="4" r="1.5" fill="rgba(255,255,255,.9)"/>
+                                        <path stroke="rgba(255,255,255,.9)" stroke-width="1.5" stroke-linecap="round" d="M9 18h6"/>
+                                    </svg>`
+                                }
                             </div>
-                            <div class="cn-pcf-greeting-ts" id="cn-pcf-time"></div>
+                            <div class="cn-pcf-company-name">${config.business_name}</div>
+                            <div class="cn-pcf-company-tagline">We're here to help you!</div>
                         </div>
 
-                        <!-- Form as user bubble -->
-                        <div class="cn-pcf-card">
-                            <div class="cn-pcf-card-inner">
+                        <!-- Enhanced form -->
+                        <div class="cn-pcf-step active">
+                            <div class="cn-pcf-step-content">
+                                <div style="text-align: center; margin-bottom: 24px;">
+                                    <h3 style="font-size: 1.2rem; font-weight: 700; color: #111b21; margin-bottom: 8px;">Tell us about yourself</h3>
+                                    <p style="font-size: 0.9rem; color: #54656f; line-height: 1.4;">This helps us provide personalized assistance</p>
+                                </div>
+
                                 <div class="cn-pcf-field">
-                                    <label class="cn-pcf-label">
-                                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;margin-right:3px"><path fill="#075e54" d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12Zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8Z"/></svg>
-                                        Your Name
-                                    </label>
-                                    <input id="cn-pcf-name" class="cn-pcf-input" type="text" placeholder="e.g. Ram Prasad" autocomplete="name">
+                                    <div class="cn-pcf-input-wrapper">
+                                        <input id="cn-pcf-name" class="cn-pcf-input" type="text" autocomplete="name">
+                                        <label class="cn-pcf-label">Full Name</label>
+                                        <div class="cn-pcf-field-icon">👤</div>
+                                    </div>
+                                    <div class="cn-pcf-field-hint">Enter your full name</div>
+                                    <div class="cn-pcf-field-error">Please enter a valid name</div>
                                 </div>
+
                                 <div class="cn-pcf-field">
-                                    <label class="cn-pcf-label">
-                                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;margin-right:3px"><path fill="#075e54" d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2Zm0 4-8 5-8-5V6l8 5 8-5v2Z"/></svg>
-                                        Email Address
-                                    </label>
-                                    <input id="cn-pcf-email" class="cn-pcf-input" type="email" placeholder="you@example.com" autocomplete="email">
+                                    <div class="cn-pcf-input-wrapper">
+                                        <input id="cn-pcf-email" class="cn-pcf-input" type="email" autocomplete="email">
+                                        <label class="cn-pcf-label">Email Address</label>
+                                        <div class="cn-pcf-field-icon">📧</div>
+                                    </div>
+                                    <div class="cn-pcf-field-hint">We'll use this to follow up if needed</div>
+                                    <div class="cn-pcf-field-error">Please enter a valid email address</div>
                                 </div>
+
                                 <div class="cn-pcf-field">
-                                    <label class="cn-pcf-label">
-                                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;margin-right:3px"><path fill="#075e54" d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1-9.4 0-17-7.6-17-17 0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8Z"/></svg>
-                                        Phone Number
-                                    </label>
-                                    <input id="cn-pcf-phone" class="cn-pcf-input" type="tel" placeholder="+977 98XXXXXXXX" autocomplete="tel">
+                                    <div class="cn-pcf-input-wrapper">
+                                        <input id="cn-pcf-phone" class="cn-pcf-input" type="tel" autocomplete="tel">
+                                        <label class="cn-pcf-label">Phone Number (Optional)</label>
+                                        <div class="cn-pcf-field-icon">📱</div>
+                                    </div>
+                                    <div class="cn-pcf-field-hint">For urgent support or callbacks</div>
+                                    <div class="cn-pcf-field-error">Please enter a valid phone number</div>
                                 </div>
-                                <div class="cn-pcf-privacy">
-                                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" style="flex-shrink:0;margin-top:1px"><path fill="#667781" d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2Zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2ZM9 8V6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9Z"/></svg>
-                                    Your info is private and used only to improve your support experience.
+
+                                <!-- Trust indicators -->
+                                <div class="cn-pcf-trust">
+                                    <div class="cn-pcf-trust-item">
+                                        <svg viewBox="0 0 24 24" fill="none">
+                                            <path fill="#00a884" d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2Zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2ZM9 8V6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9Z"/>
+                                        </svg>
+                                        <span>Your information is secure & encrypted</span>
+                                    </div>
+                                    <div class="cn-pcf-trust-item">
+                                        <svg viewBox="0 0 24 24" fill="none">
+                                            <path fill="#00a884" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                        </svg>
+                                        <span>Trusted by 1,200+ customers</span>
+                                    </div>
                                 </div>
+                            </div>
+
+                            <!-- Enhanced action buttons -->
+                            <div class="cn-pcf-actions">
                                 <div class="cn-pcf-btn-row">
-                                    <button class="cn-pcf-btn" id="cn-pcf-submit">
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path fill="#fff" d="M2.01 21 23 12 2.01 3 2 10l15 2-15 2z"/></svg>
-                                        Start Chat
+                                    <button class="cn-pcf-btn primary" id="cn-pcf-submit">
+                                        <span>Start My Conversation</span>
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                                            <path stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7"/>
+                                        </svg>
                                     </button>
-                                    <button class="cn-pcf-skip" id="cn-pcf-skip" type="button">
-                                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7"/></svg>
-                                        No thanks, just chat
+                                    <button class="cn-pcf-btn secondary" id="cn-pcf-skip" type="button">
+                                        <span>Continue as Guest</span>
                                     </button>
+                                </div>
+
+                                <div class="cn-pcf-privacy">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" style="flex-shrink:0;margin-top:1px">
+                                        <path fill="#8696a0" d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2Zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2ZM9 8V6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9Z"/>
+                                    </svg>
+                                    <span>Your data is private and used only to improve your support experience.</span>
                                 </div>
                             </div>
                         </div>
@@ -799,18 +983,44 @@
         }
 
         document.getElementById('cn-pcf-submit').addEventListener('click', () => {
-            const name  = document.getElementById('cn-pcf-name').value.trim();
-            let email = document.getElementById('cn-pcf-email').value.trim();
-            const phone = document.getElementById('cn-pcf-phone').value.trim();
-            const emailInput = document.getElementById('cn-pcf-email');
-            if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-                emailInput.style.borderColor = '#ef4444';
-                emailInput.focus();
+            // Validate all fields
+            const fields = ['cn-pcf-name', 'cn-pcf-email', 'cn-pcf-phone'];
+            let isValid = true;
+            let firstInvalidField = null;
+
+            fields.forEach(fieldId => {
+                const field = document.getElementById(fieldId);
+                if (!validateField(field)) {
+                    isValid = false;
+                    if (!firstInvalidField) firstInvalidField = field;
+                }
+            });
+
+            if (!isValid) {
+                firstInvalidField.focus();
+                // Add shake animation to the form
+                const form = document.querySelector('.cn-pcf-step-content');
+                form.style.animation = 'shake 0.5s ease-in-out';
+                setTimeout(() => form.style.animation = '', 500);
                 return;
             }
+
+            const name  = document.getElementById('cn-pcf-name').value.trim();
+            const email = document.getElementById('cn-pcf-email').value.trim();
+            const phone = document.getElementById('cn-pcf-phone').value.trim();
+
             visitorInfo = { name, email, phone };
             localStorage.setItem('cbn_visitor_info', JSON.stringify(visitorInfo));
-            dismissPrechat();
+
+            // Show loading state
+            const submitBtn = document.getElementById('cn-pcf-submit');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<span>Starting Chat...</span>';
+            submitBtn.disabled = true;
+
+            setTimeout(() => {
+                dismissPrechat();
+            }, 500);
         });
 
         document.getElementById('cn-pcf-email').addEventListener('blur', function() {
@@ -826,11 +1036,113 @@
             dismissPrechat();
         });
 
+        // Enhanced form interactions
         ['cn-pcf-name','cn-pcf-email','cn-pcf-phone'].forEach(id => {
-            document.getElementById(id).addEventListener('keydown', e => {
-                if (e.key === 'Enter') document.getElementById('cn-pcf-submit').click();
+            const input = document.getElementById(id);
+            const wrapper = input.parentElement;
+
+            // Floating label and validation
+            input.addEventListener('input', function() {
+                const label = wrapper.querySelector('.cn-pcf-label');
+                const icon = wrapper.querySelector('.cn-pcf-field-icon');
+
+                // Update filled state
+                if (this.value.trim()) {
+                    this.classList.add('filled');
+                } else {
+                    this.classList.remove('filled');
+                }
+
+                // Real-time validation
+                validateField(this);
+            });
+
+            input.addEventListener('focus', function() {
+                wrapper.classList.add('focused');
+            });
+
+            input.addEventListener('blur', function() {
+                wrapper.classList.remove('focused');
+                validateField(this);
+            });
+
+            input.addEventListener('keydown', e => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    const nextField = getNextField(input);
+                    if (nextField) {
+                        nextField.focus();
+                    } else {
+                        document.getElementById('cn-pcf-submit').click();
+                    }
+                }
             });
         });
+
+        function getNextField(currentInput) {
+            const fields = ['cn-pcf-name', 'cn-pcf-email', 'cn-pcf-phone'];
+            const currentIndex = fields.indexOf(currentInput.id);
+            if (currentIndex < fields.length - 1) {
+                return document.getElementById(fields[currentIndex + 1]);
+            }
+            return null;
+        }
+
+        function validateField(input) {
+            const value = input.value.trim();
+            const errorDiv = input.parentElement.querySelector('.cn-pcf-field-error');
+            const isRequired = input.id !== 'cn-pcf-phone'; // Phone is optional
+
+            input.classList.remove('invalid');
+
+            if (isRequired && !value) {
+                showFieldError(input, 'This field is required');
+                return false;
+            }
+
+            if (value) {
+                switch(input.id) {
+                    case 'cn-pcf-name':
+                        if (value.length < 2) {
+                            showFieldError(input, 'Name must be at least 2 characters');
+                            return false;
+                        }
+                        break;
+                    case 'cn-pcf-email':
+                        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                        if (!emailRegex.test(value)) {
+                            showFieldError(input, 'Please enter a valid email address');
+                            return false;
+                        }
+                        break;
+                    case 'cn-pcf-phone':
+                        if (value && !/^[\+]?[1-9][\d]{0,15}$/.test(value.replace(/[\s\-\(\)]/g, ''))) {
+                            showFieldError(input, 'Please enter a valid phone number');
+                            return false;
+                        }
+                        break;
+                }
+            }
+
+            hideFieldError(input);
+            return true;
+        }
+
+        function showFieldError(input, message) {
+            input.classList.add('invalid');
+            const errorDiv = input.parentElement.querySelector('.cn-pcf-field-error');
+            if (errorDiv) {
+                errorDiv.textContent = message;
+            }
+        }
+
+        function hideFieldError(input) {
+            input.classList.remove('invalid');
+            const errorDiv = input.parentElement.querySelector('.cn-pcf-field-error');
+            if (errorDiv) {
+                errorDiv.textContent = '';
+            }
+        }
 
         document.getElementById('cn-mic').addEventListener('click', () => {
             const t = document.createElement('div');
@@ -986,6 +1298,32 @@
         const prechat = document.getElementById('cn-prechat');
         if (prechat && !config.prechat_enabled) {
             prechat.style.display = 'none';
+        }
+
+        // Apply watermark settings
+        const messagesEl = document.getElementById('cn-messages');
+        if (messagesEl) {
+            if (config.watermark_enabled && config.company_logo_url) {
+                messagesEl.classList.add('has-watermark');
+                messagesEl.style.setProperty('--watermark-opacity', config.watermark_opacity || 0.1);
+
+                // Set watermark position
+                let position = 'center';
+                switch (config.watermark_position) {
+                    case 'top-left': position = 'left top'; break;
+                    case 'top-right': position = 'right top'; break;
+                    case 'bottom-left': position = 'left bottom'; break;
+                    case 'bottom-right': position = 'right bottom'; break;
+                    default: position = 'center';
+                }
+                messagesEl.style.setProperty('--watermark-position', position);
+
+                // Set the watermark image
+                messagesEl.style.backgroundImage = `url("${config.company_logo_url}"), url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3Cpattern id='p' width='40' height='40' patternUnits='userSpaceOnUse'%3E%3Cpath d='M20 2a2 2 0 110 4 2 2 0 010-4z' fill='%23d6cfc5' opacity='.35'/%3E%3Cpath d='M8 15l4-3 4 3' stroke='%23d6cfc5' fill='none' stroke-width='.8' opacity='.3'/%3E%3Ccircle cx='32' cy='28' r='1.5' fill='%23d6cfc5' opacity='.25'/%3E%3Cpath d='M2 32l3 3h-6z' fill='%23d6cfc5' opacity='.2'/%3E%3Crect x='28' y='8' width='4' height='3' rx='1' fill='%23d6cfc5' opacity='.2'/%3E%3Cpath d='M16 34a3 3 0 016 0' stroke='%23d6cfc5' fill='none' stroke-width='.7' opacity='.25'/%3E%3Cpath d='M35 18l2 4h-4z' fill='%23d6cfc5' opacity='.18'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width='200' height='200' fill='url(%23p)'/%3E%3C/svg%3E")`;
+            } else {
+                messagesEl.classList.remove('has-watermark');
+                messagesEl.style.backgroundImage = `url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3Cpattern id='p' width='40' height='40' patternUnits='userSpaceOnUse'%3E%3Cpath d='M20 2a2 2 0 110 4 2 2 0 010-4z' fill='%23d6cfc5' opacity='.35'/%3E%3Cpath d='M8 15l4-3 4 3' stroke='%23d6cfc5' fill='none' stroke-width='.8' opacity='.3'/%3E%3Ccircle cx='32' cy='28' r='1.5' fill='%23d6cfc5' opacity='.25'/%3E%3Cpath d='M2 32l3 3h-6z' fill='%23d6cfc5' opacity='.2'/%3E%3Crect x='28' y='8' width='4' height='3' rx='1' fill='%23d6cfc5' opacity='.2'/%3E%3Cpath d='M16 34a3 3 0 016 0' stroke='%23d6cfc5' fill='none' stroke-width='.7' opacity='.25'/%3E%3Cpath d='M35 18l2 4h-4z' fill='%23d6cfc5' opacity='.18'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width='200' height='200' fill='url(%23p)'/%3E%3C/svg%3E")`;
+            }
         }
     }
 

@@ -19,6 +19,10 @@ class WidgetConfig extends Model
         'bot_avatar_url',
         'show_powered_by',
         'prechat_enabled',
+        'company_logo_url',
+        'watermark_enabled',
+        'watermark_opacity',
+        'watermark_position',
     ];
 
     public function user(): BelongsTo
@@ -36,6 +40,10 @@ class WidgetConfig extends Model
             'bot_avatar_url' => null,
             'show_powered_by' => true,
             'prechat_enabled' => false,
+            'company_logo_url' => null,
+            'watermark_enabled' => false,
+            'watermark_opacity' => 0.1,
+            'watermark_position' => 'center',
         ];
     }
 }

@@ -34,6 +34,11 @@ class WidgetConfigController extends Controller
             'bot_name' => $config->bot_name,
             'bot_avatar_url' => $config->bot_avatar_url,
             'show_powered_by' => $config->show_powered_by,
+            'prechat_enabled' => $config->prechat_enabled,
+            'company_logo_url' => $config->company_logo_url,
+            'watermark_enabled' => $config->watermark_enabled,
+            'watermark_opacity' => $config->watermark_opacity,
+            'watermark_position' => $config->watermark_position,
         ]);
     }
 }
