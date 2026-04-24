@@ -11,7 +11,7 @@
     let config = {
         business_name: 'ChatBot Nepal',
         welcome_message: 'Namaste! How can I help you today?',
-        primary_color: '#10b981',
+        primary_color: '#006d77',
         bot_name: 'Assistant',
         bot_avatar_url: null,
         show_powered_by: true,
@@ -74,14 +74,14 @@
         #cn-widget {
             position: fixed; bottom: 24px; right: 24px; z-index: 999999;
             font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-            --cn-primary: #075e54;
-            --cn-primary-dark: #064a43;
+            --cn-primary: #006d77;
+            --cn-primary-dark: #00535b;
             --cn-surface: #ffffff;
-            --cn-text: #0f172a;
-            --cn-muted: #6b7280;
-            --cn-bot-bubble: #e8e8e8;
+            --cn-text: #191c1d;
+            --cn-muted: #3e494a;
+            --cn-bot-bubble: #e7e8e9;
             --cn-user-bubble: var(--cn-primary);
-            --cn-input-bg: #f3f4f6;
+            --cn-input-bg: #f3f4f5;
         }
 
         /* ── LAUNCHER — animated pill ── */
@@ -92,7 +92,7 @@
             display: flex; align-items: center;
             padding: 0 0 0 18px;
             gap: 0;
-            box-shadow: 0 10px 32px rgba(15,23,42,.20), 0 2px 10px rgba(0,0,0,.12);
+            box-shadow: 0 10px 32px rgba(0,109,119,.20), 0 2px 10px rgba(0,109,119,.12);
             outline: none; -webkit-tap-highlight-color: transparent;
             position: relative; overflow: hidden;
             will-change: transform;
@@ -161,7 +161,7 @@
             position: fixed; bottom: 96px; right: 24px;
             width: 370px; height: 570px; max-height: calc(100dvh - 110px);
             background: var(--cn-surface); border-radius: 22px;
-            box-shadow: 0 24px 64px rgba(15,23,42,.18), 0 6px 18px rgba(15,23,42,.08);
+            box-shadow: 0 32px 64px rgba(0,109,119,.12), 0 6px 18px rgba(0,109,119,.08);
             display: flex; flex-direction: column; overflow: hidden;
             opacity: 0; transform: translateY(14px) scale(.97);
             pointer-events: none;
@@ -291,11 +291,11 @@
         .cn-bubble ul { padding-left: 16px; margin-top: 4px; }
         .cn-bubble li { margin-bottom: 2px; }
 
-        /* Bot (incoming) bubble — white with left tail */
+        /* Bot (incoming) bubble — landing-page style */
         .cn-row.bot .cn-bubble {
             background: var(--cn-bot-bubble);
             color: var(--cn-text);
-            border-radius: 18px;
+            border-radius: 1rem 1rem 1rem 0.25rem;
             box-shadow: none;
         }
         .cn-row.bot .cn-col::before {
@@ -303,11 +303,11 @@
             content: none;
         }
 
-        /* User (outgoing) bubble — WhatsApp green with right tail */
+        /* User (outgoing) bubble — landing-page style */
         .cn-row.user .cn-bubble {
             background: var(--cn-user-bubble);
             color: #fff;
-            border-radius: 18px;
+            border-radius: 1rem 1rem 0.25rem 1rem;
             box-shadow: none;
         }
         .cn-row.user .cn-col::before {
@@ -323,7 +323,7 @@
             color: #fff;
             display: flex; align-items: center; justify-content: center;
             flex: 0 0 auto;
-            box-shadow: 0 2px 10px rgba(15,23,42,.10);
+            box-shadow: 0 2px 10px rgba(0,109,119,.10);
             overflow: hidden;
         }
         .cn-msg-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 999px; }
@@ -367,18 +367,18 @@
         }
         .cn-typing-bub {
             background: var(--cn-bot-bubble);
-            border-radius: 18px;
+            border-radius: 1rem 1rem 1rem 0.25rem;
             padding: 12px 15px; display: flex; gap: 5px; align-items: center;
             box-shadow: none;
         }
         .cn-dot {
             width: 7px; height: 7px; border-radius: 50%;
-            background: #9ca3af; animation: tdot 1.25s ease-in-out infinite;
+            background: #bec8ca; animation: tdot 1.25s ease-in-out infinite;
         }
         .cn-dot:nth-child(2) { animation-delay: .16s; }
         .cn-dot:nth-child(3) { animation-delay: .32s; }
         @keyframes tdot {
-            0%, 60%, 100% { transform: translateY(0); background: #9ca3af; }
+            0%, 60%, 100% { transform: translateY(0); background: #bec8ca; }
             30% { transform: translateY(-5px); background: var(--cn-primary); }
         }
 
@@ -396,7 +396,8 @@
             display: flex; align-items: flex-end;
             position: relative;
             padding: 8px 10px 8px 14px;
-            box-shadow: 0 2px 10px rgba(15,23,42,.06);
+            border: 1px solid rgba(190,200,202,.4);
+            box-shadow: 0 2px 10px rgba(0,109,119,.06);
         }
         #cn-input {
             flex: 1; background: transparent; border: none;
@@ -426,7 +427,7 @@
             color: #fff; cursor: pointer;
             display: flex; align-items: center; justify-content: center;
             transition: transform .15s ease, background .15s;
-            box-shadow: 0 8px 18px rgba(15,23,42,.12); outline: none; flex-shrink: 0;
+            box-shadow: 0 8px 18px rgba(0,109,119,.12); outline: none; flex-shrink: 0;
         }
         #cn-send:hover { background: var(--cn-primary-dark); transform: translateY(-1px); }
         #cn-send:active { transform: scale(.94); }
@@ -443,7 +444,7 @@
         /* ── FOOTER ── */
         .cn-footer {
             text-align: center; padding: 5px 0 7px;
-            font-size: .6rem; color: #8696a0; letter-spacing: .02em;
+            font-size: .6rem; color: var(--cn-muted); letter-spacing: .02em;
             background: var(--cn-surface);
         }
         .cn-footer a { color: var(--cn-primary); text-decoration: none; font-weight: 600; }
@@ -482,7 +483,7 @@
 
         /* Company branding header */
         .cn-pcf-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #006d77 0%, #00535b 100%);
             padding: 20px 16px 16px;
             color: white;
             text-align: center;
@@ -517,10 +518,10 @@
             background: rgba(255,255,255,0.3); transition: all 0.3s ease;
         }
         .cn-pcf-progress-step.active {
-            background: #00a884; transform: scale(1.2);
+            background: #006d77; transform: scale(1.2);
         }
         .cn-pcf-progress-step.completed {
-            background: #00a884;
+            background: #006d77;
         }
 
         /* Scrollable inner content */
@@ -551,21 +552,21 @@
             position: relative;
         }
         .cn-pcf-input {
-            width: 100%; padding: 16px 16px 8px; border: 2px solid rgba(0,168,132,.2);
+            width: 100%; padding: 16px 16px 8px; border: 2px solid rgba(0,109,119,.2);
             border-radius: 12px; font-size: 1rem; font-family: 'Plus Jakarta Sans',sans-serif;
             color: #111b21; outline: none; transition: all 0.3s ease;
             background: rgba(255,255,255,.95); backdrop-filter: blur(10px);
             box-sizing: border-box;
         }
         .cn-pcf-input:focus {
-            border-color: #00a884; box-shadow: 0 0 0 4px rgba(0,168,132,.1);
+            border-color: #006d77; box-shadow: 0 0 0 4px rgba(0,109,119,.1);
             background: #fff;
         }
         .cn-pcf-input.invalid {
             border-color: #ef4444; box-shadow: 0 0 0 4px rgba(239,68,68,.1);
             background: #fef2f2;
         }
-        .cn-pcf-input.filled { border-color: #00a884; }
+        .cn-pcf-input.filled { border-color: #006d77; }
         .cn-pcf-input::placeholder { color: transparent; }
 
         /* Floating labels */
@@ -577,7 +578,7 @@
         }
         .cn-pcf-input:focus + .cn-pcf-label,
         .cn-pcf-input.filled + .cn-pcf-label {
-            top: 8px; left: 12px; font-size: 0.75rem; color: #00a884;
+            top: 8px; left: 12px; font-size: 0.75rem; color: #006d77;
             font-weight: 600; background: rgba(255,255,255,.95);
         }
         .cn-pcf-input.invalid + .cn-pcf-label {
@@ -590,7 +591,7 @@
             font-size: 1.2rem; color: #8696a0; pointer-events: none;
         }
         .cn-pcf-input:focus + .cn-pcf-label + .cn-pcf-field-icon {
-            color: #00a884;
+            color: #006d77;
         }
 
         /* Field hints and errors */
@@ -615,11 +616,11 @@
         }
         .cn-pcf-btn.primary {
             width: 100%; padding: 14px 20px; border: none; border-radius: 12px;
-            background: linear-gradient(135deg, #00a884 0%, #008f72 100%);
+            background: linear-gradient(135deg, #006d77 0%, #00535b 100%);
             color: #fff; font-size: 1rem; font-weight: 700;
             font-family: 'Plus Jakarta Sans',sans-serif;
             cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
-            transition: all 0.3s ease; box-shadow: 0 4px 12px rgba(0,168,132,.3);
+            transition: all 0.3s ease; box-shadow: 0 4px 12px rgba(0,109,119,.3);
             position: relative; overflow: hidden;
         }
         .cn-pcf-btn.primary::before {
@@ -629,7 +630,7 @@
         }
         .cn-pcf-btn.primary:hover::before { left: 100%; }
         .cn-pcf-btn.primary:hover {
-            transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,168,132,.4);
+            transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,109,119,.4);
         }
         .cn-pcf-btn.primary:active { transform: translateY(0); }
         .cn-pcf-btn.primary:disabled {
@@ -637,15 +638,15 @@
         }
 
         .cn-pcf-btn.secondary {
-            width: 100%; padding: 12px 20px; border: 2px solid rgba(0,168,132,.3);
+            width: 100%; padding: 12px 20px; border: 2px solid rgba(0,109,119,.3);
             border-radius: 12px; background: rgba(255,255,255,.8);
-            color: #00a884; font-size: 0.95rem; font-weight: 600;
+            color: #006d77; font-size: 0.95rem; font-weight: 600;
             font-family: 'Plus Jakarta Sans',sans-serif;
             cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;
             transition: all 0.3s ease;
         }
         .cn-pcf-btn.secondary:hover {
-            background: #00a884; color: white; border-color: #00a884;
+            background: #006d77; color: white; border-color: #006d77;
             transform: translateY(-1px);
         }
 
@@ -665,7 +666,7 @@
         .cn-pcf-privacy {
             font-size: 0.7rem; color: #8696a0; margin-top: 12px; line-height: 1.4;
             display: flex; align-items: flex-start; gap: 6px; text-align: center;
-            padding: 8px; background: rgba(0,168,132,.05); border-radius: 8px;
+            padding: 8px; background: rgba(0,109,119,.05); border-radius: 8px;
         }
 
         /* Animations */
@@ -683,7 +684,7 @@
         /* ── ENCRYPTION NOTICE ── */
         .cn-encrypt-notice {
             align-self: center;
-            background: rgba(15,23,42,.04);
+            background: rgba(0,109,119,.05);
             border-radius: 12px;
             font-size: .72rem; font-weight: 500; color: var(--cn-muted);
             padding: 7px 12px;
@@ -773,8 +774,8 @@
                             `<img src="${config.company_logo_url}" alt="${config.business_name}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">` :
                             `<svg width="24" height="24" fill="none" viewBox="0 0 24 24">
                                 <rect x="3" y="8" width="18" height="13" rx="4" fill="rgba(255,255,255,.85)"/>
-                                <circle cx="9" cy="14" r="1.5" fill="#075e54"/>
-                                <circle cx="15" cy="14" r="1.5" fill="#075e54"/>
+                                <circle cx="9" cy="14" r="1.5" fill="#006d77"/>
+                                <circle cx="15" cy="14" r="1.5" fill="#006d77"/>
                                 <rect x="10.5" y="4" width="3" height="4" rx="1.5" fill="rgba(255,255,255,.85)"/>
                                 <circle cx="12" cy="4" r="1.5" fill="rgba(255,255,255,.85)"/>
                                 <path stroke="rgba(255,255,255,.85)" stroke-width="1.5" stroke-linecap="round" d="M9 18h6"/>
@@ -809,8 +810,8 @@
                                     `<img src="${config.company_logo_url}" alt="${config.business_name}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">` :
                                     `<svg width="28" height="28" fill="none" viewBox="0 0 24 24">
                                         <rect x="3" y="8" width="18" height="13" rx="4" fill="rgba(255,255,255,.9)"/>
-                                        <circle cx="9" cy="14" r="1.5" fill="#667eea"/>
-                                        <circle cx="15" cy="14" r="1.5" fill="#667eea"/>
+                                        <circle cx="9" cy="14" r="1.5" fill="#006d77"/>
+                                        <circle cx="15" cy="14" r="1.5" fill="#006d77"/>
                                         <rect x="10.5" y="4" width="3" height="4" rx="1.5" fill="rgba(255,255,255,.9)"/>
                                         <circle cx="12" cy="4" r="1.5" fill="rgba(255,255,255,.9)"/>
                                         <path stroke="rgba(255,255,255,.9)" stroke-width="1.5" stroke-linecap="round" d="M9 18h6"/>
@@ -863,13 +864,13 @@
                                 <div class="cn-pcf-trust">
                                     <div class="cn-pcf-trust-item">
                                         <svg viewBox="0 0 24 24" fill="none">
-                                            <path fill="#00a884" d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2Zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2ZM9 8V6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9Z"/>
+                                            <path fill="#006d77" d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2Zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2ZM9 8V6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9Z"/>
                                         </svg>
                                         <span>Your information is secure & encrypted</span>
                                     </div>
                                     <div class="cn-pcf-trust-item">
                                         <svg viewBox="0 0 24 24" fill="none">
-                                            <path fill="#00a884" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                            <path fill="#006d77" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                                         </svg>
                                         <span>Trusted by 1,200+ customers</span>
                                     </div>
@@ -1308,7 +1309,7 @@
 
         document.getElementById('cn-mic').addEventListener('click', () => {
             const t = document.createElement('div');
-            t.style.cssText = 'position:fixed;bottom:108px;right:28px;background:#075e54;color:#fff;font-family:Plus Jakarta Sans,sans-serif;font-size:.78rem;font-weight:600;padding:9px 16px;border-radius:10px;z-index:99999;pointer-events:none;animation:row-in .2s ease both;';
+            t.style.cssText = 'position:fixed;bottom:108px;right:28px;background:#006d77;color:#fff;font-family:Plus Jakarta Sans,sans-serif;font-size:.78rem;font-weight:600;padding:9px 16px;border-radius:10px;z-index:99999;pointer-events:none;animation:row-in .2s ease both;';
             t.textContent = 'Voice input coming soon!';
             document.body.appendChild(t);
             setTimeout(() => t.remove(), 2000);
@@ -1461,8 +1462,8 @@
     function applyConfig() {
         const widgetRoot = document.getElementById('cn-widget');
         if (widgetRoot) {
-            const primary = normalizeHexColor(config.primary_color) || '#075e54';
-            const primaryDark = darkenHex(primary, 0.12) || primary;
+            const primary = normalizeHexColor(config.primary_color) || '#006d77';
+            const primaryDark = darkenHex(primary, 0.24) || primary;
             widgetRoot.style.setProperty('--cn-primary', primary);
             widgetRoot.style.setProperty('--cn-primary-dark', primaryDark);
             widgetRoot.style.setProperty('--cn-user-bubble', primary);
@@ -1475,7 +1476,7 @@
         if (launcherTitle) launcherTitle.textContent = (config.business_name || 'Virtual') + ' Virtual Assistant';
 
         // Sync bot eye fill to primary color
-        const primary = normalizeHexColor(config.primary_color) || '#075e54';
+        const primary = normalizeHexColor(config.primary_color) || '#006d77';
         ['cn-eye-l','cn-eye-r'].forEach(id => {
             const el = document.getElementById(id);
             if (el) el.setAttribute('fill', primary);
