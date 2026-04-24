@@ -8,12 +8,12 @@ use App\Models\TokenUsageLog;
 use App\Models\User;
 use App\Models\WidgetSessionToken;
 use App\Services\ChatService;
-use App\Services\GrokService;
+use App\Services\GroqService;
 use Illuminate\Http\Request;
 
 class StreamChatController extends Controller
 {
-    private GrokService $grokService;
+    private GroqService $grokService;
 
     private ChatService $chatService;
 
@@ -29,7 +29,7 @@ class StreamChatController extends Controller
         '/\\[system\\]/i',
     ];
 
-    public function __construct(GrokService $grokService, ChatService $chatService)
+    public function __construct(GroqService $grokService, ChatService $chatService)
     {
         $this->grokService = $grokService;
         $this->chatService = $chatService;
@@ -130,9 +130,11 @@ class StreamChatController extends Controller
                     }
                     flush();
                 },
-                function () use (&$fullResponse, $client, $conversation, $startTime, $grokService, $chatService) {
+                function (array $usage) use (&$fullResponse, $client, $conversation, $startTime, $grokService, $chatService) {
                     $endTime   = microtime(true);
-                    $tokensOut = (int) ceil(strlen($fullResponse) / 4);
+                    $tokensIn  = $usage['input_tokens']  > 0 ? $usage['input_tokens']  : (int) ceil(strlen($fullResponse) / 4);
+                    $tokensOut = $usage['output_tokens'] > 0 ? $usage['output_tokens'] : (int) ceil(strlen($fullResponse) / 4);
+                    $total     = $usage['total_tokens']  > 0 ? $usage['total_tokens']  : ($tokensIn + $tokensOut);
 
                     if (! empty($fullResponse)) {
                         ChatMessage::create([
@@ -144,21 +146,21 @@ class StreamChatController extends Controller
                         ]);
                     }
 
-                    $cost     = $grokService->estimateCost($tokensOut);
+                    $cost     = $grokService->estimateCost($total);
                     $usageLog = TokenUsageLog::getOrCreateForToday($client->id);
-                    $usageLog->addUsage($tokensOut, $tokensOut, $cost);
+                    $usageLog->addUsage($tokensIn, $tokensOut, $cost);
 
                     $chatService->logGroqUsage($client->id, $conversation->id, [
-                        'input_tokens'  => $tokensOut,
+                        'input_tokens'  => $tokensIn,
                         'output_tokens' => $tokensOut,
-                        'tokens_used'   => $tokensOut * 2,
+                        'tokens_used'   => $total,
                         'model'         => $grokService->getModel(),
                     ]);
 
                     echo 'data: '.json_encode([
                         'type'            => 'done',
                         'conversation_id' => $conversation->id,
-                        'tokens'          => $tokensOut,
+                        'tokens'          => $total,
                         'time_ms'         => round(($endTime - $startTime) * 1000),
                     ])."\n\n";
                     if (ob_get_level()) {

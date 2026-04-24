@@ -105,12 +105,17 @@ class InvoiceService
 
     private function getPlanAmount(string $plan): float
     {
-        return match ($plan) {
-            'basic' => 1500,
-            'standard' => 3000,
-            'growth' => 5000,
-            'pro' => 10000,
-            default => 1500,
+        $key     = 'plan_price_'.$plan;
+        $default = match ($plan) {
+            'starter'    => 1000,
+            'basic'      => 1500,
+            'standard'   => 3000,
+            'growth'     => 5000,
+            'pro'        => 10000,
+            'enterprise' => 15000,
+            default      => 1500,
         };
+
+        return (float) Setting::get($key, $default);
     }
 }

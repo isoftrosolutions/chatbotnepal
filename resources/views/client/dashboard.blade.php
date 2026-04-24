@@ -7,14 +7,14 @@
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
     <!-- Chatbot Status -->
     <div class="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 flex items-center gap-4">
-        <div class="w-14 h-14 rounded-2xl flex items-center justify-center {{ $stats['chatbot_online'] ? 'bg-[#E2FFF3]' : 'bg-[#FEECEC]' }}">
+        <div id="bot-status-icon" class="w-14 h-14 rounded-2xl flex items-center justify-center {{ $stats['chatbot_online'] ? 'bg-[#E2FFF3]' : 'bg-[#FEECEC]' }}">
             <i data-lucide="bot" class="w-7 h-7 {{ $stats['chatbot_online'] ? 'text-[#05CD99]' : 'text-[#EE5D50]' }}"></i>
         </div>
         <div class="flex-1">
             <p class="text-[12px] text-gray-400 font-bold uppercase tracking-wider">Bot Status</p>
             <div class="flex items-center gap-1.5 mt-1">
-                <div class="w-2 h-2 rounded-full {{ $stats['chatbot_online'] ? 'bg-[#05CD99]' : 'bg-[#EE5D50]' }}"></div>
-                <h3 class="text-xl font-bold text-[#1B1B38]">{{ $stats['chatbot_online'] ? 'Online' : 'Offline' }}</h3>
+                <div id="bot-status-dot" class="w-2 h-2 rounded-full {{ $stats['chatbot_online'] ? 'bg-[#05CD99]' : 'bg-[#EE5D50]' }}"></div>
+                <h3 id="bot-status-text" class="text-xl font-bold text-[#1B1B38]">{{ $stats['chatbot_online'] ? 'Online' : 'Offline' }}</h3>
             </div>
         </div>
     </div>
@@ -26,7 +26,7 @@
         </div>
         <div class="flex-1">
             <p class="text-[12px] text-gray-400 font-bold uppercase tracking-wider">Total Chats</p>
-            <h3 class="text-2xl font-bold text-[#1B1B38] mt-1">{{ $stats['total_conversations'] }}</h3>
+            <h3 class="text-2xl font-bold text-[#1B1B38] mt-1" id="stat-total-conversations">{{ $stats['total_conversations'] }}</h3>
         </div>
     </div>
 
@@ -38,9 +38,9 @@
         <div class="flex-1">
             <p class="text-[12px] text-gray-400 font-bold uppercase tracking-wider">Today's Activity</p>
             <div class="flex items-center gap-2">
-                <h3 class="text-2xl font-bold text-[#1B1B38] mt-1">{{ $stats['messages_today'] }}</h3>
+                <h3 class="text-2xl font-bold text-[#1B1B38] mt-1" id="stat-messages-today">{{ $stats['messages_today'] }}</h3>
                 @if(isset($stats['messages_trend']))
-                <span class="text-xs font-semibold {{ $stats['messages_trend'] >= 0 ? 'text-[#05CD99]' : 'text-[#EE5D50]' }}">
+                <span id="stat-messages-trend" class="text-xs font-semibold {{ $stats['messages_trend'] >= 0 ? 'text-[#05CD99]' : 'text-[#EE5D50]' }}">
                     {{ $stats['messages_trend'] >= 0 ? '+' : '' }}{{ $stats['messages_trend'] }}%
                 </span>
                 @endif
@@ -71,19 +71,19 @@
                         <i data-lucide="cpu" class="w-5 h-5 text-[#4318FF]"></i>
                         <span class="text-sm font-medium text-gray-500">Total Tokens</span>
                     </div>
-                    <span class="text-lg font-bold text-[#1B1B38]">{{ number_format($usage['total_tokens']) }}</span>
+                    <span class="text-lg font-bold text-[#1B1B38]" id="stat-total-tokens">{{ number_format($usage['total_tokens']) }}</span>
                 </div>
                 <div class="flex items-center justify-between p-4 bg-[#F4F7FE] rounded-2xl">
                     <div class="flex items-center gap-3">
                         <i data-lucide="phone-call" class="w-5 h-5 text-[#05CD99]"></i>
                         <span class="text-sm font-medium text-gray-500">API Calls</span>
                     </div>
-                    <span class="text-lg font-bold text-[#1B1B38]">{{ $usage['total_api_calls'] }}</span>
+                    <span class="text-lg font-bold text-[#1B1B38]" id="stat-api-calls">{{ $usage['total_api_calls'] }}</span>
                 </div>
                 <div class="mt-4 p-4 border-t border-gray-50">
                     <div class="flex justify-between items-center">
                         <span class="text-sm font-bold text-gray-400">Est. Cost</span>
-                        <span class="text-xl font-black text-[#05CD99]">Rs. {{ number_format($usage['total_cost'], 2) }}</span>
+                        <span class="text-xl font-black text-[#05CD99]" id="stat-total-cost">Rs. {{ number_format($usage['total_cost'], 2) }}</span>
                     </div>
                 </div>
             </div>
@@ -124,7 +124,7 @@
                         <th class="px-8 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-wider text-right">Time</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-gray-50">
+                <tbody class="divide-y divide-gray-50" id="recent-conversations-tbody">
                     @forelse($recentConversations as $conv)
                     <tr class="hover:bg-gray-50 transition-colors">
                         <td class="px-8 py-4">
@@ -159,4 +159,77 @@
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    function pollDashboard() {
+        fetch(window.location.href, {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json',
+            }
+        })
+        .then(r => r.json())
+        .then(data => {
+            // Stat cards
+            const el = id => document.getElementById(id);
+
+            el('stat-total-conversations').textContent = data.stats.total_conversations;
+            el('stat-messages-today').textContent      = data.stats.messages_today;
+
+            if (el('stat-messages-trend')) {
+                const trend = data.stats.messages_trend;
+                el('stat-messages-trend').textContent  = (trend >= 0 ? '+' : '') + trend + '%';
+                el('stat-messages-trend').className    = 'text-xs font-semibold ' + (trend >= 0 ? 'text-[#05CD99]' : 'text-[#EE5D50]');
+            }
+
+            // Bot status
+            const online = data.stats.chatbot_online;
+            el('bot-status-icon').className = 'w-14 h-14 rounded-2xl flex items-center justify-center ' + (online ? 'bg-[#E2FFF3]' : 'bg-[#FEECEC]');
+            el('bot-status-dot').className  = 'w-2 h-2 rounded-full ' + (online ? 'bg-[#05CD99]' : 'bg-[#EE5D50]');
+            el('bot-status-text').textContent = online ? 'Online' : 'Offline';
+
+            // Token usage
+            el('stat-total-tokens').textContent = data.usage.total_tokens;
+            el('stat-api-calls').textContent    = data.usage.total_api_calls;
+            el('stat-total-cost').textContent   = 'Rs. ' + data.usage.total_cost;
+
+            // Recent conversations
+            const tbody = el('recent-conversations-tbody');
+            if (data.recent_conversations.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="3" class="px-8 py-12 text-center text-gray-400 font-medium">No conversations recorded yet</td></tr>';
+                return;
+            }
+            tbody.innerHTML = data.recent_conversations.map(c => `
+                <tr class="hover:bg-gray-50 transition-colors">
+                    <td class="px-8 py-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-indigo-50 rounded-xl flex items-center justify-center text-indigo-600 font-bold text-xs">
+                                ${c.visitor_initial}
+                            </div>
+                            <div>
+                                <div class="text-sm font-bold text-[#1B1B38]">${c.visitor_name}</div>
+                                <div class="text-[10px] text-gray-400 font-medium">${c.visitor_email}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-8 py-4">
+                        <div class="flex items-center gap-2">
+                            <span class="px-2.5 py-1 bg-indigo-50 text-indigo-600 rounded-lg text-[10px] font-bold uppercase tracking-wider">
+                                ${c.message_count} Messages
+                            </span>
+                        </div>
+                    </td>
+                    <td class="px-8 py-4 text-right">
+                        <span class="text-sm text-gray-400 font-medium">${c.time}</span>
+                    </td>
+                </tr>
+            `).join('');
+        })
+        .catch(() => {});
+    }
+
+    setInterval(pollDashboard, 30000);
+});
+</script>
 @endsection

@@ -12,14 +12,29 @@ use Illuminate\View\View;
 
 class ClientController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
-        $clients = User::where('role', 'client')
-            ->with('widgetConfig')
-            ->orderBy('created_at', 'desc')
-            ->paginate(15);
+        $query = User::where('role', 'client')->with('widgetConfig');
 
-        return view('admin.clients.index', compact('clients'));
+        if ($search = $request->get('search')) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%")
+                  ->orWhere('company_name', 'like', "%{$search}%");
+            });
+        }
+
+        $clients = $query->orderBy('created_at', 'desc')->paginate(15)->withQueryString();
+
+        // Real counts from DB — not from the paginated collection
+        $clientStats = [
+            'total'    => User::where('role', 'client')->count(),
+            'active'   => User::where('role', 'client')->where('status', 'active')->count(),
+            'enabled'  => User::where('role', 'client')->where('chatbot_enabled', true)->count(),
+            'inactive' => User::where('role', 'client')->where('status', '!=', 'active')->count(),
+        ];
+
+        return view('admin.clients.index', compact('clients', 'clientStats'));
     }
 
     public function create(): View

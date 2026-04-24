@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Log;
 
 class ChatService
 {
-    private GrokService $grokService;
+    private GroqService $grokService;
 
     private const SYSTEM_TOKEN_BUDGET = 1500;
     private const TOTAL_TOKEN_BUDGET  = 4000;
@@ -23,7 +23,7 @@ class ChatService
     private const CHARS_PER_TOKEN     = 4;
     private const KB_PRIORITY         = ['faq' => 1, 'services' => 2, 'contact' => 3, 'about' => 4, 'custom' => 5];
 
-    public function __construct(GrokService $grokService)
+    public function __construct(GroqService $grokService)
     {
         $this->grokService = $grokService;
     }

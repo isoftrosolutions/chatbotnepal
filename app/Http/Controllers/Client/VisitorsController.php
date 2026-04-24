@@ -4,11 +4,12 @@ namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use App\Models\Visitor;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class VisitorsController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request): \Illuminate\View\View|JsonResponse
     {
         $user  = auth()->user();
         $query = Visitor::where('user_id', $user->id);
@@ -32,9 +33,19 @@ class VisitorsController extends Controller
             'conversations as total_conversations' => fn ($q) => $q->where('user_id', $user->id),
         ])->paginate(24);
 
-        $totalVisitors  = Visitor::where('user_id', $user->id)->count();
-        $knownVisitors  = Visitor::where('user_id', $user->id)->whereNotNull('name')->count();
-        $todayVisitors  = Visitor::where('user_id', $user->id)->whereDate('last_seen_at', today())->count();
+        $totalVisitors = Visitor::where('user_id', $user->id)->count();
+        $knownVisitors = Visitor::where('user_id', $user->id)->whereNotNull('name')->count();
+        $todayVisitors = Visitor::where('user_id', $user->id)->whereDate('last_seen_at', today())->count();
+
+        if ($request->ajax()) {
+            return response()->json([
+                'html'         => view('client.partials.visitors-grid', compact('visitors'))->render(),
+                'pagination'   => $visitors->appends($request->query())->links()->toHtml(),
+                'totalVisitors'=> number_format($totalVisitors),
+                'knownVisitors'=> number_format($knownVisitors),
+                'todayVisitors'=> number_format($todayVisitors),
+            ]);
+        }
 
         return view('client.visitors', compact('visitors', 'totalVisitors', 'knownVisitors', 'todayVisitors'));
     }

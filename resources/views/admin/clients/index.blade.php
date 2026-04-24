@@ -5,21 +5,15 @@
 @section('content')
 <div class="space-y-6">
 
-  {{-- Stats row --}}
+  {{-- Stats row — counts from DB, not the paginated page --}}
   <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-    @php
-      $total    = $clients->total();
-      $active   = $clients->getCollection()->where('status','active')->count();
-      $enabled  = $clients->getCollection()->where('chatbot_enabled',true)->count();
-      $inactive = $clients->getCollection()->where('status','!=','active')->count();
-    @endphp
     <div class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 flex items-center gap-4">
       <div class="w-12 h-12 bg-[#F4F7FE] rounded-xl flex items-center justify-center shrink-0">
         <i data-lucide="users" class="w-5 h-5 text-[#4318FF]"></i>
       </div>
       <div>
         <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Total Clients</p>
-        <p class="text-2xl font-extrabold text-[#1B1B38]">{{ $total }}</p>
+        <p class="text-2xl font-extrabold text-[#1B1B38]">{{ $clientStats['total'] }}</p>
       </div>
     </div>
     <div class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 flex items-center gap-4">
@@ -28,7 +22,7 @@
       </div>
       <div>
         <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Active</p>
-        <p class="text-2xl font-extrabold text-[#1B1B38]">{{ $active }}</p>
+        <p class="text-2xl font-extrabold text-[#1B1B38]">{{ $clientStats['active'] }}</p>
       </div>
     </div>
     <div class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 flex items-center gap-4">
@@ -37,7 +31,7 @@
       </div>
       <div>
         <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Bots On</p>
-        <p class="text-2xl font-extrabold text-[#1B1B38]">{{ $enabled }}</p>
+        <p class="text-2xl font-extrabold text-[#1B1B38]">{{ $clientStats['enabled'] }}</p>
       </div>
     </div>
     <div class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 flex items-center gap-4">
@@ -46,7 +40,7 @@
       </div>
       <div>
         <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Inactive</p>
-        <p class="text-2xl font-extrabold text-[#1B1B38]">{{ $inactive }}</p>
+        <p class="text-2xl font-extrabold text-[#1B1B38]">{{ $clientStats['inactive'] }}</p>
       </div>
     </div>
   </div>
@@ -57,12 +51,14 @@
     <div class="p-6 border-b border-gray-50 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
       <h3 class="text-lg font-bold text-[#1B1B38]">All Clients</h3>
       <div class="flex items-center gap-3 w-full sm:w-auto">
-        {{-- Search --}}
-        <div class="relative flex-1 sm:flex-none">
+        {{-- Search — server-side, works across all pages --}}
+        <form method="GET" action="{{ route('admin.clients.index') }}" class="relative flex-1 sm:flex-none" id="client-search-form">
           <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none"></i>
-          <input id="client-search" type="text" placeholder="Search clients…"
-            class="pl-9 pr-4 py-2.5 text-sm bg-[#F4F7FE] border-none rounded-xl w-full sm:w-56 focus:ring-2 focus:ring-[#4318FF]/20 outline-none">
-        </div>
+          <input id="client-search" name="search" type="text"
+                 value="{{ request('search') }}"
+                 placeholder="Search clients…"
+                 class="pl-9 pr-4 py-2.5 text-sm bg-[#F4F7FE] border-none rounded-xl w-full sm:w-56 focus:ring-2 focus:ring-[#4318FF]/20 outline-none">
+        </form>
         <a href="{{ route('admin.clients.create') }}"
            class="bg-[#4318FF] text-white px-5 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2 shadow-[0_10px_20px_-5px_rgba(67,24,255,0.3)] hover:scale-[1.02] active:scale-[0.98] transition-all whitespace-nowrap">
           <i data-lucide="plus" class="w-4 h-4"></i>
@@ -93,7 +89,7 @@
             $color    = $colors[$client->id % count($colors)];
             $kbCount  = $client->knowledgeBases()->count();
           @endphp
-          <tr class="hover:bg-[#F4F7FE]/40 transition-colors client-row" data-name="{{ strtolower($client->name) }} {{ strtolower($client->company_name ?? '') }}">
+          <tr class="hover:bg-[#F4F7FE]/40 transition-colors">
             <td class="px-6 py-4">
               <div class="flex items-center gap-3">
                 <div class="w-10 h-10 {{ $color }} rounded-xl flex items-center justify-center text-white font-bold text-sm shrink-0">
@@ -212,17 +208,13 @@
 </div>
 
 <script>
-// Live client search
-document.getElementById('client-search').addEventListener('input', function() {
-  var q = this.value.toLowerCase().trim();
-  var visibleCount = 0;
-  document.querySelectorAll('.client-row').forEach(function(row) {
-    var match = row.dataset.name.includes(q);
-    row.style.display = match ? '' : 'none';
-    if (match) visibleCount++;
-  });
-  var emptyMsg = document.getElementById('no-results-msg');
-  if (emptyMsg) emptyMsg.style.display = visibleCount === 0 ? '' : 'none';
+// Debounced server-side search — works across all pages
+let clientSearchTimeout;
+document.getElementById('client-search').addEventListener('input', function () {
+  clearTimeout(clientSearchTimeout);
+  clientSearchTimeout = setTimeout(() => {
+    document.getElementById('client-search-form').submit();
+  }, 400);
 });
 </script>
 @endsection

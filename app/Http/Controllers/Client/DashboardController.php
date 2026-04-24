@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Client;
 use App\Http\Controllers\Controller;
 use App\Services\TokenUsageService;
 use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class DashboardController extends Controller
@@ -16,7 +18,7 @@ class DashboardController extends Controller
         $this->tokenUsageService = $tokenUsageService;
     }
 
-    public function index(): View
+    public function index(Request $request): View|JsonResponse
     {
         $user = auth()->user();
 
@@ -58,6 +60,30 @@ class DashboardController extends Controller
             ->get();
 
         $usage = $this->tokenUsageService->getUserUsage($user);
+
+        if ($request->ajax()) {
+            return response()->json([
+                'stats' => [
+                    'chatbot_online'           => $stats['chatbot_online'],
+                    'total_conversations'      => $stats['total_conversations'],
+                    'conversations_this_month' => $stats['conversations_this_month'],
+                    'messages_today'           => $stats['messages_today'],
+                    'messages_trend'           => $stats['messages_trend'],
+                ],
+                'usage' => [
+                    'total_tokens'   => number_format($usage['total_tokens']),
+                    'total_api_calls'=> $usage['total_api_calls'],
+                    'total_cost'     => number_format($usage['total_cost'], 2),
+                ],
+                'recent_conversations' => $recentConversations->map(fn($conv) => [
+                    'visitor_initial' => strtoupper(substr($conv->visitor_name ?? 'A', 0, 1)),
+                    'visitor_name'    => $conv->visitor_name ?? 'Anonymous Visitor',
+                    'visitor_email'   => $conv->visitor_email ?? 'No email provided',
+                    'message_count'   => $conv->messages->count(),
+                    'time'            => $conv->created_at->diffForHumans(),
+                ]),
+            ]);
+        }
 
         return view('client.dashboard', compact('stats', 'recentConversations', 'usage'));
     }
