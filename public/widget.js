@@ -84,42 +84,70 @@
             --cn-input-bg: #f3f4f6;
         }
 
-        /* ── LAUNCHER BUTTON ── */
+        /* ── LAUNCHER — animated pill ── */
         #cn-launcher {
-            width: 58px; height: 58px; border-radius: 50%;
+            border-radius: 999px;
             background: var(--cn-primary);
             border: none; cursor: pointer;
-            display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 10px 28px rgba(15,23,42,.16), 0 2px 8px rgba(0,0,0,.12);
-            transition: transform .25s cubic-bezier(.34,1.56,.64,1), box-shadow .22s ease;
+            display: flex; align-items: center;
+            padding: 0 0 0 18px;
+            gap: 0;
+            box-shadow: 0 10px 32px rgba(15,23,42,.20), 0 2px 10px rgba(0,0,0,.12);
             outline: none; -webkit-tap-highlight-color: transparent;
-            position: relative;
+            position: relative; overflow: hidden;
+            will-change: transform;
+            height: 58px;
         }
-        #cn-launcher:hover {
-            transform: scale(1.10);
-            box-shadow: 0 14px 40px rgba(15,23,42,.18), 0 2px 10px rgba(0,0,0,.15);
+
+        /* Text section (left) */
+        #cn-l-text-wrap {
+            display: flex; flex-direction: column; justify-content: center;
+            gap: 1px; padding-right: 14px;
+            overflow: hidden;
         }
-        #cn-launcher:active { transform: scale(.95); }
-        #cn-launcher::before {
-            content: ''; position: absolute; inset: -6px; border-radius: 50%;
-            border: 2.5px solid var(--cn-primary);
-            opacity: .28;
-            animation: launcher-ring 2.5s ease-out infinite;
+        #cn-l-greeting {
+            font-size: .72rem; font-weight: 700; color: rgba(255,255,255,.80);
+            letter-spacing: .02em; line-height: 1; white-space: nowrap;
         }
-        @keyframes launcher-ring {
-            0% { opacity: .9; transform: scale(.88); }
-            70% { opacity: 0; transform: scale(1.28); }
-            100% { opacity: 0; transform: scale(1.28); }
+        #cn-l-title {
+            font-size: .86rem; font-weight: 700; color: #fff;
+            line-height: 1.2; white-space: nowrap;
         }
-        .cn-l-icon {
-            transition: transform .3s cubic-bezier(.4,0,.2,1), opacity .25s ease;
-            position: absolute;
+
+        /* Bot avatar section (right) */
+        #cn-l-bot-wrap {
+            width: 58px; height: 58px;
+            border-radius: 50%;
+            background: rgba(0,0,0,.15);
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0; position: relative;
+            will-change: transform;
         }
-        .cn-l-icon.hidden { transform: rotate(80deg) scale(.5); opacity: 0; pointer-events: none; }
+        /* pulse ring behind bot wrap */
+        #cn-l-bot-wrap::before {
+            content: ''; position: absolute; inset: -5px; border-radius: 50%;
+            border: 2px solid rgba(255,255,255,.4);
+            animation: cn-pill-ring 2.8s ease-out infinite;
+        }
+        @keyframes cn-pill-ring {
+            0%   { transform: scale(.9); opacity: .8; }
+            70%  { transform: scale(1.3); opacity: 0; }
+            100% { transform: scale(1.3); opacity: 0; }
+        }
+
+        /* Close X (shown only when window is open) */
+        #cn-l-close-icon {
+            display: none;
+            align-items: center; justify-content: center;
+            width: 58px; height: 58px;
+            border-radius: 50%;
+            background: rgba(0,0,0,.18);
+            flex-shrink: 0;
+        }
 
         /* Badge */
         #cn-badge {
-            position: absolute; top: 1px; right: 1px; min-width: 18px; height: 18px;
+            position: absolute; top: 4px; right: 4px; min-width: 18px; height: 18px;
             background: #ef4444; border-radius: 999px;
             border: 2.5px solid #fff;
             font-size: 10px; font-weight: 700; color: #fff;
@@ -695,12 +723,45 @@
         container.id = 'cn-widget';
         container.innerHTML = `
             <button id="cn-launcher" aria-label="Open chat">
-                <svg class="cn-l-icon" id="li-chat" width="26" height="26" fill="none" viewBox="0 0 24 24">
-                    <path fill="#fff" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347ZM12.05 21.785h-.013A9.872 9.872 0 0 1 6.7 20.15l-.383-.228-3.971 1.042 1.06-3.873-.25-.397A9.86 9.86 0 0 1 1.63 12.05C1.63 6.315 6.315 1.63 12.05 1.63c2.772 0 5.378 1.08 7.336 3.04a10.3 10.3 0 0 1 3.034 7.348c-.003 5.736-4.688 10.42-10.37 10.42v-.653Z"/>
-                </svg>
-                <svg class="cn-l-icon hidden" id="li-close" width="20" height="20" fill="none" viewBox="0 0 24 24">
-                    <path stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" d="M18 6 6 18M6 6l12 12"/>
-                </svg>
+                <!-- Left: text -->
+                <div id="cn-l-text-wrap">
+                    <span id="cn-l-greeting">💬 Hi there!</span>
+                    <span id="cn-l-title">Virtual Assistant</span>
+                </div>
+
+                <!-- Right: animated bot avatar -->
+                <div id="cn-l-bot-wrap">
+                    <svg id="cn-bot-svg" width="36" height="36" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg" style="overflow:visible">
+                        <!-- Antenna stem -->
+                        <rect x="20.5" y="1" width="3" height="8" rx="1.5" fill="rgba(255,255,255,0.85)" id="cn-ant-stem"/>
+                        <!-- Antenna tip (glows) -->
+                        <circle id="cn-ant-tip" cx="22" cy="1" r="4" fill="white"/>
+                        <!-- Head -->
+                        <rect x="5" y="9" width="34" height="26" rx="9" fill="rgba(255,255,255,0.95)"/>
+                        <!-- Left ear -->
+                        <rect x="1" y="16" width="5" height="10" rx="2.5" fill="rgba(255,255,255,0.75)"/>
+                        <!-- Right ear -->
+                        <rect x="38" y="16" width="5" height="10" rx="2.5" fill="rgba(255,255,255,0.75)"/>
+                        <!-- Left eye (blinks via GSAP) -->
+                        <ellipse id="cn-eye-l" cx="14" cy="21" rx="4.5" ry="4.5"/>
+                        <!-- Left eye shine -->
+                        <circle cx="15.8" cy="19.2" r="1.6" fill="white"/>
+                        <!-- Right eye (blinks via GSAP) -->
+                        <ellipse id="cn-eye-r" cx="30" cy="21" rx="4.5" ry="4.5"/>
+                        <!-- Right eye shine -->
+                        <circle cx="31.8" cy="19.2" r="1.6" fill="white"/>
+                        <!-- Smile -->
+                        <path id="cn-smile" d="M14 31 Q22 37 30 31" stroke="rgba(255,255,255,0.9)" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+                    </svg>
+                </div>
+
+                <!-- Close icon (visible only when window is open) -->
+                <div id="cn-l-close-icon" aria-hidden="true">
+                    <svg width="22" height="22" fill="none" viewBox="0 0 24 24">
+                        <path stroke="#fff" stroke-width="2.5" stroke-linecap="round" d="M18 6 6 18M6 6l12 12"/>
+                    </svg>
+                </div>
+
                 <span id="cn-badge">1</span>
             </button>
 
@@ -937,8 +998,6 @@
     ───────────────────────────────────────── */
     function setupEvents() {
         const launcher = document.getElementById('cn-launcher');
-        const liChat   = document.getElementById('li-chat');
-        const liClose  = document.getElementById('li-close');
         const badge    = document.getElementById('cn-badge');
         const win      = document.getElementById('cn-window');
         const closeBtn = document.getElementById('cn-close');
@@ -946,12 +1005,58 @@
         const input    = document.getElementById('cn-input');
         const sendBtn  = document.getElementById('cn-send');
 
+        const textWrap  = document.getElementById('cn-l-text-wrap');
+        const botWrap   = document.getElementById('cn-l-bot-wrap');
+        const closeIcon = document.getElementById('cn-l-close-icon');
+
+        function launcherToClose() {
+            if (window.gsap) {
+                gsap.to(textWrap, { opacity: 0, x: -12, duration: 0.22, ease: 'power2.in',
+                    onComplete: () => { textWrap.style.display = 'none'; }
+                });
+                gsap.to(botWrap, { opacity: 0, scale: 0.6, duration: 0.18, ease: 'power2.in',
+                    onComplete: () => {
+                        botWrap.style.display = 'none';
+                        closeIcon.style.display = 'flex';
+                        gsap.from(closeIcon, { scale: 0, rotation: -90, duration: 0.35, ease: 'back.out(2)' });
+                    }
+                });
+            } else {
+                textWrap.style.display = 'none';
+                botWrap.style.display = 'none';
+                closeIcon.style.display = 'flex';
+            }
+        }
+
+        function launcherToBot() {
+            if (window.gsap) {
+                gsap.to(closeIcon, { scale: 0, rotation: 90, duration: 0.2, ease: 'power2.in',
+                    onComplete: () => {
+                        closeIcon.style.display = 'none';
+                        textWrap.style.display = 'flex';
+                        botWrap.style.display  = 'flex';
+                        gsap.fromTo(textWrap,
+                            { opacity: 0, x: -12 },
+                            { opacity: 1, x: 0, duration: 0.3, ease: 'power2.out' }
+                        );
+                        gsap.fromTo(botWrap,
+                            { opacity: 0, scale: 0.6 },
+                            { opacity: 1, scale: 1, duration: 0.35, ease: 'back.out(1.7)' }
+                        );
+                    }
+                });
+            } else {
+                closeIcon.style.display = 'none';
+                textWrap.style.display = 'flex';
+                botWrap.style.display  = 'flex';
+            }
+        }
+
         function openChat() {
             isWindowOpen = true;
             win.classList.add('open');
-            liChat.classList.add('hidden');
-            liClose.classList.remove('hidden');
             badge.classList.add('gone');
+            launcherToClose();
             if (window.innerWidth <= 480) {
                 document.querySelector('.cn-drag-handle').style.display = 'flex';
             }
@@ -975,10 +1080,9 @@
         function closeChat() {
             isWindowOpen = false;
             win.classList.remove('open');
-            liChat.classList.remove('hidden');
-            liClose.classList.add('hidden');
             badge.classList.remove('gone');
             badge.textContent = '1';
+            launcherToBot();
             document.querySelector('.cn-drag-handle').style.display = 'none';
         }
 
@@ -1367,6 +1471,18 @@
         const nameEl = document.querySelector('.cn-hdr-name');
         if (nameEl) nameEl.textContent = config.business_name;
 
+        const launcherTitle = document.getElementById('cn-l-title');
+        if (launcherTitle) launcherTitle.textContent = (config.business_name || 'Virtual') + ' Virtual Assistant';
+
+        // Sync bot eye fill to primary color
+        const primary = normalizeHexColor(config.primary_color) || '#075e54';
+        ['cn-eye-l','cn-eye-r'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.setAttribute('fill', primary);
+        });
+        const smile = document.getElementById('cn-smile');
+        if (smile) smile.setAttribute('stroke', primary);
+
         const footer = document.getElementById('cn-footer');
         if (footer && config.show_powered_by === false) footer.style.display = 'none';
 
@@ -1429,7 +1545,142 @@
         });
     }
 
-    if (document.readyState === 'complete') init();
-    else window.addEventListener('load', init);
+    /* ─────────────────────────────────────────
+       GSAP LOADER — dynamic CDN inject
+    ───────────────────────────────────────── */
+    function loadGSAP(callback) {
+        if (window.gsap) { callback(); return; }
+        const s = document.createElement('script');
+        s.src = 'https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js';
+        s.onload  = callback;
+        s.onerror = callback; // graceful: fall back to CSS-only
+        document.head.appendChild(s);
+    }
+
+    /* ─────────────────────────────────────────
+       LAUNCHER ANIMATIONS — "alive" bot
+    ───────────────────────────────────────── */
+    function initLauncherAnimations() {
+        if (!window.gsap) return;
+
+        const launcher = document.getElementById('cn-launcher');
+        const botWrap  = document.getElementById('cn-l-bot-wrap');
+        const botSvg   = document.getElementById('cn-bot-svg');
+        const antTip   = document.getElementById('cn-ant-tip');
+        const eyeL     = document.getElementById('cn-eye-l');
+        const eyeR     = document.getElementById('cn-eye-r');
+        const textWrap = document.getElementById('cn-l-text-wrap');
+        if (!launcher) return;
+
+        // ── 1. ENTRANCE ──────────────────────────────────────────
+        const entry = gsap.timeline({ delay: 0.4 });
+        entry
+            .from(launcher, {
+                y: 50, opacity: 0, scale: 0.7,
+                duration: 0.85, ease: 'back.out(2)',
+            })
+            .from(textWrap, {
+                opacity: 0, x: -16,
+                duration: 0.45, ease: 'power2.out',
+            }, '-=0.4')
+            .from(botSvg, {
+                scale: 0, rotation: -25, opacity: 0,
+                duration: 0.55, ease: 'back.out(2.5)',
+                transformOrigin: 'center center',
+            }, '-=0.35');
+
+        // ── 2. IDLE FLOAT ────────────────────────────────────────
+        gsap.to(launcher, {
+            y: -6, duration: 2.4,
+            ease: 'sine.inOut', repeat: -1, yoyo: true,
+        });
+
+        // ── 3. BOT HEAD GENTLE BOB ───────────────────────────────
+        gsap.to(botWrap, {
+            rotation: 4, duration: 1.9,
+            ease: 'sine.inOut', repeat: -1, yoyo: true,
+            transformOrigin: 'center bottom',
+        });
+
+        // ── 4. ANTENNA TIP GLOW PULSE ────────────────────────────
+        if (antTip) {
+            gsap.to(antTip, {
+                scale: 1.5, opacity: 0.5, duration: 0.85,
+                ease: 'sine.inOut', repeat: -1, yoyo: true,
+                transformOrigin: 'center center',
+            });
+        }
+
+        // ── 5. EYE BLINK — random schedule ───────────────────────
+        function scheduleBlink() {
+            if (!document.getElementById('cn-launcher')) return; // widget removed
+            const pause = 1800 + Math.random() * 2800;
+            setTimeout(() => {
+                if (!eyeL || !eyeR) return;
+                const tl = gsap.timeline({ onComplete: scheduleBlink });
+                tl.to([eyeL, eyeR], {
+                    scaleY: 0.06, duration: 0.07, ease: 'power3.in',
+                    transformOrigin: 'center center',
+                })
+                .to([eyeL, eyeR], {
+                    scaleY: 1, duration: 0.11, ease: 'power2.out',
+                    transformOrigin: 'center center',
+                });
+            }, pause);
+        }
+        scheduleBlink();
+
+        // ── 6. GREETING TEXT SUBTLE SHIMMER ─────────────────────
+        const greeting = document.getElementById('cn-l-greeting');
+        if (greeting) {
+            gsap.to(greeting, {
+                opacity: 0.65, duration: 1.8,
+                ease: 'sine.inOut', repeat: -1, yoyo: true,
+            });
+        }
+
+        // ── 7. HOVER — springy scale ─────────────────────────────
+        launcher.addEventListener('mouseenter', () => {
+            if (isWindowOpen) return;
+            gsap.to(launcher, {
+                scale: 1.06, duration: 0.35, ease: 'back.out(2)',
+                overwrite: 'auto',
+            });
+            gsap.to(botSvg, {
+                rotation: 8, duration: 0.3, ease: 'back.out(2)',
+                transformOrigin: 'center center', overwrite: 'auto',
+            });
+        });
+        launcher.addEventListener('mouseleave', () => {
+            if (isWindowOpen) return;
+            gsap.to(launcher, {
+                scale: 1, duration: 0.4, ease: 'elastic.out(1, 0.5)',
+                overwrite: 'auto',
+            });
+            gsap.to(botSvg, {
+                rotation: 0, duration: 0.4, ease: 'elastic.out(1, 0.5)',
+                transformOrigin: 'center center', overwrite: 'auto',
+            });
+        });
+
+        // ── 8. CLICK PRESS FEEL ──────────────────────────────────
+        launcher.addEventListener('mousedown', () => {
+            gsap.to(launcher, { scale: 0.94, duration: 0.12, ease: 'power3.in', overwrite: 'auto' });
+        });
+        launcher.addEventListener('mouseup', () => {
+            gsap.to(launcher, { scale: 1, duration: 0.3, ease: 'back.out(2)', overwrite: 'auto' });
+        });
+    }
+
+    /* ─────────────────────────────────────────
+       INIT — wired to load GSAP then start
+    ───────────────────────────────────────── */
+    function startWidget() {
+        init();
+        loadGSAP(initLauncherAnimations);
+    }
+
+    if (document.readyState === 'complete') startWidget();
+    else window.addEventListener('load', startWidget);
 
 })();
