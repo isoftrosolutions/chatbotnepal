@@ -17,12 +17,25 @@ class WidgetConfig extends Model
         'position',
         'bot_name',
         'bot_avatar_url',
+        'tagline',
+        'privacy_policy_url',
+        'support_email',
+        'message_meta_enabled',
         'show_powered_by',
         'prechat_enabled',
         'company_logo_url',
         'watermark_enabled',
         'watermark_opacity',
         'watermark_position',
+        'suggested_questions',
+    ];
+
+    protected $casts = [
+        'suggested_questions' => 'array',
+        'message_meta_enabled' => 'boolean',
+        'show_powered_by' => 'boolean',
+        'prechat_enabled' => 'boolean',
+        'watermark_enabled' => 'boolean',
     ];
 
     public function user(): BelongsTo
@@ -33,17 +46,22 @@ class WidgetConfig extends Model
     public static function getDefaultConfig(): array
     {
         return [
-            'welcome_message' => 'Namaste! How can I help you today?',
-            'primary_color' => '#4F46E5',
-            'position' => 'bottom-right',
-            'bot_name' => 'Assistant',
-            'bot_avatar_url' => null,
-            'show_powered_by' => true,
-            'prechat_enabled' => false,
-            'company_logo_url' => null,
-            'watermark_enabled' => false,
-            'watermark_opacity' => 0.1,
-            'watermark_position' => 'center',
+            'welcome_message'      => 'Namaste! How can I help you today?',
+            'primary_color'        => '#006d77',
+            'position'             => 'bottom-right',
+            'bot_name'             => 'Assistant',
+            'bot_avatar_url'       => null,
+            'tagline'              => null,
+            'privacy_policy_url'   => null,
+            'support_email'        => null,
+            'message_meta_enabled' => false,
+            'show_powered_by'      => true,
+            'prechat_enabled'      => false,
+            'company_logo_url'     => null,
+            'watermark_enabled'    => false,
+            'watermark_opacity'    => 0.1,
+            'watermark_position'   => 'center',
+            'suggested_questions'  => [],
         ];
     }
 }

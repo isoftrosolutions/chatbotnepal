@@ -61,6 +61,12 @@ class DashboardController extends Controller
 
         $usage = $this->tokenUsageService->getUserUsage($user);
 
+        /* Client-friendly summary — no internal cost/token data */
+        $clientSummary = [
+            'conversations_this_month' => $stats['conversations_this_month'],
+            'bot_responses_this_month' => $usage['total_api_calls'],
+        ];
+
         if ($request->ajax()) {
             return response()->json([
                 'stats' => [
@@ -71,20 +77,19 @@ class DashboardController extends Controller
                     'messages_trend'           => $stats['messages_trend'],
                 ],
                 'usage' => [
-                    'total_tokens'   => number_format($usage['total_tokens']),
-                    'total_api_calls'=> $usage['total_api_calls'],
-                    'total_cost'     => number_format($usage['total_cost'], 2),
+                    'conversations_this_month' => $clientSummary['conversations_this_month'],
+                    'bot_responses_this_month' => $clientSummary['bot_responses_this_month'],
                 ],
                 'recent_conversations' => $recentConversations->map(fn($conv) => [
                     'visitor_initial' => strtoupper(substr($conv->visitor_name ?? 'A', 0, 1)),
-                    'visitor_name'    => $conv->visitor_name ?? 'Anonymous Visitor',
-                    'visitor_email'   => $conv->visitor_email ?? 'No email provided',
+                    'visitor_name'    => $conv->visitor_name ?? 'Guest Visitor',
+                    'visitor_email'   => $conv->visitor_email ?? '',
                     'message_count'   => $conv->messages->count(),
                     'time'            => $conv->created_at->diffForHumans(),
                 ]),
             ]);
         }
 
-        return view('client.dashboard', compact('stats', 'recentConversations', 'usage'));
+        return view('client.dashboard', compact('stats', 'recentConversations', 'usage', 'clientSummary'));
     }
 }

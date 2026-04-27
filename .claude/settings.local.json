@@ -71,7 +71,11 @@
       "Bash(GIT_PAGER=cat grep -n \"reorder\\\\|sort_order\\\\|order\" /c/Apache24/htdocs/ai/routes/web.php)",
       "WebFetch(domain:github.com)",
       "Bash(npx skills *)",
-      "Bash(python3 -c \"import paramiko; import cryptography; print\\('Dependencies OK'\\)\")"
+      "Bash(python3 -c \"import paramiko; import cryptography; print\\('Dependencies OK'\\)\")",
+      "Bash(winget upgrade *)",
+      "Bash(del *)",
+      "Bash(node --check public/widget.js)",
+      "Bash(node *)"
     ]
   }
 }

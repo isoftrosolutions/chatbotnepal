@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\ChatConversation;
 use App\Models\User;
 use App\Models\WidgetSessionToken;
 use App\Services\ChatService;
@@ -109,6 +110,62 @@ class ChatController extends Controller
             'reply' => $result['reply'],
             'conversation_id' => $result['conversation_id'],
         ]);
+    }
+
+    public function history(Request $request): JsonResponse
+    {
+        $request->validate([
+            'site_id'         => 'required|string',
+            'conversation_id' => 'required|integer',
+            'visitor_id'      => 'nullable|string|max:64',
+        ]);
+
+        $sessionToken = $request->header('X-Session-Token');
+        $client = null;
+
+        if ($sessionToken) {
+            $session = WidgetSessionToken::where('token', $sessionToken)
+                ->where('expires_at', '>', now())
+                ->first();
+            if ($session) {
+                $client = $session->user;
+            }
+        }
+
+        if (! $client) {
+            $client = User::where('site_id', $request->site_id)
+                ->orWhere('api_token', $request->site_id)
+                ->first();
+        }
+
+        if (! $client) {
+            return response()->json(['messages' => []]);
+        }
+
+        $query = ChatConversation::where('id', $request->conversation_id)
+            ->where('user_id', $client->id);
+
+        if ($request->visitor_id) {
+            $query->where('visitor_id', $request->visitor_id);
+        }
+
+        $conversation = $query->first();
+
+        if (! $conversation) {
+            return response()->json(['messages' => []]);
+        }
+
+        $messages = $conversation->messages()
+            ->orderBy('created_at', 'asc')
+            ->limit(40)
+            ->get(['role', 'message', 'created_at'])
+            ->map(fn ($m) => [
+                'role'    => $m->role,
+                'message' => $m->message,
+                'time'    => $m->created_at?->format('H:i'),
+            ]);
+
+        return response()->json(['messages' => $messages]);
     }
 
     private function sanitizeInput(string $input): string

@@ -77,10 +77,10 @@
                         <label class="block text-xs font-bold uppercase tracking-widest text-gray-600 mb-2">Launcher Color</label>
                         <div class="flex items-center gap-3">
                             <input type="color" name="primary_color" id="primary_color_picker"
-                                   value="{{ $config->primary_color ?? '#4F46E5' }}"
+                                   value="{{ $config->primary_color ?? '#006d77' }}"
                                    class="w-12 h-12 rounded-xl border border-gray-200 cursor-pointer overflow-hidden">
                             <input type="text" name="primary_color_text" id="primary_color_text"
-                                   value="{{ $config->primary_color ?? '#4F46E5' }}"
+                                   value="{{ $config->primary_color ?? '#006d77' }}"
                                    class="flex-1 px-4 py-3 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-indigo-100 focus:border-indigo-500 outline-none transition-all text-sm font-mono uppercase"
                                    pattern="^#[0-9A-Fa-f]{6}$">
                         </div>
@@ -92,6 +92,50 @@
                             <option value="bottom-right" {{ ($config->position ?? 'bottom-right') == 'bottom-right' ? 'selected' : '' }}>Bottom Right</option>
                             <option value="bottom-left" {{ ($config->position ?? 'bottom-right') == 'bottom-left' ? 'selected' : '' }}>Bottom Left</option>
                         </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bot Identity Section -->
+            <div class="mb-6 p-4 rounded-2xl border border-gray-100 bg-gray-50/50">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-8 h-8 bg-teal-50 rounded-xl flex items-center justify-center">
+                        <i data-lucide="bot" class="text-teal-600 w-4 h-4"></i>
+                    </div>
+                    <div>
+                        <p class="font-semibold text-[#1B1B38] text-sm">Bot Identity</p>
+                        <p class="text-xs text-gray-400">Name, tagline, and contact info shown inside the widget</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-widest text-gray-600 mb-2">Bot Name</label>
+                        <input type="text" name="bot_name"
+                               value="{{ $config->bot_name ?? 'Assistant' }}"
+                               placeholder="e.g. Aria, Max, Support Bot"
+                               class="w-full px-4 py-3 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-indigo-100 focus:border-indigo-500 outline-none transition-all text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-widest text-gray-600 mb-2">Tagline <span class="text-gray-400 font-normal normal-case">(shown in pre-chat form)</span></label>
+                        <input type="text" name="tagline"
+                               value="{{ $config->tagline ?? '' }}"
+                               placeholder="e.g. We reply within minutes"
+                               class="w-full px-4 py-3 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-indigo-100 focus:border-indigo-500 outline-none transition-all text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-widest text-gray-600 mb-2">Support Email <span class="text-gray-400 font-normal normal-case">(escalation CTA)</span></label>
+                        <input type="email" name="support_email"
+                               value="{{ $config->support_email ?? '' }}"
+                               placeholder="support@yourcompany.com"
+                               class="w-full px-4 py-3 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-indigo-100 focus:border-indigo-500 outline-none transition-all text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-widest text-gray-600 mb-2">Privacy Policy URL <span class="text-gray-400 font-normal normal-case">(shown in pre-chat form)</span></label>
+                        <input type="url" name="privacy_policy_url"
+                               value="{{ $config->privacy_policy_url ?? '' }}"
+                               placeholder="https://yoursite.com/privacy"
+                               class="w-full px-4 py-3 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-indigo-100 focus:border-indigo-500 outline-none transition-all text-sm">
                     </div>
                 </div>
             </div>
@@ -168,6 +212,38 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Suggested Questions -->
+            <div class="mb-4 p-4 rounded-2xl border border-gray-100 bg-gray-50/50">
+                <div class="flex items-center gap-3 mb-3">
+                    <div class="w-8 h-8 bg-emerald-50 rounded-xl flex items-center justify-center">
+                        <i data-lucide="message-circle-question" class="text-emerald-600 w-4 h-4"></i>
+                    </div>
+                    <div>
+                        <p class="font-semibold text-[#1B1B38] text-sm">Quick-Reply Suggestions</p>
+                        <p class="text-xs text-gray-400">Chips shown below the welcome message. One question per line (max 4).</p>
+                    </div>
+                </div>
+                <textarea name="suggested_questions_raw" rows="4"
+                    placeholder="What are your fees?&#10;Where are you located?&#10;How do I enroll?&#10;Do you offer a free trial?"
+                    class="w-full px-4 py-3 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-teal-100 focus:border-teal-500 outline-none transition-all text-sm font-mono resize-none">{{ implode("\n", $config->suggested_questions ?? []) }}</textarea>
+            </div>
+
+            <!-- Message Timestamps Toggle -->
+            <label class="flex items-start gap-4 cursor-pointer p-4 rounded-2xl border border-gray-100 hover:border-teal-200 hover:bg-teal-50/30 transition-all group mb-3">
+                <div class="relative mt-0.5 flex-shrink-0">
+                    <input type="hidden" name="message_meta_enabled" value="0">
+                    <input type="checkbox" name="message_meta_enabled" value="1" id="meta_toggle"
+                           {{ ($config->message_meta_enabled ?? false) ? 'checked' : '' }}
+                           class="sr-only peer">
+                    <div class="w-11 h-6 bg-gray-200 peer-checked:bg-teal-600 rounded-full transition-colors duration-200"></div>
+                    <div class="absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform duration-200 peer-checked:translate-x-5"></div>
+                </div>
+                <div class="flex-1">
+                    <p class="font-semibold text-[#1B1B38] text-sm group-hover:text-teal-700 transition-colors">Show Message Timestamps</p>
+                    <p class="text-xs text-gray-400 mt-1 leading-relaxed">Display send time and read-receipt ticks on each message bubble (WhatsApp style).</p>
+                </div>
+            </label>
 
             <!-- Pre-Chat Form Toggle -->
             <label class="flex items-start gap-4 cursor-pointer p-4 rounded-2xl border border-gray-100 hover:border-indigo-200 hover:bg-indigo-50/30 transition-all group">

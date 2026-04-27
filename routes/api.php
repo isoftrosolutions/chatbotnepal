@@ -28,6 +28,9 @@ Route::post('/chat', [ChatController::class, 'chat'])
 Route::post('/chat/stream', [StreamChatController::class, 'stream'])
     ->middleware(['throttle:chat', 'widget.domain']);
 
+Route::post('/chat/history', [ChatController::class, 'history'])
+    ->middleware(['throttle:60,1', 'widget.domain']);
+
 Route::get('/widget-config/{token}', [WidgetConfigController::class, 'show']);
 
 Route::post('/webhooks/esewa', [WebhookController::class, 'esewa']);

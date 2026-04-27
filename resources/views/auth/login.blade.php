@@ -11,13 +11,13 @@
     font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
     min-height: 100vh;
     display: flex;
-    background: #0f0e2a;
+    background: #003f45;
   }
 
   /* ── LEFT PANEL ── */
   .left {
     flex: 1;
-    background: linear-gradient(160deg, #1e1b4b 0%, #1a1a35 40%, #0f0e2a 100%);
+    background: linear-gradient(160deg, #004a51 0%, #003a40 40%, #002a2f 100%);
     padding: 48px 56px;
     display: flex;
     flex-direction: column;
@@ -32,7 +32,7 @@
     position: absolute;
     top: -80px; right: -80px;
     width: 360px; height: 360px;
-    background: radial-gradient(circle, rgba(99,102,241,0.18) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(0,109,119,0.35) 0%, transparent 70%);
     pointer-events: none;
   }
 
@@ -46,7 +46,7 @@
 
   .logo-icon {
     width: 48px; height: 48px;
-    background: #4f46e5;
+    background: #006d77;
     border-radius: 10px;
     display: flex; align-items: center; justify-content: center;
     flex-shrink: 0;
@@ -148,9 +148,9 @@
     flex-shrink: 0;
   }
 
-  .avatar:first-child { margin-left: 0; background: linear-gradient(135deg, #ec4899, #8b5cf6); }
-  .avatar:nth-child(2) { background: linear-gradient(135deg, #3b82f6, #6366f1); }
-  .avatar:nth-child(3) { background: linear-gradient(135deg, #10b981, #3b82f6); }
+  .avatar:first-child { margin-left: 0; background: linear-gradient(135deg, #006d77, #00535b); }
+  .avatar:nth-child(2) { background: linear-gradient(135deg, #008a96, #006d77); }
+  .avatar:nth-child(3) { background: linear-gradient(135deg, #00535b, #003f45); }
 
   .trusted-text {
     font-size: 13.5px;
@@ -254,8 +254,8 @@
   .input-wrap input::placeholder { color: #9ca3af; }
 
   .input-wrap input:focus {
-    border-color: #6366f1;
-    box-shadow: 0 0 0 3px rgba(99,102,241,0.12);
+    border-color: #006d77;
+    box-shadow: 0 0 0 3px rgba(0,109,119,0.12);
   }
 
   .input-wrap input.error {
@@ -273,8 +273,8 @@
     transition: color 0.2s;
   }
 
-  .input-wrap .suffix:hover { color: #6366f1; }
-  .input-wrap .suffix.active { color: #6366f1; }
+  .input-wrap .suffix:hover { color: #006d77; }
+  .input-wrap .suffix.active { color: #006d77; }
   .input-wrap .suffix svg { width: 18px; height: 18px; }
 
   /* REMEMBER + FORGOT */
@@ -306,17 +306,17 @@
   .forgot {
     font-size: 14px;
     font-weight: 600;
-    color: #4f46e5;
+    color: #006d77;
     text-decoration: none;
     transition: color 0.2s;
   }
-  .forgot:hover { color: #4338ca; text-decoration: underline; }
+  .forgot:hover { color: #00535b; text-decoration: underline; }
 
   /* SIGN IN BUTTON */
   .btn-signin {
     width: 100%;
     padding: 14px;
-    background: #4f46e5;
+    background: #006d77;
     border: none;
     border-radius: 8px;
     font-size: 15px;
@@ -334,54 +334,14 @@
   }
 
   .btn-signin:hover {
-    background: #4338ca;
-    box-shadow: 0 4px 16px rgba(79,70,229,0.35);
+    background: #00535b;
+    box-shadow: 0 4px 16px rgba(0,109,119,0.35);
   }
 
   .btn-signin:active { transform: scale(0.99); }
 
   .btn-signin svg { width: 18px; height: 18px; }
 
-  /* OR DIVIDER */
-  .divider {
-    display: flex; align-items: center; gap: 14px;
-    margin-bottom: 20px;
-  }
-
-  .divider hr { flex: 1; border: none; border-top: 1.5px solid #f1f5f9; }
-  .divider span {
-    font-size: 11px;
-    letter-spacing: 1.2px;
-    color: #94a3b8;
-    text-transform: uppercase;
-    white-space: nowrap;
-    font-weight: 600;
-  }
-
-  /* SOCIAL BUTTONS */
-  .social-row {
-    display: flex; gap: 12px;
-    margin-bottom: 28px;
-  }
-
-  .btn-social {
-    flex: 1;
-    display: flex; align-items: center; justify-content: center;
-    gap: 8px;
-    padding: 11px;
-    background: #ffffff;
-    border: 1.5px solid #e5e7eb;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 600;
-    color: #374151;
-    cursor: not-allowed;
-    opacity: 0.7;
-    font-family: inherit;
-    transition: border-color 0.2s;
-  }
-
-  .btn-social .social-icon { width: 18px; height: 18px; }
 
   /* DEMO LINK */
   .demo-row {
@@ -391,7 +351,7 @@
   }
 
   .demo-row a {
-    color: #4f46e5;
+    color: #006d77;
     font-weight: 600;
     text-decoration: none;
   }
@@ -431,7 +391,7 @@
     transition: color 0.2s;
   }
 
-  .right-footer .footer-links a:hover { color: #4f46e5; }
+  .right-footer .footer-links a:hover { color: #006d77; }
 
   /* MOBILE */
   @media (max-width: 900px) {
@@ -520,7 +480,7 @@
         <div class="avatar">R</div>
         <div class="avatar">A</div>
       </div>
-      <p class="trusted-text">Trusted by <strong>50+ businesses</strong> across Nepal</p>
+      <p class="trusted-text">Serving businesses across <strong>Nepal</strong></p>
     </div>
   </div>
 
@@ -531,7 +491,7 @@
   <div class="right-inner">
 
     <h1 class="card-title">Sign in to your account</h1>
-    <p class="card-sub">Enter your credentials to access the manager.</p>
+    <p class="card-sub">Enter your credentials to access your dashboard.</p>
 
     @if($errors->any())
       <div class="alert-error">

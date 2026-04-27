@@ -27,18 +27,23 @@ class WidgetConfigController extends Controller
         }
 
         return response()->json([
-            'business_name' => $user->company_name ?? $user->name,
-            'welcome_message' => $config->welcome_message,
-            'primary_color' => $config->primary_color,
-            'position' => $config->position,
-            'bot_name' => $config->bot_name,
-            'bot_avatar_url' => $config->bot_avatar_url,
-            'show_powered_by' => $config->show_powered_by,
-            'prechat_enabled' => $config->prechat_enabled,
-            'company_logo_url' => $config->company_logo_url,
-            'watermark_enabled' => $config->watermark_enabled,
-            'watermark_opacity' => $config->watermark_opacity,
-            'watermark_position' => $config->watermark_position,
+            'business_name'        => $user->company_name ?? $user->name,
+            'welcome_message'      => $config->welcome_message,
+            'primary_color'        => $config->primary_color,
+            'position'             => $config->position,
+            'bot_name'             => $config->bot_name,
+            'bot_avatar_url'       => $config->bot_avatar_url,
+            'tagline'              => $config->tagline,
+            'privacy_policy_url'   => $config->privacy_policy_url,
+            'support_email'        => $config->support_email,
+            'message_meta_enabled' => (bool) $config->message_meta_enabled,
+            'show_powered_by'      => $config->show_powered_by,
+            'prechat_enabled'      => $config->prechat_enabled,
+            'company_logo_url'     => $config->company_logo_url,
+            'watermark_enabled'    => $config->watermark_enabled,
+            'watermark_opacity'    => $config->watermark_opacity,
+            'watermark_position'   => $config->watermark_position,
+            'suggested_questions'  => $config->suggested_questions ?? [],
         ]);
     }
 }
