@@ -155,7 +155,7 @@
 
     <div class="hidden md:flex items-center gap-8 text-sm font-medium text-muted">
       <a href="#about"   class="hover:text-primary transition-colors">About</a>
-      <a href="#pricing" class="hover:text-primary transition-colors">Pricing</a>
+      
       <a href="#faq"     class="hover:text-primary transition-colors">FAQ</a>
       <a href="#contact" class="hover:text-primary transition-colors">Contact</a>
     </div>
@@ -189,7 +189,7 @@
   </div>
   <div class="flex flex-col gap-1 p-4 text-sm font-medium">
     <a href="#about"   class="drawer-link px-4 py-3 rounded-xl text-muted hover:bg-surf-low hover:text-primary transition-colors">About</a>
-    <a href="#pricing" class="drawer-link px-4 py-3 rounded-xl text-muted hover:bg-surf-low hover:text-primary transition-colors">Pricing</a>
+    
     <a href="#faq"     class="drawer-link px-4 py-3 rounded-xl text-muted hover:bg-surf-low hover:text-primary transition-colors">FAQ</a>
     <a href="#contact" class="drawer-link px-4 py-3 rounded-xl text-muted hover:bg-surf-low hover:text-primary transition-colors">Contact</a>
   </div>
@@ -767,100 +767,7 @@
   </div>
 </section>
 
-<!-- ════════════════════════════════════
-     PRICING
-════════════════════════════════════ -->
-<section class="py-16 md:py-24" id="pricing" style="background:linear-gradient(150deg,#f3f4f5 0%,#e4eeef 100%)">
-  <div class="max-w-xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="text-center mb-14 reveal">
-      <h2 class="font-jakarta font-bold text-3xl md:text-4xl text-primary mb-3">Simple, Honest Pricing</h2>
-      <p class="text-muted">One plan. Everything included. No surprises.</p>
-    </div>
 
-    <div class="relative reveal">
-      <div class="absolute -top-5 inset-x-0 flex justify-center z-10">
-        <div class="bg-secondary text-white font-extrabold px-5 py-2.5 rounded-full text-center">
-          <span class="text-xs uppercase tracking-widest">🔥 Early Adopter Price &nbsp;·&nbsp; Rs. 999/mo</span>
-          <span class="text-xs font-normal text-white/75 ml-2">Regular: <span class="line-through">Rs. 2,499/mo</span> · launching soon</span>
-        </div>
-      </div>
-
-      <div class="bg-white rounded-3xl shadow-teal-lg p-8 md:p-10 pt-12">
-        <div class="text-center mb-6">
-          <h3 class="font-jakarta font-bold text-2xl text-primary mb-1">Starter Plan</h3>
-          <p class="text-muted text-sm">Everything you need. No hidden fees.</p>
-        </div>
-
-        <div class="text-center mb-2">
-          <div class="inline-flex items-end gap-1">
-            <span class="font-jakarta font-extrabold text-6xl text-primary leading-none">Rs. 999</span>
-            <span class="text-muted text-sm mb-2">/month</span>
-          </div>
-        </div>
-        <p class="text-center text-muted text-sm mb-8">+ Rs. 3,000 one-time setup &nbsp;·&nbsp; live in 24 hrs</p>
-
-        <div class="bg-primary-c/10 border border-primary-c/20 rounded-xl px-4 py-3 mb-6 text-center">
-          <p class="text-primary text-sm font-semibold italic">💡 Convert just 2 extra leads/month — chatbot pays for itself 3×</p>
-        </div>
-
-        <ul class="flex flex-col gap-3.5 mb-8">
-          <li class="flex items-center gap-3">
-            <span class="material-symbols-outlined text-primary-c flex-shrink-0" style="font-size:20px">check_circle</span>
-            <span class="text-muted text-sm">Custom AI Training on your data</span>
-          </li>
-          <li class="flex items-center gap-3">
-            <span class="material-symbols-outlined text-primary-c flex-shrink-0" style="font-size:20px">check_circle</span>
-            <span class="text-muted text-sm">Nepali &amp; English Support</span>
-          </li>
-          <li class="flex items-center gap-3">
-            <span class="material-symbols-outlined text-primary-c flex-shrink-0" style="font-size:20px">check_circle</span>
-            <span class="text-muted text-sm">Lead Capture Dashboard</span>
-          </li>
-          <li class="flex items-center gap-3">
-            <span class="material-symbols-outlined text-primary-c flex-shrink-0" style="font-size:20px">check_circle</span>
-            <span class="text-muted text-sm">Weekly Performance Audits</span>
-          </li>
-          <li class="flex items-center gap-3">
-            <span class="material-symbols-outlined text-primary-c flex-shrink-0" style="font-size:20px">check_circle</span>
-            <span class="text-muted text-sm">Monthly Knowledge Base Updates</span>
-          </li>
-        </ul>
-
-        <div class="flex items-center justify-center gap-2 mb-4">
-          <span class="material-symbols-outlined text-primary-c" style="font-size:20px">verified_user</span>
-          <p class="text-sm font-bold text-primary">No contracts &nbsp;·&nbsp; Cancel anytime &nbsp;·&nbsp; Zero lock-in</p>
-        </div>
-
-        <a href="https://wa.me/9779811144402?text=Namaste%21%20Chatbot%20ko%20bare%20ma%20kura%20garnu%20tha%20%F0%9F%99%8F"
-           target="_blank" rel="noopener"
-           class="block text-center w-full bg-secondary hover:opacity-90 text-white font-bold py-4 rounded-xl transition-opacity text-base">
-          Claim This Offer Now
-        </a>
-        <p class="text-center text-xs text-muted mt-3">💬 We reply on WhatsApp within 2 hours</p>
-      </div>
-    </div>
-
-    <div class="mt-6 bg-white rounded-2xl p-5 shadow-teal-sm reveal">
-      <div class="flex items-center justify-between mb-2">
-        <span class="text-sm font-semibold text-primary">Beta spots claimed</span>
-        <span class="text-sm font-bold text-secondary">7 / 10</span>
-      </div>
-      <div class="w-full bg-surf-low rounded-full h-3 overflow-hidden">
-        <div class="h-3 rounded-full bg-gradient-to-r from-primary-c to-secondary transition-all duration-1000" style="width:70%"></div>
-      </div>
-      <p class="text-xs text-muted mt-2 text-center">⚡ Only <strong class="text-secondary">3 spots left</strong> at the Early Adopter price — Rs. 999/month locked forever</p>
-    </div>
-
-    <div class="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 mt-3 text-sm">
-      <span class="text-muted font-medium">Payment via:</span>
-      <span class="font-bold" style="color:#60BB46">eSewa</span>
-      <span class="text-muted">·</span>
-      <span class="font-bold" style="color:#5C2D91">Khalti</span>
-      <span class="text-muted">·</span>
-      <span class="font-semibold text-muted">Bank Transfer</span>
-    </div>
-  </div>
-</section>
 
 <!-- ════════════════════════════════════
      SOCIAL PROOF (Honest)

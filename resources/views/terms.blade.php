@@ -41,7 +41,7 @@
   <h2>2. Subscription and Payment</h2>
   <ul>
     <li>All plans are billed monthly in Nepali Rupees (NPR)</li>
-    <li>A one-time setup fee applies as shown in the pricing section</li>
+    <li>A one-time setup fee applies as shown in your selected plan</li>
     <li>Payment is due within 7 days of invoice date</li>
     <li>Yearly plans receive 2 months free (10 months billed, 12 months of service)</li>
     <li>Invoices are issued via the client dashboard</li>
