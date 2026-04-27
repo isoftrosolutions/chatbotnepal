@@ -33,6 +33,14 @@
     let busy = false;
     let prechatShown = false;
 
+    function getLauncherPosition() {
+        const pos = config.position || 'bottom-right';
+        switch (pos) {
+            case 'bottom-left': return { bottom: '24px', left: '24px', right: 'auto' };
+            case 'bottom-right': default: return { bottom: '24px', right: '24px', left: 'auto' };
+        }
+    }
+
     function normalizeAssetUrl(maybeUrl) {
         if (!maybeUrl || typeof maybeUrl !== 'string') return null;
         try { return new URL(maybeUrl, BASE_URL).href; } catch { return maybeUrl; }
@@ -1467,6 +1475,11 @@
             widgetRoot.style.setProperty('--cn-primary', primary);
             widgetRoot.style.setProperty('--cn-primary-dark', primaryDark);
             widgetRoot.style.setProperty('--cn-user-bubble', primary);
+
+            const launcherPos = getLauncherPosition();
+            widgetRoot.style.bottom = launcherPos.bottom;
+            widgetRoot.style.right = launcherPos.right;
+            widgetRoot.style.left = launcherPos.left;
         }
 
         const nameEl = document.querySelector('.cn-hdr-name');

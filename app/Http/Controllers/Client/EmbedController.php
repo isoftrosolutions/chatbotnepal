@@ -24,10 +24,11 @@ class EmbedController extends Controller
         $user = auth()->user();
 
         $validated = $request->validate([
-            'welcome_message' => 'required|string|max:500',
-            'primary_color' => 'required|string|regex:/^#[0-9A-Fa-f]{6}$/',
+            'welcome_message' => 'nullable|string|max:500',
+            'primary_color' => 'nullable|string|regex:/^#[0-9A-Fa-f]{6}$/',
+            'primary_color_text' => 'nullable|string|regex:/^#[0-9A-Fa-f]{6}$/',
             'position' => 'required|in:bottom-right,bottom-left',
-            'bot_name' => 'required|string|max:100',
+            'bot_name' => 'nullable|string|max:100',
             'show_powered_by' => 'boolean',
             'prechat_enabled' => 'boolean',
             'company_logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
@@ -43,13 +44,16 @@ class EmbedController extends Controller
             $logoUrl = asset('storage/'.$logoPath);
         }
 
+        // Determine primary color from color picker or text input
+        $primaryColor = $validated['primary_color'] ?? $validated['primary_color_text'] ?? '#4F46E5';
+
         $configData = [
-            'welcome_message' => $validated['welcome_message'],
-            'primary_color' => $validated['primary_color'],
+            'welcome_message' => $validated['welcome_message'] ?? 'Namaste! How can I help you today?',
+            'primary_color' => $primaryColor,
             'position' => $validated['position'],
-            'bot_name' => $validated['bot_name'],
-            'show_powered_by' => $validated['show_powered_by'],
-            'prechat_enabled' => $validated['prechat_enabled'],
+            'bot_name' => $validated['bot_name'] ?? 'Assistant',
+            'show_powered_by' => $validated['show_powered_by'] ?? true,
+            'prechat_enabled' => $validated['prechat_enabled'] ?? false,
             'watermark_enabled' => $validated['watermark_enabled'] ?? false,
             'watermark_opacity' => $validated['watermark_opacity'] ?? 0.1,
             'watermark_position' => $validated['watermark_position'] ?? 'center',
