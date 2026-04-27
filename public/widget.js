@@ -146,12 +146,12 @@
             overflow: hidden;
         }
         #cn-l-greeting {
-            font-size: .72rem; font-weight: 700; color: rgba(255,255,255,.80);
-            letter-spacing: .02em; line-height: 1; white-space: nowrap;
+            font-size: .75rem; font-weight: 600; color: rgba(255,255,255,.85);
+            letter-spacing: .025em; line-height: 1.1; white-space: nowrap;
         }
         #cn-l-title {
-            font-size: .86rem; font-weight: 700; color: #fff;
-            line-height: 1.2; white-space: nowrap;
+            font-size: .9rem; font-weight: 700; color: #fff;
+            line-height: 1.2; white-space: nowrap; letter-spacing: 0.01em;
         }
 
         /* Bot avatar section (right) */
@@ -236,13 +236,14 @@
 
         .cn-hdr-info { flex: 1; min-width: 0; z-index: 1; }
         .cn-hdr-name {
-            font-size: .92rem; font-weight: 600; color: #fff;
+            font-size: 1rem; font-weight: 600; color: #fff;
             white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+            letter-spacing: 0.01em;
         }
         .cn-hdr-status {
-            margin-top: 2px; font-size: .72rem; color: rgba(255,255,255,.82);
+            margin-top: 3px; font-size: .75rem; color: rgba(255,255,255,.85);
             display: flex; align-items: center; gap: 5px; font-weight: 500;
-            line-height: 1;
+            line-height: 1.1; letter-spacing: 0.01em;
         }
 
         /* Header action buttons — min 40×40 touch target */
@@ -289,11 +290,12 @@
         .cn-date-pill {
             align-self: center;
             background: rgba(225,218,208,.9);
-            border-radius: 8px;
-            font-size: .68rem; font-weight: 500; color: #54656f;
-            padding: 5px 12px;
-            margin: 6px 0;
+            border-radius: 10px;
+            font-size: .72rem; font-weight: 500; color: #54656f;
+            padding: 6px 14px;
+            margin: 8px 0;
             box-shadow: 0 1px 1px rgba(0,0,0,.06);
+            letter-spacing: 0.01em;
         }
 
         /* ── MESSAGE BUBBLES ── */
@@ -315,9 +317,11 @@
         .cn-col { max-width: 76%; position: relative; }
 
         .cn-bubble {
-            padding: 12px 14px;
-            font-size: .92rem; line-height: 1.55; word-break: break-word;
+            padding: 14px 16px;
+            font-size: 1rem; line-height: 1.6; word-break: break-word;
+            font-weight: 400; letter-spacing: 0.01em;
             position: relative; min-width: 72px;
+            border-radius: 12px;
         }
         .cn-bubble strong { font-weight: 700; }
         .cn-bubble em { font-style: italic; }
@@ -325,14 +329,16 @@
         .cn-bubble ol { padding-left: 18px; margin: 6px 0; }
         .cn-bubble li { margin-bottom: 3px; }
         .cn-bubble pre {
-            background: rgba(0,0,0,.06); border-radius: 6px;
-            padding: 8px 10px; margin: 6px 0;
-            overflow-x: auto; font-size: .8rem; font-family: monospace;
+            background: rgba(0,0,0,.06); border-radius: 8px;
+            padding: 10px 12px; margin: 8px 0;
+            overflow-x: auto; font-size: .85rem; font-family: monospace;
             white-space: pre-wrap; word-break: break-all;
+            border: 1px solid rgba(0,0,0,.08);
         }
         .cn-bubble code {
-            background: rgba(0,0,0,.06); border-radius: 3px;
-            padding: 1px 5px; font-family: monospace; font-size: .85em;
+            background: rgba(0,0,0,.08); border-radius: 4px;
+            padding: 2px 6px; font-family: monospace; font-size: .85em;
+            border: 1px solid rgba(0,0,0,.04);
         }
         .cn-bubble pre code { background: none; padding: 0; }
 
@@ -365,7 +371,7 @@
             float: right; margin-left: 10px;
             position: relative; top: 4px;
         }
-        .cn-ts { font-size: .7rem; color: #667781; font-weight: 400; white-space: nowrap; }
+        .cn-ts { font-size: .72rem; color: #667781; font-weight: 500; white-space: nowrap; letter-spacing: 0.01em; }
         /* Single-tick sent indicator — no read-receipt implication */
         .cn-check { display: inline-flex; color: rgba(255,255,255,.6); }
         .cn-check.cn-check-pending { color: rgba(255,255,255,.4); }
@@ -409,9 +415,9 @@
         }
         .cn-input-wrap {
             flex: 1; background: var(--cn-input-bg);
-            border-radius: 18px;
+            border-radius: 20px;
             display: flex; align-items: flex-end;
-            position: relative; padding: 8px 14px;
+            position: relative; padding: 10px 16px;
             border: 1px solid rgba(190,200,202,.4);
             box-shadow: 0 2px 10px rgba(0,109,119,.06);
         }
@@ -419,15 +425,20 @@
             flex: 1; background: transparent; border: none;
             color: var(--cn-text);
             font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1rem;
-            font-weight: 500; padding: 8px 6px; outline: none;
-            resize: none; height: 38px; max-height: 96px; line-height: 1.4;
+            font-weight: 400; padding: 10px 8px; outline: none;
+            resize: none; height: 38px; max-height: 96px; line-height: 1.5;
+            letter-spacing: 0.01em;
         }
-        #cn-input::placeholder { color: #9ca3af; font-weight: 500; }
+        #cn-input::placeholder {
+            color: #9ca3af; font-weight: 400; opacity: 0.7;
+            letter-spacing: 0.01em;
+        }
 
         /* Character counter */
         #cn-char-count {
-            position: absolute; bottom: 6px; right: 12px;
-            font-size: .65rem; color: #8696a0; pointer-events: none;
+            position: absolute; bottom: 8px; right: 14px;
+            font-size: .68rem; color: #8696a0; pointer-events: none;
+            font-weight: 500; letter-spacing: 0.01em;
         }
         #cn-char-count.warning { color: #f59e0b; }
         #cn-char-count.error   { color: #ef4444; font-weight: 600; }
@@ -448,15 +459,16 @@
 
         /* ── FOOTER ── */
         .cn-footer {
-            text-align: center; padding: 5px 0 7px;
-            font-size: .6rem; color: var(--cn-muted); letter-spacing: .02em;
-            background: var(--cn-surface);
+            text-align: center; padding: 6px 0 8px;
+            font-size: .65rem; color: var(--cn-muted); letter-spacing: .025em;
+            background: var(--cn-surface); font-weight: 500;
         }
         .cn-footer a { color: var(--cn-primary); text-decoration: none; font-weight: 600; }
 
         /* ── ERROR BUBBLE ── */
         .cn-bubble.error {
-            background: #fef2f2; border-left: 3px solid #ef4444; color: #111;
+            background: #fef2f2; border: 1px solid #fecaca; border-radius: 12px; color: #111;
+            border-left: 3px solid #ef4444;
         }
         .cn-row.user .cn-bubble.error { background: #fef2f2; color: #111; }
 
@@ -467,13 +479,14 @@
         }
         .cn-chip {
             display: inline-flex; align-items: center;
-            padding: 7px 14px; border-radius: 999px;
+            padding: 10px 18px; border-radius: 20px;
             border: 1.5px solid var(--cn-primary);
             background: rgba(0,109,119,.06);
-            color: var(--cn-primary); font-size: .82rem; font-weight: 600;
+            color: var(--cn-primary); font-size: .88rem; font-weight: 600;
             cursor: pointer; transition: background .15s, color .15s;
             font-family: 'Plus Jakarta Sans', sans-serif;
-            white-space: normal; text-align: left; line-height: 1.3;
+            white-space: normal; text-align: left; line-height: 1.4;
+            letter-spacing: 0.01em;
         }
         .cn-chip:hover  { background: var(--cn-primary); color: #fff; }
         .cn-chip:active { transform: scale(.97); }
@@ -487,9 +500,9 @@
         }
         .cn-escalation p { margin-bottom: 8px; }
         .cn-esc-btn {
-            display: inline-block; padding: 6px 14px;
+            display: inline-block; padding: 8px 16px;
             background: var(--cn-primary); color: #fff;
-            border-radius: 8px; font-size: .75rem; font-weight: 600;
+            border-radius: 10px; font-size: .78rem; font-weight: 600;
             text-decoration: none; transition: background .15s;
         }
         .cn-esc-btn:hover { background: var(--cn-primary-dark); color: #fff; }
@@ -533,8 +546,14 @@
             margin: 0 auto 12px; display: flex; align-items: center; justify-content: center;
             backdrop-filter: blur(10px);
         }
-        .cn-pcf-company-name { font-size: 1.1rem; font-weight: 700; margin-bottom: 4px; }
-        .cn-pcf-company-tagline { font-size: 0.8rem; opacity: 0.9; font-weight: 400; }
+        .cn-pcf-company-name {
+            font-size: 1.15rem; font-weight: 700; margin-bottom: 6px;
+            letter-spacing: 0.01em; line-height: 1.2;
+        }
+        .cn-pcf-company-tagline {
+            font-size: 0.85rem; opacity: 0.9; font-weight: 400;
+            letter-spacing: 0.01em; line-height: 1.3;
+        }
 
         /* Form scroll area */
         .cn-pcf-scroll { flex: 1; display: flex; flex-direction: column; padding: 0; gap: 0; }
@@ -553,10 +572,11 @@
         .cn-pcf-field { margin-bottom: 20px; position: relative; }
         .cn-pcf-input-wrapper { position: relative; }
         .cn-pcf-input {
-            width: 100%; padding: 16px 40px 8px 16px; border: 2px solid rgba(0,109,119,.2);
-            border-radius: 12px; font-size: 1rem; font-family: 'Plus Jakarta Sans',sans-serif;
+            width: 100%; padding: 18px 40px 10px 16px; border: 2px solid rgba(0,109,119,.2);
+            border-radius: 14px; font-size: 1.05rem; font-family: 'Plus Jakarta Sans',sans-serif;
             color: #111b21; outline: none; transition: all 0.3s ease;
             background: rgba(255,255,255,.95); box-sizing: border-box;
+            font-weight: 400; letter-spacing: 0.01em; line-height: 1.2;
         }
         .cn-pcf-input:focus  { border-color: var(--cn-primary); box-shadow: 0 0 0 4px rgba(0,109,119,.1); background: #fff; }
         .cn-pcf-input.invalid { border-color: #ef4444; box-shadow: 0 0 0 4px rgba(239,68,68,.1); background: #fef2f2; }
@@ -564,9 +584,10 @@
         .cn-pcf-input::placeholder { color: transparent; }
 
         .cn-pcf-label {
-            position: absolute; top: 16px; left: 16px;
-            font-size: 1rem; color: #8696a0; pointer-events: none;
-            transition: all 0.3s ease;
+            position: absolute; top: 18px; left: 16px;
+            font-size: 1.05rem; color: #8696a0; pointer-events: none;
+            transition: all 0.3s ease; font-weight: 500;
+            letter-spacing: 0.01em;
         }
         .cn-pcf-input:focus + .cn-pcf-label,
         .cn-pcf-input.filled + .cn-pcf-label { top: 8px; font-size: 0.72rem; color: var(--cn-primary); font-weight: 600; }
@@ -586,32 +607,32 @@
         }
         .cn-pcf-btn-row { display: flex; flex-direction: column; gap: 12px; }
         .cn-pcf-btn.primary {
-            width: 100%; padding: 14px 20px; border: none; border-radius: 12px;
+            width: 100%; padding: 16px 20px; border: none; border-radius: 14px;
             background: linear-gradient(135deg, var(--cn-primary) 0%, var(--cn-primary-dark) 100%);
-            color: #fff; font-size: 1rem; font-weight: 700;
+            color: #fff; font-size: 1.05rem; font-weight: 700;
             font-family: 'Plus Jakarta Sans',sans-serif;
             cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
             transition: all 0.3s ease; box-shadow: 0 4px 12px rgba(0,109,119,.3);
-            position: relative; overflow: hidden;
+            position: relative; overflow: hidden; letter-spacing: 0.01em;
         }
         .cn-pcf-btn.primary:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,109,119,.4); }
         .cn-pcf-btn.primary:active { transform: translateY(0); }
         .cn-pcf-btn.primary:disabled { background: #a0aeb6; cursor: not-allowed; transform: none; box-shadow: none; }
         .cn-pcf-btn.secondary {
-            width: 100%; padding: 12px 20px; border: 2px solid rgba(0,109,119,.3);
-            border-radius: 12px; background: rgba(255,255,255,.8);
-            color: var(--cn-primary); font-size: 0.95rem; font-weight: 600;
+            width: 100%; padding: 14px 20px; border: 2px solid rgba(0,109,119,.3);
+            border-radius: 14px; background: rgba(255,255,255,.8);
+            color: var(--cn-primary); font-size: 1rem; font-weight: 600;
             font-family: 'Plus Jakarta Sans',sans-serif;
             cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;
-            transition: all 0.3s ease;
+            transition: all 0.3s ease; letter-spacing: 0.01em;
         }
         .cn-pcf-btn.secondary:hover { background: var(--cn-primary); color: white; border-color: var(--cn-primary); }
 
         /* Consent checkbox */
         .cn-pcf-consent {
             display: flex; align-items: flex-start; gap: 10px;
-            font-size: 0.75rem; color: #54656f; line-height: 1.4;
-            padding: 12px 0 4px;
+            font-size: 0.78rem; color: #54656f; line-height: 1.5;
+            padding: 14px 0 6px; letter-spacing: 0.01em;
         }
         .cn-pcf-consent input[type="checkbox"] {
             width: 16px; height: 16px; flex-shrink: 0; margin-top: 1px;
@@ -621,17 +642,19 @@
 
         /* Trust indicator */
         .cn-pcf-trust { display: flex; flex-direction: column; gap: 8px; margin-top: 16px; }
-        .cn-pcf-trust-item { display: flex; align-items: center; gap: 8px; font-size: 0.75rem; color: #54656f; }
+        .cn-pcf-trust-item { display: flex; align-items: center; gap: 8px; font-size: 0.78rem; color: #54656f; letter-spacing: 0.01em; }
         .cn-pcf-trust-item svg { width: 14px; height: 14px; flex-shrink: 0; }
 
         /* Encryption notice */
         .cn-encrypt-notice {
             align-self: center;
-            background: rgba(0,109,119,.05); border-radius: 12px;
-            font-size: .72rem; font-weight: 500; color: var(--cn-muted);
-            padding: 7px 12px; margin: 2px 0 8px;
-            display: flex; align-items: center; gap: 5px;
+            background: rgba(0,109,119,.05); border-radius: 14px;
+            font-size: .75rem; font-weight: 500; color: var(--cn-muted);
+            padding: 10px 16px; margin: 4px 0 10px;
+            display: flex; align-items: center; gap: 6px;
             text-align: center; line-height: 1.4;
+            letter-spacing: 0.01em;
+            border: 1px solid rgba(0,109,119,.08);
         }
 
         /* ── ANIMATIONS ── */
@@ -653,6 +676,21 @@
                 padding-bottom: calc(14px + env(safe-area-inset-bottom, 0px));
             }
             #cn-launcher { bottom: 18px; right: 18px; }
+
+            /* Mobile typography adjustments */
+            .cn-bubble { font-size: 1.05rem; padding: 16px 18px; line-height: 1.55; }
+            #cn-input { font-size: 1.1rem; padding: 12px 10px; }
+            .cn-hdr-name { font-size: 1.1rem; }
+            .cn-hdr-status { font-size: .8rem; }
+            .cn-pcf-company-name { font-size: 1.25rem; }
+            .cn-pcf-company-tagline { font-size: 0.9rem; }
+            .cn-pcf-input { font-size: 1.1rem; padding: 20px 40px 12px 16px; }
+            .cn-pcf-label { font-size: 1.1rem; top: 20px; }
+            .cn-pcf-btn.primary,
+            .cn-pcf-btn.secondary { font-size: 1.1rem; padding: 18px 20px; }
+            .cn-chip { font-size: .92rem; padding: 10px 18px; }
+            .cn-footer { font-size: .7rem; padding: 8px 0 10px; }
+
             .cn-drag-handle {
                 display: flex; width: 100%; justify-content: center; padding: 8px 0 6px;
             }
@@ -745,8 +783,8 @@
                         <div class="cn-pcf-step active">
                             <div class="cn-pcf-step-content">
                                 <div style="text-align:center;margin-bottom:24px;">
-                                    <h3 style="font-size:1.1rem;font-weight:700;color:#111b21;margin-bottom:8px;">Tell us about yourself</h3>
-                                    <p style="font-size:0.88rem;color:#54656f;line-height:1.4;">This helps us provide personalized assistance</p>
+                                    <h3 style="font-size:1.2rem;font-weight:700;color:#111b21;margin-bottom:10px;letter-spacing:0.01em;line-height:1.3;">Tell us about yourself</h3>
+                                    <p style="font-size:0.9rem;color:#54656f;line-height:1.5;letter-spacing:0.01em;">This helps us provide personalized assistance</p>
                                 </div>
 
                                 <div class="cn-pcf-field">
