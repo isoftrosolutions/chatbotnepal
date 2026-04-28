@@ -25,6 +25,7 @@
         watermark_opacity:    0.1,
         watermark_position:   'center',
         suggested_questions:  [],
+        welcome_buttons:      [],
     };
 
     /* ─── Conversation persistence — localStorage with 24-hour TTL ─── */
@@ -657,6 +658,30 @@
             border: 1px solid rgba(0,109,119,.08);
         }
 
+        /* ── ACTION BUTTONS (link + reply) ── */
+        .cn-btns {
+            display: flex; flex-wrap: wrap; gap: 8px;
+            padding: 8px 0 4px; max-width: 100%;
+        }
+        .cn-btn {
+            background: transparent;
+            border: 1.5px solid var(--cn-primary);
+            color: var(--cn-primary);
+            padding: 8px 16px; border-radius: 20px;
+            cursor: pointer; font-size: .85rem;
+            font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 600;
+            transition: background .2s, color .2s, opacity .2s;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+            line-height: 1.3; display: inline-flex; align-items: center;
+            gap: 4px; letter-spacing: 0.01em;
+            max-width: 100%;
+        }
+        .cn-btn:hover { background: var(--cn-primary); color: #ffffff; }
+        .cn-btn:focus-visible { outline: 2px solid var(--cn-primary); outline-offset: 2px; }
+        .cn-btn-link  { border-style: solid; }
+        .cn-btn-reply { border-style: dashed; }
+        .cn-btn-disabled { opacity: 0.5; cursor: not-allowed; pointer-events: none; }
+
         /* ── ANIMATIONS ── */
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
@@ -948,6 +973,76 @@
     }
 
     /* ─────────────────────────────────────────
+       BUTTON RENDERING
+    ───────────────────────────────────────── */
+    function getLinkIcon(url) {
+        if (/^tel:/i.test(url))                     return '📞';
+        if (/wa\.me|whatsapp/i.test(url))           return '💬';
+        if (/maps\.google|goo\.gl\/maps/i.test(url)) return '📍';
+        if (/facebook\.com/i.test(url))             return '📘';
+        if (/instagram\.com/i.test(url))            return '📷';
+        if (/tiktok\.com/i.test(url))               return '🎵';
+        if (/youtube\.com/i.test(url))              return '▶️';
+        if (/^mailto:/i.test(url))                  return '📧';
+        return '🔗';
+    }
+
+    function renderButtons(buttons, colEl) {
+        if (!buttons || !buttons.length || !colEl) return;
+
+        const container = document.createElement('div');
+        container.className = 'cn-btns';
+        container.setAttribute('role', 'group');
+        container.setAttribute('aria-label', 'Quick actions');
+
+        buttons.forEach(btn => {
+            if (!btn || !btn.label) return;
+            // XSS: block javascript: scheme
+            if (btn.type === 'link' && btn.url && /^javascript:/i.test(btn.url)) return;
+            if (btn.type === 'link' && !btn.url)   return;
+            if (btn.type === 'reply' && !btn.value) return;
+
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.className = btn.type === 'link' ? 'cn-btn cn-btn-link' : 'cn-btn cn-btn-reply';
+
+            if (btn.type === 'link') {
+                const icon = document.createElement('span');
+                icon.setAttribute('aria-hidden', 'true');
+                icon.textContent = getLinkIcon(btn.url);
+                button.appendChild(icon);
+            }
+
+            const labelSpan = document.createElement('span');
+            labelSpan.textContent = btn.label; // textContent is XSS-safe
+            button.appendChild(labelSpan);
+
+            if (btn.type === 'link') {
+                button.addEventListener('click', () => {
+                    window.open(btn.url, '_blank', 'noopener,noreferrer');
+                });
+            } else {
+                button.addEventListener('click', () => {
+                    // Disable all reply buttons in this group to prevent double-send
+                    container.querySelectorAll('.cn-btn-reply').forEach(b => {
+                        b.classList.add('cn-btn-disabled');
+                        b.disabled = true;
+                    });
+                    addMsg(btn.label, 'user');
+                    sendMessage(btn.value);
+                });
+            }
+
+            container.appendChild(button);
+        });
+
+        if (container.children.length) {
+            colEl.appendChild(container);
+            scrollToBottom();
+        }
+    }
+
+    /* ─────────────────────────────────────────
        CONVERSATION HISTORY LOADER
     ───────────────────────────────────────── */
     async function loadHistory(savedConvId) {
@@ -1052,6 +1147,13 @@
                     col.appendChild(chips);
                     scrollToBottom();
                 }
+            }
+
+            /* Render welcome_buttons (link + reply) below the welcome bubble */
+            const welcomeButtons = Array.isArray(config.welcome_buttons) ? config.welcome_buttons.filter(Boolean) : [];
+            if (welcomeButtons.length) {
+                const col = welcomeRow && welcomeRow.querySelector('.cn-col');
+                if (col) renderButtons(welcomeButtons.slice(0, 4), col);
             }
         }, 900 + Math.random() * 400);
     }
@@ -1475,6 +1577,16 @@
                                     conversationId = ev.conversation_id;
                                     saveConversationId(conversationId);
                                 }
+                                // Replace streamed content with clean version (buttons stripped)
+                                if (ev.message !== undefined && streamBubble) {
+                                    streamContent = ev.message;
+                                    streamBubble.innerHTML = renderMarkdown(streamContent);
+                                }
+                                // Render action buttons after the bubble
+                                if (ev.buttons && ev.buttons.length && streamRow) {
+                                    const col = streamRow.querySelector('.cn-col');
+                                    if (col) renderButtons(ev.buttons, col);
+                                }
                                 updateChecksToRead();
                             } else if (ev.type === 'error') {
                                 streamContent = ev.message || 'Something went wrong.';
@@ -1540,7 +1652,11 @@
                     conversationId = data.conversation_id;
                     saveConversationId(conversationId);
                 }
-                addMsg(data.reply, 'bot');
+                const botRow = addMsg(data.reply, 'bot');
+                if (data.buttons && data.buttons.length && botRow) {
+                    const col = botRow.querySelector('.cn-col');
+                    if (col) renderButtons(data.buttons, col);
+                }
                 updateChecksToRead();
             } else {
                 addMsg('Sorry, I could not process that. Please try again.', 'bot', true);

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ChatConversation;
 use App\Models\User;
 use App\Models\WidgetSessionToken;
+use App\Services\ChatButtonParser;
 use App\Services\ChatService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -106,8 +107,11 @@ class ChatController extends Controller
             return response()->json($result, 400);
         }
 
+        $parsed = ChatButtonParser::parse($result['reply']);
+
         return response()->json([
-            'reply' => $result['reply'],
+            'reply'           => $parsed['message'],
+            'buttons'         => $parsed['buttons'],
             'conversation_id' => $result['conversation_id'],
         ]);
     }

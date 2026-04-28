@@ -128,7 +128,7 @@
             <p class="text-xs text-gray-400 mt-0.5">Configure which features are active for this client</p>
           </div>
         </div>
-        <div class="p-6">
+        <div class="p-6 space-y-6">
           <label class="flex items-start gap-4 cursor-pointer group">
             <div class="relative mt-0.5 flex-shrink-0">
               <input type="hidden" name="prechat_enabled" value="0">
@@ -143,6 +143,15 @@
               <p class="text-xs text-gray-400 mt-1 leading-relaxed">Ask visitors for their name, email, and phone number before the conversation starts. All fields are optional for the visitor.</p>
             </div>
           </label>
+
+          <div class="border-t border-gray-50 pt-6">
+            <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Welcome Buttons <span class="normal-case text-gray-300">(JSON array — shown when chat opens)</span></label>
+            <p class="text-xs text-gray-400 mb-3 leading-relaxed">Each button: <code class="bg-gray-100 px-1 rounded text-xs">{"type":"reply","label":"Our Services","value":"Tell me about your services"}</code> or <code class="bg-gray-100 px-1 rounded text-xs">{"type":"link","label":"Call Us","url":"tel:+9779812345678"}</code></p>
+            <textarea name="welcome_buttons" rows="5"
+              class="w-full bg-[#F4F7FE] border-none rounded-xl px-4 py-3 text-xs text-[#1B1B38] font-mono focus:ring-2 focus:ring-[#4318FF]/20 transition-all outline-none resize-y"
+              placeholder='[&#10;  {"type":"reply","label":"Our Services","value":"What services do you offer?"},&#10;  {"type":"link","label":"Call Us","url":"tel:+9779812345678"}&#10;]'>{{ old('welcome_buttons', $client->widgetConfig?->welcome_buttons ? json_encode($client->widgetConfig->welcome_buttons, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) : '') }}</textarea>
+            @error('welcome_buttons') <span class="text-[#EE5D50] text-[10px] font-bold mt-1 uppercase tracking-wide block">{{ $message }}</span> @enderror
+          </div>
         </div>
       </div>
 

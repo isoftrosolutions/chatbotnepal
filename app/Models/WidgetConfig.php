@@ -28,10 +28,12 @@ class WidgetConfig extends Model
         'watermark_opacity',
         'watermark_position',
         'suggested_questions',
+        'welcome_buttons',
     ];
 
     protected $casts = [
         'suggested_questions' => 'array',
+        'welcome_buttons'     => 'array',
         'message_meta_enabled' => 'boolean',
         'show_powered_by' => 'boolean',
         'prechat_enabled' => 'boolean',
@@ -62,6 +64,7 @@ class WidgetConfig extends Model
             'watermark_opacity'    => 0.1,
             'watermark_position'   => 'center',
             'suggested_questions'  => [],
+            'welcome_buttons'      => [],
         ];
     }
 }

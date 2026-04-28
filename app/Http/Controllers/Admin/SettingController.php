@@ -22,6 +22,7 @@ class SettingController extends Controller
             'grok_max_tokens'         => '500',
             'grok_temperature'        => '0.7',
             'grok_system_prompt'      => "You are a helpful assistant for {business_name}. Answer questions using ONLY the provided knowledge base. Be friendly, concise, and helpful. If you don't know the answer, say so politely and suggest contacting the business directly.",
+            'grok_button_rules'       => '',
             // Platform
             'platform_name'           => 'ChatBot Nepal',
             'admin_email'             => '',
@@ -66,6 +67,7 @@ class SettingController extends Controller
             'grok_max_tokens'         => 'required|integer|min:100|max:4000',
             'grok_temperature'        => 'required|numeric|min:0|max:2',
             'grok_system_prompt'      => 'required|string',
+            'grok_button_rules'       => 'nullable|string',
             // Platform
             'platform_name'           => 'required|string|max:255',
             'admin_email'             => 'required|email',

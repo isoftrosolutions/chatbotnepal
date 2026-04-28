@@ -7,6 +7,7 @@ use App\Models\ChatMessage;
 use App\Models\TokenUsageLog;
 use App\Models\User;
 use App\Models\WidgetSessionToken;
+use App\Services\ChatButtonParser;
 use App\Services\ChatService;
 use App\Services\GroqService;
 use Illuminate\Http\Request;
@@ -136,11 +137,16 @@ class StreamChatController extends Controller
                     $tokensOut = $usage['output_tokens'] > 0 ? $usage['output_tokens'] : (int) ceil(strlen($fullResponse) / 4);
                     $total     = $usage['total_tokens']  > 0 ? $usage['total_tokens']  : ($tokensIn + $tokensOut);
 
+                    // Parse buttons out of the full response before saving to DB
+                    $parsed      = ChatButtonParser::parse($fullResponse);
+                    $cleanedText = $parsed['message'];
+                    $buttons     = $parsed['buttons'];
+
                     if (! empty($fullResponse)) {
                         ChatMessage::create([
                             'conversation_id' => $conversation->id,
                             'role'            => 'bot',
-                            'message'         => $fullResponse,
+                            'message'         => $cleanedText,
                             'tokens_used'     => $tokensOut,
                             'created_at'      => now(),
                         ]);
@@ -160,6 +166,8 @@ class StreamChatController extends Controller
                     echo 'data: '.json_encode([
                         'type'            => 'done',
                         'conversation_id' => $conversation->id,
+                        'message'         => $cleanedText,
+                        'buttons'         => $buttons,
                         'tokens'          => $total,
                         'time_ms'         => round(($endTime - $startTime) * 1000),
                     ])."\n\n";

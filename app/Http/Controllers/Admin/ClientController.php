@@ -94,17 +94,31 @@ class ClientController extends Controller
             'plan'            => 'required|in:basic,standard,growth,pro',
             'status'          => 'required|in:active,inactive,suspended',
             'prechat_enabled' => 'boolean',
+            'welcome_buttons' => 'nullable|string',
         ]);
 
         if (empty($validated['password'])) {
             unset($validated['password']);
         }
 
-        $client->update(collect($validated)->except('prechat_enabled')->all());
+        $client->update(collect($validated)->except(['prechat_enabled', 'welcome_buttons'])->all());
+
+        // Parse welcome_buttons JSON — silently ignore malformed input
+        $welcomeButtonsRaw = $request->input('welcome_buttons', '');
+        $welcomeButtons    = [];
+        if ($welcomeButtonsRaw) {
+            $decoded = json_decode($welcomeButtonsRaw, true);
+            if (is_array($decoded)) {
+                $welcomeButtons = $decoded;
+            }
+        }
 
         WidgetConfig::updateOrCreate(
             ['user_id' => $client->id],
-            ['prechat_enabled' => $request->boolean('prechat_enabled')]
+            [
+                'prechat_enabled' => $request->boolean('prechat_enabled'),
+                'welcome_buttons' => $welcomeButtons ?: null,
+            ]
         );
 
         return redirect()->route('admin.clients.index')

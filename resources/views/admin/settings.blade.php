@@ -51,6 +51,13 @@
                     <textarea name="grok_system_prompt" rows="4"
                               class="w-full bg-[#F4F7FE] border-none rounded-2xl px-4 py-3 text-sm text-[#1B1B38] focus:ring-2 focus:ring-[#4318FF]/20 transition-all font-mono">{{ old('grok_system_prompt', $settings['grok_system_prompt']) }}</textarea>
                 </div>
+                <div class="md:col-span-2">
+                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Button Formatting Rules <span class="normal-case text-gray-300 font-normal">(leave blank to use built-in defaults)</span></label>
+                    <p class="text-[10px] text-gray-400 mb-2">Appended after every client's knowledge base. Controls how the AI produces <code class="bg-gray-200 px-1 rounded">[link:Label|URL]</code> and <code class="bg-gray-200 px-1 rounded">[btn:Label|Value]</code> buttons. Edit examples or limits here — changes apply instantly to all clients.</p>
+                    <textarea name="grok_button_rules" rows="6"
+                              class="w-full bg-[#F4F7FE] border-none rounded-2xl px-4 py-3 text-xs text-[#1B1B38] focus:ring-2 focus:ring-[#4318FF]/20 transition-all font-mono resize-y"
+                              placeholder="Leave blank to use built-in defaults. Paste a full replacement block here to override.">{{ old('grok_button_rules', $settings['grok_button_rules']) }}</textarea>
+                </div>
             </div>
         </div>
 

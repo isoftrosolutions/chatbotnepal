@@ -44,6 +44,7 @@ class WidgetConfigController extends Controller
             'watermark_opacity'    => $config->watermark_opacity,
             'watermark_position'   => $config->watermark_position,
             'suggested_questions'  => $config->suggested_questions ?? [],
+            'welcome_buttons'      => $config->welcome_buttons ?? [],
         ]);
     }
 }

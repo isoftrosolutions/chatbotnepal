@@ -298,7 +298,45 @@ class ChatService
 
         $prompt = str_replace('{business_name}', $businessName, $promptTemplate);
 
-        return $prompt."\n\n--- KNOWLEDGE BASE ---\n".$knowledgeBase."\n--- END KNOWLEDGE BASE ---";
+        $defaultButtonRules = <<<'RULES'
+
+---
+BUTTON FORMATTING RULES:
+When it is helpful to offer the user clickable options, you MUST use these exact syntaxes:
+
+1. LINK BUTTON (opens a URL in new tab):
+   [link:Button Label|https://example.com]
+
+   Examples:
+   [link:Book Now|https://example.com/booking]
+   [link:Call Us|tel:+9770000000000]
+   [link:WhatsApp|https://wa.me/9770000000000]
+   [link:Get Directions|https://maps.google.com/?q=Business+Name+City]
+   [link:Our Facebook|https://facebook.com/page]
+
+2. REPLY BUTTON (sends a message back to chat):
+   [btn:Button Label|Message to send]
+
+   Examples:
+   [btn:Room Rates|What are your room rates?]
+   [btn:Our Services|Tell me about your services]
+
+RULES:
+- Use LINK buttons whenever referring to a URL, phone number, map location, social media page, booking page, or any external resource from the knowledge base.
+- Use REPLY buttons when offering the user follow-up topic choices.
+- You can mix both types in a single response.
+- Always use the ACTUAL URLs from the knowledge base above — never make up URLs.
+- Place buttons AFTER your text explanation, not before.
+- Maximum 4 buttons per response to avoid clutter.
+- For phone numbers, use tel: prefix. For WhatsApp, use https://wa.me/ prefix.
+- Keep button labels SHORT — 2-4 words maximum.
+---
+RULES;
+
+        $stored      = Setting::get('grok_button_rules', '');
+        $buttonRules = (is_string($stored) && trim($stored) !== '') ? $stored : $defaultButtonRules;
+
+        return $prompt."\n\n--- KNOWLEDGE BASE ---\n".$knowledgeBase."\n--- END KNOWLEDGE BASE ---".$buttonRules;
     }
 
     private function estimateTokens(string $text): int
