@@ -298,7 +298,7 @@ class ChatService
 
         $prompt = str_replace('{business_name}', $businessName, $promptTemplate);
 
-        $defaultButtonRules = <<<'RULES'
+        $defaultButtonRules = <<<'EOT'
 
 ---
 BUTTON FORMATTING RULES:
@@ -321,7 +321,7 @@ When it is helpful to offer the user clickable options, you MUST use these exact
    [btn:Room Rates|What are your room rates?]
    [btn:Our Services|Tell me about your services]
 
-RULES:
+Follow these rules:
 - Use LINK buttons whenever referring to a URL, phone number, map location, social media page, booking page, or any external resource from the knowledge base.
 - Use REPLY buttons when offering the user follow-up topic choices.
 - You can mix both types in a single response.
@@ -331,7 +331,7 @@ RULES:
 - For phone numbers, use tel: prefix. For WhatsApp, use https://wa.me/ prefix.
 - Keep button labels SHORT — 2-4 words maximum.
 ---
-RULES;
+EOT;
 
         $stored      = Setting::get('grok_button_rules', '');
         $buttonRules = (is_string($stored) && trim($stored) !== '') ? $stored : $defaultButtonRules;
