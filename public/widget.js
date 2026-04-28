@@ -1,7 +1,8 @@
 (function() {
     const SCRIPT_TAG = document.currentScript;
     const SITE_ID = SCRIPT_TAG.getAttribute('data-token') || SCRIPT_TAG.getAttribute('data-site-id');
-    const BASE_URL = new URL(SCRIPT_TAG.src).origin;
+    const SCRIPT_URL = new URL(SCRIPT_TAG.src, window.location.href);
+    const BASE_URL = SCRIPT_URL.origin + SCRIPT_URL.pathname.replace(/\/widget\.js$/, '');
 
     if (!SITE_ID) {
         console.error('ChatBot Nepal: Missing data-token or data-site-id attribute.');
@@ -690,11 +691,11 @@
         }
 
         /* ── MOBILE ── */
-        @media (max-width: 480px) {
+        @media (max-width: 768px) {
             #cn-widget { bottom: 18px; right: 18px; }
             #cn-window {
                 position: fixed; bottom: 0; right: 0; left: 0;
-                width: 100%; max-height: 100dvh; height: 100dvh;
+                width: 100%; max-height: var(--cn-mobile-vh, 100dvh); height: var(--cn-mobile-vh, 100dvh);
                 border-radius: 0;
             }
             #cn-input-area {
@@ -1194,6 +1195,14 @@
         const textWrap  = document.getElementById('cn-l-text-wrap');
         const botWrap   = document.getElementById('cn-l-bot-wrap');
         const closeIcon = document.getElementById('cn-l-close-icon');
+        const widgetRoot = document.getElementById('cn-widget');
+
+        function syncMobileViewportHeight() {
+            if (!widgetRoot) return;
+            const vv = window.visualViewport;
+            const viewportHeight = vv ? Math.round(vv.height) : window.innerHeight;
+            widgetRoot.style.setProperty('--cn-mobile-vh', `${viewportHeight}px`);
+        }
 
         function launcherToClose() {
             if (window.gsap) {
@@ -1271,8 +1280,9 @@
             win.classList.add('open');
             badge.classList.add('gone');
             launcherToClose();
+            syncMobileViewportHeight();
 
-            if (window.innerWidth <= 480) {
+            if (window.innerWidth <= 768) {
                 dragHandle.style.display = 'flex';
             }
 
@@ -1309,6 +1319,12 @@
 
         launcher.addEventListener('click', () => isWindowOpen ? closeChat() : openChat());
         closeBtn.addEventListener('click', closeChat);
+        window.addEventListener('resize', syncMobileViewportHeight);
+        if (window.visualViewport) {
+            window.visualViewport.addEventListener('resize', syncMobileViewportHeight);
+            window.visualViewport.addEventListener('scroll', syncMobileViewportHeight);
+        }
+        syncMobileViewportHeight();
 
         /* Auto-grow textarea */
         function autoResize() {

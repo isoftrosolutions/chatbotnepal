@@ -1052,7 +1052,9 @@ document.querySelectorAll('.reveal').forEach(function(el) {
   </a>
 </div>
 
-<script src="{{ asset('widget.js') }}" data-site-id="chatbotnepal-buwgr2" defer></script>
+@if(!empty($demoSiteId))
+<script src="{{ asset('widget.js') }}" data-site-id="{{ $demoSiteId }}" defer></script>
+@endif
 
 <script>
 // ── Demo chatbot simulation ──

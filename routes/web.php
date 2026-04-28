@@ -18,6 +18,7 @@ use App\Http\Controllers\Client\InvoiceController;
 use App\Http\Controllers\Client\ProfileController;
 use App\Http\Controllers\Client\UpdateRequestController;
 use App\Http\Controllers\Client\VisitorsController;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -27,7 +28,12 @@ Route::get('/', function () {
             : redirect()->route('client.dashboard');
     }
 
-    return view('welcome');
+    $demoSiteId = User::where('role', 'client')
+        ->where('chatbot_enabled', true)
+        ->whereNotNull('site_id')
+        ->value('site_id');
+
+    return view('welcome', ['demoSiteId' => $demoSiteId]);
 });
 
 Route::get('/privacy-policy', fn() => view('privacy-policy'))->name('privacy-policy');

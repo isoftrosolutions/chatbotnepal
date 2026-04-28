@@ -75,7 +75,12 @@
       "Bash(winget upgrade *)",
       "Bash(del *)",
       "Bash(node --check public/widget.js)",
-      "Bash(node *)"
+      "Bash(node *)",
+      "WebFetch(domain:www.avocadoresort.com)",
+      "Bash(mkdir -p /c/Apache24/htdocs/ai/scripts)",
+      "Bash(mkdir -p /c/Apache24/htdocs/ai/screenshots)",
+      "Bash(pip show *)",
+      "Bash(playwright --version)"
     ]
   }
 }
