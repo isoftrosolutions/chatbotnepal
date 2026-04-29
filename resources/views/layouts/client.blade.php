@@ -94,11 +94,6 @@
                     <span class="font-medium">My Invoices</span>
                 </a>
 
-                <a href="{{ route('admin.links.index') }}" class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all {{ request()->routeIs('admin.links*') ? 'bg-indigo-600 text-white shadow-[0_10px_20px_-5px_rgba(79,70,229,0.4)]' : 'hover:bg-white/5' }}">
-                    <i data-lucide="link" class="w-5 h-5"></i>
-                    <span class="font-medium">My Links</span>
-                </a>
-
                 <a href="{{ route('client.embed-code') }}" class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all {{ request()->routeIs('client.embed-code*') ? 'bg-indigo-600 text-white shadow-[0_10px_20px_-5px_rgba(79,70,229,0.4)]' : 'hover:bg-white/5' }}">
                     <i data-lucide="code-2" class="w-5 h-5"></i>
                     <span class="font-medium">Embed Code</span>
