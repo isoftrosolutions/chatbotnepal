@@ -1,0 +1,43 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          script: |
+            cd /home/isoftroerp.com/chatbotnepal.isoftroerp.com
+
+            echo "=== Pulling latest code ==="
+            git pull origin main
+
+            echo "=== Fix permissions ==="
+            chown -R isoft1807:isoft1807 .
+            chmod -R 775 storage bootstrap/cache
+
+            echo "=== Laravel post-deploy ==="
+            /usr/local/lsws/lsphp84/bin/php artisan cache:clear
+            /usr/local/lsws/lsphp84/bin/php artisan config:clear
+            /usr/local/lsws/lsphp84/bin/php artisan route:cache
+            /usr/local/lsws/lsphp84/bin/php artisan view:clear
+            /usr/local/lsws/lsphp84/bin/php artisan migrate --force
+            /usr/local/lsws/lsphp84/bin/php artisan app:fix-null-site-id
+
+            echo "=== Restart web server ==="
+            systemctl restart lsws
+
+            echo "✅ Deployment complete"
