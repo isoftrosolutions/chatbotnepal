@@ -1606,9 +1606,12 @@
                                 updateChecksToRead();
                             } else if (ev.type === 'error') {
                                 streamContent = ev.message || 'Something went wrong.';
-                                streamBubble.innerHTML = renderMarkdown(streamContent);
-                                streamBubble.classList.add('error');
-                                addRetryLink(streamBubble);
+                                if (streamBubble) {
+                                    streamBubble.innerHTML = renderMarkdown(streamContent);
+                                    streamBubble.classList.add('error');
+                                    addRetryLink(streamBubble);
+                                }
+                                finalize();
                             }
                         } catch (_) {}
                     }

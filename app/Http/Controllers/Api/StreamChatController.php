@@ -114,12 +114,13 @@ class StreamChatController extends Controller
 
         $startTime    = microtime(true);
         $fullResponse = '';
+        $hadError    = false;
         $grokService  = $this->grokService;
         $chatService  = $this->chatService;
 
         return response()->stream(function () use (
             $messages, $client, $conversation, $startTime,
-            $grokService, $chatService, &$fullResponse
+            $grokService, $chatService, &$fullResponse, &$hadError
         ) {
             $grokService->streamChat(
                 $messages,
@@ -131,7 +132,25 @@ class StreamChatController extends Controller
                     }
                     flush();
                 },
-                function (array $usage) use (&$fullResponse, $client, $conversation, $startTime, $grokService, $chatService) {
+                function (array $usage) use (&$fullResponse, $client, $conversation, $startTime, $grokService, $chatService, &$hadError) {
+                    // If $onError was called, don't process completion again
+                    if ($hadError) {
+                        return;
+                    }
+
+                    // If no response received, send error instead of done
+                    if (empty($fullResponse)) {
+                        echo 'data: '.json_encode([
+                            'type' => 'error',
+                            'message' => 'No response received from AI. Please try again.'
+                        ])."\n\n";
+                        if (ob_get_level()) {
+                            ob_flush();
+                        }
+                        flush();
+                        return;
+                    }
+
                     $endTime   = microtime(true);
                     $tokensIn  = $usage['input_tokens']  > 0 ? $usage['input_tokens']  : (int) ceil(strlen($fullResponse) / 4);
                     $tokensOut = $usage['output_tokens'] > 0 ? $usage['output_tokens'] : (int) ceil(strlen($fullResponse) / 4);
@@ -142,15 +161,13 @@ class StreamChatController extends Controller
                     $cleanedText = $parsed['message'];
                     $buttons     = $parsed['buttons'];
 
-                    if (! empty($fullResponse)) {
-                        ChatMessage::create([
-                            'conversation_id' => $conversation->id,
-                            'role'            => 'bot',
-                            'message'         => $cleanedText,
-                            'tokens_used'     => $tokensOut,
-                            'created_at'      => now(),
-                        ]);
-                    }
+                    ChatMessage::create([
+                        'conversation_id' => $conversation->id,
+                        'role'            => 'bot',
+                        'message'         => $cleanedText,
+                        'tokens_used'     => $tokensOut,
+                        'created_at'      => now(),
+                    ]);
 
                     $cost     = $grokService->estimateCost($total);
                     $usageLog = TokenUsageLog::getOrCreateForToday($client->id);
@@ -176,7 +193,8 @@ class StreamChatController extends Controller
                     }
                     flush();
                 },
-                function ($error) {
+                function ($error) use (&$hadError) {
+                    $hadError = true;
                     echo 'data: '.json_encode(['type' => 'error', 'message' => $error])."\n\n";
                     if (ob_get_level()) {
                         ob_flush();

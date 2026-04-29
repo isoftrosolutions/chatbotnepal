@@ -109,6 +109,8 @@ class GroqService
         try {
             $ch    = curl_init();
             $usage = [];
+            $rawBuffer = '';
+            $httpCode = 0;
 
             $postData = json_encode([
                 'model'          => $this->model,
@@ -128,7 +130,20 @@ class GroqService
                     'Content-Type: application/json',
                 ],
                 CURLOPT_RETURNTRANSFER => false,
-                CURLOPT_WRITEFUNCTION  => function ($ch, $data) use ($onChunk, &$usage) {
+                CURLOPT_WRITEFUNCTION  => function ($ch, $data) use ($onChunk, &$usage, &$rawBuffer, &$httpCode) {
+                    $rawBuffer .= $data;
+
+                    // Check for HTTP error response BEFORE SSE parsing
+                    // If data doesn't start with "data: ", it might be a JSON error body
+                    if ($httpCode === 0) {
+                        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                    }
+
+                    // If we got a non-SSE response (JSON error), stop processing
+                    if ($httpCode >= 400 && strpos($data, 'data: ') !== 0) {
+                        return strlen($data);
+                    }
+
                     foreach (explode("\n", $data) as $line) {
                         if (strpos($line, 'data: ') !== 0) {
                             continue;
@@ -156,12 +171,28 @@ class GroqService
             ]);
 
             curl_exec($ch);
-            $error = curl_error($ch);
+            $curlError = curl_error($ch);
+            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             curl_close($ch);
 
-            if ($error) {
-                Log::error('Groq streaming error', ['error' => $error]);
-                $onError('Connection error');
+            // Handle cURL errors first
+            if ($curlError) {
+                Log::error('Groq streaming curl error', ['error' => $curlError, 'http_code' => $httpCode]);
+                $onError('Connection error: ' . $curlError);
+
+                return;
+            }
+
+            // Handle HTTP errors (401, 429, 500, etc.)
+            if ($httpCode >= 400) {
+                $category = $this->categorizeError($httpCode, $rawBuffer);
+                Log::error('Groq streaming HTTP error', [
+                    'http_code' => $httpCode,
+                    'category' => $category,
+                    'body' => substr($rawBuffer, 0, 500),
+                    'model' => $this->model,
+                ]);
+                $onError('AI service error (' . $httpCode . '): ' . $category);
 
                 return;
             }
