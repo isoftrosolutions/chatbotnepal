@@ -155,22 +155,34 @@
         </div>
       </div>
 
-      {{-- API Token (read-only) --}}
+      {{-- API Token & Custom Groq Key --}}
       <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
         <div class="p-6 border-b border-gray-50 flex items-center gap-4">
           <div class="w-12 h-12 bg-[#F4F7FE] rounded-2xl flex items-center justify-center">
             <i data-lucide="key" class="text-[#4318FF] w-6 h-6"></i>
           </div>
-          <h3 class="text-lg font-bold text-[#1B1B38]">API Credentials</h3>
+          <div>
+            <h3 class="text-lg font-bold text-[#1B1B38]">API Credentials</h3>
+            <p class="text-xs text-gray-400 mt-0.5">Use your own Groq API key to avoid sharing limits with other clients</p>
+          </div>
         </div>
-        <div class="p-6">
-          <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">API Token <span class="normal-case text-gray-300">(read-only)</span></label>
-          <div class="flex items-center gap-3">
-            <code class="flex-1 bg-[#F4F7FE] rounded-xl px-4 py-3 text-sm text-[#4318FF] font-mono break-all">{{ $client->api_token }}</code>
-            <button type="button" onclick="navigator.clipboard.writeText('{{ $client->api_token }}'); this.innerHTML='<i data-lucide=\'check\' class=\'w-4 h-4\'></i>'; lucide.createIcons(); setTimeout(()=>{this.innerHTML='<i data-lucide=\'copy\' class=\'w-4 h-4\'></i>'; lucide.createIcons();}, 1500)"
-              class="p-3 text-gray-400 hover:text-[#4318FF] hover:bg-[#4318FF]/5 rounded-xl transition-all" title="Copy token">
-              <i data-lucide="copy" class="w-4 h-4"></i>
-            </button>
+        <div class="p-6 space-y-4">
+          <div>
+            <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">API Token <span class="normal-case text-gray-300">(read-only)</span></label>
+            <div class="flex items-center gap-3">
+              <code class="flex-1 bg-[#F4F7FE] rounded-xl px-4 py-3 text-sm text-[#4318FF] font-mono break-all">{{ $client->api_token }}</code>
+              <button type="button" onclick="navigator.clipboard.writeText('{{ $client->api_token }}'); this.innerHTML='<i data-lucide=\'check\' class=\'w-4 h-4\'></i>'; lucide.createIcons(); setTimeout(()=>{this.innerHTML='<i data-lucide=\'copy\' class=\'w-4 h-4\'></i>'; lucide.createIcons();}, 1500)"
+                class="p-3 text-gray-400 hover:text-[#4318FF] hover:bg-[#4318FF]/5 rounded-xl transition-all" title="Copy token">
+                <i data-lucide="copy" class="w-4 h-4"></i>
+              </button>
+            </div>
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Custom Groq API Key <span class="normal-case text-gray-300">(optional)</span></label>
+            <input type="password" name="groq_api_key" value="{{ old('groq_api_key', $client->groq_api_key) }}"
+              class="w-full bg-[#F4F7FE] border-none rounded-xl px-4 py-3 text-sm text-[#1B1B38] focus:ring-2 focus:ring-[#4318FF]/20 transition-all outline-none"
+              placeholder="gsk_xxxx... (leave empty to use global key)">
+            <p class="text-xs text-gray-400 mt-2 leading-relaxed">Enter your own Groq API key here to have dedicated rate limits. Get one free at <a href="https://console.groq.com" target="_blank" class="text-[#4318FF] hover:underline">console.groq.com</a></p>
           </div>
         </div>
       </div>

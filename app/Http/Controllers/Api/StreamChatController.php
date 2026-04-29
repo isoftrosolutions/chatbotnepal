@@ -80,6 +80,8 @@ class StreamChatController extends Controller
             return response()->json(['error' => 'Account suspended'], 403);
         }
 
+        $this->grokService->setApiKey($client->groq_api_key ?? null);
+
         $cleanedMessage = $this->sanitizeInput($request->message);
         $conversation   = $this->chatService->getOrCreateConversation(
             $client,

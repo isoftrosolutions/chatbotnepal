@@ -18,6 +18,8 @@ class GroqService
 
     private float $temperature;
 
+    private ?string $userApiKey = null;
+
     public function __construct()
     {
         $this->apiKey      = Setting::get('grok_api_key', env('GROQ_API_KEY', ''));
@@ -27,6 +29,21 @@ class GroqService
         $this->temperature = (float) Setting::get('grok_temperature', env('GROQ_TEMPERATURE', 0.7));
     }
 
+    public function setApiKey(?string $key): void
+    {
+        $this->userApiKey = $key && !empty(trim($key)) ? trim($key) : null;
+    }
+
+    public function resetApiKey(): void
+    {
+        $this->userApiKey = null;
+    }
+
+    private function getEffectiveApiKey(): string
+    {
+        return $this->userApiKey ?? $this->apiKey;
+    }
+
     public function getModel(): string
     {
         return $this->model;
@@ -34,10 +51,12 @@ class GroqService
 
     public function chat(array $messages): array
     {
+        $apiKey = $this->getEffectiveApiKey();
+
         try {
             $response = Http::timeout(30)
                 ->withHeaders([
-                    'Authorization' => 'Bearer '.$this->apiKey,
+                    'Authorization' => 'Bearer '.$apiKey,
                     'Content-Type'  => 'application/json',
                 ])
                 ->post($this->apiUrl, [
@@ -46,6 +65,24 @@ class GroqService
                     'max_tokens'  => $this->maxTokens,
                     'temperature' => $this->temperature,
                 ]);
+
+            // Retry on 429
+            if ($response->status() === 429) {
+                Log::info('Groq API 429 rate limit, retrying after 2 seconds...');
+                sleep(2);
+
+                $response = Http::timeout(30)
+                    ->withHeaders([
+                        'Authorization' => 'Bearer '.$apiKey,
+                        'Content-Type'  => 'application/json',
+                    ])
+                    ->post($this->apiUrl, [
+                        'model'       => $this->model,
+                        'messages'    => $messages,
+                        'max_tokens'  => $this->maxTokens,
+                        'temperature' => $this->temperature,
+                    ]);
+            }
 
             if ($response->failed()) {
                 $status   = $response->status();
@@ -59,9 +96,13 @@ class GroqService
                     'model'    => $this->model,
                 ]);
 
+                $errorMessage = ($status === 429)
+                    ? "I'm handling many requests right now. Please wait a moment and try again."
+                    : 'AI service temporarily unavailable';
+
                 return [
                     'success'        => false,
-                    'error'          => 'AI service temporarily unavailable',
+                    'error'          => $errorMessage,
                     'error_category' => $category,
                 ];
             }
@@ -106,6 +147,10 @@ class GroqService
      */
     public function streamChat(array $messages, callable $onChunk, callable $onComplete, callable $onError): void
     {
+        $apiKey = $this->getEffectiveApiKey();
+        $retryCount = 0;
+        $maxRetries = 1;
+
         try {
             $ch    = curl_init();
             $usage = [];
@@ -126,7 +171,7 @@ class GroqService
                 CURLOPT_POST           => true,
                 CURLOPT_POSTFIELDS     => $postData,
                 CURLOPT_HTTPHEADER     => [
-                    'Authorization: Bearer '.$this->apiKey,
+                    'Authorization: Bearer '.$apiKey,
                     'Content-Type: application/json',
                 ],
                 CURLOPT_RETURNTRANSFER => false,
@@ -168,11 +213,69 @@ class GroqService
                     return strlen($data);
                 },
                 CURLOPT_TIMEOUT => 60,
+                CURLOPT_FAILONERROR => false,
             ]);
 
+            // Initial request
             curl_exec($ch);
             $curlError = curl_error($ch);
             $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+            // Retry on 429
+            while ($httpCode === 429 && $retryCount < $maxRetries) {
+                Log::info("Groq stream 429 rate limit, retrying (attempt " . ($retryCount + 1) . ")...");
+                curl_close($ch);
+                sleep(2);
+                $retryCount++;
+
+                $ch = curl_init();
+                curl_setopt_array($ch, [
+                    CURLOPT_URL            => $this->apiUrl,
+                    CURLOPT_POST           => true,
+                    CURLOPT_POSTFIELDS     => $postData,
+                    CURLOPT_HTTPHEADER     => [
+                        'Authorization: Bearer '.$apiKey,
+                        'Content-Type: application/json',
+                    ],
+                    CURLOPT_RETURNTRANSFER => false,
+                    CURLOPT_WRITEFUNCTION  => function ($ch, $data) use ($onChunk, &$usage, &$rawBuffer, &$httpCode) {
+                        $rawBuffer .= $data;
+                        if ($httpCode === 0) {
+                            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                        }
+                        if ($httpCode >= 400 && strpos($data, 'data: ') !== 0) {
+                            return strlen($data);
+                        }
+                        foreach (explode("\n", $data) as $line) {
+                            if (strpos($line, 'data: ') !== 0) {
+                                continue;
+                            }
+                            $json = substr($line, 6);
+                            if (trim($json) === '[DONE]') {
+                                continue;
+                            }
+                            $decoded = json_decode($json, true);
+                            if (! $decoded) {
+                                continue;
+                            }
+                            if (isset($decoded['usage'])) {
+                                $usage = $decoded['usage'];
+                            }
+                            if (isset($decoded['choices'][0]['delta']['content'])) {
+                                $onChunk($decoded['choices'][0]['delta']['content']);
+                            }
+                        }
+                        return strlen($data);
+                    },
+                    CURLOPT_TIMEOUT => 60,
+                    CURLOPT_FAILONERROR => false,
+                ]);
+
+                curl_exec($ch);
+                $curlError = curl_error($ch);
+                $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            }
+
             curl_close($ch);
 
             // Handle cURL errors first
@@ -191,8 +294,14 @@ class GroqService
                     'category' => $category,
                     'body' => substr($rawBuffer, 0, 500),
                     'model' => $this->model,
+                    'retries' => $retryCount,
                 ]);
-                $onError('AI service error (' . $httpCode . '): ' . $category);
+
+                $errorMessage = ($httpCode === 429 && $retryCount >= $maxRetries)
+                    ? "I'm handling many requests right now. Please wait a moment and try again."
+                    : "AI service error ({$httpCode}): {$category}";
+
+                $onError($errorMessage);
 
                 return;
             }

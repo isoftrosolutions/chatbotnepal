@@ -48,6 +48,8 @@ class ChatService
             return ['success' => false, 'error' => 'Chatbot is currently unavailable'];
         }
 
+        $this->grokService->setApiKey($client->groq_api_key ?? null);
+
         $conversation = $this->getOrCreateConversation(
             $client, $conversationId, $visitorId, $sourceUrl,
             $visitorName, $visitorEmail, $visitorPhone

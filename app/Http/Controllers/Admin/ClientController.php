@@ -121,6 +121,15 @@ class ClientController extends Controller
             ]
         );
 
+        // Handle groq_api_key - convert empty string to null
+        $groqApiKey = $request->input('groq_api_key');
+        if ($groqApiKey && trim($groqApiKey) !== '') {
+            $client->groq_api_key = trim($groqApiKey);
+        } else {
+            $client->groq_api_key = null;
+        }
+        $client->save();
+
         return redirect()->route('admin.clients.index')
             ->with('success', 'Client updated successfully');
     }

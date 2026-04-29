@@ -24,6 +24,7 @@ class User extends Authenticatable
         'status',
         'api_token',
         'site_id',
+        'groq_api_key',
         'chatbot_enabled',
         'last_login_at',
     ];
