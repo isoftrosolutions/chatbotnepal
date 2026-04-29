@@ -23,8 +23,8 @@ class GroqService
         $this->apiKey      = Setting::get('grok_api_key', env('GROQ_API_KEY', ''));
         $this->apiUrl      = Setting::get('groq_api_url', env('GROQ_API_URL', 'https://api.groq.com/openai/v1/chat/completions'));
         $this->model       = Setting::get('grok_model', env('GROQ_MODEL', 'llama-3.3-70b-versatile'));
-        $this->maxTokens   = (int) Setting::get('grok_max_tokens', env('GROK_MAX_TOKENS', 500));
-        $this->temperature = (float) Setting::get('grok_temperature', env('GROK_TEMPERATURE', 0.7));
+        $this->maxTokens   = (int) Setting::get('grok_max_tokens', env('GROQ_MAX_TOKENS', 500));
+        $this->temperature = (float) Setting::get('grok_temperature', env('GROQ_TEMPERATURE', 0.7));
     }
 
     public function getModel(): string
