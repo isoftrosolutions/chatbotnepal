@@ -205,7 +205,8 @@
             position: fixed; bottom: 96px; right: 24px;
             width: 370px; height: 570px; max-height: calc(100dvh - 110px);
             background: var(--cn-surface); border-radius: 22px;
-            box-shadow: 0 32px 64px rgba(0,109,119,.12), 0 6px 18px rgba(0,109,119,.08);
+            border: 1px solid rgba(0,0,0,0.12);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.18);
             display: flex; flex-direction: column; overflow: hidden;
             opacity: 0; transform: translateY(14px) scale(.97);
             pointer-events: none;
@@ -264,10 +265,11 @@
 
         /* ── MESSAGES AREA ── */
         #cn-messages {
-            flex: 1; overflow-y: auto; padding: 14px 16px 12px;
+            padding: 12px 0;
+            background: #ffffff;
+            flex: 1; overflow-y: auto;
             display: flex; flex-direction: column; gap: 0;
             scroll-behavior: smooth;
-            background: var(--cn-surface);
             position: relative;
             -webkit-overflow-scrolling: touch;
             overscroll-behavior: contain;
@@ -318,10 +320,20 @@
             from { opacity: 0; transform: translateY(5px); }
             to   { opacity: 1; transform: translateY(0); }
         }
-        .cn-row.user { justify-content: flex-end; }
-        .cn-row.bot  { justify-content: flex-start; }
+        .cn-row.user, .cn-row--user {
+            display: flex;
+            justify-content: flex-end;
+            padding: 4px 12px;
+        }
+        .cn-row.bot, .cn-row--bot {
+            display: flex;
+            align-items: flex-start;
+            justify-content: flex-start;
+            gap: 10px;
+            padding: 4px 12px;
+        }
 
-        .cn-col { max-width: 76%; position: relative; }
+        .cn-col { max-width: 100%; position: relative; }
 
         .cn-bubble {
             padding: 14px 16px;
@@ -350,24 +362,40 @@
         .cn-bubble pre code { background: none; padding: 0; }
 
         /* Bot bubble */
-        .cn-row.bot .cn-bubble {
-            background: var(--cn-bot-bubble); color: var(--cn-text);
-            border-radius: 1rem 1rem 1rem 0.25rem; box-shadow: none;
+        .cn-row.bot .cn-bubble, .cn-bubble--bot {
+            max-width: 82%;
+            border-radius: 4px 16px 16px 16px;
+            padding: 10px 14px;
+            font-size: 14px;
+            line-height: 1.55;
+            background: #f0f0ec;
+            color: #1a1a1a;
+            word-break: break-word;
+            box-shadow: none;
         }
         /* User bubble */
-        .cn-row.user .cn-bubble {
-            background: var(--cn-user-bubble); color: #fff;
-            border-radius: 1rem 1rem 0.25rem 1rem; box-shadow: none;
+        .cn-row.user .cn-bubble, .cn-bubble--user {
+            max-width: 78%;
+            border-radius: 16px 4px 16px 16px;
+            padding: 10px 14px;
+            font-size: 14px;
+            background: #1a6b35;
+            color: #ffffff;
+            margin-left: auto;
+            box-shadow: none;
         }
 
         /* Bot message avatar */
-        .cn-msg-avatar {
-            width: 34px; height: 34px; border-radius: 999px;
+        .cn-msg-avatar, .cn-avatar {
+            width: 28px; height: 28px; border-radius: 50%;
             background: var(--cn-primary); color: #fff;
             display: flex; align-items: center; justify-content: center;
-            flex: 0 0 auto;
+            flex-shrink: 0;
+            margin-top: 2px;
             box-shadow: 0 2px 10px rgba(0,109,119,.10);
             overflow: hidden;
+            object-fit: cover;
+            border: 1px solid #e0e0d8;
         }
         .cn-msg-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 999px; }
 
@@ -414,30 +442,46 @@
         }
 
         /* ── INPUT AREA ── */
-        #cn-input-area {
-            padding: 12px 12px 14px;
-            background: var(--cn-surface);
-            display: flex; align-items: flex-end;
-            gap: 10px; flex-shrink: 0;
+        #cn-input-area, #cn-input-bar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 12px;
+            padding-bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+            background: #ffffff;
+            border-top: 1px solid #e8e8e4;
+            flex-shrink: 0;
             position: sticky; bottom: 0;
             z-index: 4;
         }
         .cn-input-wrap {
-            flex: 1; background: var(--cn-input-bg);
-            border-radius: 20px;
-            display: flex; align-items: flex-end;
-            position: relative; padding: 10px 16px;
-            border: 1px solid rgba(190,200,202,.4);
-            box-shadow: 0 2px 10px rgba(0,109,119,.06);
+            flex: 1;
+            background: transparent;
+            border-radius: 0;
+            display: flex; align-items: center;
+            position: relative; padding: 0;
+            border: none;
+            box-shadow: none;
         }
         #cn-input {
-            flex: 1; background: transparent; border: none;
+            flex: 1;
+            border: 1.5px solid #d3d1c7;
+            border-radius: 22px;
+            padding: 10px 16px;
+            font-size: 16px;
+            background: #f8f8f6;
+            resize: none;
+            min-height: 44px;
+            max-height: 120px;
+            line-height: 1.4;
+            outline: none;
+            transition: border-color 0.15s;
             color: var(--cn-text);
-            font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1rem;
-            font-weight: 400; padding: 10px 8px; outline: none;
-            resize: none; height: 38px; max-height: 96px; line-height: 1.5;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-weight: 400;
             letter-spacing: 0.01em;
         }
+        #cn-input:focus { border-color: #1a6b35; background: #ffffff; }
         #cn-input::placeholder {
             color: #9ca3af; font-weight: 400; opacity: 0.7;
             letter-spacing: 0.01em;
@@ -453,17 +497,18 @@
         #cn-char-count.error   { color: #ef4444; font-weight: 600; }
 
         /* Send button — fully circular, 44×44 touch target */
-        #cn-send {
+        #cn-send, #cn-send-btn {
             width: 44px; height: 44px; border-radius: 50%; border: none;
-            background: var(--cn-primary);
+            background: #1a6b35;
             color: #fff; cursor: pointer;
             display: flex; align-items: center; justify-content: center;
             transition: transform .15s ease, background .15s;
             box-shadow: 0 8px 18px rgba(0,109,119,.12); outline: none; flex-shrink: 0;
+            touch-action: manipulation;
         }
-        #cn-send:hover   { background: var(--cn-primary-dark); transform: translateY(-1px); }
+        #cn-send:hover, #cn-send-btn:hover   { background: #145228; transform: translateY(-1px); }
         #cn-send:active  { transform: scale(.94); }
-        #cn-send:disabled { background: #a0aeb6; cursor: not-allowed; transform: none; box-shadow: none; }
+        #cn-send:disabled, #cn-send-btn:disabled { background: #b4b2a9; cursor: not-allowed; transform: none; box-shadow: none; }
         #cn-send:focus-visible { box-shadow: 0 0 0 3px rgba(0,109,119,.4); }
 
         /* ── FOOTER ── */
@@ -483,24 +528,34 @@
 
         /* ── QUICK-REPLY CHIPS ── */
         .cn-chips {
-            display: flex; flex-wrap: wrap; gap: 12px;
-            padding: 4px 0 6px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 4px 0 8px 0;
         }
-        .cn-chip {
-            display: inline-flex; align-items: center;
-            padding: 12px 20px; border-radius: 20px;
+        .cn-chip, .cn-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 18px;
             min-height: 44px;
-            border: 1.5px solid var(--cn-primary);
-            background: rgba(0,109,119,.06);
-            color: var(--cn-primary); font-size: .88rem; font-weight: 600;
-            cursor: pointer; transition: background .15s, color .15s;
+            background: #ffffff;
+            border: 1.5px solid #1a6b35;
+            border-radius: 22px;
+            color: #1a6b35;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.15s, color 0.15s;
             font-family: 'Plus Jakarta Sans', sans-serif;
-            white-space: normal; text-align: left; line-height: 1.4;
-            letter-spacing: 0.01em;
+            white-space: nowrap;
             touch-action: manipulation;
         }
-        .cn-chip:hover  { background: var(--cn-primary); color: #fff; }
-        .cn-chip:active { transform: scale(.97); }
+        .cn-chip:hover, .cn-chip:active, .cn-btn:hover, .cn-btn:active {
+            background: #1a6b35;
+            color: #ffffff;
+        }
+        .cn-chip:active, .cn-btn:active { transform: scale(.97); }
         .cn-chip:focus-visible { outline: 2px solid var(--cn-primary); outline-offset: 2px; }
 
         /* ── ESCALATION CARD ── */
@@ -675,24 +730,12 @@
             padding: 8px 0 4px; max-width: 100%;
         }
         .cn-btn {
-            background: transparent;
-            border: 1.5px solid var(--cn-primary);
-            color: var(--cn-primary);
-            padding: 10px 18px; border-radius: 20px;
-            min-height: 44px;
-            cursor: pointer; font-size: .85rem;
-            font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 600;
-            transition: background .2s, color .2s, opacity .2s;
-            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-            line-height: 1.3; display: inline-flex; align-items: center;
-            gap: 4px; letter-spacing: 0.01em;
-            max-width: 100%;
-            touch-action: manipulation;
+            overflow: hidden; text-overflow: ellipsis; line-height: 1.3;
+            gap: 4px; letter-spacing: 0.01em; max-width: 100%;
         }
-        .cn-btn:hover { background: var(--cn-primary); color: #ffffff; }
         .cn-btn:focus-visible { outline: 2px solid var(--cn-primary); outline-offset: 2px; }
         .cn-btn-link  { border-style: solid; }
-        .cn-btn-reply { border-style: dashed; }
+        .cn-btn-reply { border-style: solid; }
         .cn-btn-disabled { opacity: 0.5; cursor: not-allowed; pointer-events: none; }
 
         /* ── ANIMATIONS ── */
@@ -706,23 +749,30 @@
         @media (max-width: 768px) {
             #cn-widget { bottom: 18px; right: 18px; }
             #cn-window {
-                position: fixed; bottom: 0; right: 0; left: 0;
-                width: 100%; height: 100dvh; max-height: calc(var(--cn-mobile-vh, 100dvh) - 110px);
-                border-radius: 0;
+                position: fixed;
+                bottom: 0;
+                left: 50% !important;
+                right: auto !important;
+                width: calc(100vw - 24px);
+                max-width: 420px;
+                height: 100dvh;
+                max-height: calc(var(--cn-mobile-vh, 100dvh) - 110px);
+                border-radius: 16px;
+                overflow: hidden;
+                transform: translateX(-50%) translateY(14px) scale(.97);
                 padding-top: env(safe-area-inset-top, 0px);
                 padding-bottom: env(safe-area-inset-bottom, 0px);
+                box-shadow: 0 4px 24px rgba(0,0,0,0.15);
             }
-            #cn-input-area {
-                padding-bottom: calc(14px + env(safe-area-inset-bottom, 0px));
-            }
+            #cn-window.open { transform: translateX(-50%) translateY(0) scale(1); }
+            #cn-input-area, #cn-input-bar { padding-bottom: calc(10px + env(safe-area-inset-bottom, 0px)); }
             #cn-launcher {
                 bottom: calc(18px + env(safe-area-inset-bottom, 0px));
                 right: calc(18px + env(safe-area-inset-right, 0px));
             }
 
             /* Mobile typography adjustments */
-            .cn-bubble { font-size: 1.05rem; padding: 16px 18px; line-height: 1.55; }
-            #cn-input { font-size: 1.1rem; padding: 12px 10px; }
+            .cn-bubble { line-height: 1.55; }
             .cn-hdr-name { font-size: 1.1rem; }
             .cn-hdr-status { font-size: .8rem; }
             .cn-pcf-company-name { font-size: 1.25rem; }
@@ -731,7 +781,6 @@
             .cn-pcf-label { font-size: 1.1rem; top: 20px; }
             .cn-pcf-btn.primary,
             .cn-pcf-btn.secondary { font-size: 1.1rem; padding: 18px 20px; }
-            .cn-chip { font-size: .92rem; padding: 10px 18px; }
             #cn-input, .cn-pcf-input { font-size: 16px !important; }
             .cn-footer { font-size: .7rem; padding: 8px 0 10px; }
 
@@ -988,7 +1037,25 @@
         /* 9 — Newlines → <br> (skip inside <ul>/<ol>/<pre> by replacing only bare \n) */
         html = html.replace(/\n/g, '<br>');
 
-        return html;
+        return linkify(html);
+    }
+
+    function linkify(html) {
+        return html
+            .replace(
+                /(https?:\/\/[^\s<"]+)/g,
+                '<a href="$1" target="_blank" rel="noopener" ' +
+                'style="color:#1a6b35;text-decoration:underline;' +
+                'word-break:break-all;">$1</a>'
+            )
+            .replace(
+                /(\+?977[\d\s\-]{7,}|\b9[78]\d{8}\b)/g,
+                '<a href="tel:$1" style="color:#1a6b35;font-weight:500;">$1</a>'
+            )
+            .replace(
+                /(\b057[\-\s]?\d{6}\b)/g,
+                '<a href="tel:$1" style="color:#1a6b35;font-weight:500;">$1</a>'
+            );
     }
 
     /* ─────────────────────────────────────────
