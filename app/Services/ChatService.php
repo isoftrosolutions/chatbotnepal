@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\ChatConversation;
 use App\Models\ChatMessage;
+use App\Models\ClientLink;
 use App\Models\GroqUsageLog;
 use App\Models\KnowledgeBase;
 use App\Models\Setting;
@@ -338,7 +339,18 @@ EOT;
         $stored      = Setting::get('grok_button_rules', '');
         $buttonRules = (is_string($stored) && trim($stored) !== '') ? $stored : $defaultButtonRules;
 
-        return $prompt."\n\n--- KNOWLEDGE BASE ---\n".$knowledgeBase."\n--- END KNOWLEDGE BASE ---".$buttonRules;
+        $linksSection = '';
+        $links = ClientLink::where('user_id', $client->id)
+            ->active()
+            ->orderBy('sort_order')
+            ->get();
+
+        if ($links->isNotEmpty()) {
+            $linksList = $links->map(fn($link) => "{$link->name}: {$link->link}")->implode("\n");
+            $linksSection = "\n\n--- CLIENT LINKS ---\nUse these EXACT links when referring to the following:\n{$linksList}\n--- END CLIENT LINKS ---";
+        }
+
+        return $prompt."\n\n--- KNOWLEDGE BASE ---\n".$knowledgeBase."\n--- END KNOWLEDGE BASE ---".$buttonRules.$linksSection;
     }
 
     private function estimateTokens(string $text): int

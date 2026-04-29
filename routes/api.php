@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\ChatController;
+use App\Http\Controllers\Admin\ClientLinkController;
 use App\Http\Controllers\Api\StreamChatController;
 use App\Http\Controllers\Api\WebhookController;
 use App\Http\Controllers\Api\WidgetConfigController;
@@ -28,3 +29,5 @@ Route::get('/widget-config/{token}', [WidgetConfigController::class, 'show']);
 
 Route::post('/webhooks/esewa', [WebhookController::class, 'esewa']);
 Route::post('/webhooks/khalti', [WebhookController::class, 'khalti']);
+
+Route::get('/links/{site_id}', [ClientLinkController::class, 'publicIndex']);

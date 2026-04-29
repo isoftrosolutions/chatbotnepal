@@ -76,6 +76,11 @@ class User extends Authenticatable
         return $this->hasMany(Invoice::class);
     }
 
+    public function clientLinks(): HasMany
+    {
+        return $this->hasMany(ClientLink::class);
+    }
+
     public function tokenUsageLogs(): HasMany
     {
         return $this->hasMany(TokenUsageLog::class);

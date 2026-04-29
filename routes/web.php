@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\ClientController;
+use App\Http\Controllers\Admin\ClientLinkController;
 use App\Http\Controllers\Admin\ConversationController as AdminConversationController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\EmbedScriptController;
@@ -131,4 +132,10 @@ Route::middleware('auth')->group(function () {
         Route::post('/request-update', [UpdateRequestController::class, 'store'])->name('client.request-update.store');
 
     });
+
+    // Links management (for clients to manage their own links)
+    Route::resource('admin/links', ClientLinkController::class);
+    Route::post('admin/links/{link}/toggle', [ClientLinkController::class, 'toggle']);
+    Route::post('admin/links/reorder', [ClientLinkController::class, 'reorder']);
+
 });
