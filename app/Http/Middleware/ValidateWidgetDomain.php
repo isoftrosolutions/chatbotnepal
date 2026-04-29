@@ -12,24 +12,6 @@ class ValidateWidgetDomain
 {
     public function handle(Request $request, Closure $next): Response
     {
-        $origin = $request->headers->get('origin');
-        $referer = $request->headers->get('referer');
-
-        if ($request->is('api/widget/*') || $request->is('api/widget/session')) {
-            $response = $next($request);
-
-            $headers = [
-                'Access-Control-Allow-Origin' => $origin ?: '*',
-                'Access-Control-Allow-Methods' => 'GET, POST, OPTIONS',
-                'Access-Control-Allow-Headers' => 'Content-Type, Authorization, X-Requested-With',
-            ];
-            if ($origin) {
-                $headers['Access-Control-Allow-Credentials'] = 'true';
-            }
-
-            return $this->applyHeaders($response, $headers);
-        }
-
         // Valid session token means the widget already authenticated — skip domain check
         $sessionToken = $request->header('X-Session-Token');
         if ($sessionToken) {
@@ -37,62 +19,40 @@ class ValidateWidgetDomain
                 ->where('expires_at', '>', now())
                 ->exists();
             if ($valid) {
-                $response = $next($request);
-                $headers = [
-                    'Access-Control-Allow-Origin' => $origin ?: '*',
-                    'Access-Control-Allow-Methods' => 'GET, POST, OPTIONS',
-                    'Access-Control-Allow-Headers' => 'Content-Type, Authorization, X-Session-Token',
-                ];
-                if ($origin) {
-                    $headers['Access-Control-Allow-Credentials'] = 'true';
-                }
-
-                return $this->applyHeaders($response, $headers);
+                return $next($request);
             }
+        }
+
+        $origin = $request->headers->get('origin');
+        $referer = $request->headers->get('referer');
+        
+        $requestHost = null;
+        if ($origin) {
+            $requestHost = parse_url($origin, PHP_URL_HOST);
+        } elseif ($referer) {
+            $requestHost = parse_url($referer, PHP_URL_HOST);
+        }
+
+        // If no host can be determined (e.g. non-browser call), allow it through
+        if (! $requestHost) {
+            return $next($request);
+        }
+
+        // Local development is always allowed
+        if (in_array($requestHost, ['localhost', '127.0.0.1'])) {
+            return $next($request);
         }
 
         $allowedDomains = $this->getAllowedDomains($request);
 
-        $requestOrigin = $origin ?: ($referer ? parse_url($referer, PHP_URL_HOST) : null);
-
-        if ($requestOrigin && ! in_array($requestOrigin, $allowedDomains)) {
-            $denyHeaders = [
-                'Access-Control-Allow-Origin' => $origin ?: '*',
-                'Access-Control-Allow-Methods' => 'GET, POST, OPTIONS',
-                'Access-Control-Allow-Headers' => 'Content-Type, Authorization, X-Session-Token',
-            ];
-            if ($origin) {
-                $denyHeaders['Access-Control-Allow-Credentials'] = 'true';
-            }
-
+        if (! in_array($requestHost, $allowedDomains)) {
             return response()->json([
                 'success' => false,
-                'error' => 'Domain not authorized',
-            ], 403)->withHeaders($denyHeaders);
+                'error' => 'Domain not authorized: ' . $requestHost,
+            ], 403);
         }
 
-        // No origin header = server-side/tool call, not a browser cross-origin request — allow it through
-        $response = $next($request);
-
-        $successHeaders = [
-            'Access-Control-Allow-Origin' => $origin ?: '*',
-            'Access-Control-Allow-Methods' => 'GET, POST, OPTIONS',
-            'Access-Control-Allow-Headers' => 'Content-Type, Authorization, X-Session-Token',
-        ];
-        if ($origin) {
-            $successHeaders['Access-Control-Allow-Credentials'] = 'true';
-        }
-
-        return $this->applyHeaders($response, $successHeaders);
-    }
-
-    private function applyHeaders(Response $response, array $headers): Response
-    {
-        foreach ($headers as $key => $value) {
-            $response->headers->set($key, $value);
-        }
-
-        return $response;
+        return $next($request);
     }
 
     private function getAllowedDomains(Request $request): array
@@ -105,21 +65,22 @@ class ValidateWidgetDomain
                 ->first();
 
             if ($user && $user->website_url) {
-                $parsed = parse_url($user->website_url);
-                $host = $parsed['host'] ?? null;
+                $url = $user->website_url;
+                if (! str_contains($url, '://')) {
+                    $url = 'https://' . $url;
+                }
+                
+                $host = parse_url($url, PHP_URL_HOST);
                 if ($host) {
+                    $cleanHost = preg_replace('/^www\./', '', $host);
                     return [
-                        $host,
-                        'www.'.$host,
-                        preg_replace('/^www\./', '', $host),
+                        $cleanHost,
+                        'www.'.$cleanHost,
                     ];
                 }
             }
         }
 
-        return [
-            'localhost',
-            '127.0.0.1',
-        ];
+        return [];
     }
 }

@@ -1052,9 +1052,9 @@ document.querySelectorAll('.reveal').forEach(function(el) {
   </a>
 </div>
 
-@if(!empty($demoSiteId))
-<script src="{{ asset('widget.js') }}" data-site-id="{{ $demoSiteId }}" defer></script>
-@endif
+<!-- ChatBot Nepal Widget -->
+<script src="https://chatbotnepal.isoftroerp.com/widget.js" data-token="iVmfZwgDohSpk1yiQNJMPWJSdiocHPbnTwImj8fIf0JNoHFgHui4tsoTU2lf7NOz" defer></script>
+<!-- End ChatBot Nepal Widget -->
 
 <script>
 // ── Demo chatbot simulation ──

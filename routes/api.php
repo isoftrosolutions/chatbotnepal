@@ -7,13 +7,6 @@ use App\Http\Controllers\Api\WidgetConfigController;
 use App\Http\Controllers\Api\WidgetSessionController;
 use Illuminate\Support\Facades\Route;
 
-Route::options('/{any}', function () {
-    return response('', 204)
-        ->header('Access-Control-Allow-Origin', '*')
-        ->header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
-        ->header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Session-Token, X-Requested-With, Accept');
-})->where('any', '.*');
-
 Route::post('/widget/session', [WidgetSessionController::class, 'createSession'])
     ->middleware('throttle:session')
     ->withoutMiddleware('widget.domain');
