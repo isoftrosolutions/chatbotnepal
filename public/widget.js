@@ -139,6 +139,7 @@
             position: relative; overflow: hidden;
             will-change: transform;
             height: 58px;
+            touch-action: manipulation;
         }
 
         /* Text section (left) */
@@ -209,6 +210,7 @@
             opacity: 0; transform: translateY(14px) scale(.97);
             pointer-events: none;
             transition: opacity .28s cubic-bezier(.4,0,.2,1), transform .32s cubic-bezier(.34,1.2,.64,1);
+            touch-action: manipulation;
         }
         #cn-window.open {
             opacity: 1; transform: translateY(0) scale(1);
@@ -251,7 +253,7 @@
         /* Header action buttons — min 40×40 touch target */
         .cn-hdr-btns { display: flex; gap: 2px; z-index: 1; }
         .cn-hdr-btn {
-            width: 40px; height: 40px; border-radius: 50%; border: none;
+            width: 44px; height: 44px; border-radius: 50%; border: none;
             background: transparent; color: rgba(255,255,255,.85);
             cursor: pointer; display: flex; align-items: center; justify-content: center;
             transition: background .17s; outline: none;
@@ -267,6 +269,8 @@
             scroll-behavior: smooth;
             background: var(--cn-surface);
             position: relative;
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior: contain;
         }
 
         /* Watermark overlay */
@@ -305,6 +309,7 @@
             display: flex; align-items: flex-end;
             gap: 10px;
             padding: 7px 0;
+            will-change: transform;
         }
         @media (prefers-reduced-motion: no-preference) {
             .cn-row { animation: row-in .2s ease both; }
@@ -414,6 +419,8 @@
             background: var(--cn-surface);
             display: flex; align-items: flex-end;
             gap: 10px; flex-shrink: 0;
+            position: sticky; bottom: 0;
+            z-index: 4;
         }
         .cn-input-wrap {
             flex: 1; background: var(--cn-input-bg);
@@ -476,12 +483,13 @@
 
         /* ── QUICK-REPLY CHIPS ── */
         .cn-chips {
-            display: flex; flex-wrap: wrap; gap: 8px;
+            display: flex; flex-wrap: wrap; gap: 12px;
             padding: 4px 0 6px;
         }
         .cn-chip {
             display: inline-flex; align-items: center;
-            padding: 10px 18px; border-radius: 20px;
+            padding: 12px 20px; border-radius: 20px;
+            min-height: 44px;
             border: 1.5px solid var(--cn-primary);
             background: rgba(0,109,119,.06);
             color: var(--cn-primary); font-size: .88rem; font-weight: 600;
@@ -489,6 +497,7 @@
             font-family: 'Plus Jakarta Sans', sans-serif;
             white-space: normal; text-align: left; line-height: 1.4;
             letter-spacing: 0.01em;
+            touch-action: manipulation;
         }
         .cn-chip:hover  { background: var(--cn-primary); color: #fff; }
         .cn-chip:active { transform: scale(.97); }
@@ -514,10 +523,11 @@
             position: absolute; bottom: 8px; right: 12px;
             background: var(--cn-primary); color: #fff;
             border: none; border-radius: 50%;
-            width: 40px; height: 40px;
+            width: 44px; height: 44px;
             cursor: pointer; display: none;
             align-items: center; justify-content: center;
             box-shadow: 0 2px 8px rgba(0,0,0,.2); z-index: 5;
+            touch-action: manipulation;
         }
         #cn-scroll-btn.show { display: flex; }
         #cn-scroll-btn:hover { background: var(--cn-primary-dark); }
@@ -668,7 +678,8 @@
             background: transparent;
             border: 1.5px solid var(--cn-primary);
             color: var(--cn-primary);
-            padding: 8px 16px; border-radius: 20px;
+            padding: 10px 18px; border-radius: 20px;
+            min-height: 44px;
             cursor: pointer; font-size: .85rem;
             font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 600;
             transition: background .2s, color .2s, opacity .2s;
@@ -676,6 +687,7 @@
             line-height: 1.3; display: inline-flex; align-items: center;
             gap: 4px; letter-spacing: 0.01em;
             max-width: 100%;
+            touch-action: manipulation;
         }
         .cn-btn:hover { background: var(--cn-primary); color: #ffffff; }
         .cn-btn:focus-visible { outline: 2px solid var(--cn-primary); outline-offset: 2px; }
@@ -695,13 +707,18 @@
             #cn-widget { bottom: 18px; right: 18px; }
             #cn-window {
                 position: fixed; bottom: 0; right: 0; left: 0;
-                width: 100%; max-height: var(--cn-mobile-vh, 100dvh); height: var(--cn-mobile-vh, 100dvh);
+                width: 100%; height: 100dvh; max-height: calc(var(--cn-mobile-vh, 100dvh) - 110px);
                 border-radius: 0;
+                padding-top: env(safe-area-inset-top, 0px);
+                padding-bottom: env(safe-area-inset-bottom, 0px);
             }
             #cn-input-area {
                 padding-bottom: calc(14px + env(safe-area-inset-bottom, 0px));
             }
-            #cn-launcher { bottom: 18px; right: 18px; }
+            #cn-launcher {
+                bottom: calc(18px + env(safe-area-inset-bottom, 0px));
+                right: calc(18px + env(safe-area-inset-right, 0px));
+            }
 
             /* Mobile typography adjustments */
             .cn-bubble { font-size: 1.05rem; padding: 16px 18px; line-height: 1.55; }
@@ -715,6 +732,7 @@
             .cn-pcf-btn.primary,
             .cn-pcf-btn.secondary { font-size: 1.1rem; padding: 18px 20px; }
             .cn-chip { font-size: .92rem; padding: 10px 18px; }
+            #cn-input, .cn-pcf-input { font-size: 16px !important; }
             .cn-footer { font-size: .7rem; padding: 8px 0 10px; }
 
             .cn-drag-handle {
@@ -815,7 +833,7 @@
 
                                 <div class="cn-pcf-field">
                                     <div class="cn-pcf-input-wrapper">
-                                        <input id="cn-pcf-name" class="cn-pcf-input" type="text" autocomplete="name">
+                                        <input id="cn-pcf-name" class="cn-pcf-input" type="text" autocomplete="name" inputmode="text">
                                         <label class="cn-pcf-label" for="cn-pcf-name">Full Name</label>
                                         <span class="cn-pcf-field-icon" aria-hidden="true">&#128100;</span>
                                     </div>
@@ -824,7 +842,7 @@
 
                                 <div class="cn-pcf-field">
                                     <div class="cn-pcf-input-wrapper">
-                                        <input id="cn-pcf-email" class="cn-pcf-input" type="email" autocomplete="email">
+                                        <input id="cn-pcf-email" class="cn-pcf-input" type="email" autocomplete="email" inputmode="email">
                                         <label class="cn-pcf-label" for="cn-pcf-email">Email Address</label>
                                         <span class="cn-pcf-field-icon" aria-hidden="true">&#128231;</span>
                                     </div>
@@ -833,7 +851,7 @@
 
                                 <div class="cn-pcf-field">
                                     <div class="cn-pcf-input-wrapper">
-                                        <input id="cn-pcf-phone" class="cn-pcf-input" type="tel" autocomplete="tel">
+                                        <input id="cn-pcf-phone" class="cn-pcf-input" type="tel" autocomplete="tel" inputmode="tel">
                                         <label class="cn-pcf-label" for="cn-pcf-phone">Phone Number (Optional)</label>
                                         <span class="cn-pcf-field-icon" aria-hidden="true">&#128241;</span>
                                     </div>
@@ -901,7 +919,7 @@
                     <div class="cn-input-wrap">
                         <span id="cn-char-count" aria-hidden="true"></span>
                         <textarea id="cn-input" placeholder="Type your message..." rows="1"
-                            aria-label="Message input" autocomplete="off" maxlength="1000"></textarea>
+                            aria-label="Message input" autocomplete="off" maxlength="1000" inputmode="text"></textarea>
                     </div>
                     <button id="cn-send" disabled aria-label="Send message">
                         <svg width="20" height="20" fill="none" viewBox="0 0 24 24">
@@ -1051,7 +1069,7 @@
             const headers = { 'Content-Type': 'application/json' };
             if (sessionToken) headers['X-Session-Token'] = sessionToken;
 
-            const r = await fetch(`${BASE_URL}/api/chat/history`, {
+            const r = await fetchWithTimeout(`${BASE_URL}/api/chat/history`, {
                 method: 'POST',
                 headers,
                 body: JSON.stringify({
@@ -1059,7 +1077,7 @@
                     conversation_id: savedConvId,
                     visitor_id:      visitorId,
                 }),
-            });
+            }, 10000);
 
             if (!r.ok) { localStorage.removeItem('cbn_conversation'); return false; }
 
@@ -1084,11 +1102,11 @@
        SESSION — fetch token + config
     ───────────────────────────────────────── */
     function initSession() {
-        return fetch(`${BASE_URL}/api/widget/session`, {
+        return fetchWithTimeout(`${BASE_URL}/api/widget/session`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ site_id: SITE_ID }),
-        })
+        }, 10000)
         .then(r => r.json())
         .then(data => {
             if (data.session_token) {
@@ -1202,6 +1220,8 @@
             const vv = window.visualViewport;
             const viewportHeight = vv ? Math.round(vv.height) : window.innerHeight;
             widgetRoot.style.setProperty('--cn-mobile-vh', `${viewportHeight}px`);
+            const windowEl = document.getElementById('cn-window');
+            if (windowEl) windowEl.style.maxHeight = `calc(var(--cn-mobile-vh) - 110px)`;
         }
 
         function launcherToClose() {
@@ -1246,8 +1266,6 @@
         const dragHandle = document.querySelector('.cn-drag-handle');
 
         function onDragStart(e) {
-            const messages = document.getElementById('cn-messages');
-            if (messages.scrollTop > 0) return; /* only dismiss when scrolled to top */
             dragging    = true;
             dragStartY  = (e.touches ? e.touches[0].clientY : e.clientY);
             dragCurrentY = dragStartY;
@@ -1320,6 +1338,8 @@
         launcher.addEventListener('click', () => isWindowOpen ? closeChat() : openChat());
         closeBtn.addEventListener('click', closeChat);
         window.addEventListener('resize', syncMobileViewportHeight);
+        window.addEventListener('orientationchange', syncMobileViewportHeight);
+        document.addEventListener('DOMContentLoaded', syncMobileViewportHeight);
         if (window.visualViewport) {
             window.visualViewport.addEventListener('resize', syncMobileViewportHeight);
             window.visualViewport.addEventListener('scroll', syncMobileViewportHeight);
@@ -1350,7 +1370,7 @@
             autoResize();
         });
 
-        function handleSend() {
+        async function handleSend() {
             const text = input.value.trim();
             if (!text || busy) return;
             window.lastUserMsg = text;
@@ -1363,12 +1383,34 @@
             if (ESCALATION_RE.test(text)) {
                 window._pendingEscalation = true;
             }
-            sendMessage(text);
+            try {
+                await sendMessage(text);
+            } catch (_) {}
         }
 
-        sendBtn.addEventListener('click', handleSend);
-        input.addEventListener('keydown', e => {
-            if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); }
+        let sending = false;
+        sendBtn.addEventListener('click', async () => {
+            if (sending) return;
+            sending = true;
+            sendBtn.disabled = true;
+            try { await handleSend(); }
+            finally {
+                sending = false;
+                if (!busy) sendBtn.disabled = !input.value.trim();
+            }
+        });
+        input.addEventListener('keydown', async e => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                if (sending) return;
+                sending = true;
+                sendBtn.disabled = true;
+                try { await handleSend(); }
+                finally {
+                    sending = false;
+                    if (!busy) sendBtn.disabled = !input.value.trim();
+                }
+            }
         });
 
         /* ── PRE-CHAT FORM ── */
@@ -1559,7 +1601,7 @@
             }
         }
 
-        fetch(`${BASE_URL}/api/chat/stream`, { method: 'POST', headers, body })
+        return fetchWithTimeout(`${BASE_URL}/api/chat/stream`, { method: 'POST', headers, body }, 10000)
         .then(r => {
             if (!r.ok) return r.json().then(d => Promise.reject(d));
 
@@ -1621,9 +1663,14 @@
             return pump();
         })
         .catch(err => {
+            if (err && err.name === 'AbortError') {
+                if (!streamRow) addMsg('Connection timeout. Please try again.', 'bot', true);
+                finalize();
+                return;
+            }
             if (!streamRow) {
                 /* Stream not started — fall back to blocking API */
-                useFallbackChat(text);
+                return useFallbackChat(text);
             } else {
                 /* Partial stream failed */
                 if (!streamContent) {
@@ -1648,7 +1695,7 @@
         const headers = { 'Content-Type': 'application/json' };
         if (sessionToken) headers['X-Session-Token'] = sessionToken;
 
-        fetch(`${BASE_URL}/api/chat`, {
+        return fetchWithTimeout(`${BASE_URL}/api/chat`, {
             method: 'POST', headers,
             body: JSON.stringify({
                 site_id:         SITE_ID,
@@ -1660,7 +1707,7 @@
                 visitor_email:   visitorInfo.email || undefined,
                 visitor_phone:   visitorInfo.phone || undefined,
             }),
-        })
+        }, 10000)
         .then(r => {
             if (!r.ok) return r.json().then(d => Promise.reject(d));
             return r.json();
@@ -1682,6 +1729,10 @@
             }
         })
         .catch(err => {
+            if (err && err.name === 'AbortError') {
+                addMsg('Connection timeout. Please try again.', 'bot', true);
+                return;
+            }
             const msg = (err && err.error) ? err.error : 'Unable to connect. Please check your connection and try again.';
             addMsg(msg, 'bot', true);
         })
@@ -1929,6 +1980,13 @@
             var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
             return v.toString(16);
         });
+    }
+
+    function fetchWithTimeout(url, options, timeoutMs) {
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), timeoutMs || 10000);
+        const fetchOptions = { ...(options || {}), signal: controller.signal };
+        return fetch(url, fetchOptions).finally(() => clearTimeout(timer));
     }
 
     /* ─────────────────────────────────────────
