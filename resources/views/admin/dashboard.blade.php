@@ -4,105 +4,105 @@
 
 @section('content')
 <!-- Stats Grid -->
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
     <!-- Total Clients -->
-    <div class="bg-white rounded-2xl p-6 border border-[rgba(0,0,0,0.05)] flex items-center gap-4 shadow-[rgba(0,0,0,0.03)_0px_2px_4px]">
-        <div class="w-12 h-12 bg-[#f5f5f5] rounded-full flex items-center justify-center">
+    <div class="bg-white rounded-2xl p-4 sm:p-5 lg:p-6 border border-[rgba(0,0,0,0.05)] flex items-center gap-3 sm:gap-4 shadow-[rgba(0,0,0,0.03)_0px_2px_4px]">
+        <div class="w-10 h-10 sm:w-12 sm:h-12 bg-[#f5f5f5] rounded-full flex items-center justify-center flex-shrink-0">
             <i data-lucide="users" class="text-[#0d0d0d] w-5 h-5"></i>
         </div>
-        <div class="flex-1">
+        <div class="flex-1 min-w-0">
             <div class="flex items-center justify-between">
-                <p class="text-[11px] text-[#888888] font-medium tracking-[0.65px] uppercase">Total Clients</p>
-                <div id="trend-clients" class="flex items-center gap-1 text-xs font-medium {{ $trends['clients']['up'] ? 'text-brand-deep' : 'text-[#d45656]' }}">
+                <p class="text-[10px] sm:text-[11px] text-[#888888] font-medium tracking-[0.65px] uppercase">Total Clients</p>
+                <div id="trend-clients" class="flex items-center gap-1 text-[10px] sm:text-xs font-medium {{ $trends['clients']['up'] ? 'text-brand-deep' : 'text-[#d45656]' }} flex-shrink-0">
                     <i data-lucide="{{ $trends['clients']['up'] ? 'trending-up' : 'trending-down' }}" class="w-3 h-3"></i>
                     <span>{{ ($trends['clients']['up'] ? '+' : '') }}{{ $trends['clients']['value'] }}%</span>
                 </div>
             </div>
-            <h3 class="text-xl font-semibold text-[#0d0d0d] mt-1" id="stat-total-clients">{{ $stats['total_clients'] }}</h3>
+            <h3 class="text-base sm:text-xl font-semibold text-[#0d0d0d] mt-1 truncate" id="stat-total-clients">{{ $stats['total_clients'] }}</h3>
         </div>
     </div>
 
     <!-- Conversations Today -->
-    <div class="bg-white rounded-2xl p-6 border border-[rgba(0,0,0,0.05)] flex items-center gap-4 shadow-[rgba(0,0,0,0.03)_0px_2px_4px]">
-        <div class="w-12 h-12 bg-brand-light rounded-full flex items-center justify-center">
+    <div class="bg-white rounded-2xl p-4 sm:p-5 lg:p-6 border border-[rgba(0,0,0,0.05)] flex items-center gap-3 sm:gap-4 shadow-[rgba(0,0,0,0.03)_0px_2px_4px]">
+        <div class="w-10 h-10 sm:w-12 sm:h-12 bg-brand-light rounded-full flex items-center justify-center flex-shrink-0">
             <i data-lucide="message-square" class="text-brand-deep w-5 h-5"></i>
         </div>
-        <div class="flex-1">
+        <div class="flex-1 min-w-0">
             <div class="flex items-center justify-between">
-                <p class="text-[11px] text-[#888888] font-medium tracking-[0.65px] uppercase">Conversations Today</p>
-                <div id="trend-conversations" class="flex items-center gap-1 text-xs font-medium {{ $trends['conversations']['up'] ? 'text-brand-deep' : 'text-[#d45656]' }}">
+                <p class="text-[10px] sm:text-[11px] text-[#888888] font-medium tracking-[0.65px] uppercase">Today</p>
+                <div id="trend-conversations" class="flex items-center gap-1 text-[10px] sm:text-xs font-medium {{ $trends['conversations']['up'] ? 'text-brand-deep' : 'text-[#d45656]' }} flex-shrink-0">
                     <i data-lucide="{{ $trends['conversations']['up'] ? 'trending-up' : 'trending-down' }}" class="w-3 h-3"></i>
                     <span>{{ ($trends['conversations']['up'] ? '+' : '') }}{{ $trends['conversations']['value'] }}%</span>
                 </div>
             </div>
-            <h3 class="text-xl font-semibold text-[#0d0d0d] mt-1" id="stat-conversations-today">{{ $stats['conversations_today'] }}</h3>
+            <h3 class="text-base sm:text-xl font-semibold text-[#0d0d0d] mt-1 truncate" id="stat-conversations-today">{{ $stats['conversations_today'] }}</h3>
         </div>
     </div>
 
     <!-- Tokens Used -->
-    <div class="bg-white rounded-2xl p-6 border border-[rgba(0,0,0,0.05)] flex items-center gap-4 shadow-[rgba(0,0,0,0.03)_0px_2px_4px]">
-        <div class="w-12 h-12 bg-[#fef2f2] rounded-full flex items-center justify-center">
+    <div class="bg-white rounded-2xl p-4 sm:p-5 lg:p-6 border border-[rgba(0,0,0,0.05)] flex items-center gap-3 sm:gap-4 shadow-[rgba(0,0,0,0.03)_0px_2px_4px]">
+        <div class="w-10 h-10 sm:w-12 sm:h-12 bg-[#fef2f2] rounded-full flex items-center justify-center flex-shrink-0">
             <i data-lucide="cpu" class="text-[#c37d0d] w-5 h-5"></i>
         </div>
-        <div class="flex-1">
+        <div class="flex-1 min-w-0">
             <div class="flex items-center justify-between">
-                <p class="text-[11px] text-[#888888] font-medium tracking-[0.65px] uppercase">Tokens Used Today</p>
-                <div id="trend-tokens" class="flex items-center gap-1 text-xs font-medium {{ $trends['tokens']['up'] ? 'text-brand-deep' : 'text-[#d45656]' }}">
+                <p class="text-[10px] sm:text-[11px] text-[#888888] font-medium tracking-[0.65px] uppercase">Tokens Used</p>
+                <div id="trend-tokens" class="flex items-center gap-1 text-[10px] sm:text-xs font-medium {{ $trends['tokens']['up'] ? 'text-brand-deep' : 'text-[#d45656]' }} flex-shrink-0">
                     <i data-lucide="{{ $trends['tokens']['up'] ? 'trending-up' : 'trending-down' }}" class="w-3 h-3"></i>
                     <span>{{ ($trends['tokens']['up'] ? '+' : '') }}{{ $trends['tokens']['value'] }}%</span>
                 </div>
             </div>
-            <h3 class="text-xl font-semibold text-[#0d0d0d] mt-1" id="stat-tokens-today">{{ number_format($stats['tokens_today']) }}</h3>
+            <h3 class="text-base sm:text-xl font-semibold text-[#0d0d0d] mt-1 truncate" id="stat-tokens-today">{{ number_format($stats['tokens_today']) }}</h3>
         </div>
     </div>
 
     <!-- Revenue -->
-    <div class="bg-white rounded-2xl p-6 border border-[rgba(0,0,0,0.05)] flex items-center gap-4 shadow-[rgba(0,0,0,0.03)_0px_2px_4px]">
-        <div class="w-12 h-12 bg-brand-light rounded-full flex items-center justify-center">
+    <div class="bg-white rounded-2xl p-4 sm:p-5 lg:p-6 border border-[rgba(0,0,0,0.05)] flex items-center gap-3 sm:gap-4 shadow-[rgba(0,0,0,0.03)_0px_2px_4px]">
+        <div class="w-10 h-10 sm:w-12 sm:h-12 bg-brand-light rounded-full flex items-center justify-center flex-shrink-0">
             <i data-lucide="banknote" class="text-brand-deep w-5 h-5"></i>
         </div>
-        <div class="flex-1">
+        <div class="flex-1 min-w-0">
             <div class="flex items-center justify-between">
-                <p class="text-[11px] text-[#888888] font-medium tracking-[0.65px] uppercase">Revenue This Month</p>
-                <div id="trend-revenue" class="flex items-center gap-1 text-xs font-medium {{ $trends['revenue']['up'] ? 'text-brand-deep' : 'text-[#d45656]' }}">
+                <p class="text-[10px] sm:text-[11px] text-[#888888] font-medium tracking-[0.65px] uppercase">Revenue</p>
+                <div id="trend-revenue" class="flex items-center gap-1 text-[10px] sm:text-xs font-medium {{ $trends['revenue']['up'] ? 'text-brand-deep' : 'text-[#d45656]' }} flex-shrink-0">
                     <i data-lucide="{{ $trends['revenue']['up'] ? 'trending-up' : 'trending-down' }}" class="w-3 h-3"></i>
                     <span>{{ ($trends['revenue']['up'] ? '+' : '') }}{{ $trends['revenue']['value'] }}%</span>
                 </div>
             </div>
-            <h3 class="text-xl font-semibold text-[#0d0d0d] mt-1" id="stat-revenue-month">Rs. {{ number_format($stats['revenue_month']) }}</h3>
+            <h3 class="text-base sm:text-xl font-semibold text-[#0d0d0d] mt-1 truncate" id="stat-revenue-month">Rs. {{ number_format($stats['revenue_month']) }}</h3>
         </div>
     </div>
 </div>
 
-<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
     <!-- Conversations Trend Chart -->
-    <div class="lg:col-span-2 bg-white rounded-2xl p-6 border border-[rgba(0,0,0,0.05)] shadow-[rgba(0,0,0,0.03)_0px_2px_4px]">
-        <div class="flex items-center justify-between mb-6">
+    <div class="lg:col-span-2 bg-white rounded-2xl p-4 sm:p-5 lg:p-6 border border-[rgba(0,0,0,0.05)] shadow-[rgba(0,0,0,0.03)_0px_2px_4px]">
+        <div class="flex items-start sm:items-center justify-between mb-4 sm:mb-6 flex-wrap gap-2 sm:gap-3">
             <div>
-                <h3 class="text-base font-semibold text-[#0d0d0d]">Conversations Trend</h3>
-                <p class="text-sm text-[#888888]">Daily conversation volume across all bots</p>
+                <h3 class="text-sm sm:text-base font-semibold text-[#0d0d0d]">Conversations Trend</h3>
+                <p class="text-xs sm:text-sm text-[#888888] hidden sm:block">Daily conversation volume across all bots</p>
             </div>
-            <div class="flex bg-[#fafafa] border border-[rgba(0,0,0,0.05)] rounded-full p-1" id="chart-toggle">
-                <button data-days="7"  class="chart-toggle-btn px-4 py-1.5 rounded-full text-xs font-medium text-[#0d0d0d] bg-white border border-[rgba(0,0,0,0.05)]">7 DAYS</button>
-                <button data-days="30" class="chart-toggle-btn px-4 py-1.5 rounded-full text-xs font-medium text-[#888888] hover:text-[#0d0d0d]">30 DAYS</button>
+            <div class="flex bg-[#fafafa] border border-[rgba(0,0,0,0.05)] rounded-full p-1 shrink-0" id="chart-toggle">
+                <button data-days="7"  class="chart-toggle-btn px-3 sm:px-4 py-1 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-medium text-[#0d0d0d] bg-white border border-[rgba(0,0,0,0.05)]">7 DAYS</button>
+                <button data-days="30" class="chart-toggle-btn px-3 sm:px-4 py-1 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-medium text-[#888888] hover:text-[#0d0d0d]">30 DAYS</button>
             </div>
         </div>
-        <div class="h-[300px] w-full">
+        <div class="h-[220px] sm:h-[260px] lg:h-[300px] w-full">
             <canvas id="conversationsChart"></canvas>
         </div>
     </div>
 
     <!-- Client Distribution -->
-    <div class="bg-white rounded-2xl p-6 border border-[rgba(0,0,0,0.05)] shadow-[rgba(0,0,0,0.03)_0px_2px_4px]">
-        <h3 class="text-base font-semibold text-[#0d0d0d] mb-6">Client Distribution</h3>
-        <div class="relative h-[220px] flex items-center justify-center mb-6">
+    <div class="bg-white rounded-2xl p-4 sm:p-5 lg:p-6 border border-[rgba(0,0,0,0.05)] shadow-[rgba(0,0,0,0.03)_0px_2px_4px]">
+        <h3 class="text-sm sm:text-base font-semibold text-[#0d0d0d] mb-4 sm:mb-6">Client Distribution</h3>
+        <div class="relative h-[160px] sm:h-[180px] lg:h-[220px] flex items-center justify-center mb-4 sm:mb-6">
             <canvas id="distributionChart"></canvas>
             <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                <span class="text-3xl font-semibold text-[#0d0d0d]">{{ $stats['total_clients'] }}</span>
-                <span class="text-[10px] text-[#888888] font-medium tracking-[0.65px] uppercase">Total</span>
+                <span class="text-2xl sm:text-3xl font-semibold text-[#0d0d0d]">{{ $stats['total_clients'] }}</span>
+                <span class="text-[9px] sm:text-[10px] text-[#888888] font-medium tracking-[0.65px] uppercase">Total</span>
             </div>
         </div>
-        <div class="space-y-3" id="plan-legend">
+        <div class="space-y-2 sm:space-y-3" id="plan-legend">
             @forelse($planDistribution as $plan)
             <div class="flex items-center justify-between">
                 <div class="flex items-center gap-2">
@@ -122,35 +122,35 @@
 
 <!-- Recent Activity -->
 <div class="bg-white rounded-2xl border border-[rgba(0,0,0,0.05)] shadow-[rgba(0,0,0,0.03)_0px_2px_4px] overflow-hidden">
-    <div class="p-6 border-b border-[rgba(0,0,0,0.05)] flex items-center justify-between">
-        <h3 class="text-base font-semibold text-[#0d0d0d]">Recent Activity</h3>
+    <div class="p-4 sm:p-5 lg:p-6 border-b border-[rgba(0,0,0,0.05)]">
+        <h3 class="text-sm sm:text-base font-semibold text-[#0d0d0d]">Recent Activity</h3>
     </div>
     <div class="overflow-x-auto">
-        <table class="w-full text-left">
+        <table class="w-full text-left min-w-[550px]">
             <thead>
                 <tr>
-                    <th class="px-6 py-4 text-[10px] font-medium text-[#888888] tracking-[0.65px] uppercase">Time</th>
-                    <th class="px-6 py-4 text-[10px] font-medium text-[#888888] tracking-[0.65px] uppercase">Event</th>
-                    <th class="px-6 py-4 text-[10px] font-medium text-[#888888] tracking-[0.65px] uppercase">Client</th>
-                    <th class="px-6 py-4 text-[10px] font-medium text-[#888888] tracking-[0.65px] uppercase">Details</th>
+                    <th class="px-3 sm:px-6 py-3 sm:py-4 text-[10px] font-medium text-[#888888] tracking-[0.65px] uppercase">Time</th>
+                    <th class="px-3 sm:px-6 py-3 sm:py-4 text-[10px] font-medium text-[#888888] tracking-[0.65px] uppercase">Event</th>
+                    <th class="px-3 sm:px-6 py-3 sm:py-4 text-[10px] font-medium text-[#888888] tracking-[0.65px] uppercase">Client</th>
+                    <th class="px-3 sm:px-6 py-3 sm:py-4 text-[10px] font-medium text-[#888888] tracking-[0.65px] uppercase hidden sm:table-cell">Details</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-[rgba(0,0,0,0.05)]" id="recent-activity-tbody">
                 @forelse($recentConversations as $conversation)
                 <tr class="hover:bg-[#fafafa] transition-colors">
-                    <td class="px-6 py-4 text-sm text-[#666666]">{{ $conversation->created_at->diffForHumans() }}</td>
-                    <td class="px-6 py-4">
+                    <td class="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-[#666666] whitespace-nowrap">{{ $conversation->created_at->diffForHumans() }}</td>
+                    <td class="px-3 sm:px-6 py-3 sm:py-4">
                         <div class="flex items-center gap-2">
-                            <div class="w-2 h-2 rounded-full bg-brand-deep"></div>
-                            <span class="text-sm font-medium text-[#0d0d0d]">New conversation</span>
+                            <div class="w-2 h-2 rounded-full bg-brand-deep flex-shrink-0"></div>
+                            <span class="text-xs sm:text-sm font-medium text-[#0d0d0d]">New conversation</span>
                         </div>
                     </td>
-                    <td class="px-6 py-4 text-sm font-medium text-[#0d0d0d]">{{ $conversation->user->company_name ?? $conversation->user->name }}</td>
-                    <td class="px-6 py-4 text-sm text-[#666666]">Session #{{ substr($conversation->id, 0, 8) }} started by user via Widget</td>
+                    <td class="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm font-medium text-[#0d0d0d] truncate max-w-[120px] sm:max-w-none">{{ $conversation->user->company_name ?? $conversation->user->name }}</td>
+                    <td class="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-[#666666] hidden sm:table-cell">Session #{{ substr($conversation->id, 0, 8) }} started by user via Widget</td>
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="4" class="px-6 py-12 text-center text-[#888888] text-sm">No recent activity found</td>
+                    <td colspan="4" class="px-3 sm:px-6 py-8 sm:py-12 text-center text-[#888888] text-xs sm:text-sm">No recent activity found</td>
                 </tr>
                 @endforelse
             </tbody>
@@ -286,15 +286,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const tbody = document.getElementById('recent-activity-tbody');
             if (!data.recent_conversations.length) {
-                tbody.innerHTML = '<tr><td colspan="4" class="px-6 py-12 text-center text-[#888888] text-sm">No recent activity found</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="4" class="px-3 sm:px-6 py-8 sm:py-12 text-center text-[#888888] text-xs sm:text-sm">No recent activity found</td></tr>';
                 return;
             }
             tbody.innerHTML = data.recent_conversations.map(c => `
                 <tr class="hover:bg-[#fafafa] transition-colors">
-                    <td class="px-6 py-4 text-sm text-[#666666]">${c.time}</td>
-                    <td class="px-6 py-4"><div class="flex items-center gap-2"><div class="w-2 h-2 rounded-full bg-brand-deep"></div><span class="text-sm font-medium text-[#0d0d0d]">New conversation</span></div></td>
-                    <td class="px-6 py-4 text-sm font-medium text-[#0d0d0d]">${c.client}</td>
-                    <td class="px-6 py-4 text-sm text-[#666666]">Session #${c.session_id} started by user via Widget</td>
+                    <td class="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-[#666666] whitespace-nowrap">${c.time}</td>
+                    <td class="px-3 sm:px-6 py-3 sm:py-4"><div class="flex items-center gap-2"><div class="w-2 h-2 rounded-full bg-brand-deep flex-shrink-0"></div><span class="text-xs sm:text-sm font-medium text-[#0d0d0d]">New conversation</span></div></td>
+                    <td class="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm font-medium text-[#0d0d0d] truncate">${c.client}</td>
+                    <td class="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-[#666666] hidden sm:table-cell">Session #${c.session_id} started by user via Widget</td>
                 </tr>
             `).join('');
         })

@@ -137,29 +137,29 @@
         <!-- Main Content -->
         <main class="flex-1 flex flex-col min-w-0 overflow-hidden">
             <!-- Top Header -->
-            <header class="h-16 flex items-center justify-between px-4 lg:px-8 shrink-0 bg-white border-b border-[rgba(0,0,0,0.05)] sticky top-0 z-30">
-                <div class="flex items-center gap-4">
+            <header class="h-14 sm:h-16 flex items-center justify-between px-3 sm:px-4 lg:px-8 shrink-0 bg-white border-b border-[rgba(0,0,0,0.05)] sticky top-0 z-30">
+                <div class="flex items-center gap-2 sm:gap-4 min-w-0">
                     <!-- Mobile Menu Toggle -->
-                    <button @click="sidebarOpen = !sidebarOpen" class="lg:hidden p-2 rounded-lg hover:bg-[#f5f5f5] transition-colors">
+                    <button @click="sidebarOpen = !sidebarOpen" class="lg:hidden p-2 rounded-lg hover:bg-[#f5f5f5] transition-colors flex-shrink-0">
                         <i data-lucide="menu" class="w-5 h-5 text-[#0d0d0d]"></i>
                     </button>
-                    <h2 class="text-lg font-semibold text-[#0d0d0d]">@yield('header', 'Dashboard')</h2>
+                    <h2 class="text-base sm:text-lg font-semibold text-[#0d0d0d] truncate">@yield('header', 'Dashboard')</h2>
                 </div>
-                <div class="flex items-center gap-3 pl-4 border-l border-[rgba(0,0,0,0.05)]">
+                <div class="flex items-center gap-3 pl-3 sm:pl-4 border-l border-[rgba(0,0,0,0.05)] flex-shrink-0">
                     <div class="text-right hidden sm:block">
                         <p class="text-sm font-medium text-[#0d0d0d] leading-none">{{ auth()->user()->name }}</p>
                         <p class="text-[11px] text-[#888888] font-medium mt-0.5">{{ auth()->user()->company_name ?? 'Client' }}</p>
                     </div>
-                    <div class="w-9 h-9 bg-[#f5f5f5] rounded-full flex items-center justify-center overflow-hidden border border-[rgba(0,0,0,0.05)]">
+                    <div class="w-8 h-8 sm:w-9 sm:h-9 bg-[#f5f5f5] rounded-full flex items-center justify-center overflow-hidden border border-[rgba(0,0,0,0.05)]">
                         <img src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name) }}&background=18E299&color=0d0d0d" alt="Avatar">
                     </div>
                 </div>
             </header>
 
             <!-- Scrollable Content -->
-            <div class="flex-1 overflow-y-auto p-4 lg:p-8 pt-6" id="main-content">
+            <div class="flex-1 overflow-y-auto p-3 sm:p-4 lg:p-8 pt-4 sm:pt-6" id="main-content">
                 <!-- Toast Notifications -->
-                <div id="toast-container" class="fixed top-4 right-4 z-50 space-y-2">
+                <div id="toast-container" class="fixed top-3 right-3 sm:top-4 sm:right-4 z-50 space-y-2 max-w-[calc(100vw-24px)]">
                     @if(session('success'))
                         <div class="toast-notification animate-slide-in bg-brand-light border border-brand-deep/20 rounded-full px-4 py-3 text-brand-deep flex items-center gap-3 max-w-md shadow-[rgba(0,0,0,0.03)_0px_2px_4px]">
                             <i data-lucide="check-circle" class="w-4 h-4 flex-shrink-0"></i>
