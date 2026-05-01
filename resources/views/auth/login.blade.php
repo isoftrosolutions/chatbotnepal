@@ -4,20 +4,23 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Sign In — ChatBot Nepal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   body {
-    font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
     min-height: 100vh;
     display: flex;
-    background: #003f45;
+    background: #ffffff;
   }
 
   /* ── LEFT PANEL ── */
   .left {
     flex: 1;
-    background: linear-gradient(160deg, #004a51 0%, #003a40 40%, #002a2f 100%);
+    background: linear-gradient(160deg, #f0fdf7 0%, #ffffff 60%, #f0fdf7 100%);
     padding: 48px 56px;
     display: flex;
     flex-direction: column;
@@ -26,13 +29,12 @@
     min-height: 100vh;
   }
 
-  /* subtle radial glow top-right */
   .left::before {
     content: '';
     position: absolute;
-    top: -80px; right: -80px;
-    width: 360px; height: 360px;
-    background: radial-gradient(circle, rgba(0,109,119,0.35) 0%, transparent 70%);
+    top: -120px; right: -120px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(24,226,153,0.12) 0%, transparent 70%);
     pointer-events: none;
   }
 
@@ -45,36 +47,36 @@
   }
 
   .logo-icon {
-    width: 48px; height: 48px;
-    background: #006d77;
-    border-radius: 10px;
+    width: 40px; height: 40px;
+    background: #0d0d0d;
+    border-radius: 9999px;
     display: flex; align-items: center; justify-content: center;
     flex-shrink: 0;
   }
 
-  .logo-icon svg { width: 26px; height: 26px; }
+  .logo-icon svg { width: 20px; height: 20px; }
 
   .logo-name {
-    font-size: 20px;
-    font-weight: 700;
-    color: #ffffff;
+    font-size: 18px;
+    font-weight: 600;
+    color: #0d0d0d;
     letter-spacing: -0.3px;
   }
 
   /* HERO TEXT */
   .hero-heading {
-    font-size: 46px;
-    font-weight: 800;
-    line-height: 1.12;
-    color: #ffffff;
-    margin-bottom: 20px;
-    letter-spacing: -0.5px;
+    font-size: 40px;
+    font-weight: 600;
+    line-height: 1.10;
+    color: #0d0d0d;
+    letter-spacing: -0.8px;
+    margin-bottom: 16px;
   }
 
   .hero-sub {
-    font-size: 15px;
-    color: rgba(255,255,255,0.5);
-    line-height: 1.65;
+    font-size: 18px;
+    color: #666666;
+    line-height: 1.50;
     max-width: 400px;
     margin-bottom: 56px;
   }
@@ -83,38 +85,38 @@
   .features {
     display: flex;
     flex-direction: column;
-    gap: 28px;
+    gap: 24px;
     flex: 1;
   }
 
   .feature {
     display: flex;
     align-items: flex-start;
-    gap: 16px;
+    gap: 14px;
   }
 
   .feature-icon {
-    width: 42px; height: 42px;
-    background: rgba(255,255,255,0.07);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 10px;
+    width: 40px; height: 40px;
+    background: #fafafa;
+    border: 1px solid rgba(0,0,0,0.05);
+    border-radius: 12px;
     flex-shrink: 0;
     display: flex; align-items: center; justify-content: center;
   }
 
-  .feature-icon svg { width: 19px; height: 19px; stroke: rgba(255,255,255,0.75); }
+  .feature-icon svg { width: 18px; height: 18px; stroke: #0d0d0d; }
 
   .feature-text strong {
     display: block;
     font-size: 14px;
-    font-weight: 600;
-    color: #ffffff;
-    margin-bottom: 3px;
+    font-weight: 500;
+    color: #0d0d0d;
+    margin-bottom: 2px;
   }
 
   .feature-text span {
     font-size: 13px;
-    color: rgba(255,255,255,0.42);
+    color: #888888;
     line-height: 1.5;
   }
 
@@ -122,7 +124,7 @@
   .trusted {
     margin-top: auto;
     padding-top: 40px;
-    border-top: 1px solid rgba(255,255,255,0.08);
+    border-top: 1px solid rgba(0,0,0,0.05);
   }
 
   .trusted-inner {
@@ -136,37 +138,38 @@
   }
 
   .avatar {
-    width: 36px; height: 36px;
+    width: 32px; height: 32px;
     border-radius: 50%;
-    border: 2px solid #1e1b4b;
-    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    border: 2px solid #ffffff;
+    background: #18E299;
     display: flex; align-items: center; justify-content: center;
-    font-size: 12px;
-    font-weight: 700;
-    color: #fff;
-    margin-left: -8px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #0d0d0d;
+    margin-left: -6px;
     flex-shrink: 0;
   }
 
-  .avatar:first-child { margin-left: 0; background: linear-gradient(135deg, #006d77, #00535b); }
-  .avatar:nth-child(2) { background: linear-gradient(135deg, #008a96, #006d77); }
-  .avatar:nth-child(3) { background: linear-gradient(135deg, #00535b, #003f45); }
+  .avatar:first-child { margin-left: 0; }
+  .avatar:nth-child(2) { background: #d4fae8; }
+  .avatar:nth-child(3) { background: #0fa76e; color: #fff; }
 
   .trusted-text {
-    font-size: 13.5px;
-    color: rgba(255,255,255,0.5);
+    font-size: 13px;
+    color: #888888;
   }
 
   .trusted-text strong {
-    color: #ffffff;
-    font-weight: 700;
+    color: #0d0d0d;
+    font-weight: 600;
   }
 
   /* ── RIGHT PANEL ── */
   .right {
-    width: 500px;
+    width: 480px;
     flex-shrink: 0;
     background: #ffffff;
+    border-left: 1px solid rgba(0,0,0,0.05);
     display: flex;
     flex-direction: column;
     min-height: 100vh;
@@ -177,32 +180,32 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 56px 52px;
+    padding: 56px 48px;
   }
 
   .card-title {
     font-size: 28px;
-    font-weight: 800;
-    color: #0f172a;
-    letter-spacing: -0.4px;
+    font-weight: 600;
+    color: #0d0d0d;
+    letter-spacing: -0.56px;
     margin-bottom: 6px;
   }
 
   .card-sub {
-    font-size: 14px;
-    color: #64748b;
-    margin-bottom: 36px;
+    font-size: 15px;
+    color: #666666;
+    margin-bottom: 32px;
     line-height: 1.5;
   }
 
   /* ERROR ALERT */
   .alert-error {
     background: #fef2f2;
-    border: 1px solid #fecaca;
-    border-radius: 8px;
-    padding: 12px 14px;
-    font-size: 13.5px;
-    color: #dc2626;
+    border: 1px solid rgba(212,92,86,0.15);
+    border-radius: 9999px;
+    padding: 10px 16px;
+    font-size: 14px;
+    color: #d45656;
     margin-bottom: 24px;
     display: flex;
     align-items: center;
@@ -212,16 +215,14 @@
   .alert-error svg { width: 16px; height: 16px; flex-shrink: 0; }
 
   /* FORM FIELDS */
-  .field { margin-bottom: 20px; }
+  .field { margin-bottom: 18px; }
 
   .field label {
     display: block;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 1.1px;
-    text-transform: uppercase;
-    color: #374151;
-    margin-bottom: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #333333;
+    margin-bottom: 6px;
   }
 
   .input-wrap {
@@ -233,34 +234,34 @@
   .input-wrap svg.prefix {
     position: absolute; left: 14px;
     width: 16px; height: 16px;
-    color: #9ca3af;
+    color: #888888;
     pointer-events: none;
     flex-shrink: 0;
   }
 
   .input-wrap input {
     width: 100%;
-    background: #ffffff;
-    border: 1.5px solid #e5e7eb;
-    border-radius: 8px;
-    padding: 13px 44px;
+    background: #fafafa;
+    border: 1px solid rgba(0,0,0,0.08);
+    border-radius: 9999px;
+    padding: 12px 44px;
     font-size: 15px;
-    color: #111827;
+    color: #0d0d0d;
     outline: none;
     transition: border-color 0.2s, box-shadow 0.2s;
     font-family: inherit;
   }
 
-  .input-wrap input::placeholder { color: #9ca3af; }
+  .input-wrap input::placeholder { color: #888888; }
 
   .input-wrap input:focus {
-    border-color: #006d77;
-    box-shadow: 0 0 0 3px rgba(0,109,119,0.12);
+    border-color: #18E299;
+    box-shadow: 0 0 0 1px #18E299;
   }
 
   .input-wrap input.error {
-    border-color: #f87171;
-    box-shadow: 0 0 0 3px rgba(248,113,113,0.1);
+    border-color: #d45656;
+    box-shadow: 0 0 0 1px rgba(212,92,86,0.3);
   }
 
   .input-wrap .suffix {
@@ -269,12 +270,12 @@
     cursor: pointer; padding: 4px;
     display: flex; align-items: center;
     border-radius: 4px;
-    color: #9ca3af;
+    color: #888888;
     transition: color 0.2s;
   }
 
-  .input-wrap .suffix:hover { color: #006d77; }
-  .input-wrap .suffix.active { color: #006d77; }
+  .input-wrap .suffix:hover { color: #0d0d0d; }
+  .input-wrap .suffix.active { color: #18E299; }
   .input-wrap .suffix svg { width: 18px; height: 18px; }
 
   /* REMEMBER + FORGOT */
@@ -292,76 +293,74 @@
 
   .remember input[type="checkbox"] {
     width: 16px; height: 16px;
-    accent-color: #4f46e5;
+    accent-color: #18E299;
     cursor: pointer;
     border-radius: 4px;
   }
 
   .remember span {
     font-size: 14px;
-    color: #374151;
+    color: #333333;
     user-select: none;
   }
 
   .forgot {
     font-size: 14px;
-    font-weight: 600;
-    color: #006d77;
+    font-weight: 500;
+    color: #18E299;
     text-decoration: none;
     transition: color 0.2s;
   }
-  .forgot:hover { color: #00535b; text-decoration: underline; }
+  .forgot:hover { color: #0fa76e; }
 
   /* SIGN IN BUTTON */
   .btn-signin {
     width: 100%;
-    padding: 14px;
-    background: #006d77;
+    padding: 13px 24px;
+    background: #0d0d0d;
     border: none;
-    border-radius: 8px;
+    border-radius: 9999px;
     font-size: 15px;
-    font-weight: 700;
+    font-weight: 500;
     color: #ffffff;
     cursor: pointer;
-    transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
-    margin-bottom: 28px;
+    transition: opacity 0.2s, transform 0.1s;
+    margin-bottom: 24px;
     font-family: inherit;
-    letter-spacing: 0.1px;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
+    box-shadow: rgba(0,0,0,0.06) 0px 1px 2px;
   }
 
   .btn-signin:hover {
-    background: #00535b;
-    box-shadow: 0 4px 16px rgba(0,109,119,0.35);
+    opacity: 0.9;
   }
 
   .btn-signin:active { transform: scale(0.99); }
 
   .btn-signin svg { width: 18px; height: 18px; }
 
-
   /* DEMO LINK */
   .demo-row {
     text-align: center;
     font-size: 14px;
-    color: #64748b;
+    color: #666666;
   }
 
   .demo-row a {
-    color: #006d77;
-    font-weight: 600;
+    color: #18E299;
+    font-weight: 500;
     text-decoration: none;
   }
 
-  .demo-row a:hover { text-decoration: underline; }
+  .demo-row a:hover { color: #0fa76e; text-decoration: underline; }
 
   /* RIGHT FOOTER */
   .right-footer {
-    padding: 20px 52px;
-    border-top: 1px solid #f1f5f9;
+    padding: 16px 48px;
+    border-top: 1px solid rgba(0,0,0,0.05);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -370,10 +369,8 @@
   }
 
   .right-footer .copy {
-    font-size: 11px;
-    color: #94a3b8;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+    font-size: 12px;
+    color: #888888;
   }
 
   .right-footer .footer-links {
@@ -382,24 +379,22 @@
   }
 
   .right-footer .footer-links a {
-    font-size: 11px;
-    font-weight: 600;
-    color: #94a3b8;
+    font-size: 12px;
+    font-weight: 500;
+    color: #888888;
     text-decoration: none;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
     transition: color 0.2s;
   }
 
-  .right-footer .footer-links a:hover { color: #006d77; }
+  .right-footer .footer-links a:hover { color: #18E299; }
 
   /* MOBILE */
   @media (max-width: 900px) {
     body { flex-direction: column; }
     .left { min-height: auto; padding: 40px 32px; }
-    .hero-heading { font-size: 34px; }
+    .hero-heading { font-size: 32px; }
     .trusted { display: none; }
-    .right { width: 100%; min-height: auto; }
+    .right { width: 100%; min-height: auto; border-left: none; border-top: 1px solid rgba(0,0,0,0.05); }
     .right-inner { padding: 40px 32px; }
     .right-footer { padding: 16px 32px; }
   }
@@ -429,8 +424,8 @@
     <span class="logo-name">ChatBot Nepal</span>
   </div>
 
-  <h2 class="hero-heading">AI-Powered Chatbots for Nepali Businesses</h2>
-  <p class="hero-sub">Empower your enterprise with sophisticated conversational AI tailored specifically for the unique market dynamics of Nepal.</p>
+  <h2 class="hero-heading">AI Chatbots for Nepali Businesses</h2>
+  <p class="hero-sub">Empower your enterprise with conversational AI tailored for Nepal's unique market.</p>
 
   <div class="features">
     <div class="feature">
@@ -546,7 +541,7 @@
             type="password"
             id="pwd"
             name="password"
-            placeholder="••••••••"
+            placeholder="Enter your password"
             autocomplete="current-password"
             required
             class="{{ $errors->has('password') ? 'error' : '' }}"
@@ -577,8 +572,6 @@
 
     </form>
 
-
-
     <div class="demo-row">
       Don't have an account? <a href="https://wa.me/9779811144402" target="_blank">Request a demo</a>
     </div>
@@ -586,7 +579,7 @@
   </div>
 
   <div class="right-footer">
-    <span class="copy">© 2026 ChatBot Nepal by iSoftro</span>
+    <span class="copy">&copy; 2026 ChatBot Nepal by iSoftro</span>
     <div class="footer-links">
       <a href="{{ route('privacy-policy') }}">Privacy</a>
       <a href="{{ route('terms') }}">Terms</a>

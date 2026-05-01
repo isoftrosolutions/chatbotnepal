@@ -4,43 +4,43 @@
 
 @section('content')
 <!-- Stats Grid -->
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
     <!-- Chatbot Status -->
-    <div class="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 flex items-center gap-4">
-        <div id="bot-status-icon" class="w-14 h-14 rounded-2xl flex items-center justify-center {{ $stats['chatbot_online'] ? 'bg-[#E2FFF3]' : 'bg-[#FEECEC]' }}">
-            <i data-lucide="bot" class="w-7 h-7 {{ $stats['chatbot_online'] ? 'text-[#05CD99]' : 'text-[#EE5D50]' }}"></i>
+    <div class="bg-white rounded-2xl p-6 border border-[rgba(0,0,0,0.05)] flex items-center gap-4 shadow-[rgba(0,0,0,0.03)_0px_2px_4px]">
+        <div id="bot-status-icon" class="w-12 h-12 rounded-full flex items-center justify-center {{ $stats['chatbot_online'] ? 'bg-brand-light' : 'bg-[#fef2f2]' }}">
+            <i data-lucide="bot" class="w-5 h-5 {{ $stats['chatbot_online'] ? 'text-brand-deep' : 'text-[#d45656]' }}"></i>
         </div>
         <div class="flex-1">
-            <p class="text-[12px] text-gray-400 font-bold uppercase tracking-wider">Bot Status</p>
+            <p class="text-[11px] text-[#888888] font-medium tracking-[0.65px] uppercase">Bot Status</p>
             <div class="flex items-center gap-1.5 mt-1">
-                <div id="bot-status-dot" class="w-2 h-2 rounded-full {{ $stats['chatbot_online'] ? 'bg-[#05CD99]' : 'bg-[#EE5D50]' }}"></div>
-                <h3 id="bot-status-text" class="text-xl font-bold text-[#1B1B38]">{{ $stats['chatbot_online'] ? 'Online' : 'Offline' }}</h3>
+                <div id="bot-status-dot" class="w-2 h-2 rounded-full {{ $stats['chatbot_online'] ? 'bg-brand-deep' : 'bg-[#d45656]' }}"></div>
+                <h3 id="bot-status-text" class="text-lg font-semibold text-[#0d0d0d]">{{ $stats['chatbot_online'] ? 'Online' : 'Offline' }}</h3>
             </div>
         </div>
     </div>
 
     <!-- Total Conversations -->
-    <div class="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 flex items-center gap-4">
-        <div class="w-14 h-14 bg-[#F4F7FE] rounded-2xl flex items-center justify-center">
-            <i data-lucide="messages-square" class="text-[#4318FF] w-7 h-7"></i>
+    <div class="bg-white rounded-2xl p-6 border border-[rgba(0,0,0,0.05)] flex items-center gap-4 shadow-[rgba(0,0,0,0.03)_0px_2px_4px]">
+        <div class="w-12 h-12 bg-[#f5f5f5] rounded-full flex items-center justify-center">
+            <i data-lucide="messages-square" class="text-[#0d0d0d] w-5 h-5"></i>
         </div>
         <div class="flex-1">
-            <p class="text-[12px] text-gray-400 font-bold uppercase tracking-wider">Total Chats</p>
-            <h3 class="text-2xl font-bold text-[#1B1B38] mt-1" id="stat-total-conversations">{{ $stats['total_conversations'] }}</h3>
+            <p class="text-[11px] text-[#888888] font-medium tracking-[0.65px] uppercase">Total Chats</p>
+            <h3 class="text-xl font-semibold text-[#0d0d0d] mt-1" id="stat-total-conversations">{{ $stats['total_conversations'] }}</h3>
         </div>
     </div>
 
     <!-- Messages Today -->
-    <div class="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 flex items-center gap-4">
-        <div class="w-14 h-14 bg-[#FFF5E9] rounded-2xl flex items-center justify-center">
-            <i data-lucide="message-circle" class="text-[#FFB547] w-7 h-7"></i>
+    <div class="bg-white rounded-2xl p-6 border border-[rgba(0,0,0,0.05)] flex items-center gap-4 shadow-[rgba(0,0,0,0.03)_0px_2px_4px]">
+        <div class="w-12 h-12 bg-[#fef2f2] rounded-full flex items-center justify-center">
+            <i data-lucide="message-circle" class="text-[#c37d0d] w-5 h-5"></i>
         </div>
         <div class="flex-1">
-            <p class="text-[12px] text-gray-400 font-bold uppercase tracking-wider">Today's Activity</p>
+            <p class="text-[11px] text-[#888888] font-medium tracking-[0.65px] uppercase">Today's Activity</p>
             <div class="flex items-center gap-2">
-                <h3 class="text-2xl font-bold text-[#1B1B38] mt-1" id="stat-messages-today">{{ $stats['messages_today'] }}</h3>
+                <h3 class="text-xl font-semibold text-[#0d0d0d] mt-1" id="stat-messages-today">{{ $stats['messages_today'] }}</h3>
                 @if(isset($stats['messages_trend']))
-                <span id="stat-messages-trend" class="text-xs font-semibold {{ $stats['messages_trend'] >= 0 ? 'text-[#05CD99]' : 'text-[#EE5D50]' }}">
+                <span id="stat-messages-trend" class="text-xs font-medium {{ $stats['messages_trend'] >= 0 ? 'text-brand-deep' : 'text-[#d45656]' }}">
                     {{ $stats['messages_trend'] >= 0 ? '+' : '' }}{{ $stats['messages_trend'] }}%
                 </span>
                 @endif
@@ -49,60 +49,60 @@
     </div>
 
     <!-- Plan -->
-    <div class="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 flex items-center gap-4">
-        <div class="w-14 h-14 bg-[#E2FFF3] rounded-2xl flex items-center justify-center">
-            <i data-lucide="zap" class="text-[#05CD99] w-7 h-7"></i>
+    <div class="bg-white rounded-2xl p-6 border border-[rgba(0,0,0,0.05)] flex items-center gap-4 shadow-[rgba(0,0,0,0.03)_0px_2px_4px]">
+        <div class="w-12 h-12 bg-brand-light rounded-full flex items-center justify-center">
+            <i data-lucide="zap" class="text-brand-deep w-5 h-5"></i>
         </div>
         <div class="flex-1">
-            <p class="text-[12px] text-gray-400 font-bold uppercase tracking-wider">Current Plan</p>
-            <h3 class="text-xl font-bold text-[#1B1B38] mt-1 uppercase">{{ $stats['current_plan'] }}</h3>
+            <p class="text-[11px] text-[#888888] font-medium tracking-[0.65px] uppercase">Current Plan</p>
+            <h3 class="text-lg font-semibold text-[#0d0d0d] mt-1 uppercase">{{ $stats['current_plan'] }}</h3>
         </div>
     </div>
 </div>
 
-<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
     <!-- Usage Stats -->
-    <div class="lg:col-span-1 space-y-8">
-        <div class="bg-white rounded-3xl p-8 shadow-sm border border-gray-100">
-            <h3 class="text-lg font-bold text-[#1B1B38] mb-6">Token Consumption</h3>
-            <div class="space-y-6">
-                <div class="flex items-center justify-between p-4 bg-[#F4F7FE] rounded-2xl">
+    <div class="lg:col-span-1 space-y-6">
+        <div class="bg-white rounded-2xl p-6 border border-[rgba(0,0,0,0.05)] shadow-[rgba(0,0,0,0.03)_0px_2px_4px]">
+            <h3 class="text-base font-semibold text-[#0d0d0d] mb-5">Token Consumption</h3>
+            <div class="space-y-4">
+                <div class="flex items-center justify-between p-3 bg-[#fafafa] rounded-xl">
                     <div class="flex items-center gap-3">
-                        <i data-lucide="cpu" class="w-5 h-5 text-[#4318FF]"></i>
-                        <span class="text-sm font-medium text-gray-500">Total Tokens</span>
+                        <i data-lucide="cpu" class="w-4 h-4 text-[#0d0d0d]"></i>
+                        <span class="text-sm text-[#666666]">Total Tokens</span>
                     </div>
-                    <span class="text-lg font-bold text-[#1B1B38]" id="stat-total-tokens">{{ number_format($usage['total_tokens']) }}</span>
+                    <span class="text-base font-semibold text-[#0d0d0d]" id="stat-total-tokens">{{ number_format($usage['total_tokens']) }}</span>
                 </div>
-                <div class="flex items-center justify-between p-4 bg-[#F4F7FE] rounded-2xl">
+                <div class="flex items-center justify-between p-3 bg-[#fafafa] rounded-xl">
                     <div class="flex items-center gap-3">
-                        <i data-lucide="phone-call" class="w-5 h-5 text-[#05CD99]"></i>
-                        <span class="text-sm font-medium text-gray-500">API Calls</span>
+                        <i data-lucide="phone-call" class="w-4 h-4 text-brand-deep"></i>
+                        <span class="text-sm text-[#666666]">API Calls</span>
                     </div>
-                    <span class="text-lg font-bold text-[#1B1B38]" id="stat-api-calls">{{ $usage['total_api_calls'] }}</span>
+                    <span class="text-base font-semibold text-[#0d0d0d]" id="stat-api-calls">{{ $usage['total_api_calls'] }}</span>
                 </div>
-                <div class="mt-4 p-4 border-t border-gray-50">
+                <div class="p-3 border-t border-[rgba(0,0,0,0.05)]">
                     <div class="flex justify-between items-center">
-                        <span class="text-sm font-bold text-gray-400">Est. Cost</span>
-                        <span class="text-xl font-black text-[#05CD99]" id="stat-total-cost">Rs. {{ number_format($usage['total_cost'], 2) }}</span>
+                        <span class="text-sm font-medium text-[#888888]">Est. Cost</span>
+                        <span class="text-lg font-semibold text-brand-deep" id="stat-total-cost">Rs. {{ number_format($usage['total_cost'], 2) }}</span>
                     </div>
                 </div>
             </div>
-            <a href="{{ route('client.embed-code') }}" class="mt-8 w-full py-4 bg-indigo-600 text-white rounded-2xl text-sm font-bold shadow-lg hover:bg-indigo-700 transition-all flex items-center justify-center gap-2">
+            <a href="{{ route('client.embed-code') }}" class="mt-6 w-full py-3 bg-[#0d0d0d] text-white rounded-[9999px] text-sm font-medium flex items-center justify-center gap-2 hover:opacity-90 transition-opacity shadow-[rgba(0,0,0,0.06)_0px_1px_2px]">
                 <i data-lucide="code" class="w-4 h-4"></i>
                 Get Embed Code
             </a>
         </div>
 
         @if($stats['next_billing'])
-        <div class="bg-gradient-to-br from-[#1B1B38] to-[#2E2E5D] rounded-3xl p-8 text-white shadow-xl relative overflow-hidden">
-            <div class="absolute -right-4 -bottom-4 w-32 h-32 bg-white/5 rounded-full blur-3xl"></div>
-            <p class="text-[10px] text-indigo-300 font-bold uppercase tracking-wider mb-2">Next Billing Date</p>
-            <h4 class="text-2xl font-bold mb-4">{{ $stats['next_billing']->due_date->format('M d, Y') }}</h4>
-            <div class="flex justify-between items-center text-sm font-medium">
-                <span class="text-white/60">Amount Due:</span>
-                <span class="font-bold">Rs. {{ number_format($stats['next_billing']->amount) }}</span>
+        <div class="bg-[#0d0d0d] rounded-2xl p-6 text-white relative overflow-hidden">
+            <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-brand/10 rounded-full blur-2xl"></div>
+            <p class="text-[10px] text-[#888888] font-medium tracking-[0.65px] uppercase mb-2">Next Billing Date</p>
+            <h4 class="text-lg font-semibold mb-4">{{ $stats['next_billing']->due_date->format('M d, Y') }}</h4>
+            <div class="flex justify-between items-center text-sm">
+                <span class="text-[#888888]">Amount Due:</span>
+                <span class="font-semibold">Rs. {{ number_format($stats['next_billing']->amount) }}</span>
             </div>
-            <a href="{{ route('client.invoices') }}" class="mt-6 block w-full text-center py-3 bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl text-xs font-bold transition-all">
+            <a href="{{ route('client.invoices') }}" class="mt-4 block w-full text-center py-2.5 bg-white/10 hover:bg-white/20 border border-white/10 rounded-[9999px] text-xs font-medium transition-colors">
                 View Invoice Details
             </a>
         </div>
@@ -110,48 +110,48 @@
     </div>
 
     <!-- Recent Activity -->
-    <div class="lg:col-span-2 bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
-        <div class="p-8 border-b border-gray-50 flex items-center justify-between">
-            <h3 class="text-lg font-bold text-[#1B1B38]">Recent Conversations</h3>
-            <a href="{{ route('client.conversations') }}" class="text-sm font-bold text-indigo-600 hover:underline">View All</a>
+    <div class="lg:col-span-2 bg-white rounded-2xl border border-[rgba(0,0,0,0.05)] shadow-[rgba(0,0,0,0.03)_0px_2px_4px] overflow-hidden">
+        <div class="p-6 border-b border-[rgba(0,0,0,0.05)] flex items-center justify-between">
+            <h3 class="text-base font-semibold text-[#0d0d0d]">Recent Conversations</h3>
+            <a href="{{ route('client.conversations') }}" class="text-sm font-medium text-brand-deep hover:underline">View All</a>
         </div>
         <div class="overflow-x-auto">
             <table class="w-full text-left">
                 <thead>
-                    <tr class="bg-[#F4F7FE]/50">
-                        <th class="px-8 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-wider">Visitor</th>
-                        <th class="px-8 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-wider">Activity</th>
-                        <th class="px-8 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-wider text-right">Time</th>
+                    <tr>
+                        <th class="px-6 py-4 text-[10px] font-medium text-[#888888] tracking-[0.65px] uppercase">Visitor</th>
+                        <th class="px-6 py-4 text-[10px] font-medium text-[#888888] tracking-[0.65px] uppercase">Activity</th>
+                        <th class="px-6 py-4 text-[10px] font-medium text-[#888888] tracking-[0.65px] uppercase text-right">Time</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-gray-50" id="recent-conversations-tbody">
+                <tbody class="divide-y divide-[rgba(0,0,0,0.05)]" id="recent-conversations-tbody">
                     @forelse($recentConversations as $conv)
-                    <tr class="hover:bg-gray-50 transition-colors">
-                        <td class="px-8 py-4">
+                    <tr class="hover:bg-[#fafafa] transition-colors">
+                        <td class="px-6 py-4">
                             <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 bg-indigo-50 rounded-xl flex items-center justify-center text-indigo-600 font-bold text-xs">
+                                <div class="w-9 h-9 bg-[#fafafa] rounded-full flex items-center justify-center text-[#0d0d0d] font-semibold text-xs border border-[rgba(0,0,0,0.05)]">
                                     {{ substr($conv->visitor_name ?? 'A', 0, 1) }}
                                 </div>
                                 <div>
-                                    <div class="text-sm font-bold text-[#1B1B38]">{{ $conv->visitor_name ?? 'Anonymous Visitor' }}</div>
-                                    <div class="text-[10px] text-gray-400 font-medium">{{ $conv->visitor_email ?? 'No email provided' }}</div>
+                                    <div class="text-sm font-medium text-[#0d0d0d]">{{ $conv->visitor_name ?? 'Anonymous Visitor' }}</div>
+                                    <div class="text-[11px] text-[#888888]">{{ $conv->visitor_email ?? 'No email provided' }}</div>
                                 </div>
                             </div>
                         </td>
-                        <td class="px-8 py-4">
+                        <td class="px-6 py-4">
                             <div class="flex items-center gap-2">
-                                <span class="px-2.5 py-1 bg-indigo-50 text-indigo-600 rounded-lg text-[10px] font-bold uppercase tracking-wider">
+                                <span class="px-3 py-1 bg-[#fafafa] border border-[rgba(0,0,0,0.05)] rounded-full text-[11px] font-medium text-[#666666]">
                                     {{ $conv->messages->count() }} Messages
                                 </span>
                             </div>
                         </td>
-                        <td class="px-8 py-4 text-right">
-                            <span class="text-sm text-gray-400 font-medium">{{ $conv->created_at->diffForHumans() }}</span>
+                        <td class="px-6 py-4 text-right">
+                            <span class="text-sm text-[#888888]">{{ $conv->created_at->diffForHumans() }}</span>
                         </td>
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="3" class="px-8 py-12 text-center text-gray-400 font-medium">No conversations recorded yet</td>
+                        <td colspan="3" class="px-6 py-12 text-center text-[#888888] text-sm">No conversations recorded yet</td>
                     </tr>
                     @endforelse
                 </tbody>
@@ -171,7 +171,6 @@ document.addEventListener('DOMContentLoaded', function () {
         })
         .then(r => r.json())
         .then(data => {
-            // Stat cards
             const el = id => document.getElementById(id);
 
             el('stat-total-conversations').textContent = data.stats.total_conversations;
@@ -180,48 +179,45 @@ document.addEventListener('DOMContentLoaded', function () {
             if (el('stat-messages-trend')) {
                 const trend = data.stats.messages_trend;
                 el('stat-messages-trend').textContent  = (trend >= 0 ? '+' : '') + trend + '%';
-                el('stat-messages-trend').className    = 'text-xs font-semibold ' + (trend >= 0 ? 'text-[#05CD99]' : 'text-[#EE5D50]');
+                el('stat-messages-trend').className    = 'text-xs font-medium ' + (trend >= 0 ? 'text-brand-deep' : 'text-[#d45656]');
             }
 
-            // Bot status
             const online = data.stats.chatbot_online;
-            el('bot-status-icon').className = 'w-14 h-14 rounded-2xl flex items-center justify-center ' + (online ? 'bg-[#E2FFF3]' : 'bg-[#FEECEC]');
-            el('bot-status-dot').className  = 'w-2 h-2 rounded-full ' + (online ? 'bg-[#05CD99]' : 'bg-[#EE5D50]');
+            el('bot-status-icon').className = 'w-12 h-12 rounded-full flex items-center justify-center ' + (online ? 'bg-brand-light' : 'bg-[#fef2f2]');
+            el('bot-status-dot').className  = 'w-2 h-2 rounded-full ' + (online ? 'bg-brand-deep' : 'bg-[#d45656]');
             el('bot-status-text').textContent = online ? 'Online' : 'Offline';
 
-            // Token usage
             el('stat-total-tokens').textContent = data.usage.total_tokens;
             el('stat-api-calls').textContent    = data.usage.total_api_calls;
             el('stat-total-cost').textContent   = 'Rs. ' + data.usage.total_cost;
 
-            // Recent conversations
             const tbody = el('recent-conversations-tbody');
             if (data.recent_conversations.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="3" class="px-8 py-12 text-center text-gray-400 font-medium">No conversations recorded yet</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="3" class="px-6 py-12 text-center text-[#888888] text-sm">No conversations recorded yet</td></tr>';
                 return;
             }
             tbody.innerHTML = data.recent_conversations.map(c => `
-                <tr class="hover:bg-gray-50 transition-colors">
-                    <td class="px-8 py-4">
+                <tr class="hover:bg-[#fafafa] transition-colors">
+                    <td class="px-6 py-4">
                         <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 bg-indigo-50 rounded-xl flex items-center justify-center text-indigo-600 font-bold text-xs">
+                            <div class="w-9 h-9 bg-[#fafafa] rounded-full flex items-center justify-center text-[#0d0d0d] font-semibold text-xs border border-[rgba(0,0,0,0.05)]">
                                 ${c.visitor_initial}
                             </div>
                             <div>
-                                <div class="text-sm font-bold text-[#1B1B38]">${c.visitor_name}</div>
-                                <div class="text-[10px] text-gray-400 font-medium">${c.visitor_email}</div>
+                                <div class="text-sm font-medium text-[#0d0d0d]">${c.visitor_name}</div>
+                                <div class="text-[11px] text-[#888888]">${c.visitor_email}</div>
                             </div>
                         </div>
                     </td>
-                    <td class="px-8 py-4">
+                    <td class="px-6 py-4">
                         <div class="flex items-center gap-2">
-                            <span class="px-2.5 py-1 bg-indigo-50 text-indigo-600 rounded-lg text-[10px] font-bold uppercase tracking-wider">
+                            <span class="px-3 py-1 bg-[#fafafa] border border-[rgba(0,0,0,0.05)] rounded-full text-[11px] font-medium text-[#666666]">
                                 ${c.message_count} Messages
                             </span>
                         </div>
                     </td>
-                    <td class="px-8 py-4 text-right">
-                        <span class="text-sm text-gray-400 font-medium">${c.time}</span>
+                    <td class="px-6 py-4 text-right">
+                        <span class="text-sm text-[#888888]">${c.time}</span>
                     </td>
                 </tr>
             `).join('');
