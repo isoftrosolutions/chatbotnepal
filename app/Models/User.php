@@ -27,6 +27,7 @@ class User extends Authenticatable
         'groq_api_key',
         'chatbot_enabled',
         'voice_enabled',
+        'voice',
         'last_login_at',
     ];
 
@@ -91,6 +92,11 @@ class User extends Authenticatable
     public function widgetConfig(): HasOne
     {
         return $this->hasOne(WidgetConfig::class);
+    }
+
+    public function hostedPages(): HasMany
+    {
+        return $this->hasMany(HostedPage::class, 'client_id');
     }
 
     public function isAdmin(): bool

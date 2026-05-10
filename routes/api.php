@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\ClientLinkController;
 use App\Http\Controllers\Api\ChatController;
+use App\Http\Controllers\Api\HostedChatController;
 use App\Http\Controllers\Api\StreamChatController;
 use App\Http\Controllers\Api\VoiceController;
 use App\Http\Controllers\Api\WebhookController;
@@ -19,6 +20,9 @@ Route::post('/widget/session/verify', [WidgetSessionController::class, 'verifySe
 
 Route::post('/chat', [ChatController::class, 'chat'])
     ->middleware(['throttle:chat', 'widget.domain']);
+Route::post('/chat/init', [HostedChatController::class, 'init']);
+Route::post('/chat/message', [HostedChatController::class, 'message']);
+Route::post('/chat/lead', [HostedChatController::class, 'lead']);
 
 Route::post('/chat/stream', [StreamChatController::class, 'stream'])
     ->middleware(['throttle:chat', 'widget.domain']);

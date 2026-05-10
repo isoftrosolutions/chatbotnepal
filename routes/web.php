@@ -16,9 +16,11 @@ use App\Http\Controllers\Client\ConversationController;
 use App\Http\Controllers\Client\DashboardController;
 use App\Http\Controllers\Client\EmbedController;
 use App\Http\Controllers\Client\InvoiceController;
+use App\Http\Controllers\Client\HostedPageController;
 use App\Http\Controllers\Client\ProfileController;
 use App\Http\Controllers\Client\UpdateRequestController;
 use App\Http\Controllers\Client\VisitorsController;
+use App\Http\Controllers\HostedChatPageController;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -40,6 +42,7 @@ Route::get('/', function () {
 
 Route::get('/privacy-policy', fn () => view('privacy-policy'))->name('privacy-policy');
 Route::get('/terms', fn () => view('terms'))->name('terms');
+Route::get('/c/{slug}', [HostedChatPageController::class, 'show'])->name('hosted.chat');
 
 Route::get('/sitemap.xml', function () {
     $content = '<?xml version="1.0" encoding="UTF-8"?>'."\n".
@@ -125,6 +128,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/visitors', [VisitorsController::class, 'index'])->name('client.visitors');
 
         Route::get('/invoices', [InvoiceController::class, 'index'])->name('client.invoices');
+        Route::get('/invoices/{invoice}', [InvoiceController::class, 'show'])->name('client.invoices.show');
         Route::get('/invoices/{invoice}/pay', [InvoiceController::class, 'pay'])->name('client.invoices.pay');
         Route::get('/invoices/{invoice}/callback', [InvoiceController::class, 'callback'])->name('client.invoices.callback');
 
@@ -133,6 +137,12 @@ Route::middleware('auth')->group(function () {
 
         Route::get('/request-update', [UpdateRequestController::class, 'create'])->name('client.request-update.create');
         Route::post('/request-update', [UpdateRequestController::class, 'store'])->name('client.request-update.store');
+
+        Route::get('/hosted-pages', [HostedPageController::class, 'index'])->name('client.hosted-pages.index');
+        Route::get('/hosted-pages/create', [HostedPageController::class, 'create'])->name('client.hosted-pages.create');
+        Route::post('/hosted-pages', [HostedPageController::class, 'store'])->name('client.hosted-pages.store');
+        Route::get('/hosted-pages/{hostedPage}/update', [HostedPageController::class, 'edit'])->name('client.hosted-pages.edit');
+        Route::put('/hosted-pages/{hostedPage}', [HostedPageController::class, 'update'])->name('client.hosted-pages.update');
 
     });
 
