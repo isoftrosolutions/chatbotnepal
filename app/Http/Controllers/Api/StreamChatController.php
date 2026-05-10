@@ -80,6 +80,16 @@ class StreamChatController extends Controller
             return response()->json(['error' => 'Account suspended'], 403);
         }
 
+        $dailyCap = (int) \App\Models\Setting::get('daily_token_limit_per_client', 50000);
+        if ($dailyCap > 0) {
+            $todayUsage = TokenUsageLog::where('user_id', $client->id)
+                ->where('date', now()->toDateString())
+                ->value('total_tokens') ?? 0;
+            if ($todayUsage >= $dailyCap) {
+                return response()->json(['error' => 'Daily message limit reached. Please try again tomorrow.'], 429);
+            }
+        }
+
         $this->grokService->setApiKey($client->groq_api_key ?? null);
 
         $cleanedMessage = $this->sanitizeInput($request->message);

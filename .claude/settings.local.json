@@ -81,7 +81,10 @@
       "Bash(mkdir -p /c/Apache24/htdocs/ai/screenshots)",
       "Bash(pip show *)",
       "Bash(playwright --version)",
-      "Bash(Copy-Item *)"
+      "Bash(Copy-Item *)",
+      "Bash(findstr /i \"voice\\\\|users\")",
+      "Bash(Select-String -Pattern \"voice|users\" -SimpleMatch)",
+      "Bash(Test-Path *)"
     ]
   }
 }

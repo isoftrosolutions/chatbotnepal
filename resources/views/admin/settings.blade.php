@@ -20,10 +20,16 @@
             </div>
             <div class="p-8 grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">API Key</label>
+                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Groq API Key</label>
                     <input type="password" name="grok_api_key" value="{{ old('grok_api_key', $settings['grok_api_key']) }}"
                            class="w-full bg-[#F4F7FE] border-none rounded-xl px-4 py-3 text-sm text-[#1B1B38] focus:ring-2 focus:ring-[#4318FF]/20 transition-all"
                            placeholder="gsk_...">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Gemini API Key <span class="normal-case font-normal text-gray-300">(for TTS / voice output)</span></label>
+                    <input type="password" name="gemini_api_key" value="{{ old('gemini_api_key', $settings['gemini_api_key']) }}"
+                           class="w-full bg-[#F4F7FE] border-none rounded-xl px-4 py-3 text-sm text-[#1B1B38] focus:ring-2 focus:ring-[#4318FF]/20 transition-all"
+                           placeholder="AIza...">
                 </div>
                 <div>
                     <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Model Version</label>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -13,12 +14,12 @@ class VoiceController extends Controller
 {
     public function transcribe(Request $request): JsonResponse
     {
-        try {
-            $request->validate([
-                'audio' => 'required|file|mimes:webm,mpeg,mp4,wav,flac,m4a,mp3|max:25600', // 25MB max
-                'token' => 'required|string',
-            ]);
+        $request->validate([
+            'audio' => 'required|file|mimes:webm,mpeg,mp4,wav,flac,m4a,mp3|max:25600', // 25MB max
+            'token' => 'required|string',
+        ]);
 
+        try {
             $client = User::where('api_token', $request->token)->first();
             if (! $client) {
                 return response()->json(['error' => 'invalid_token'], 401);
@@ -31,7 +32,7 @@ class VoiceController extends Controller
             $audioFile = $request->file('audio');
             $audioContent = file_get_contents($audioFile->getRealPath());
 
-            $groqKey = config('services.groq.api_key') ?: env('GROQ_API_KEY');
+            $groqKey = Setting::get('grok_api_key', config('services.groq.api_key', ''));
             if (! $groqKey) {
                 Log::error('Voice transcribe: GROQ_API_KEY not configured');
 
@@ -73,12 +74,12 @@ class VoiceController extends Controller
 
     public function speak(Request $request): JsonResponse
     {
-        try {
-            $request->validate([
-                'text' => 'required|string|max:5000',
-                'token' => 'required|string',
-            ]);
+        $request->validate([
+            'text' => 'required|string|max:5000',
+            'token' => 'required|string',
+        ]);
 
+        try {
             $client = User::where('api_token', $request->token)->first();
             if (! $client) {
                 return response()->json(['error' => 'invalid_token'], 401);
@@ -90,7 +91,7 @@ class VoiceController extends Controller
 
             $text = $request->text;
 
-            $geminiKey = config('services.gemini.api_key') ?: env('GEMINI_API_KEY');
+            $geminiKey = Setting::get('gemini_api_key', config('services.gemini.api_key', ''));
             if (! $geminiKey) {
                 Log::error('Voice speak: GEMINI_API_KEY not configured');
 

@@ -6,6 +6,7 @@ use App\Models\ChatSession;
 use App\Models\HostedPage;
 use App\Models\Lead;
 use App\Models\User;
+use App\Services\ChatButtonParser;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\RateLimiter;
 
@@ -94,6 +95,7 @@ class ChatOrchestratorService
         if (! ($result['success'] ?? false)) {
             return $result;
         }
+        $parsed = ChatButtonParser::parse((string) ($result['reply'] ?? ''));
 
         $session->conversation_id = $result['conversation_id'];
         $session->message_count += 1;
@@ -108,7 +110,8 @@ class ChatOrchestratorService
 
         return [
             'success' => true,
-            'reply' => $result['reply'],
+            'reply' => $parsed['message'],
+            'buttons' => $parsed['buttons'],
             'conversation_id' => $result['conversation_id'],
             'lead_capture_suggested' => (bool) $leadTrigger,
             'lead_trigger' => $leadTrigger,

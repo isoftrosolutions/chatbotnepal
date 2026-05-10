@@ -38,7 +38,8 @@
       font-weight: 600;
       background: #fdfcff;
     }
-    .share-row { margin-top: 10px; display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+    .share-row { margin-top: 10px; display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; transition: opacity .25s ease; }
+    .share-row.hidden { opacity: 0; pointer-events: none; }
     .share-btn {
       border: 1px solid #dddff2;
       background: #fff;
@@ -49,6 +50,7 @@
       font-weight: 600;
       text-decoration: none;
     }
+    .share-btn svg { width: 14px; height: 14px; vertical-align: -2px; margin-right: 6px; }
 
     .shell {
       background: var(--white);
@@ -110,6 +112,18 @@
       margin-left: auto;
     }
     .typing { color: var(--muted); font-size: 14px; display: none; padding: 4px 2px; }
+    .btn-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 6px 0 10px; }
+    .chat-btn {
+      border: 1px solid #ccd0ea;
+      background: #fff;
+      border-radius: 10px;
+      padding: 7px 10px;
+      font-size: 13px;
+      cursor: pointer;
+      color: #2c2f42;
+      text-decoration: none;
+      display: inline-block;
+    }
 
     .composer {
       margin-top: 12px;
@@ -141,6 +155,15 @@
       background: #fff;
       padding: 16px;
     }
+    .lead-card.floating {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: min(92vw, 360px);
+      z-index: 1200;
+      box-shadow: 0 20px 56px rgba(14, 17, 32, 0.28);
+    }
     .lead-card.hidden { display: none; }
     .lead-card h4 { margin: 0 0 6px; font-size: 24px; }
     .lead-card p { margin: 0 0 14px; color: var(--muted); font-size: 14px; }
@@ -163,6 +186,17 @@
       cursor: pointer;
     }
     .lead-note { margin-top: 8px; text-align: center; color: var(--muted); font-size: 12px; }
+    .lead-skip {
+      margin-top: 8px;
+      width: 100%;
+      background: #fff;
+      border: 1px solid #d8daeb;
+      border-radius: 10px;
+      padding: 10px;
+      cursor: pointer;
+      font-weight: 600;
+      color: #2c2f42;
+    }
 
     .footer { padding: 12px 18px; text-align: center; color: var(--muted); border-top: 1px solid var(--line); background: #fff; }
 
@@ -174,6 +208,7 @@
     @media (max-width: 768px) {
       .page { margin: 10px auto; padding: 0 8px; }
       .top h1 { font-size: 24px; }
+      .share-row { display: none !important; }
       .bar { padding: 12px; }
       .content { min-height: auto; }
       .left, .center, .right { padding: 12px; }
@@ -193,11 +228,10 @@
 <div class="page">
   <div class="top">
     <h1>{{ $title }}</h1>
-    <div class="url" id="shareUrl">https://{{ request()->getHost() }}/c/{{ $slug }}</div>
-    <div class="share-row">
-      <a class="share-btn" id="shareFacebook" target="_blank" rel="noopener">Share Facebook</a>
-      <a class="share-btn" id="shareTwitter" target="_blank" rel="noopener">Share X</a>
-      <a class="share-btn" id="shareWhatsapp" target="_blank" rel="noopener">Share WhatsApp</a>
+    <div class="share-row" id="shareRow">
+      <a class="share-btn" id="shareFacebook" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 22v-8h2.7l.4-3h-3.1V9.1c0-.9.3-1.5 1.6-1.5h1.7V4.9c-.3 0-1.3-.1-2.4-.1-2.4 0-4 1.5-4 4.2V11H8v3h2.4v8h3.1z"/></svg>Facebook</a>
+      <a class="share-btn" id="shareTwitter" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="m18.9 2 2.6 3.7-5.7 6.5L22 22h-4.7l-4.6-6.1L7.4 22H2.7l6.1-7L2 2h4.8l4.2 5.7L15.9 2h3z"/></svg>X</a>
+      <a class="share-btn" id="shareWhatsapp" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.7 14.9L2 22l5.3-1.4A10 10 0 1 0 12 2Zm5.8 14.1c-.2.6-1.3 1.2-1.8 1.2-.5 0-1.2.2-3.8-1-3.2-1.5-5.2-4.9-5.4-5.1-.2-.2-1.3-1.7-1.3-3.2s.8-2.3 1.1-2.6c.3-.3.6-.4.8-.4h.6c.2 0 .4 0 .6.5.2.6.8 2 .8 2.1.1.2.1.4 0 .6 0 .2-.2.4-.3.5-.2.2-.3.4-.5.6-.1.1-.3.3-.1.6.2.4 1 1.6 2.1 2.5 1.4 1.2 2.5 1.6 2.9 1.8.4.2.6.1.8-.1.2-.3 1-1.1 1.3-1.5.2-.3.5-.3.8-.2.3.1 2 .9 2.3 1 .3.2.5.2.6.4.1.2.1 1-.1 1.6Z"/></svg>WhatsApp</a>
     </div>
   </div>
 
@@ -244,7 +278,7 @@
         <div id="chatStatus" style="margin-top:8px;color:#6b7085;font-size:12px;">Connecting...</div>
       </section>
 
-      <aside class="right">
+      <aside class="right" id="leadAside">
         <div class="lead-card hidden" id="leadCard">
           <h4>Almost there!</h4>
           <p>Please share your details so we can assist you better.</p>
@@ -252,6 +286,7 @@
           <input id="leadPhone" placeholder="Phone number" />
           <input id="leadEmail" placeholder="Email (optional)" />
           <button id="leadSubmit">Submit</button>
+          <button id="leadSkip" class="lead-skip" type="button">Skip</button>
           <div class="lead-note">You can continue chatting after this.</div>
         </div>
       </aside>
@@ -267,11 +302,14 @@ let sessionToken = null;
 let messageCount = 0;
 let leadCaptureShown = false;
 const slug = @json($slug);
-const shareUrl = document.getElementById('shareUrl').textContent.trim();
+const shareUrl = window.location.href;
 const messagesEl = document.getElementById('messages');
 const typingEl = document.getElementById('typing');
 const statusEl = document.getElementById('chatStatus');
 const leadCardEl = document.getElementById('leadCard');
+const leadAsideEl = document.getElementById('leadAside');
+const shareRowEl = document.getElementById('shareRow');
+const isMobile = window.matchMedia('(max-width: 768px)').matches;
 
 function getFingerprint() {
   const key = 'hosted_chat_fingerprint_v1';
@@ -288,6 +326,37 @@ function appendMessage(role, text) {
   div.className = 'msg ' + role;
   div.textContent = text;
   messagesEl.insertBefore(div, typingEl);
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+}
+
+function appendButtons(buttons) {
+  if (!Array.isArray(buttons) || buttons.length === 0) return;
+  const row = document.createElement('div');
+  row.className = 'btn-row';
+
+  buttons.slice(0, 4).forEach((btn) => {
+    if (btn.type === 'reply' && btn.value) {
+      const button = document.createElement('button');
+      button.className = 'chat-btn';
+      button.type = 'button';
+      button.textContent = btn.label || 'Option';
+      button.addEventListener('click', () => sendMessage(btn.value));
+      row.appendChild(button);
+      return;
+    }
+
+    if (btn.type === 'link' && btn.url) {
+      const link = document.createElement('a');
+      link.className = 'chat-btn';
+      link.href = btn.url;
+      link.target = '_blank';
+      link.rel = 'noopener';
+      link.textContent = btn.label || 'Open';
+      row.appendChild(link);
+    }
+  });
+
+  messagesEl.insertBefore(row, typingEl);
   messagesEl.scrollTop = messagesEl.scrollHeight;
 }
 
@@ -332,6 +401,7 @@ async function sendMessage(text) {
   }
   statusEl.textContent = 'Connected';
   appendMessage('bot', data.reply || 'Sorry, I could not process that.');
+  appendButtons(data.buttons || []);
   messageCount += 1;
   maybeShowLeadCapture();
 }
@@ -339,9 +409,40 @@ async function sendMessage(text) {
 function maybeShowLeadCapture() {
   if (leadCaptureShown) return;
   if (messageCount >= 1) {
-    leadCardEl.classList.remove('hidden');
+    if (!isMobile) {
+      leadCardEl.classList.remove('hidden');
+      leadAsideEl.style.display = '';
+    }
     leadCaptureShown = true;
   }
+}
+
+function showFirstVisitLeadPopup() {
+  if (isMobile) return;
+  const key = 'hosted_lead_popup_seen_v1';
+  if (localStorage.getItem(key) === '1') return;
+  localStorage.setItem(key, '1');
+
+  leadAsideEl.style.display = 'none';
+  leadCardEl.classList.remove('hidden');
+  leadCardEl.classList.add('floating');
+
+  setTimeout(() => {
+    if (leadCardEl.classList.contains('floating')) {
+      leadCardEl.classList.add('hidden');
+      leadCardEl.classList.remove('floating');
+    }
+  }, 5000);
+}
+
+function skipLeadCard() {
+  if (leadCardEl.classList.contains('floating')) {
+    leadCardEl.classList.remove('floating');
+    leadAsideEl.style.display = '';
+    leadCardEl.classList.remove('hidden');
+    return;
+  }
+  leadCardEl.classList.add('hidden');
 }
 
 async function submitLead() {
@@ -388,10 +489,17 @@ document.querySelectorAll('.quick-action-btn').forEach((btn) => {
 });
 
 document.getElementById('leadSubmit').addEventListener('click', submitLead);
+document.getElementById('leadSkip').addEventListener('click', skipLeadCard);
 document.getElementById('shareFacebook').href = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(shareUrl);
 document.getElementById('shareTwitter').href = 'https://twitter.com/intent/tweet?url=' + encodeURIComponent(shareUrl) + '&text=' + encodeURIComponent('Chat with us live');
 document.getElementById('shareWhatsapp').href = 'https://wa.me/?text=' + encodeURIComponent('Chat with us: ' + shareUrl);
+setTimeout(() => {
+  if (!isMobile) {
+    shareRowEl.classList.add('hidden');
+  }
+}, 2000);
 
+showFirstVisitLeadPopup();
 init();
 </script>
 </body>

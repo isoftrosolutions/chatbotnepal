@@ -54,6 +54,18 @@ class ChatService
             return ['success' => false, 'error' => 'Chatbot is currently unavailable'];
         }
 
+        $dailyCap = (int) Setting::get('daily_token_limit_per_client', 50000);
+        if ($dailyCap > 0) {
+            $todayUsage = TokenUsageLog::where('user_id', $client->id)
+                ->where('date', now()->toDateString())
+                ->value('total_tokens') ?? 0;
+            if ($todayUsage >= $dailyCap) {
+                Log::warning('Daily token cap reached', ['client_id' => $client->id, 'used' => $todayUsage, 'cap' => $dailyCap]);
+
+                return ['success' => false, 'error' => 'Daily message limit reached. Please try again tomorrow.'];
+            }
+        }
+
         $this->grokService->setApiKey($client->groq_api_key ?? null);
 
         $conversation = $this->getOrCreateConversation(

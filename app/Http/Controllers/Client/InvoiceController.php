@@ -25,6 +25,15 @@ class InvoiceController extends Controller
         return view('client.invoices', compact('invoices', 'pendingTotal'));
     }
 
+    public function show(Invoice $invoice): View
+    {
+        if ($invoice->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        return view('client.invoice-show', compact('invoice'));
+    }
+
     public function pay(Invoice $invoice)
     {
         $user = auth()->user();
@@ -129,11 +138,11 @@ class InvoiceController extends Controller
         if ($request->status === 'success') {
             $invoice->markAsPaid('esewa', $request->ref_id ?? 'unknown');
 
-            return redirect()->route('client.invoices.index')
+            return redirect()->route('client.invoices')
                 ->with('success', 'Payment successful! Your chatbot is now active.');
         }
 
-        return redirect()->route('client.invoices.index')
+        return redirect()->route('client.invoices')
             ->with('error', 'Payment failed. Please try again.');
     }
 }

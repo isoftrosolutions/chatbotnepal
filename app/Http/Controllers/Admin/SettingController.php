@@ -17,6 +17,7 @@ class SettingController extends Controller
         $defaults = [
             // Groq AI
             'grok_api_key' => '',
+            'gemini_api_key' => '',
             'groq_api_url' => 'https://api.groq.com/openai/v1/chat/completions',
             'grok_model' => 'llama-3.3-70b-versatile',
             'grok_max_tokens' => '500',
@@ -62,6 +63,7 @@ class SettingController extends Controller
         $validated = $request->validate([
             // Groq AI
             'grok_api_key' => 'nullable|string',
+            'gemini_api_key' => 'nullable|string',
             'groq_api_url' => 'required|url',
             'grok_model' => 'required|string',
             'grok_max_tokens' => 'required|integer|min:100|max:4000',
