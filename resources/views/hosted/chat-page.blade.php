@@ -38,6 +38,17 @@
       font-weight: 600;
       background: #fdfcff;
     }
+    .share-row { margin-top: 10px; display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+    .share-btn {
+      border: 1px solid #dddff2;
+      background: #fff;
+      color: #2b2f48;
+      border-radius: 10px;
+      padding: 8px 12px;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+    }
 
     .shell {
       background: var(--white);
@@ -160,6 +171,22 @@
       .left, .right { border: none; border-top: 1px solid var(--line); }
       .messages { height: 390px; }
     }
+    @media (max-width: 768px) {
+      .page { margin: 10px auto; padding: 0 8px; }
+      .top h1 { font-size: 24px; }
+      .bar { padding: 12px; }
+      .content { min-height: auto; }
+      .left, .center, .right { padding: 12px; }
+      .left h3 { font-size: 24px; }
+      .messages { height: 300px; }
+      .composer input { font-size: 14px; padding: 11px; }
+      .composer button { width: 46px; font-size: 16px; }
+      .url { font-size: 12px; padding: 8px 10px; word-break: break-all; }
+      .right { order: 3; }
+      .center { order: 2; }
+      .left { order: 1; }
+      .msg { max-width: 94%; font-size: 14px; }
+    }
   </style>
 </head>
 <body>
@@ -167,7 +194,11 @@
   <div class="top">
     <h1>{{ $title }}</h1>
     <div class="url" id="shareUrl">https://{{ request()->getHost() }}/c/{{ $slug }}</div>
-    <button id="copyUrlBtn" style="margin-left:8px;border:1px solid #ccc3ff;background:#fff;border-radius:10px;padding:8px 12px;cursor:pointer;">Copy Link</button>
+    <div class="share-row">
+      <a class="share-btn" id="shareFacebook" target="_blank" rel="noopener">Share Facebook</a>
+      <a class="share-btn" id="shareTwitter" target="_blank" rel="noopener">Share X</a>
+      <a class="share-btn" id="shareWhatsapp" target="_blank" rel="noopener">Share WhatsApp</a>
+    </div>
   </div>
 
   <div class="shell">
@@ -357,14 +388,9 @@ document.querySelectorAll('.quick-action-btn').forEach((btn) => {
 });
 
 document.getElementById('leadSubmit').addEventListener('click', submitLead);
-document.getElementById('copyUrlBtn').addEventListener('click', async () => {
-  try {
-    await navigator.clipboard.writeText(shareUrl);
-    statusEl.textContent = 'Link copied.';
-  } catch (e) {
-    statusEl.textContent = 'Could not copy link.';
-  }
-});
+document.getElementById('shareFacebook').href = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(shareUrl);
+document.getElementById('shareTwitter').href = 'https://twitter.com/intent/tweet?url=' + encodeURIComponent(shareUrl) + '&text=' + encodeURIComponent('Chat with us live');
+document.getElementById('shareWhatsapp').href = 'https://wa.me/?text=' + encodeURIComponent('Chat with us: ' + shareUrl);
 
 init();
 </script>
