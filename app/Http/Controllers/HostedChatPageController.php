@@ -3,26 +3,36 @@
 namespace App\Http\Controllers;
 
 use App\Models\HostedPage;
+use App\Models\User;
 use Illuminate\Support\Facades\Cache;
 
 class HostedChatPageController extends Controller
 {
     public function show(string $slug)
     {
-        $hostedPage = Cache::remember("hosted_page:slug:{$slug}", 300, function () use ($slug) {
-            return HostedPage::with('client')->where('slug', $slug)->where('status', 'active')->first();
+        $hostedPageData = Cache::remember("hosted_page:slug:{$slug}", 300, function () use ($slug) {
+            return HostedPage::query()
+                ->where('slug', $slug)
+                ->where('status', 'active')
+                ->first(['id', 'client_id', 'slug', 'public_config'])
+                ?->toArray();
         });
 
-        if (! $hostedPage || ! $hostedPage->client || ! $hostedPage->client->isActive()) {
+        if (! is_array($hostedPageData)) {
             abort(404);
         }
 
-        $config = $hostedPage->public_config ?? [];
+        $client = User::query()->where('id', $hostedPageData['client_id'] ?? 0)->first();
+        if (! $client || ! $client->isActive()) {
+            abort(404);
+        }
+
+        $config = is_array($hostedPageData['public_config'] ?? null) ? $hostedPageData['public_config'] : [];
 
         return response()
             ->view('hosted.chat-page', [
-                'slug' => $hostedPage->slug,
-                'title' => $config['title'] ?? ($hostedPage->client->company_name ?: 'AI Assistant'),
+                'slug' => $hostedPageData['slug'],
+                'title' => $config['title'] ?? ($client->company_name ?: 'AI Assistant'),
                 'welcomeMessage' => $config['welcome_message'] ?? 'Hello, how can we help you today?',
                 'logoUrl' => $config['logo_url'] ?? null,
                 'brandPrimary' => $config['branding']['primary'] ?? '#0f766e',

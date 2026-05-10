@@ -12,14 +12,18 @@ class ChannelResolver
         if (! empty($payload['slug'])) {
             $slug = (string) $payload['slug'];
             $hostedPage = Cache::remember("hosted_page:slug:{$slug}", 300, function () use ($slug) {
-                return HostedPage::where('slug', $slug)->where('status', 'active')->first();
+                return HostedPage::query()
+                    ->where('slug', $slug)
+                    ->where('status', 'active')
+                    ->first(['id', 'client_id', 'slug', 'status'])
+                    ?->toArray();
             });
 
-            if ($hostedPage) {
+            if (is_array($hostedPage)) {
                 return [
                     'channel' => 'hosted_page',
-                    'client_id' => $hostedPage->client_id,
-                    'channel_ref' => $hostedPage->slug,
+                    'client_id' => $hostedPage['client_id'],
+                    'channel_ref' => $hostedPage['slug'],
                     'hosted_page' => $hostedPage,
                 ];
             }

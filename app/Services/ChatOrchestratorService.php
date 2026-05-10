@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\ChatSession;
+use App\Models\HostedPage;
 use App\Models\Lead;
 use App\Models\User;
 use Illuminate\Support\Facades\Log;
@@ -19,11 +20,18 @@ class ChatOrchestratorService
     {
         $resolved = $this->channelResolver->resolve($payload);
 
-        if ($resolved['channel'] !== 'hosted_page' || empty($resolved['hosted_page'])) {
+        if ($resolved['channel'] !== 'hosted_page' || empty($resolved['hosted_page']) || ! is_array($resolved['hosted_page'])) {
             return ['success' => false, 'error' => 'Invalid request'];
         }
 
-        $hostedPage = $resolved['hosted_page'];
+        $hostedPageData = $resolved['hosted_page'];
+        $hostedPage = HostedPage::query()
+            ->where('id', $hostedPageData['id'] ?? 0)
+            ->where('status', 'active')
+            ->first(['id', 'client_id', 'slug']);
+        if (! $hostedPage) {
+            return ['success' => false, 'error' => 'Invalid request'];
+        }
 
         $session = ChatSession::create([
             'client_id' => $hostedPage->client_id,

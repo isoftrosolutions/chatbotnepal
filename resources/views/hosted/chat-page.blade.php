@@ -130,6 +130,7 @@
       background: #fff;
       padding: 16px;
     }
+    .lead-card.hidden { display: none; }
     .lead-card h4 { margin: 0 0 6px; font-size: 24px; }
     .lead-card p { margin: 0 0 14px; color: var(--muted); font-size: 14px; }
     .lead-card input {
@@ -193,9 +194,9 @@
 
         <div class="quick">Quick Actions</div>
         <div class="qa">
-          <button data-q="Check room availability">Check Room Availability</button>
-          <button data-q="Show room prices">View Room Prices</button>
-          <button data-q="Share your location">Hotel Location</button>
+          <button class="quick-action-btn" data-prompt="Check room availability">Check Room Availability</button>
+          <button class="quick-action-btn" data-prompt="Show room prices">View Room Prices</button>
+          <button class="quick-action-btn" data-prompt="Share your location">Hotel Location</button>
         </div>
       </aside>
 
@@ -213,7 +214,7 @@
       </section>
 
       <aside class="right">
-        <div class="lead-card">
+        <div class="lead-card hidden" id="leadCard">
           <h4>Almost there!</h4>
           <p>Please share your details so we can assist you better.</p>
           <input id="leadName" placeholder="Your name" />
@@ -232,11 +233,14 @@
 <script>
 let sessionId = null;
 let sessionToken = null;
+let messageCount = 0;
+let leadCaptureShown = false;
 const slug = @json($slug);
 const shareUrl = document.getElementById('shareUrl').textContent.trim();
 const messagesEl = document.getElementById('messages');
 const typingEl = document.getElementById('typing');
 const statusEl = document.getElementById('chatStatus');
+const leadCardEl = document.getElementById('leadCard');
 
 function getFingerprint() {
   const key = 'hosted_chat_fingerprint_v1';
@@ -297,6 +301,16 @@ async function sendMessage(text) {
   }
   statusEl.textContent = 'Connected';
   appendMessage('bot', data.reply || 'Sorry, I could not process that.');
+  messageCount += 1;
+  maybeShowLeadCapture();
+}
+
+function maybeShowLeadCapture() {
+  if (leadCaptureShown) return;
+  if (messageCount >= 1) {
+    leadCardEl.classList.remove('hidden');
+    leadCaptureShown = true;
+  }
 }
 
 async function submitLead() {
@@ -338,8 +352,8 @@ document.getElementById('message').addEventListener('keydown', (e) => {
   if (e.key === 'Enter') document.getElementById('send').click();
 });
 
-document.querySelectorAll('.qa button').forEach((btn) => {
-  btn.addEventListener('click', () => sendMessage(btn.dataset.q));
+document.querySelectorAll('.quick-action-btn').forEach((btn) => {
+  btn.addEventListener('click', () => sendMessage(btn.dataset.prompt));
 });
 
 document.getElementById('leadSubmit').addEventListener('click', submitLead);
