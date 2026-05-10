@@ -20,9 +20,12 @@ Route::post('/widget/session/verify', [WidgetSessionController::class, 'verifySe
 
 Route::post('/chat', [ChatController::class, 'chat'])
     ->middleware(['throttle:chat', 'widget.domain']);
-Route::post('/chat/init', [HostedChatController::class, 'init']);
-Route::post('/chat/message', [HostedChatController::class, 'message']);
-Route::post('/chat/lead', [HostedChatController::class, 'lead']);
+Route::post('/chat/init', [HostedChatController::class, 'init'])
+    ->middleware('throttle:hosted-chat-init');
+Route::post('/chat/message', [HostedChatController::class, 'message'])
+    ->middleware('throttle:hosted-chat-message');
+Route::post('/chat/lead', [HostedChatController::class, 'lead'])
+    ->middleware('throttle:hosted-chat-message');
 
 Route::post('/chat/stream', [StreamChatController::class, 'stream'])
     ->middleware(['throttle:chat', 'widget.domain']);

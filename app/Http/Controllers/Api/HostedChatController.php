@@ -13,6 +13,10 @@ class HostedChatController extends Controller
 
     public function init(Request $request): JsonResponse
     {
+        if (! $request->secure() && ! app()->environment('local')) {
+            return response()->json(['success' => false, 'error' => 'HTTPS required'], 403);
+        }
+
         $request->validate([
             'slug' => 'required|string|max:120',
             'visitor_fingerprint' => 'nullable|string|max:191',
@@ -31,8 +35,14 @@ class HostedChatController extends Controller
 
     public function message(Request $request): JsonResponse
     {
+        if (! $request->secure() && ! app()->environment('local')) {
+            return response()->json(['success' => false, 'error' => 'HTTPS required'], 403);
+        }
+
         $request->validate([
             'session_id' => 'required|uuid',
+            'session_token' => 'required|string|max:500',
+            'visitor_fingerprint' => 'required|string|max:191',
             'message' => 'required|string|max:1000',
             'source_url' => 'nullable|url|max:500',
             'visitor_name' => 'nullable|string|max:100',
@@ -42,6 +52,8 @@ class HostedChatController extends Controller
 
         $result = $this->orchestrator->processMessage([
             'session_id' => $request->string('session_id')->toString(),
+            'session_token' => $request->string('session_token')->toString(),
+            'visitor_fingerprint' => $request->string('visitor_fingerprint')->toString(),
             'message' => $this->sanitizeInput($request->string('message')->toString()),
             'source_url' => $request->input('source_url'),
             'visitor_name' => $request->input('visitor_name'),
@@ -54,8 +66,14 @@ class HostedChatController extends Controller
 
     public function lead(Request $request): JsonResponse
     {
+        if (! $request->secure() && ! app()->environment('local')) {
+            return response()->json(['success' => false, 'error' => 'HTTPS required'], 403);
+        }
+
         $request->validate([
             'session_id' => 'required|uuid',
+            'session_token' => 'required|string|max:500',
+            'visitor_fingerprint' => 'required|string|max:191',
             'name' => 'nullable|string|max:100',
             'email' => 'nullable|email|max:191',
             'phone' => 'nullable|string|max:30',
@@ -63,8 +81,15 @@ class HostedChatController extends Controller
             'trigger' => 'nullable|string|max:64',
         ]);
 
+        if (! $request->filled('email') && ! $request->filled('phone')) {
+            return response()->json([
+                'success' => false,
+                'error' => 'Email or phone is required to capture a lead.',
+            ], 422);
+        }
+
         $result = $this->orchestrator->captureLead($request->only([
-            'session_id', 'name', 'email', 'phone', 'notes', 'trigger',
+            'session_id', 'session_token', 'visitor_fingerprint', 'name', 'email', 'phone', 'notes', 'trigger',
         ]));
 
         return response()->json($result, ($result['success'] ?? false) ? 200 : 400);

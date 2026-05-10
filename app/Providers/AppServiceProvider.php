@@ -21,6 +21,12 @@ class AppServiceProvider extends ServiceProvider
         RateLimiter::for('session', function (Request $request) {
             return Limit::perMinute(10)->by($request->input('site_id', $request->ip()));
         });
+        RateLimiter::for('hosted-chat-init', function (Request $request) {
+            return Limit::perMinute(20)->by($request->ip());
+        });
+        RateLimiter::for('hosted-chat-message', function (Request $request) {
+            return Limit::perMinute(60)->by($request->ip());
+        });
 
         $this->applySmtpSettings();
     }

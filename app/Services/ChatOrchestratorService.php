@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\ChatSession;
 use App\Models\Lead;
 use App\Models\User;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\RateLimiter;
 
 class ChatOrchestratorService
@@ -39,6 +40,7 @@ class ChatOrchestratorService
         return [
             'success' => true,
             'session_id' => $session->id,
+            'session_token' => $this->createSessionToken($session, $payload['visitor_fingerprint'] ?? null),
             'client_id' => $hostedPage->client_id,
             'channel' => 'hosted_page',
         ];
@@ -52,6 +54,9 @@ class ChatOrchestratorService
 
         if (! $session) {
             return ['success' => false, 'error' => 'Invalid session'];
+        }
+        if (! $this->verifySessionToken($payload['session_token'] ?? null, $session, $payload['visitor_fingerprint'] ?? null)) {
+            return ['success' => false, 'error' => 'Unauthorized session'];
         }
 
         $rateKey = 'hosted_chat:'.$session->client_id.':'.$ip;
@@ -108,6 +113,9 @@ class ChatOrchestratorService
         if (! $session) {
             return ['success' => false, 'error' => 'Invalid session'];
         }
+        if (! $this->verifySessionToken($payload['session_token'] ?? null, $session, $payload['visitor_fingerprint'] ?? null)) {
+            return ['success' => false, 'error' => 'Unauthorized session'];
+        }
 
         Lead::create([
             'session_id' => $session->id,
@@ -145,5 +153,52 @@ class ChatOrchestratorService
         }
 
         return null;
+    }
+
+    private function createSessionToken(ChatSession $session, ?string $visitorFingerprint): string
+    {
+        $secret = (string) config('app.key');
+        $payload = [
+            'sid' => $session->id,
+            'cid' => $session->client_id,
+            'fp' => sha1((string) ($visitorFingerprint ?? $session->visitor_fingerprint ?? '')),
+            'exp' => now()->addHours(24)->timestamp,
+        ];
+
+        $payloadEncoded = rtrim(strtr(base64_encode(json_encode($payload)), '+/', '-_'), '=');
+        $signature = hash_hmac('sha256', $payloadEncoded, $secret);
+
+        return $payloadEncoded.'.'.$signature;
+    }
+
+    private function verifySessionToken(?string $token, ChatSession $session, ?string $visitorFingerprint): bool
+    {
+        if (! $token || ! str_contains($token, '.')) {
+            return false;
+        }
+
+        [$payloadEncoded, $signature] = explode('.', $token, 2);
+        $expected = hash_hmac('sha256', $payloadEncoded, (string) config('app.key'));
+        if (! hash_equals($expected, $signature)) {
+            return false;
+        }
+
+        $json = base64_decode(strtr($payloadEncoded, '-_', '+/'));
+        $payload = json_decode($json ?: '', true);
+        if (! is_array($payload)) {
+            return false;
+        }
+
+        $fingerprintHash = sha1((string) ($visitorFingerprint ?? $session->visitor_fingerprint ?? ''));
+        $isValid = ($payload['sid'] ?? null) === $session->id
+            && (int) ($payload['cid'] ?? 0) === (int) $session->client_id
+            && ($payload['fp'] ?? null) === $fingerprintHash
+            && (int) ($payload['exp'] ?? 0) >= now()->timestamp;
+
+        if (! $isValid) {
+            Log::warning('Hosted session token mismatch', ['session_id' => $session->id]);
+        }
+
+        return $isValid;
     }
 }

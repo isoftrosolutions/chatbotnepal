@@ -165,7 +165,8 @@
 <div class="page">
   <div class="top">
     <h1>{{ $title }}</h1>
-    <div class="url">https://{{ request()->getHost() }}/c/{{ $slug }}</div>
+    <div class="url" id="shareUrl">https://{{ request()->getHost() }}/c/{{ $slug }}</div>
+    <button id="copyUrlBtn" style="margin-left:8px;border:1px solid #ccc3ff;background:#fff;border-radius:10px;padding:8px 12px;cursor:pointer;">Copy Link</button>
   </div>
 
   <div class="shell">
@@ -187,7 +188,7 @@
         @if($logoUrl)
           <img class="welcome-image" src="{{ $logoUrl }}" alt="welcome" />
         @endif
-        <h3>Welcome ??</h3>
+        <h3>Welcome</h3>
         <p>{{ $welcomeMessage }}</p>
 
         <div class="quick">Quick Actions</div>
@@ -206,13 +207,14 @@
 
         <div class="composer">
           <input id="message" placeholder="Type your message..." />
-          <button id="send">?</button>
+          <button id="send">></button>
         </div>
+        <div id="chatStatus" style="margin-top:8px;color:#6b7085;font-size:12px;">Connecting...</div>
       </section>
 
       <aside class="right">
         <div class="lead-card">
-          <h4>Almost there! ??</h4>
+          <h4>Almost there!</h4>
           <p>Please share your details so we can assist you better.</p>
           <input id="leadName" placeholder="Your name" />
           <input id="leadPhone" placeholder="Phone number" />
@@ -223,15 +225,28 @@
       </aside>
     </div>
 
-    <div class="footer">We typically reply instantly ?</div>
+    <div class="footer">We typically reply instantly</div>
   </div>
 </div>
 
 <script>
 let sessionId = null;
+let sessionToken = null;
 const slug = @json($slug);
+const shareUrl = document.getElementById('shareUrl').textContent.trim();
 const messagesEl = document.getElementById('messages');
 const typingEl = document.getElementById('typing');
+const statusEl = document.getElementById('chatStatus');
+
+function getFingerprint() {
+  const key = 'hosted_chat_fingerprint_v1';
+  let fp = localStorage.getItem(key);
+  if (!fp) {
+    fp = 'fp_' + Math.random().toString(36).slice(2) + Date.now().toString(36);
+    localStorage.setItem(key, fp);
+  }
+  return fp;
+}
 
 function appendMessage(role, text) {
   const div = document.createElement('div');
@@ -244,27 +259,48 @@ function appendMessage(role, text) {
 async function init() {
   const res = await fetch('/api/chat/init', {
     method: 'POST', headers: {'Content-Type':'application/json'},
-    body: JSON.stringify({ slug, source_url: window.location.href })
+    body: JSON.stringify({ slug, visitor_fingerprint: getFingerprint(), source_url: window.location.href })
   });
   const data = await res.json();
-  if (data.success) sessionId = data.session_id;
+  if (data.success) {
+    sessionId = data.session_id;
+    sessionToken = data.session_token;
+    statusEl.textContent = 'Connected';
+  } else {
+    statusEl.textContent = data.error || 'Connection failed. Refresh to retry.';
+  }
 }
 
 async function sendMessage(text) {
-  if (!sessionId || !text) return;
+  if (!sessionId || !sessionToken || !text) {
+    statusEl.textContent = 'Not connected yet.';
+    return;
+  }
   appendMessage('user', text);
   typingEl.style.display = 'block';
   const res = await fetch('/api/chat/message', {
     method: 'POST', headers: {'Content-Type':'application/json'},
-    body: JSON.stringify({ session_id: sessionId, message: text, source_url: window.location.href })
+    body: JSON.stringify({
+      session_id: sessionId,
+      session_token: sessionToken,
+      visitor_fingerprint: getFingerprint(),
+      message: text,
+      source_url: window.location.href
+    })
   });
   const data = await res.json();
   typingEl.style.display = 'none';
+  if (!res.ok || !data.success) {
+    statusEl.textContent = data.error || 'Message failed. Please retry.';
+    appendMessage('bot', 'Sorry, your message could not be processed. Please try again.');
+    return;
+  }
+  statusEl.textContent = 'Connected';
   appendMessage('bot', data.reply || 'Sorry, I could not process that.');
 }
 
 async function submitLead() {
-  if (!sessionId) return;
+  if (!sessionId || !sessionToken) return;
   const name = document.getElementById('leadName').value.trim();
   const phone = document.getElementById('leadPhone').value.trim();
   const email = document.getElementById('leadEmail').value.trim();
@@ -272,12 +308,22 @@ async function submitLead() {
   const res = await fetch('/api/chat/lead', {
     method: 'POST',
     headers: {'Content-Type':'application/json'},
-    body: JSON.stringify({ session_id: sessionId, name, phone, email, trigger: 'sidebar_form' })
+    body: JSON.stringify({
+      session_id: sessionId,
+      session_token: sessionToken,
+      visitor_fingerprint: getFingerprint(),
+      name,
+      phone,
+      email,
+      trigger: 'sidebar_form'
+    })
   });
   const data = await res.json();
   if (data.success) {
     document.getElementById('leadSubmit').textContent = 'Submitted';
     document.getElementById('leadSubmit').disabled = true;
+  } else {
+    statusEl.textContent = data.error || 'Lead submit failed.';
   }
 }
 
@@ -297,6 +343,14 @@ document.querySelectorAll('.qa button').forEach((btn) => {
 });
 
 document.getElementById('leadSubmit').addEventListener('click', submitLead);
+document.getElementById('copyUrlBtn').addEventListener('click', async () => {
+  try {
+    await navigator.clipboard.writeText(shareUrl);
+    statusEl.textContent = 'Link copied.';
+  } catch (e) {
+    statusEl.textContent = 'Could not copy link.';
+  }
+});
 
 init();
 </script>
