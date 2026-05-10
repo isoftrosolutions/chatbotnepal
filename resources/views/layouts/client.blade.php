@@ -106,6 +106,11 @@
                     <span>Embed Code</span>
                 </a>
 
+                <a href="{{ route('client.hosted-pages.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-[9999px] transition-all text-sm font-medium {{ request()->routeIs('client.hosted-pages*') ? 'bg-[#0B1E3D] text-white' : 'text-[#0F172A] hover:bg-[#F1F5F9]' }}">
+                    <i data-lucide="link-2" class="w-4 h-4"></i>
+                    <span>Hosted Pages</span>
+                </a>
+
                 <a href="{{ route('client.request-update.create') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-[9999px] transition-all text-sm font-medium {{ request()->routeIs('client.request-update*') ? 'bg-[#0B1E3D] text-white' : 'text-[#0F172A] hover:bg-[#F1F5F9]' }}">
                     <i data-lucide="edit-3" class="w-4 h-4"></i>
                     <span>Request Update</span>
