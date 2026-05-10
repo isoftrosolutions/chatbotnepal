@@ -33,10 +33,10 @@ class ProfileController extends Controller
         $user = auth()->user();
 
         $validated = $request->validate([
-            'name'         => 'required|string|max:255',
-            'phone'        => 'nullable|string|max:20',
+            'name' => 'required|string|max:255',
+            'phone' => 'nullable|string|max:20',
             'company_name' => 'nullable|string|max:255',
-            'website_url'  => 'nullable|url|max:500',
+            'website_url' => 'nullable|url|max:500',
         ]);
 
         // Email handled separately (requires OTP)
@@ -59,9 +59,9 @@ class ProfileController extends Controller
             $otpRecord = OtpCode::where('email', $newEmail)->where('purpose', 'email_change')->latest()->first();
 
             DB::table('pending_email_changes')->insert([
-                'user_id'    => $user->id,
-                'new_email'  => $newEmail,
-                'otp_id'     => $otpRecord->id,
+                'user_id' => $user->id,
+                'new_email' => $newEmail,
+                'otp_id' => $otpRecord->id,
                 'expires_at' => now()->addMinutes(15),
                 'created_at' => now(),
             ]);
@@ -72,7 +72,7 @@ class ProfileController extends Controller
             $user->update($validated);
 
             return redirect()->route('profile.email.verify.form')
-                ->with('info', 'A verification code was sent to ' . $newEmail . '. Enter it below to confirm the change.');
+                ->with('info', 'A verification code was sent to '.$newEmail.'. Enter it below to confirm the change.');
         }
 
         $user->update($validated);
@@ -98,7 +98,7 @@ class ProfileController extends Controller
     {
         $request->validate(['otp' => 'required|string|digits:6']);
 
-        $user    = auth()->user();
+        $user = auth()->user();
         $pending = DB::table('pending_email_changes')
             ->where('user_id', $user->id)
             ->where('expires_at', '>', now())
@@ -109,7 +109,7 @@ class ProfileController extends Controller
                 ->withErrors(['otp' => 'No pending email change found or it has expired.']);
         }
 
-        $limitKey = 'email_change_verify:' . $user->id;
+        $limitKey = 'email_change_verify:'.$user->id;
         if (RateLimiter::tooManyAttempts($limitKey, 5)) {
             return back()->withErrors(['otp' => 'Too many attempts. Please request a new verification code.']);
         }
@@ -122,6 +122,7 @@ class ProfileController extends Controller
         // Check the new email is still available
         if (User::where('email', $pending->new_email)->where('id', '!=', $user->id)->exists()) {
             DB::table('pending_email_changes')->where('user_id', $user->id)->delete();
+
             return redirect()->route('profile.show')
                 ->withErrors(['email' => 'That email address has already been taken.']);
         }
@@ -144,9 +145,10 @@ class ProfileController extends Controller
 
     public function passwordUpdate(Request $request): RedirectResponse
     {
-        $limitKey = 'pw_change:' . auth()->id();
+        $limitKey = 'pw_change:'.auth()->id();
         if (RateLimiter::tooManyAttempts($limitKey, 5)) {
             $seconds = RateLimiter::availableIn($limitKey);
+
             return back()->withErrors([
                 'current_password' => "Too many attempts. Try again in {$seconds} seconds.",
             ]);
@@ -154,13 +156,14 @@ class ProfileController extends Controller
 
         $request->validate([
             'current_password' => 'required',
-            'password'         => ['required', 'confirmed', Password::min(12)->mixedCase()->numbers()->symbols()],
+            'password' => ['required', 'confirmed', Password::min(12)->mixedCase()->numbers()->symbols()],
         ]);
 
         $user = auth()->user();
 
         if (! password_verify($request->input('current_password'), $user->password)) {
             RateLimiter::hit($limitKey, 3600);
+
             return back()->withErrors(['current_password' => 'The current password is incorrect.']);
         }
 

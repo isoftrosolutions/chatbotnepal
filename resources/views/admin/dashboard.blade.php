@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+﻿@extends('layouts.admin')
 @section('title', 'Admin Dashboard')
 @section('header', 'Dashboard')
 
@@ -6,85 +6,85 @@
 <!-- Stats Grid -->
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
     <!-- Total Clients -->
-    <div class="bg-white rounded-2xl p-4 sm:p-5 lg:p-6 border border-[rgba(0,0,0,0.05)] flex items-center gap-3 sm:gap-4 shadow-[rgba(0,0,0,0.03)_0px_2px_4px]">
-        <div class="w-10 h-10 sm:w-12 sm:h-12 bg-[#f5f5f5] rounded-full flex items-center justify-center flex-shrink-0">
-            <i data-lucide="users" class="text-[#0d0d0d] w-5 h-5"></i>
+    <div class="bg-white rounded-2xl p-4 sm:p-5 lg:p-6 border border-[#E2E8F0] flex items-center gap-3 sm:gap-4 shadow-[rgba(0,0,0,0.03)_0px_2px_4px]">
+        <div class="w-10 h-10 sm:w-12 sm:h-12 bg-[#F1F5F9] rounded-full flex items-center justify-center flex-shrink-0">
+            <i data-lucide="users" class="text-[#0F172A] w-5 h-5"></i>
         </div>
         <div class="flex-1 min-w-0">
             <div class="flex items-center justify-between">
-                <p class="text-[10px] sm:text-[11px] text-[#888888] font-medium tracking-[0.65px] uppercase">Total Clients</p>
+                <p class="text-[10px] sm:text-[11px] text-[#64748B] font-medium tracking-[0.65px] uppercase">Total Clients</p>
                 <div id="trend-clients" class="flex items-center gap-1 text-[10px] sm:text-xs font-medium {{ $trends['clients']['up'] ? 'text-brand-deep' : 'text-[#d45656]' }} flex-shrink-0">
                     <i data-lucide="{{ $trends['clients']['up'] ? 'trending-up' : 'trending-down' }}" class="w-3 h-3"></i>
                     <span>{{ ($trends['clients']['up'] ? '+' : '') }}{{ $trends['clients']['value'] }}%</span>
                 </div>
             </div>
-            <h3 class="text-base sm:text-xl font-semibold text-[#0d0d0d] mt-1 truncate" id="stat-total-clients">{{ $stats['total_clients'] }}</h3>
+            <h3 class="text-base sm:text-xl font-semibold text-[#0F172A] mt-1 truncate" id="stat-total-clients">{{ $stats['total_clients'] }}</h3>
         </div>
     </div>
 
     <!-- Conversations Today -->
-    <div class="bg-white rounded-2xl p-4 sm:p-5 lg:p-6 border border-[rgba(0,0,0,0.05)] flex items-center gap-3 sm:gap-4 shadow-[rgba(0,0,0,0.03)_0px_2px_4px]">
+    <div class="bg-white rounded-2xl p-4 sm:p-5 lg:p-6 border border-[#E2E8F0] flex items-center gap-3 sm:gap-4 shadow-[rgba(0,0,0,0.03)_0px_2px_4px]">
         <div class="w-10 h-10 sm:w-12 sm:h-12 bg-brand-light rounded-full flex items-center justify-center flex-shrink-0">
             <i data-lucide="message-square" class="text-brand-deep w-5 h-5"></i>
         </div>
         <div class="flex-1 min-w-0">
             <div class="flex items-center justify-between">
-                <p class="text-[10px] sm:text-[11px] text-[#888888] font-medium tracking-[0.65px] uppercase">Today</p>
+                <p class="text-[10px] sm:text-[11px] text-[#64748B] font-medium tracking-[0.65px] uppercase">Today</p>
                 <div id="trend-conversations" class="flex items-center gap-1 text-[10px] sm:text-xs font-medium {{ $trends['conversations']['up'] ? 'text-brand-deep' : 'text-[#d45656]' }} flex-shrink-0">
                     <i data-lucide="{{ $trends['conversations']['up'] ? 'trending-up' : 'trending-down' }}" class="w-3 h-3"></i>
                     <span>{{ ($trends['conversations']['up'] ? '+' : '') }}{{ $trends['conversations']['value'] }}%</span>
                 </div>
             </div>
-            <h3 class="text-base sm:text-xl font-semibold text-[#0d0d0d] mt-1 truncate" id="stat-conversations-today">{{ $stats['conversations_today'] }}</h3>
+            <h3 class="text-base sm:text-xl font-semibold text-[#0F172A] mt-1 truncate" id="stat-conversations-today">{{ $stats['conversations_today'] }}</h3>
         </div>
     </div>
 
     <!-- Tokens Used -->
-    <div class="bg-white rounded-2xl p-4 sm:p-5 lg:p-6 border border-[rgba(0,0,0,0.05)] flex items-center gap-3 sm:gap-4 shadow-[rgba(0,0,0,0.03)_0px_2px_4px]">
+    <div class="bg-white rounded-2xl p-4 sm:p-5 lg:p-6 border border-[#E2E8F0] flex items-center gap-3 sm:gap-4 shadow-[rgba(0,0,0,0.03)_0px_2px_4px]">
         <div class="w-10 h-10 sm:w-12 sm:h-12 bg-[#fef2f2] rounded-full flex items-center justify-center flex-shrink-0">
             <i data-lucide="cpu" class="text-[#c37d0d] w-5 h-5"></i>
         </div>
         <div class="flex-1 min-w-0">
             <div class="flex items-center justify-between">
-                <p class="text-[10px] sm:text-[11px] text-[#888888] font-medium tracking-[0.65px] uppercase">Tokens Used</p>
+                <p class="text-[10px] sm:text-[11px] text-[#64748B] font-medium tracking-[0.65px] uppercase">Tokens Used</p>
                 <div id="trend-tokens" class="flex items-center gap-1 text-[10px] sm:text-xs font-medium {{ $trends['tokens']['up'] ? 'text-brand-deep' : 'text-[#d45656]' }} flex-shrink-0">
                     <i data-lucide="{{ $trends['tokens']['up'] ? 'trending-up' : 'trending-down' }}" class="w-3 h-3"></i>
                     <span>{{ ($trends['tokens']['up'] ? '+' : '') }}{{ $trends['tokens']['value'] }}%</span>
                 </div>
             </div>
-            <h3 class="text-base sm:text-xl font-semibold text-[#0d0d0d] mt-1 truncate" id="stat-tokens-today">{{ number_format($stats['tokens_today']) }}</h3>
+            <h3 class="text-base sm:text-xl font-semibold text-[#0F172A] mt-1 truncate" id="stat-tokens-today">{{ number_format($stats['tokens_today']) }}</h3>
         </div>
     </div>
 
     <!-- Revenue -->
-    <div class="bg-white rounded-2xl p-4 sm:p-5 lg:p-6 border border-[rgba(0,0,0,0.05)] flex items-center gap-3 sm:gap-4 shadow-[rgba(0,0,0,0.03)_0px_2px_4px]">
+    <div class="bg-white rounded-2xl p-4 sm:p-5 lg:p-6 border border-[#E2E8F0] flex items-center gap-3 sm:gap-4 shadow-[rgba(0,0,0,0.03)_0px_2px_4px]">
         <div class="w-10 h-10 sm:w-12 sm:h-12 bg-brand-light rounded-full flex items-center justify-center flex-shrink-0">
             <i data-lucide="banknote" class="text-brand-deep w-5 h-5"></i>
         </div>
         <div class="flex-1 min-w-0">
             <div class="flex items-center justify-between">
-                <p class="text-[10px] sm:text-[11px] text-[#888888] font-medium tracking-[0.65px] uppercase">Revenue</p>
+                <p class="text-[10px] sm:text-[11px] text-[#64748B] font-medium tracking-[0.65px] uppercase">Revenue</p>
                 <div id="trend-revenue" class="flex items-center gap-1 text-[10px] sm:text-xs font-medium {{ $trends['revenue']['up'] ? 'text-brand-deep' : 'text-[#d45656]' }} flex-shrink-0">
                     <i data-lucide="{{ $trends['revenue']['up'] ? 'trending-up' : 'trending-down' }}" class="w-3 h-3"></i>
                     <span>{{ ($trends['revenue']['up'] ? '+' : '') }}{{ $trends['revenue']['value'] }}%</span>
                 </div>
             </div>
-            <h3 class="text-base sm:text-xl font-semibold text-[#0d0d0d] mt-1 truncate" id="stat-revenue-month">Rs. {{ number_format($stats['revenue_month']) }}</h3>
+            <h3 class="text-base sm:text-xl font-semibold text-[#0F172A] mt-1 truncate" id="stat-revenue-month">Rs. {{ number_format($stats['revenue_month']) }}</h3>
         </div>
     </div>
 </div>
 
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
     <!-- Conversations Trend Chart -->
-    <div class="lg:col-span-2 bg-white rounded-2xl p-4 sm:p-5 lg:p-6 border border-[rgba(0,0,0,0.05)] shadow-[rgba(0,0,0,0.03)_0px_2px_4px]">
+    <div class="lg:col-span-2 bg-white rounded-2xl p-4 sm:p-5 lg:p-6 border border-[#E2E8F0] shadow-[rgba(0,0,0,0.03)_0px_2px_4px]">
         <div class="flex items-start sm:items-center justify-between mb-4 sm:mb-6 flex-wrap gap-2 sm:gap-3">
             <div>
-                <h3 class="text-sm sm:text-base font-semibold text-[#0d0d0d]">Conversations Trend</h3>
-                <p class="text-xs sm:text-sm text-[#888888] hidden sm:block">Daily conversation volume across all bots</p>
+                <h3 class="text-sm sm:text-base font-semibold text-[#0F172A]">Conversations Trend</h3>
+                <p class="text-xs sm:text-sm text-[#64748B] hidden sm:block">Daily conversation volume across all bots</p>
             </div>
-            <div class="flex bg-[#fafafa] border border-[rgba(0,0,0,0.05)] rounded-full p-1 shrink-0" id="chart-toggle">
-                <button data-days="7"  class="chart-toggle-btn px-3 sm:px-4 py-1 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-medium text-[#0d0d0d] bg-white border border-[rgba(0,0,0,0.05)]">7 DAYS</button>
-                <button data-days="30" class="chart-toggle-btn px-3 sm:px-4 py-1 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-medium text-[#888888] hover:text-[#0d0d0d]">30 DAYS</button>
+            <div class="flex bg-[#F1F5F9] border border-[#E2E8F0] rounded-full p-1 shrink-0" id="chart-toggle">
+                <button data-days="7"  class="chart-toggle-btn px-3 sm:px-4 py-1 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-medium text-[#0F172A] bg-white border border-[#E2E8F0]">7 DAYS</button>
+                <button data-days="30" class="chart-toggle-btn px-3 sm:px-4 py-1 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-medium text-[#64748B] hover:text-[#0F172A]">30 DAYS</button>
             </div>
         </div>
         <div class="h-[220px] sm:h-[260px] lg:h-[300px] w-full">
@@ -93,13 +93,13 @@
     </div>
 
     <!-- Client Distribution -->
-    <div class="bg-white rounded-2xl p-4 sm:p-5 lg:p-6 border border-[rgba(0,0,0,0.05)] shadow-[rgba(0,0,0,0.03)_0px_2px_4px]">
-        <h3 class="text-sm sm:text-base font-semibold text-[#0d0d0d] mb-4 sm:mb-6">Client Distribution</h3>
+    <div class="bg-white rounded-2xl p-4 sm:p-5 lg:p-6 border border-[#E2E8F0] shadow-[rgba(0,0,0,0.03)_0px_2px_4px]">
+        <h3 class="text-sm sm:text-base font-semibold text-[#0F172A] mb-4 sm:mb-6">Client Distribution</h3>
         <div class="relative h-[160px] sm:h-[180px] lg:h-[220px] flex items-center justify-center mb-4 sm:mb-6">
             <canvas id="distributionChart"></canvas>
             <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                <span class="text-2xl sm:text-3xl font-semibold text-[#0d0d0d]">{{ $stats['total_clients'] }}</span>
-                <span class="text-[9px] sm:text-[10px] text-[#888888] font-medium tracking-[0.65px] uppercase">Total</span>
+                <span class="text-2xl sm:text-3xl font-semibold text-[#0F172A]">{{ $stats['total_clients'] }}</span>
+                <span class="text-[9px] sm:text-[10px] text-[#64748B] font-medium tracking-[0.65px] uppercase">Total</span>
             </div>
         </div>
         <div class="space-y-2 sm:space-y-3" id="plan-legend">
@@ -107,50 +107,50 @@
             <div class="flex items-center justify-between">
                 <div class="flex items-center gap-2">
                     <div class="w-2.5 h-2.5 rounded-full" style="background-color: {{ $plan['color'] }}"></div>
-                    <span class="text-sm text-[#666666]">{{ $plan['label'] }} Plan</span>
+                    <span class="text-sm text-[#64748B]">{{ $plan['label'] }} Plan</span>
                 </div>
-                <span class="text-sm font-medium text-[#0d0d0d]">
+                <span class="text-sm font-medium text-[#0F172A]">
                     {{ $stats['total_clients'] > 0 ? round(($plan['count'] / $stats['total_clients']) * 100) : 0 }}%
                 </span>
             </div>
             @empty
-            <p class="text-sm text-[#888888] text-center">No clients yet</p>
+            <p class="text-sm text-[#64748B] text-center">No clients yet</p>
             @endforelse
         </div>
     </div>
 </div>
 
 <!-- Recent Activity -->
-<div class="bg-white rounded-2xl border border-[rgba(0,0,0,0.05)] shadow-[rgba(0,0,0,0.03)_0px_2px_4px] overflow-hidden">
-    <div class="p-4 sm:p-5 lg:p-6 border-b border-[rgba(0,0,0,0.05)]">
-        <h3 class="text-sm sm:text-base font-semibold text-[#0d0d0d]">Recent Activity</h3>
+<div class="bg-white rounded-2xl border border-[#E2E8F0] shadow-[rgba(0,0,0,0.03)_0px_2px_4px] overflow-hidden">
+    <div class="p-4 sm:p-5 lg:p-6 border-b border-[#E2E8F0]">
+        <h3 class="text-sm sm:text-base font-semibold text-[#0F172A]">Recent Activity</h3>
     </div>
     <div class="overflow-x-auto">
         <table class="w-full text-left min-w-[550px]">
             <thead>
                 <tr>
-                    <th class="px-3 sm:px-6 py-3 sm:py-4 text-[10px] font-medium text-[#888888] tracking-[0.65px] uppercase">Time</th>
-                    <th class="px-3 sm:px-6 py-3 sm:py-4 text-[10px] font-medium text-[#888888] tracking-[0.65px] uppercase">Event</th>
-                    <th class="px-3 sm:px-6 py-3 sm:py-4 text-[10px] font-medium text-[#888888] tracking-[0.65px] uppercase">Client</th>
-                    <th class="px-3 sm:px-6 py-3 sm:py-4 text-[10px] font-medium text-[#888888] tracking-[0.65px] uppercase hidden sm:table-cell">Details</th>
+                    <th class="px-3 sm:px-6 py-3 sm:py-4 text-[10px] font-medium text-[#64748B] tracking-[0.65px] uppercase">Time</th>
+                    <th class="px-3 sm:px-6 py-3 sm:py-4 text-[10px] font-medium text-[#64748B] tracking-[0.65px] uppercase">Event</th>
+                    <th class="px-3 sm:px-6 py-3 sm:py-4 text-[10px] font-medium text-[#64748B] tracking-[0.65px] uppercase">Client</th>
+                    <th class="px-3 sm:px-6 py-3 sm:py-4 text-[10px] font-medium text-[#64748B] tracking-[0.65px] uppercase hidden sm:table-cell">Details</th>
                 </tr>
             </thead>
-            <tbody class="divide-y divide-[rgba(0,0,0,0.05)]" id="recent-activity-tbody">
+            <tbody class="divide-y divide-[#E2E8F0]" id="recent-activity-tbody">
                 @forelse($recentConversations as $conversation)
-                <tr class="hover:bg-[#fafafa] transition-colors">
-                    <td class="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-[#666666] whitespace-nowrap">{{ $conversation->created_at->diffForHumans() }}</td>
+                <tr class="hover:bg-[#F1F5F9] transition-colors">
+                    <td class="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-[#64748B] whitespace-nowrap">{{ $conversation->created_at->diffForHumans() }}</td>
                     <td class="px-3 sm:px-6 py-3 sm:py-4">
                         <div class="flex items-center gap-2">
                             <div class="w-2 h-2 rounded-full bg-brand-deep flex-shrink-0"></div>
-                            <span class="text-xs sm:text-sm font-medium text-[#0d0d0d]">New conversation</span>
+                            <span class="text-xs sm:text-sm font-medium text-[#0F172A]">New conversation</span>
                         </div>
                     </td>
-                    <td class="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm font-medium text-[#0d0d0d] truncate max-w-[120px] sm:max-w-none">{{ $conversation->user->company_name ?? $conversation->user->name }}</td>
-                    <td class="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-[#666666] hidden sm:table-cell">Session #{{ substr($conversation->id, 0, 8) }} started by user via Widget</td>
+                    <td class="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm font-medium text-[#0F172A] truncate max-w-[120px] sm:max-w-none">{{ $conversation->user->company_name ?? $conversation->user->name }}</td>
+                    <td class="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-[#64748B] hidden sm:table-cell">Session #{{ substr($conversation->id, 0, 8) }} started by user via Widget</td>
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="4" class="px-3 sm:px-6 py-8 sm:py-12 text-center text-[#888888] text-xs sm:text-sm">No recent activity found</td>
+                    <td colspan="4" class="px-3 sm:px-6 py-8 sm:py-12 text-center text-[#64748B] text-xs sm:text-sm">No recent activity found</td>
                 </tr>
                 @endforelse
             </tbody>
@@ -168,7 +168,7 @@ document.addEventListener('DOMContentLoaded', function () {
             legend: { display: false },
             tooltip: {
                 mode: 'index', intersect: false, padding: 12,
-                backgroundColor: '#0d0d0d',
+                backgroundColor: '#0B1E3D',
                 titleFont: { size: 12, weight: '600' },
                 bodyFont: { size: 12 },
                 cornerRadius: 9999, displayColors: false
@@ -182,8 +182,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function makeGradient(ctx) {
         const g = ctx.createLinearGradient(0, 0, 0, 400);
-        g.addColorStop(0, 'rgba(24, 226, 153, 0.12)');
-        g.addColorStop(1, 'rgba(24, 226, 153, 0)');
+        g.addColorStop(0, 'rgba(29, 185, 84, 0.12)');
+        g.addColorStop(1, 'rgba(29, 185, 84, 0)');
         return g;
     }
 
@@ -194,9 +194,9 @@ document.addEventListener('DOMContentLoaded', function () {
             datasets: [{
                 label: 'Conversations',
                 data: @json($chartData['data']),
-                borderColor: '#18E299', borderWidth: 3,
+                borderColor: '#1DB954', borderWidth: 2.5,
                 pointRadius: 0, pointHoverRadius: 6,
-                pointHoverBackgroundColor: '#18E299',
+                pointHoverBackgroundColor: '#1DB954',
                 pointHoverBorderColor: '#fff', pointHoverBorderWidth: 3,
                 fill: true,
                 backgroundColor: (ctx) => makeGradient(ctx.chart.ctx),
@@ -209,9 +209,9 @@ document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('.chart-toggle-btn').forEach(btn => {
         btn.addEventListener('click', function () {
             document.querySelectorAll('.chart-toggle-btn').forEach(b => {
-                b.className = 'chart-toggle-btn px-4 py-1.5 rounded-full text-xs font-medium text-[#888888] hover:text-[#0d0d0d]';
+                b.className = 'chart-toggle-btn px-4 py-1.5 rounded-full text-xs font-medium text-[#64748B] hover:text-[#0F172A]';
             });
-            this.className = 'chart-toggle-btn px-4 py-1.5 rounded-full text-xs font-medium text-[#0d0d0d] bg-white border border-[rgba(0,0,0,0.05)]';
+            this.className = 'chart-toggle-btn px-4 py-1.5 rounded-full text-xs font-medium text-[#0F172A] bg-white border border-[#E2E8F0]';
 
             fetch(window.location.href + '?days=' + this.dataset.days, {
                 headers: { 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json' }
@@ -286,15 +286,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const tbody = document.getElementById('recent-activity-tbody');
             if (!data.recent_conversations.length) {
-                tbody.innerHTML = '<tr><td colspan="4" class="px-3 sm:px-6 py-8 sm:py-12 text-center text-[#888888] text-xs sm:text-sm">No recent activity found</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="4" class="px-3 sm:px-6 py-8 sm:py-12 text-center text-[#64748B] text-xs sm:text-sm">No recent activity found</td></tr>';
                 return;
             }
             tbody.innerHTML = data.recent_conversations.map(c => `
-                <tr class="hover:bg-[#fafafa] transition-colors">
-                    <td class="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-[#666666] whitespace-nowrap">${c.time}</td>
-                    <td class="px-3 sm:px-6 py-3 sm:py-4"><div class="flex items-center gap-2"><div class="w-2 h-2 rounded-full bg-brand-deep flex-shrink-0"></div><span class="text-xs sm:text-sm font-medium text-[#0d0d0d]">New conversation</span></div></td>
-                    <td class="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm font-medium text-[#0d0d0d] truncate">${c.client}</td>
-                    <td class="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-[#666666] hidden sm:table-cell">Session #${c.session_id} started by user via Widget</td>
+                <tr class="hover:bg-[#F1F5F9] transition-colors">
+                    <td class="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-[#64748B] whitespace-nowrap">${c.time}</td>
+                    <td class="px-3 sm:px-6 py-3 sm:py-4"><div class="flex items-center gap-2"><div class="w-2 h-2 rounded-full bg-brand-deep flex-shrink-0"></div><span class="text-xs sm:text-sm font-medium text-[#0F172A]">New conversation</span></div></td>
+                    <td class="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm font-medium text-[#0F172A] truncate">${c.client}</td>
+                    <td class="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-[#64748B] hidden sm:table-cell">Session #${c.session_id} started by user via Widget</td>
                 </tr>
             `).join('');
         })

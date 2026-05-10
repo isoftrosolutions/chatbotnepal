@@ -6,27 +6,28 @@ use App\Http\Controllers\Controller;
 use App\Models\Visitor;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class VisitorsController extends Controller
 {
-    public function index(Request $request): \Illuminate\View\View|JsonResponse
+    public function index(Request $request): View|JsonResponse
     {
-        $user  = auth()->user();
+        $user = auth()->user();
         $query = Visitor::where('user_id', $user->id);
 
         if ($search = $request->get('search')) {
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('email', 'like', "%{$search}%")
-                  ->orWhere('phone', 'like', "%{$search}%");
+                    ->orWhere('email', 'like', "%{$search}%")
+                    ->orWhere('phone', 'like', "%{$search}%");
             });
         }
 
         $sort = $request->get('sort', 'latest');
         match ($sort) {
-            'oldest'  => $query->orderBy('first_seen_at'),
-            'name'    => $query->orderBy('name'),
-            default   => $query->orderByDesc('last_seen_at'),
+            'oldest' => $query->orderBy('first_seen_at'),
+            'name' => $query->orderBy('name'),
+            default => $query->orderByDesc('last_seen_at'),
         };
 
         $visitors = $query->withCount([
@@ -39,11 +40,11 @@ class VisitorsController extends Controller
 
         if ($request->ajax()) {
             return response()->json([
-                'html'         => view('client.partials.visitors-grid', compact('visitors'))->render(),
-                'pagination'   => $visitors->appends($request->query())->links()->toHtml(),
-                'totalVisitors'=> number_format($totalVisitors),
-                'knownVisitors'=> number_format($knownVisitors),
-                'todayVisitors'=> number_format($todayVisitors),
+                'html' => view('client.partials.visitors-grid', compact('visitors'))->render(),
+                'pagination' => $visitors->appends($request->query())->links()->toHtml(),
+                'totalVisitors' => number_format($totalVisitors),
+                'knownVisitors' => number_format($knownVisitors),
+                'todayVisitors' => number_format($todayVisitors),
             ]);
         }
 

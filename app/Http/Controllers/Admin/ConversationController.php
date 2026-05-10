@@ -27,7 +27,7 @@ class ConversationController extends Controller
             $search = $request->search;
             $query->where(function ($q) use ($search) {
                 $q->where('visitor_name', 'like', "%{$search}%")
-                  ->orWhere('visitor_email', 'like', "%{$search}%");
+                    ->orWhere('visitor_email', 'like', "%{$search}%");
             });
         }
 
@@ -35,7 +35,7 @@ class ConversationController extends Controller
 
         if ($request->ajax()) {
             return response()->json([
-                'html'       => view('admin.clients.partials.conversations-table', compact('client', 'conversations'))->render(),
+                'html' => view('admin.clients.partials.conversations-table', compact('client', 'conversations'))->render(),
                 'pagination' => $conversations->appends($request->query())->links()->toHtml(),
             ]);
         }

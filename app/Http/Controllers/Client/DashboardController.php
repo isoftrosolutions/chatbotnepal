@@ -70,22 +70,22 @@ class DashboardController extends Controller
         if ($request->ajax()) {
             return response()->json([
                 'stats' => [
-                    'chatbot_online'           => $stats['chatbot_online'],
-                    'total_conversations'      => $stats['total_conversations'],
+                    'chatbot_online' => $stats['chatbot_online'],
+                    'total_conversations' => $stats['total_conversations'],
                     'conversations_this_month' => $stats['conversations_this_month'],
-                    'messages_today'           => $stats['messages_today'],
-                    'messages_trend'           => $stats['messages_trend'],
+                    'messages_today' => $stats['messages_today'],
+                    'messages_trend' => $stats['messages_trend'],
                 ],
                 'usage' => [
                     'conversations_this_month' => $clientSummary['conversations_this_month'],
                     'bot_responses_this_month' => $clientSummary['bot_responses_this_month'],
                 ],
-                'recent_conversations' => $recentConversations->map(fn($conv) => [
+                'recent_conversations' => $recentConversations->map(fn ($conv) => [
                     'visitor_initial' => strtoupper(substr($conv->visitor_name ?? 'A', 0, 1)),
-                    'visitor_name'    => $conv->visitor_name ?? 'Guest Visitor',
-                    'visitor_email'   => $conv->visitor_email ?? '',
-                    'message_count'   => $conv->messages->count(),
-                    'time'            => $conv->created_at->diffForHumans(),
+                    'visitor_name' => $conv->visitor_name ?? 'Guest Visitor',
+                    'visitor_email' => $conv->visitor_email ?? '',
+                    'message_count' => $conv->messages->count(),
+                    'time' => $conv->created_at->diffForHumans(),
                 ]),
             ]);
         }

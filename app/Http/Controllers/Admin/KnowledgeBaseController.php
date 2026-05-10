@@ -41,13 +41,13 @@ class KnowledgeBaseController extends Controller
         $validated = $request->validate([
             'file_name' => 'required|string|max:255',
             'file_type' => 'required|in:about,services,faq,contact,custom',
-            'content'   => 'required|string',
+            'content' => 'required|string',
         ]);
 
         $validated['file_name'] = $this->ensureMdExtension($validated['file_name']);
 
         $kb = KnowledgeBase::create([
-            'user_id'   => $client->id,
+            'user_id' => $client->id,
             'is_active' => true,
             ...$validated,
         ]);
@@ -65,7 +65,7 @@ class KnowledgeBaseController extends Controller
         $validated = $request->validate([
             'file_name' => 'required|string|max:255',
             'file_type' => 'required|in:about,services,faq,contact,custom',
-            'content'   => 'required|string',
+            'content' => 'required|string',
         ]);
 
         $validated['file_name'] = $this->ensureMdExtension($validated['file_name']);
@@ -98,6 +98,7 @@ class KnowledgeBaseController extends Controller
         foreach ($order as $i => $id) {
             KnowledgeBase::where('id', $id)->where('user_id', $clientId)->update(['sort_order' => $i]);
         }
+
         return response()->json(['success' => true]);
     }
 
@@ -114,26 +115,28 @@ class KnowledgeBaseController extends Controller
     private function clientDiskPath(User $client): string
     {
         $slug = Str::slug($client->company_name ?? $client->name);
-        return 'clients/' . $client->id . '_' . $slug;
+
+        return 'clients/'.$client->id.'_'.$slug;
     }
 
     private function writeToDisk(User $client, KnowledgeBase $kb): void
     {
-        $path = $this->clientDiskPath($client) . '/' . $kb->file_name;
+        $path = $this->clientDiskPath($client).'/'.$kb->file_name;
         Storage::disk('local')->put($path, $kb->content);
     }
 
     private function deleteFromDisk(User $client, string $fileName): void
     {
-        $path = $this->clientDiskPath($client) . '/' . $fileName;
+        $path = $this->clientDiskPath($client).'/'.$fileName;
         Storage::disk('local')->delete($path);
     }
 
     private function ensureMdExtension(string $name): string
     {
-        if (!Str::endsWith($name, ['.md', '.markdown'])) {
-            return $name . '.md';
+        if (! Str::endsWith($name, ['.md', '.markdown'])) {
+            return $name.'.md';
         }
+
         return $name;
     }
 }

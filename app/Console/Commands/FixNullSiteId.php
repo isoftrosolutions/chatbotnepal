@@ -18,15 +18,17 @@ class FixNullSiteId extends Command
 
         if ($users->isEmpty()) {
             $this->info('No users with NULL site_id found.');
+
             return Command::SUCCESS;
         }
 
         if ($this->option('dry-run')) {
-            $this->warn('Found ' . $users->count() . ' users with NULL site_id:');
+            $this->warn('Found '.$users->count().' users with NULL site_id:');
             foreach ($users as $user) {
                 $newSiteId = $this->generateUniqueSiteId($user);
                 $this->line("  ID: {$user->id}, Name: {$user->name}, Email: {$user->email} => site_id: {$newSiteId}");
             }
+
             return Command::SUCCESS;
         }
 
@@ -53,7 +55,7 @@ class FixNullSiteId extends Command
         $attempt = 1;
 
         while (User::where('site_id', $siteId)->where('id', '!=', $user->id)->exists()) {
-            $siteId = substr($base, 0, 18) . $attempt;
+            $siteId = substr($base, 0, 18).$attempt;
             $attempt++;
         }
 

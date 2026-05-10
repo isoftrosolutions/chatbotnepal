@@ -43,18 +43,18 @@ class StreamChatController extends Controller
         }
 
         $request->validate([
-            'site_id'         => 'required|string',
-            'message'         => 'required|string|max:1000',
-            'visitor_id'      => 'nullable|string|max:64',
+            'site_id' => 'required|string',
+            'message' => 'required|string|max:1000',
+            'visitor_id' => 'nullable|string|max:64',
             'conversation_id' => 'nullable|integer',
-            'source_url'      => 'nullable|string|max:500',
-            'visitor_name'    => 'nullable|string|max:100',
-            'visitor_email'   => 'nullable|email|max:191',
-            'visitor_phone'   => 'nullable|string|max:30',
+            'source_url' => 'nullable|string|max:500',
+            'visitor_name' => 'nullable|string|max:100',
+            'visitor_email' => 'nullable|email|max:191',
+            'visitor_phone' => 'nullable|string|max:30',
         ]);
 
         $sessionToken = $request->header('X-Session-Token');
-        $client       = null;
+        $client = null;
 
         if ($sessionToken) {
             $session = WidgetSessionToken::where('token', $sessionToken)
@@ -83,7 +83,7 @@ class StreamChatController extends Controller
         $this->grokService->setApiKey($client->groq_api_key ?? null);
 
         $cleanedMessage = $this->sanitizeInput($request->message);
-        $conversation   = $this->chatService->getOrCreateConversation(
+        $conversation = $this->chatService->getOrCreateConversation(
             $client,
             $request->conversation_id,
             $request->visitor_id,
@@ -108,17 +108,17 @@ class StreamChatController extends Controller
 
         ChatMessage::create([
             'conversation_id' => $conversation->id,
-            'role'            => 'visitor',
-            'message'         => $cleanedMessage,
-            'tokens_used'     => 0,
-            'created_at'      => now(),
+            'role' => 'visitor',
+            'message' => $cleanedMessage,
+            'tokens_used' => 0,
+            'created_at' => now(),
         ]);
 
-        $startTime    = microtime(true);
+        $startTime = microtime(true);
         $fullResponse = '';
-        $hadError    = false;
-        $grokService  = $this->grokService;
-        $chatService  = $this->chatService;
+        $hadError = false;
+        $grokService = $this->grokService;
+        $chatService = $this->chatService;
 
         return response()->stream(function () use (
             $messages, $client, $conversation, $startTime,
@@ -144,51 +144,52 @@ class StreamChatController extends Controller
                     if (empty($fullResponse)) {
                         echo 'data: '.json_encode([
                             'type' => 'error',
-                            'message' => 'No response received from AI. Please try again.'
+                            'message' => 'No response received from AI. Please try again.',
                         ])."\n\n";
                         if (ob_get_level()) {
                             ob_flush();
                         }
                         flush();
+
                         return;
                     }
 
-                    $endTime   = microtime(true);
-                    $tokensIn  = $usage['input_tokens']  > 0 ? $usage['input_tokens']  : (int) ceil(strlen($fullResponse) / 4);
+                    $endTime = microtime(true);
+                    $tokensIn = $usage['input_tokens'] > 0 ? $usage['input_tokens'] : (int) ceil(strlen($fullResponse) / 4);
                     $tokensOut = $usage['output_tokens'] > 0 ? $usage['output_tokens'] : (int) ceil(strlen($fullResponse) / 4);
-                    $total     = $usage['total_tokens']  > 0 ? $usage['total_tokens']  : ($tokensIn + $tokensOut);
+                    $total = $usage['total_tokens'] > 0 ? $usage['total_tokens'] : ($tokensIn + $tokensOut);
 
                     // Parse buttons out of the full response before saving to DB
-                    $parsed      = ChatButtonParser::parse($fullResponse);
+                    $parsed = ChatButtonParser::parse($fullResponse);
                     $cleanedText = $parsed['message'];
-                    $buttons     = $parsed['buttons'];
+                    $buttons = $parsed['buttons'];
 
                     ChatMessage::create([
                         'conversation_id' => $conversation->id,
-                        'role'            => 'bot',
-                        'message'         => $cleanedText,
-                        'tokens_used'     => $tokensOut,
-                        'created_at'      => now(),
+                        'role' => 'bot',
+                        'message' => $cleanedText,
+                        'tokens_used' => $tokensOut,
+                        'created_at' => now(),
                     ]);
 
-                    $cost     = $grokService->estimateCost($total);
+                    $cost = $grokService->estimateCost($total);
                     $usageLog = TokenUsageLog::getOrCreateForToday($client->id);
                     $usageLog->addUsage($tokensIn, $tokensOut, $cost);
 
                     $chatService->logGroqUsage($client->id, $conversation->id, [
-                        'input_tokens'  => $tokensIn,
+                        'input_tokens' => $tokensIn,
                         'output_tokens' => $tokensOut,
-                        'tokens_used'   => $total,
-                        'model'         => $grokService->getModel(),
+                        'tokens_used' => $total,
+                        'model' => $grokService->getModel(),
                     ]);
 
                     echo 'data: '.json_encode([
-                        'type'            => 'done',
+                        'type' => 'done',
                         'conversation_id' => $conversation->id,
-                        'message'         => $cleanedText,
-                        'buttons'         => $buttons,
-                        'tokens'          => $total,
-                        'time_ms'         => round(($endTime - $startTime) * 1000),
+                        'message' => $cleanedText,
+                        'buttons' => $buttons,
+                        'tokens' => $total,
+                        'time_ms' => round(($endTime - $startTime) * 1000),
                     ])."\n\n";
                     if (ob_get_level()) {
                         ob_flush();
@@ -205,10 +206,10 @@ class StreamChatController extends Controller
                 }
             );
         }, 200, [
-            'Content-Type'                 => 'text/event-stream',
-            'Cache-Control'                => 'no-cache',
-            'Connection'                   => 'keep-alive',
-            'X-Accel-Buffering'            => 'no',
+            'Content-Type' => 'text/event-stream',
+            'Cache-Control' => 'no-cache',
+            'Connection' => 'keep-alive',
+            'X-Accel-Buffering' => 'no',
         ]);
     }
 

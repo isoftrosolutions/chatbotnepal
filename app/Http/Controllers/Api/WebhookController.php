@@ -25,19 +25,21 @@ class WebhookController extends Controller
         Log::info('eSewa webhook received', $request->all());
 
         $merchantId = Setting::get('esewa_merchant_id');
-        $productId  = $request->product_id;
-        $refId      = $request->ref_id;
-        $amount     = $request->amount;
-        $status     = $request->status;
+        $productId = $request->product_id;
+        $refId = $request->ref_id;
+        $amount = $request->amount;
+        $status = $request->status;
 
         if (! $merchantId) {
             Log::warning('eSewa merchant ID not configured');
+
             return response()->json(['error' => 'Payment gateway not configured'], 500);
         }
 
         // Only process completed payments — ignore cancellations, refunds, etc.
         if ($status !== 'COMPLETE') {
             Log::info('eSewa payment not completed', ['status' => $status, 'product_id' => $productId]);
+
             return response()->json(['status' => 'ignored'], 200);
         }
 
@@ -52,8 +54,9 @@ class WebhookController extends Controller
             Log::warning('eSewa amount mismatch', [
                 'expected' => $invoice->amount,
                 'received' => $amount,
-                'product'  => $productId,
+                'product' => $productId,
             ]);
+
             return response()->json(['status' => 'failed'], 400);
         }
 
@@ -61,6 +64,7 @@ class WebhookController extends Controller
 
         if (! $verified) {
             Log::warning('eSewa payment verification failed', compact('productId', 'refId', 'amount'));
+
             return response()->json(['status' => 'failed'], 400);
         }
 
@@ -75,15 +79,16 @@ class WebhookController extends Controller
     {
         Log::info('Khalti webhook received', $request->all());
 
-        $token           = $request->token;
-        $amount          = $request->amount;
+        $token = $request->token;
+        $amount = $request->amount;
         $productIdentity = $request->product_identity;
 
-        $secretKey  = Setting::get('khalti_secret_key');
-        $verifyUrl  = Setting::get('khalti_verify_url', 'https://khalti.com/api/v2/payment/verify/');
+        $secretKey = Setting::get('khalti_secret_key');
+        $verifyUrl = Setting::get('khalti_verify_url', 'https://khalti.com/api/v2/payment/verify/');
 
         if (! $secretKey) {
             Log::warning('Khalti secret key not configured');
+
             return response()->json(['error' => 'Payment gateway not configured'], 500);
         }
 
@@ -98,9 +103,10 @@ class WebhookController extends Controller
         if ((int) $amount !== $expectedPaisa) {
             Log::warning('Khalti amount mismatch', [
                 'expected_paisa' => $expectedPaisa,
-                'received'       => $amount,
-                'product'        => $productIdentity,
+                'received' => $amount,
+                'product' => $productIdentity,
             ]);
+
             return response()->json(['status' => 'failed'], 400);
         }
 
@@ -110,8 +116,9 @@ class WebhookController extends Controller
         if (! $response->successful()) {
             Log::warning('Khalti verification request failed', [
                 'status' => $response->status(),
-                'body'   => $response->body(),
+                'body' => $response->body(),
             ]);
+
             return response()->json(['status' => 'failed'], 400);
         }
 
@@ -130,8 +137,8 @@ class WebhookController extends Controller
 
     private function verifyEsewa(string $merchantId, string $productId, string $amount, string $refId): bool
     {
-        $env        = Setting::get('esewa_env', 'test');
-        $verifyUrl  = $env === 'live'
+        $env = Setting::get('esewa_env', 'test');
+        $verifyUrl = $env === 'live'
             ? 'https://esewa.com.np/epay/transrec'
             : 'https://uat.esewa.com.np/epay/transrec';
 
@@ -147,6 +154,7 @@ class WebhookController extends Controller
                 && str_contains($response->body(), '<response_code>Success</response_code>');
         } catch (\Exception $e) {
             Log::error('eSewa verification exception', ['message' => $e->getMessage()]);
+
             return false;
         }
     }

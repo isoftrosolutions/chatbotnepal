@@ -35,19 +35,27 @@ return [
         ],
     ],
 
+    'groq' => [
+        'api_key' => env('GROQ_API_KEY'),
+    ],
+
+    'gemini' => [
+        'api_key' => env('GEMINI_API_KEY'),
+    ],
+
     'esewa' => [
         'merchant_id' => env('ESEWA_MERCHANT_ID'),
-        'secret_key'  => env('ESEWA_SECRET_KEY'),
-        'env'         => env('ESEWA_ENV', 'test'),
-        'url'         => env('ESEWA_ENV', 'test') === 'production'
+        'secret_key' => env('ESEWA_SECRET_KEY'),
+        'env' => env('ESEWA_ENV', 'test'),
+        'url' => env('ESEWA_ENV', 'test') === 'production'
             ? 'https://epay.esewa.com.np/api/epay/main/v2/form'
             : 'https://rc-epay.esewa.com.np/api/epay/main/v2/form',
     ],
 
     'khalti' => [
         'secret_key' => env('KHALTI_SECRET_KEY'),
-        'env'        => env('KHALTI_ENV', 'test'),
-        'url'        => env('KHALTI_ENV', 'test') === 'production'
+        'env' => env('KHALTI_ENV', 'test'),
+        'url' => env('KHALTI_ENV', 'test') === 'production'
             ? 'https://khalti.com/api/v2/epayment/initiate/'
             : 'https://a.khalti.com/api/v2/epayment/initiate/',
     ],

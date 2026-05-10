@@ -26,6 +26,7 @@ class User extends Authenticatable
         'site_id',
         'groq_api_key',
         'chatbot_enabled',
+        'voice_enabled',
         'last_login_at',
     ];
 
@@ -39,6 +40,7 @@ class User extends Authenticatable
         'last_login_at' => 'datetime',
         'password' => 'hashed',
         'chatbot_enabled' => 'boolean',
+        'voice_enabled' => 'boolean',
     ];
 
     protected static function booted(): void

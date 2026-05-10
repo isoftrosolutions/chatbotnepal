@@ -23,7 +23,7 @@ class Visitor extends Model
 
     protected $casts = [
         'first_seen_at' => 'datetime',
-        'last_seen_at'  => 'datetime',
+        'last_seen_at' => 'datetime',
     ];
 
     public function user(): BelongsTo

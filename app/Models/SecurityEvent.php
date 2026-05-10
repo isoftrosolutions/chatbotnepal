@@ -28,9 +28,9 @@ class SecurityEvent extends Model
     public static function log(string $event, ?int $userId, string $ip, string $userAgent): void
     {
         static::create([
-            'user_id'    => $userId,
-            'event'      => $event,
-            'ip'         => $ip,
+            'user_id' => $userId,
+            'event' => $event,
+            'ip' => $ip,
             'user_agent' => $userAgent,
         ]);
     }

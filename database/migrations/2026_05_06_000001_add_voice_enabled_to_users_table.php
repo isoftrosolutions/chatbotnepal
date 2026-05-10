@@ -9,14 +9,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('groq_api_key', 255)->nullable()->after('api_token');
+            $table->boolean('voice_enabled')->nullable()->default(null)->after('chatbot_enabled');
         });
     }
 
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('groq_api_key');
+            $table->dropColumn('voice_enabled');
         });
     }
 };

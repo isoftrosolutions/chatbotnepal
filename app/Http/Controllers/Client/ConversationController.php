@@ -12,14 +12,14 @@ class ConversationController extends Controller
 {
     public function index(Request $request): View|JsonResponse
     {
-        $user  = auth()->user();
+        $user = auth()->user();
         $query = $user->conversations()->with('messages');
 
         if ($request->search) {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
                 $q->where('visitor_name', 'like', "%{$search}%")
-                  ->orWhere('visitor_email', 'like', "%{$search}%");
+                    ->orWhere('visitor_email', 'like', "%{$search}%");
             });
         }
 
@@ -40,7 +40,7 @@ class ConversationController extends Controller
 
         if ($request->ajax()) {
             return response()->json([
-                'html'       => view('client.partials.conversations-grid', compact('conversations'))->render(),
+                'html' => view('client.partials.conversations-grid', compact('conversations'))->render(),
                 'pagination' => $conversations->appends($request->query())->links()->toHtml(),
             ]);
         }

@@ -1,11 +1,11 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Your verification code</title>
   <style>
-    body { margin:0; padding:0; background:#f4f7fe; font-family:'Inter','Segoe UI',system-ui,sans-serif; }
+    body { margin:0; padding:0; background:#f4f7fe; font-family:'Poppins','Segoe UI',system-ui,sans-serif; }
     .wrap { max-width:520px; margin:40px auto; background:#fff; border-radius:16px; overflow:hidden; box-shadow:0 4px 24px rgba(0,0,0,0.07); }
     .header { background:linear-gradient(135deg,#4f46e5,#7c3aed); padding:36px 40px; text-align:center; }
     .header-icon { width:56px; height:56px; background:rgba(255,255,255,0.15); border-radius:14px; margin:0 auto 16px; display:flex; align-items:center; justify-content:center; }

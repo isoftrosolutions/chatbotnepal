@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
@@ -6,11 +6,11 @@
 <title>Forgot Password — ChatBot Nepal</title>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Inter','Segoe UI',system-ui,sans-serif; min-height:100vh; display:flex; background:#0f0e2a; }
-  .left { flex:1; background:linear-gradient(160deg,#1e1b4b 0%,#1a1a35 40%,#0f0e2a 100%); padding:48px 56px; display:flex; flex-direction:column; position:relative; overflow:hidden; min-height:100vh; }
-  .left::before { content:''; position:absolute; top:-80px; right:-80px; width:360px; height:360px; background:radial-gradient(circle,rgba(99,102,241,0.18) 0%,transparent 70%); pointer-events:none; }
+  body { font-family: 'Poppins','Segoe UI',system-ui,sans-serif; min-height:100vh; display:flex; background:#0B1E3D; }
+  .left { flex:1; background:linear-gradient(160deg,#132847 0%,#0e2038 40%,#0B1E3D 100%); padding:48px 56px; display:flex; flex-direction:column; position:relative; overflow:hidden; min-height:100vh; }
+  .left::before { content:''; position:absolute; top:-80px; right:-80px; width:360px; height:360px; background:radial-gradient(circle,rgba(29,185,84,0.15) 0%,transparent 70%); pointer-events:none; }
   .logo-row { display:flex; align-items:center; gap:12px; margin-bottom:72px; }
-  .logo-icon { width:48px; height:48px; background:#4f46e5; border-radius:10px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .logo-icon { width:48px; height:48px; background:#1DB954; border-radius:9999px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
   .logo-icon svg { width:26px; height:26px; }
   .logo-name { font-size:20px; font-weight:700; color:#ffffff; letter-spacing:-0.3px; }
   .hero-heading { font-size:40px; font-weight:800; line-height:1.12; color:#fff; margin-bottom:20px; letter-spacing:-0.5px; }
@@ -28,13 +28,13 @@
   .input-wrap svg.prefix { position:absolute; left:14px; width:16px; height:16px; color:#9ca3af; pointer-events:none; }
   .input-wrap input { width:100%; background:#fff; border:1.5px solid #e5e7eb; border-radius:8px; padding:13px 44px; font-size:15px; color:#111827; outline:none; transition:border-color 0.2s,box-shadow 0.2s; font-family:inherit; }
   .input-wrap input::placeholder { color:#9ca3af; }
-  .input-wrap input:focus { border-color:#6366f1; box-shadow:0 0 0 3px rgba(99,102,241,0.12); }
+  .input-wrap input:focus { border-color:#1DB954; box-shadow:0 0 0 3px rgba(29,185,84,0.15); }
   .input-wrap input.error { border-color:#f87171; box-shadow:0 0 0 3px rgba(248,113,113,0.1); }
   .field-error { font-size:12px; color:#dc2626; margin-top:5px; }
-  .btn-primary { width:100%; padding:14px; background:#4f46e5; border:none; border-radius:8px; font-size:15px; font-weight:700; color:#fff; cursor:pointer; transition:background 0.2s,box-shadow 0.2s; margin-bottom:20px; font-family:inherit; }
-  .btn-primary:hover { background:#4338ca; box-shadow:0 4px 16px rgba(79,70,229,0.35); }
+  .btn-primary { width:100%; padding:14px; background:#1DB954; border:none; border-radius:8px; font-size:15px; font-weight:700; color:#fff; cursor:pointer; transition:background 0.2s,box-shadow 0.2s; margin-bottom:20px; font-family:inherit; }
+  .btn-primary:hover { background:#18A348; box-shadow:0 4px 16px rgba(29,185,84,0.35); }
   .back-link { text-align:center; font-size:14px; color:#64748b; }
-  .back-link a { color:#4f46e5; font-weight:600; text-decoration:none; }
+  .back-link a { color:#1DB954; font-weight:600; text-decoration:none; }
   .back-link a:hover { text-decoration:underline; }
   .right-footer { padding:20px 52px; border-top:1px solid #f1f5f9; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; }
   .right-footer .copy { font-size:11px; color:#94a3b8; text-transform:uppercase; letter-spacing:0.5px; }
@@ -66,7 +66,7 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
         <div>
           {{ session('status') }}
-          <div style="margin-top:8px;font-size:13px;">Redirecting to enter code in <span id="countdown" style="font-weight:700;color:#4f46e5;">3</span> seconds...</div>
+          <div style="margin-top:8px;font-size:13px;">Redirecting to enter code in <span id="countdown" style="font-weight:700;color:#1DB954;">3</span> seconds...</div>
         </div>
       </div>
     @endif

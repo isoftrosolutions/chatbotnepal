@@ -19,22 +19,23 @@ class DashboardController extends Controller
         // Return chart data only when the toggle buttons request it
         if ($request->ajax() && $request->has('days')) {
             $days = (int) min(max($request->days, 7), 90);
+
             return response()->json($this->chartData($days));
         }
 
         $stats = [
-            'total_clients'        => User::where('role', 'client')->count(),
-            'active_clients'       => User::where('role', 'client')->where('status', 'active')->count(),
-            'suspended_clients'    => User::where('role', 'client')->where('status', 'suspended')->count(),
-            'conversations_today'  => ChatConversation::whereDate('created_at', Carbon::today())->count(),
-            'conversations_month'  => ChatConversation::whereMonth('created_at', Carbon::now()->month)->count(),
-            'tokens_today'         => TokenUsageLog::whereDate('date', Carbon::today())->sum('total_tokens'),
-            'tokens_month'         => TokenUsageLog::whereMonth('date', Carbon::now()->month)->sum('total_tokens'),
-            'revenue_month'        => Invoice::where('status', 'paid')
+            'total_clients' => User::where('role', 'client')->count(),
+            'active_clients' => User::where('role', 'client')->where('status', 'active')->count(),
+            'suspended_clients' => User::where('role', 'client')->where('status', 'suspended')->count(),
+            'conversations_today' => ChatConversation::whereDate('created_at', Carbon::today())->count(),
+            'conversations_month' => ChatConversation::whereMonth('created_at', Carbon::now()->month)->count(),
+            'tokens_today' => TokenUsageLog::whereDate('date', Carbon::today())->sum('total_tokens'),
+            'tokens_month' => TokenUsageLog::whereMonth('date', Carbon::now()->month)->sum('total_tokens'),
+            'revenue_month' => Invoice::where('status', 'paid')
                 ->whereMonth('paid_at', Carbon::now()->month)
                 ->sum('amount'),
-            'pending_invoices'     => Invoice::where('status', 'pending')->count(),
-            'overdue_invoices'     => Invoice::where('status', 'overdue')->count(),
+            'pending_invoices' => Invoice::where('status', 'pending')->count(),
+            'overdue_invoices' => Invoice::where('status', 'overdue')->count(),
         ];
 
         $trends = $this->calculateTrends($stats);
@@ -49,15 +50,15 @@ class DashboardController extends Controller
         if ($request->ajax()) {
             return response()->json([
                 'stats' => [
-                    'total_clients'       => $stats['total_clients'],
+                    'total_clients' => $stats['total_clients'],
                     'conversations_today' => $stats['conversations_today'],
-                    'tokens_today'        => number_format($stats['tokens_today']),
-                    'revenue_month'       => number_format($stats['revenue_month']),
+                    'tokens_today' => number_format($stats['tokens_today']),
+                    'revenue_month' => number_format($stats['revenue_month']),
                 ],
                 'trends' => $trends,
-                'recent_conversations' => $recentConversations->map(fn($c) => [
-                    'time'       => $c->created_at->diffForHumans(),
-                    'client'     => $c->user->company_name ?? $c->user->name,
+                'recent_conversations' => $recentConversations->map(fn ($c) => [
+                    'time' => $c->created_at->diffForHumans(),
+                    'client' => $c->user->company_name ?? $c->user->name,
                     'session_id' => substr($c->id, 0, 8),
                 ]),
             ]);
@@ -85,10 +86,10 @@ class DashboardController extends Controller
             ->sum('amount');
 
         return [
-            'clients'       => $this->pct($stats['total_clients'], $clientsLastMonth),
+            'clients' => $this->pct($stats['total_clients'], $clientsLastMonth),
             'conversations' => $this->pct($stats['conversations_today'], $convsYesterday),
-            'tokens'        => $this->pct($stats['tokens_today'], $tokensYesterday),
-            'revenue'       => $this->pct($stats['revenue_month'], $revenueLastMonth),
+            'tokens' => $this->pct($stats['tokens_today'], $tokensYesterday),
+            'revenue' => $this->pct($stats['revenue_month'], $revenueLastMonth),
         ];
     }
 
@@ -111,7 +112,7 @@ class DashboardController extends Controller
             ->pluck('count', 'plan')
             ->toArray();
 
-        $plans  = ['enterprise', 'growth', 'standard', 'basic', 'starter', 'pro'];
+        $plans = ['enterprise', 'growth', 'standard', 'basic', 'starter', 'pro'];
         $colors = ['#4318FF', '#6AD2FF', '#05CD99', '#FFB547', '#EE5D50', '#A855F7'];
         $result = [];
 
@@ -146,12 +147,12 @@ class DashboardController extends Controller
             ->toArray();
 
         $labels = [];
-        $data   = [];
+        $data = [];
 
         for ($i = $days - 1; $i >= 0; $i--) {
-            $date     = Carbon::today()->subDays($i);
+            $date = Carbon::today()->subDays($i);
             $labels[] = $days <= 7 ? $date->format('D') : $date->format('M d');
-            $data[]   = $counts[$date->toDateString()] ?? 0;
+            $data[] = $counts[$date->toDateString()] ?? 0;
         }
 
         return ['labels' => $labels, 'data' => $data];

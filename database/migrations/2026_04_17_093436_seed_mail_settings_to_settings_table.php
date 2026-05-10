@@ -14,14 +14,14 @@ return new class extends Migration
     {
         $defaults = [
             // Groq AI
-            'grok_api_key'      => '',
-            'grok_model'        => 'llama-3.1-8b-instant',
+            'grok_api_key' => '',
+            'grok_model' => 'llama-3.1-8b-instant',
 
             // SMTP
-            'mail_host'         => 'smtp.gmail.com',
-            'mail_port'         => '587',
-            'mail_username'     => '',
-            'mail_password'     => '',
+            'mail_host' => 'smtp.gmail.com',
+            'mail_port' => '587',
+            'mail_username' => '',
+            'mail_password' => '',
             'mail_from_address' => '',
         ];
 

@@ -14,13 +14,14 @@ class Setting extends Model
 
     private static function cacheKey(string $key): string
     {
-        return 'setting:' . $key;
+        return 'setting:'.$key;
     }
 
     public static function get(string $key, mixed $default = null): mixed
     {
         return Cache::rememberForever(static::cacheKey($key), function () use ($key, $default) {
             $setting = static::where('key', $key)->first();
+
             return $setting ? $setting->value : $default;
         });
     }

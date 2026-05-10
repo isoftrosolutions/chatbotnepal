@@ -27,15 +27,15 @@ class ResetPasswordController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'email'                 => 'required|email|max:255',
-            'otp'                   => 'required|string|digits:6',
-            'password'              => ['required', 'confirmed', Password::min(12)->mixedCase()->numbers()->symbols()],
+            'email' => 'required|email|max:255',
+            'otp' => 'required|string|digits:6',
+            'password' => ['required', 'confirmed', Password::min(12)->mixedCase()->numbers()->symbols()],
         ]);
 
         $email = $request->input('email');
 
         // Per-email verification rate limit: 5 attempts per OTP lifetime
-        $limitKey = 'pw_reset_verify:' . sha1($email);
+        $limitKey = 'pw_reset_verify:'.sha1($email);
         if (RateLimiter::tooManyAttempts($limitKey, 5)) {
             return back()
                 ->withInput($request->only('email'))
@@ -68,7 +68,7 @@ class ResetPasswordController extends Controller
         $request->session()->regenerate();
 
         return redirect()->route('password.success', [
-            'redirect' => $user->isAdmin() ? route('admin.dashboard') : route('client.dashboard')
+            'redirect' => $user->isAdmin() ? route('admin.dashboard') : route('client.dashboard'),
         ]);
     }
 }

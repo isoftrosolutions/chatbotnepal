@@ -1,4 +1,4 @@
-@extends('layouts.client')
+﻿@extends('layouts.client')
 @section('title', 'Verify Email Change')
 @section('header', 'Verify New Email')
 
@@ -7,17 +7,17 @@
   <div class="bg-white rounded-2xl shadow p-8">
 
     <div class="flex items-center gap-3 mb-6">
-      <div class="w-10 h-10 bg-indigo-100 rounded-xl flex items-center justify-center">
-        <i data-lucide="mail-check" class="w-5 h-5 text-indigo-600"></i>
+      <div class="w-10 h-10 bg-brand-light rounded-xl flex items-center justify-center">
+        <i data-lucide="mail-check" class="w-5 h-5 text-brand-deep"></i>
       </div>
       <div>
-        <h3 class="font-bold text-gray-900">Confirm your new email</h3>
-        <p class="text-sm text-gray-500">Enter the 6-digit code sent to <strong>{{ $pendingEmail }}</strong></p>
+        <h3 class="font-bold text-[#0F172A]">Confirm your new email</h3>
+        <p class="text-sm text-[#64748B]">Enter the 6-digit code sent to <strong>{{ $pendingEmail }}</strong></p>
       </div>
     </div>
 
     @if($errors->any())
-      <div class="mb-4 p-3 bg-red-50 border border-red-100 rounded-xl text-red-600 text-sm flex items-center gap-2">
+      <div class="mb-4 p-3 bg-[#fef2f2] border border-[#EF4444]/20 rounded-xl text-[#EF4444] text-sm flex items-center gap-2">
         <i data-lucide="alert-circle" class="w-4 h-4 flex-shrink-0"></i>
         {{ $errors->first() }}
       </div>
@@ -26,7 +26,7 @@
     <form method="POST" action="{{ route('profile.email.verify') }}">
       @csrf
       <div class="mb-6">
-        <label class="block text-xs font-bold uppercase tracking-widest text-gray-600 mb-2">Verification Code</label>
+        <label class="block text-xs font-bold uppercase tracking-widest text-[#64748B] mb-2">Verification Code</label>
         <input
           type="text"
           name="otp"
@@ -37,18 +37,18 @@
           autocomplete="one-time-code"
           autofocus
           required
-          class="w-full border-2 border-gray-200 rounded-xl px-4 py-4 text-center text-3xl font-bold tracking-[12px] font-mono focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none transition {{ $errors->has('otp') ? 'border-red-400' : '' }}"
+          class="w-full border-2 border-[#E2E8F0] rounded-xl px-4 py-4 text-center text-3xl font-bold tracking-[12px] font-mono focus:border-[#1DB954] focus:ring-2 focus:ring-[rgba(29,185,84,0.15)] outline-none transition {{ $errors->has('otp') ? 'border-[#EF4444]' : '' }}"
         />
-        <p class="text-xs text-gray-400 mt-2 text-center">Check your inbox and spam folder — expires in 15 minutes</p>
+        <p class="text-xs text-[#64748B] mt-2 text-center">Check your inbox and spam folder — expires in 15 minutes</p>
       </div>
 
-      <button type="submit" class="w-full py-3 bg-indigo-600 text-white rounded-xl font-semibold hover:bg-indigo-700 transition">
+      <button type="submit" class="w-full py-3 bg-[#1DB954] text-white rounded-xl font-semibold hover:bg-[#18A348] transition">
         Confirm Email Change
       </button>
     </form>
 
     <div class="mt-4 text-center">
-      <a href="{{ route('profile.show') }}" class="text-sm text-gray-500 hover:text-indigo-600 transition">
+      <a href="{{ route('profile.show') }}" class="text-sm text-[#64748B] hover:text-brand-deep transition">
         Cancel — keep current email
       </a>
     </div>

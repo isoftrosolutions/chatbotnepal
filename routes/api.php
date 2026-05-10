@@ -1,8 +1,9 @@
 <?php
 
-use App\Http\Controllers\Api\ChatController;
 use App\Http\Controllers\Admin\ClientLinkController;
+use App\Http\Controllers\Api\ChatController;
 use App\Http\Controllers\Api\StreamChatController;
+use App\Http\Controllers\Api\VoiceController;
 use App\Http\Controllers\Api\WebhookController;
 use App\Http\Controllers\Api\WidgetConfigController;
 use App\Http\Controllers\Api\WidgetSessionController;
@@ -29,5 +30,8 @@ Route::get('/widget-config/{token}', [WidgetConfigController::class, 'show']);
 
 Route::post('/webhooks/esewa', [WebhookController::class, 'esewa']);
 Route::post('/webhooks/khalti', [WebhookController::class, 'khalti']);
+
+Route::post('/voice/transcribe', [VoiceController::class, 'transcribe']);
+Route::post('/voice/speak', [VoiceController::class, 'speak']);
 
 Route::get('/links/{site_id}', [ClientLinkController::class, 'publicIndex']);

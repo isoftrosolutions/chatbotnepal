@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
@@ -6,25 +6,25 @@
 <title>Password Reset Successful — ChatBot Nepal</title>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Inter','Segoe UI',system-ui,sans-serif; min-height:100vh; display:flex; background:#0f0e2a; }
-  .left { flex:1; background:linear-gradient(160deg,#1e1b4b 0%,#1a1a35 40%,#0f0e2a 100%); padding:48px 56px; display:flex; flex-direction:column; position:relative; overflow:hidden; min-height:100vh; }
-  .left::before { content:''; position:absolute; top:-80px; right:-80px; width:360px; height:360px; background:radial-gradient(circle,rgba(99,102,241,0.18) 0%,transparent 70%); pointer-events:none; }
+  body { font-family: 'Poppins','Segoe UI',system-ui,sans-serif; min-height:100vh; display:flex; background:#0B1E3D; }
+  .left { flex:1; background:linear-gradient(160deg,#132847 0%,#0e2038 40%,#0B1E3D 100%); padding:48px 56px; display:flex; flex-direction:column; position:relative; overflow:hidden; min-height:100vh; }
+  .left::before { content:''; position:absolute; top:-80px; right:-80px; width:360px; height:360px; background:radial-gradient(circle,rgba(29,185,84,0.15) 0%,transparent 70%); pointer-events:none; }
   .logo-row { display:flex; align-items:center; gap:12px; margin-bottom:72px; }
-  .logo-icon { width:48px; height:48px; background:#4f46e5; border-radius:10px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .logo-icon { width:48px; height:48px; background:#1DB954; border-radius:9999px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
   .logo-icon svg { width:26px; height:26px; }
   .logo-name { font-size:20px; font-weight:700; color:#ffffff; letter-spacing:-0.3px; }
   .hero-heading { font-size:40px; font-weight:800; line-height:1.12; color:#fff; margin-bottom:20px; letter-spacing:-0.5px; }
   .hero-sub { font-size:15px; color:rgba(255,255,255,0.5); line-height:1.65; max-width:400px; }
   .right { width:500px; flex-shrink:0; background:#fff; display:flex; flex-direction:column; min-height:100vh; }
   .right-inner { flex:1; display:flex; flex-direction:column; justify-content:center; padding:56px 52px; text-align:center; }
-  .success-icon { width:80px; height:80px; background:#f0fdf4; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 24px; }
-  .success-icon svg { width:40px; height:40px; color:#10b981; }
+  .success-icon { width:80px; height:80px; background:#dcfce7; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 24px; }
+  .success-icon svg { width:40px; height:40px; color:#18A348; }
   .card-title { font-size:28px; font-weight:800; color:#0f172a; letter-spacing:-0.4px; margin-bottom:12px; }
   .card-sub { font-size:15px; color:#64748b; margin-bottom:32px; line-height:1.6; }
   .countdown-text { font-size:13px; color:#9ca3af; margin-bottom:24px; }
-  .countdown-text span { font-weight:700; color:#4f46e5; }
-  .btn-primary { display:inline-block; padding:14px 32px; background:#4f46e5; border:none; border-radius:8px; font-size:15px; font-weight:700; color:#fff; text-decoration:none; cursor:pointer; transition:background 0.2s,box-shadow 0.2s; font-family:inherit; }
-  .btn-primary:hover { background:#4338ca; box-shadow:0 4px 16px rgba(79,70,229,0.35); }
+  .countdown-text span { font-weight:700; color:#1DB954; }
+  .btn-primary { display:inline-block; padding:14px 32px; background:#1DB954; border:none; border-radius:8px; font-size:15px; font-weight:700; color:#fff; text-decoration:none; cursor:pointer; transition:background 0.2s,box-shadow 0.2s; font-family:inherit; }
+  .btn-primary:hover { background:#18A348; box-shadow:0 4px 16px rgba(29,185,84,0.35); }
   .right-footer { padding:20px 52px; border-top:1px solid #f1f5f9; }
   .right-footer .copy { font-size:11px; color:#94a3b8; text-transform:uppercase; letter-spacing:0.5px; }
   @media(max-width:900px) { body{flex-direction:column;} .left{min-height:auto;padding:40px 32px;} .hero-heading{font-size:28px;} .right{width:100%;min-height:auto;} .right-inner{padding:40px 32px;} .right-footer{padding:16px 32px;} }

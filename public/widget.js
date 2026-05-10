@@ -70,6 +70,12 @@
     let lastMsgDateStr = null;
     let focusTrapHandler = null;
 
+    /* ─── VOICE FEATURES ─── */
+    let isRecording = false;
+    let voiceOutputEnabled = false; // default OFF
+    let mediaRecorder = null;
+    let audioChunks = [];
+
     /* ─── ESCALATION — phrases that signal a user wants a human ─── */
     const ESCALATION_RE = /\b(human|agent|real person|live (chat|agent|support)|speak to|talk to|contact (someone|support|a person)|someone real|customer service)\b/i;
 
@@ -262,6 +268,7 @@
         .cn-hdr-btn:hover { background: rgba(255,255,255,.12); }
         .cn-hdr-btn:active { background: rgba(255,255,255,.2); }
         .cn-hdr-btn:focus-visible { box-shadow: 0 0 0 2px rgba(255,255,255,.6); }
+        .cn-hdr-btn.active { background: rgba(255,255,255,.2); color: #fff; }
 
         /* ── MESSAGES AREA ── */
         #cn-messages {
@@ -510,6 +517,26 @@
         #cn-send:active  { transform: scale(.94); }
         #cn-send:disabled, #cn-send-btn:disabled { background: #b4b2a9; cursor: not-allowed; transform: none; box-shadow: none; }
         #cn-send:focus-visible { box-shadow: 0 0 0 3px rgba(0,109,119,.4); }
+
+        /* Mic button — same as send button */
+        #cn-mic {
+            width: 44px; height: 44px; border-radius: 50%; border: none;
+            background: #f3f4f5; color: #666;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: transform .15s ease, background .15s, color .15s;
+            box-shadow: 0 2px 4px rgba(0,0,0,.1); outline: none; flex-shrink: 0;
+            touch-action: manipulation; margin-right: 8px;
+        }
+        #cn-mic:hover   { background: #e8e9ea; transform: translateY(-1px); }
+        #cn-mic:active  { transform: scale(.94); }
+        #cn-mic.recording { background: #ef4444; color: #fff; animation: pulse 1.5s infinite; }
+        #cn-mic:focus-visible { box-shadow: 0 0 0 3px rgba(0,109,119,.4); }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
 
         /* ── FOOTER ── */
         .cn-footer {
@@ -848,6 +875,13 @@
                         <div class="cn-hdr-status">AI-powered &middot; Replies instantly</div>
                     </div>
                     <div class="cn-hdr-btns">
+                        <button class="cn-hdr-btn" id="cn-voice-toggle" title="Toggle voice responses" aria-label="Toggle voice responses">
+                            <svg width="18" height="18" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M11 5 6 9H2v6h4l5 4V5z"/>
+                                <path stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+                                <path stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+                            </svg>
+                        </button>
                         <button class="cn-hdr-btn" id="cn-close" title="Close" aria-label="Close chat">
                             <svg width="18" height="18" fill="none" viewBox="0 0 24 24">
                                 <path stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M18 6 6 18M6 6l12 12"/>
@@ -970,6 +1004,12 @@
                         <textarea id="cn-input" placeholder="Type your message..." rows="1"
                             aria-label="Message input" autocomplete="off" maxlength="1000" inputmode="text"></textarea>
                     </div>
+                    <button id="cn-mic" aria-label="Voice input" title="Record voice message">
+                        <svg width="20" height="20" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+                            <path stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M19 10v1a7 7 0 0 1-14 0v-1M12 19v4M8 23h8"/>
+                        </svg>
+                    </button>
                     <button id="cn-send" disabled aria-label="Send message">
                         <svg width="20" height="20" fill="none" viewBox="0 0 24 24">
                             <path fill="#fff" d="M2.01 21 23 12 2.01 3 2 10l15 2-15 2z"/>
@@ -1194,6 +1234,18 @@
        BOOT — load history or show welcome
     ───────────────────────────────────────── */
     async function bootChat() {
+        // Check for voice features support
+        const hasMediaRecorder = typeof MediaRecorder !== 'undefined' && MediaRecorder.isTypeSupported('audio/webm;codecs=opus');
+        const hasAudio = typeof Audio !== 'undefined';
+
+        if (!hasMediaRecorder) {
+            const micBtn = document.getElementById('cn-mic');
+            if (micBtn) micBtn.style.display = 'none';
+        }
+        if (!hasAudio) {
+            const voiceToggle = document.getElementById('cn-voice-toggle');
+            if (voiceToggle) voiceToggle.style.display = 'none';
+        }
         const savedConvId = loadConversationId();
         if (savedConvId) {
             const restored = await loadHistory(savedConvId);
@@ -1480,6 +1532,126 @@
             }
         });
 
+        /* ── VOICE FEATURES ── */
+        async function startRecording() {
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                throw new Error('Media devices not supported');
+            }
+
+            const stream = await navigator.mediaDevices.getUserMedia({
+                audio: {
+                    echoCancellation: true,
+                    noiseSuppression: true,
+                    autoGainControl: true
+                }
+            });
+
+            mediaRecorder = new MediaRecorder(stream, {
+                mimeType: 'audio/webm;codecs=opus'
+            });
+            audioChunks = [];
+
+            mediaRecorder.ondataavailable = (event) => {
+                if (event.data.size > 0) {
+                    audioChunks.push(event.data);
+                }
+            };
+
+            mediaRecorder.onstop = async () => {
+                stream.getTracks().forEach(track => track.stop());
+                await processRecording();
+            };
+
+            mediaRecorder.start();
+            isRecording = true;
+            micBtn.classList.add('recording');
+            addMsg('🎤 Recording... Click mic again to stop.', 'bot');
+        }
+
+        function stopRecording() {
+            if (mediaRecorder && isRecording) {
+                mediaRecorder.stop();
+                isRecording = false;
+                micBtn.classList.remove('recording');
+            }
+        }
+
+        async function processRecording() {
+            if (audioChunks.length === 0) return;
+
+            const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+            const formData = new FormData();
+            formData.append('audio', audioBlob, 'recording.webm');
+            formData.append('token', SITE_ID);
+
+            try {
+                const response = await fetch(`${BASE_URL}/api/voice/transcribe`, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (result.error) {
+                    addMsg('Could not understand audio, please type instead.', 'bot');
+                    return;
+                }
+
+                const transcript = result.transcript;
+                if (transcript) {
+                    input.value = transcript;
+                    input.dispatchEvent(new Event('input'));
+                    // Auto-send the transcript
+                    setTimeout(() => {
+                        if (!busy) {
+                            handleSend();
+                        }
+                    }, 100);
+                } else {
+                    addMsg('Could not understand audio, please type instead.', 'bot');
+                }
+            } catch (error) {
+                console.error('Transcription error:', error);
+                addMsg('Could not understand audio, please type instead.', 'bot');
+            }
+        }
+
+        const micBtn = document.getElementById('cn-mic');
+        const voiceToggleBtn = document.getElementById('cn-voice-toggle');
+
+        // Voice toggle button
+        if (voiceToggleBtn) {
+            voiceToggleBtn.addEventListener('click', () => {
+                voiceOutputEnabled = !voiceOutputEnabled;
+                voiceToggleBtn.classList.toggle('active', voiceOutputEnabled);
+                localStorage.setItem('cbn_voice_output', voiceOutputEnabled ? '1' : '0');
+            });
+            // Load saved preference
+            const saved = localStorage.getItem('cbn_voice_output');
+            if (saved === '1') {
+                voiceOutputEnabled = true;
+                voiceToggleBtn.classList.add('active');
+            }
+        }
+
+        // Mic button for voice input
+        if (micBtn) {
+            micBtn.addEventListener('click', async () => {
+                if (isRecording) {
+                    // Stop recording
+                    stopRecording();
+                } else {
+                    // Start recording
+                    try {
+                        await startRecording();
+                    } catch (error) {
+                        console.error('Failed to start recording:', error);
+                        addMsg('Could not access microphone. Please check permissions.', 'bot');
+                    }
+                }
+            });
+        }
+
         /* ── PRE-CHAT FORM ── */
         function dismissPrechat() {
             const prechat = document.getElementById('cn-prechat');
@@ -1713,6 +1885,10 @@
                                     if (col) renderButtons(ev.buttons, col);
                                 }
                                 updateChecksToRead();
+                                // Play voice if enabled
+                                if (ev.message) {
+                                    playVoice(ev.message);
+                                }
                             } else if (ev.type === 'error') {
                                 streamContent = ev.message || 'Something went wrong.';
                                 if (streamBubble) {
@@ -1791,6 +1967,8 @@
                     if (col) renderButtons(data.buttons, col);
                 }
                 updateChecksToRead();
+                // Play voice if enabled
+                playVoice(data.reply);
             } else {
                 addMsg('Sorry, I could not process that. Please try again.', 'bot', true);
             }
@@ -1809,6 +1987,42 @@
             sendBtn.disabled = false;
             scrollToBottom();
         });
+    }
+
+    /* ─────────────────────────────────────────
+       VOICE OUTPUT
+    ───────────────────────────────────────── */
+    async function playVoice(text) {
+        if (!voiceOutputEnabled) return;
+
+        try {
+            const response = await fetch(`${BASE_URL}/api/voice/speak`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    text: text,
+                    token: SITE_ID
+                })
+            });
+
+            if (!response.ok) {
+                console.warn('Voice synthesis failed, continuing silently');
+                return;
+            }
+
+            const result = await response.json();
+            if (result.audio) {
+                const audioData = atob(result.audio);
+                const audioBlob = new Blob([new Uint8Array(audioData.split('').map(c => c.charCodeAt(0)))], { type: 'audio/wav' });
+                const audioUrl = URL.createObjectURL(audioBlob);
+                const audio = new Audio(audioUrl);
+                audio.play().catch(() => {
+                    console.warn('Audio playback failed');
+                });
+            }
+        } catch (error) {
+            console.warn('Voice output error:', error);
+        }
     }
 
     /* ─────────────────────────────────────────

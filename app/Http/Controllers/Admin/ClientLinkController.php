@@ -30,9 +30,9 @@ class ClientLinkController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'name'     => 'required|string|max:100',
-            'link'     => 'required|url|max:500',
-            'slug'     => 'nullable|alpha_dash|max:100',
+            'name' => 'required|string|max:100',
+            'link' => 'required|url|max:500',
+            'slug' => 'nullable|alpha_dash|max:100',
             'is_active' => 'boolean',
         ]);
 
@@ -50,10 +50,10 @@ class ClientLinkController extends Controller
         $maxOrder = ClientLink::where('user_id', auth()->id())->max('sort_order') ?? 0;
 
         ClientLink::create([
-            'user_id'    => auth()->id(),
-            'name'      => $validated['name'],
-            'slug'      => $slug,
-            'link'      => $validated['link'],
+            'user_id' => auth()->id(),
+            'name' => $validated['name'],
+            'slug' => $slug,
+            'link' => $validated['link'],
             'is_active' => $validated['is_active'] ?? true,
             'sort_order' => $maxOrder + 1,
         ]);
@@ -74,9 +74,9 @@ class ClientLinkController extends Controller
         $link = ClientLink::where('user_id', auth()->id())->findOrFail($id);
 
         $validated = $request->validate([
-            'name'     => 'required|string|max:100',
-            'link'     => 'required|url|max:500',
-            'slug'     => 'nullable|alpha_dash|max:100',
+            'name' => 'required|string|max:100',
+            'link' => 'required|url|max:500',
+            'slug' => 'nullable|alpha_dash|max:100',
             'is_active' => 'boolean',
         ]);
 
@@ -93,9 +93,9 @@ class ClientLinkController extends Controller
         }
 
         $link->update([
-            'name'      => $validated['name'],
-            'slug'      => $slug,
-            'link'      => $validated['link'],
+            'name' => $validated['name'],
+            'slug' => $slug,
+            'link' => $validated['link'],
             'is_active' => $validated['is_active'] ?? $link->is_active,
         ]);
 
@@ -116,12 +116,12 @@ class ClientLinkController extends Controller
     {
         $link = ClientLink::where('user_id', auth()->id())->findOrFail($id);
 
-        $link->update(['is_active' => !$link->is_active]);
+        $link->update(['is_active' => ! $link->is_active]);
 
         return response()->json([
-            'success'    => true,
+            'success' => true,
             'is_active' => $link->is_active,
-            'message'   => $link->is_active ? 'Link enabled' : 'Link disabled',
+            'message' => $link->is_active ? 'Link enabled' : 'Link disabled',
         ]);
     }
 
@@ -145,7 +145,7 @@ class ClientLinkController extends Controller
     {
         $user = User::where('site_id', $siteId)->first();
 
-        if (!$user) {
+        if (! $user) {
             return response()->json(['links' => []], 404);
         }
 

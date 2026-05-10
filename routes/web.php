@@ -20,6 +20,7 @@ use App\Http\Controllers\Client\ProfileController;
 use App\Http\Controllers\Client\UpdateRequestController;
 use App\Http\Controllers\Client\VisitorsController;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -37,14 +38,15 @@ Route::get('/', function () {
     return view('welcome', ['demoSiteId' => $demoSiteId]);
 });
 
-Route::get('/privacy-policy', fn() => view('privacy-policy'))->name('privacy-policy');
-Route::get('/terms', fn() => view('terms'))->name('terms');
+Route::get('/privacy-policy', fn () => view('privacy-policy'))->name('privacy-policy');
+Route::get('/terms', fn () => view('terms'))->name('terms');
 
 Route::get('/sitemap.xml', function () {
-    $content = '<?xml version="1.0" encoding="UTF-8"?>' . "\n" .
-        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n" .
-        '  <url><loc>https://chatbotnepal.com/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>' . "\n" .
+    $content = '<?xml version="1.0" encoding="UTF-8"?>'."\n".
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'."\n".
+        '  <url><loc>https://chatbotnepal.com/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>'."\n".
         '</urlset>';
+
     return response($content, 200)->header('Content-Type', 'application/xml');
 })->name('sitemap');
 
@@ -58,8 +60,9 @@ Route::middleware('guest')->group(function () {
     Route::post('forgot-password', [ForgotPasswordController::class, 'store'])->name('password.email');
     Route::get('reset-password', [ResetPasswordController::class, 'create'])->name('password.reset');
     Route::post('reset-password', [ResetPasswordController::class, 'store'])->name('password.update');
-    Route::get('password-reset-success', function (\Illuminate\Http\Request $request) {
+    Route::get('password-reset-success', function (Request $request) {
         $redirect = $request->query('redirect', route('client.dashboard'));
+
         return view('auth.password-reset-success', ['redirectUrl' => $redirect]);
     })->name('password.success');
 });

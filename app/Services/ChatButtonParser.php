@@ -17,7 +17,7 @@ class ChatButtonParser
             '/\[link:([^\]|]+)\|([^\]]+)\]/u',
             function ($m) use (&$buttons) {
                 $label = trim($m[1]);
-                $url   = trim($m[2]);
+                $url = trim($m[2]);
                 if ($label === '' || $url === '') {
                     return '';
                 }
@@ -26,6 +26,7 @@ class ChatButtonParser
                     return '';
                 }
                 $buttons[] = ['type' => 'link', 'label' => $label, 'url' => $url];
+
                 return '';
             },
             $text
@@ -41,6 +42,7 @@ class ChatButtonParser
                     return '';
                 }
                 $buttons[] = ['type' => 'reply', 'label' => $label, 'value' => $value];
+
                 return '';
             },
             $text

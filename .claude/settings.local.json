@@ -80,7 +80,8 @@
       "Bash(mkdir -p /c/Apache24/htdocs/ai/scripts)",
       "Bash(mkdir -p /c/Apache24/htdocs/ai/screenshots)",
       "Bash(pip show *)",
-      "Bash(playwright --version)"
+      "Bash(playwright --version)",
+      "Bash(Copy-Item *)"
     ]
   }
 }

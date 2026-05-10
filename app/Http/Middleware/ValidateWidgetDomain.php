@@ -25,7 +25,7 @@ class ValidateWidgetDomain
 
         $origin = $request->headers->get('origin');
         $referer = $request->headers->get('referer');
-        
+
         $requestHost = null;
         if ($origin) {
             $requestHost = parse_url($origin, PHP_URL_HOST);
@@ -48,7 +48,7 @@ class ValidateWidgetDomain
         if (! in_array($requestHost, $allowedDomains)) {
             return response()->json([
                 'success' => false,
-                'error' => 'Domain not authorized: ' . $requestHost,
+                'error' => 'Domain not authorized: '.$requestHost,
             ], 403);
         }
 
@@ -67,12 +67,13 @@ class ValidateWidgetDomain
             if ($user && $user->website_url) {
                 $url = $user->website_url;
                 if (! str_contains($url, '://')) {
-                    $url = 'https://' . $url;
+                    $url = 'https://'.$url;
                 }
-                
+
                 $host = parse_url($url, PHP_URL_HOST);
                 if ($host) {
                     $cleanHost = preg_replace('/^www\./', '', $host);
+
                     return [
                         $cleanHost,
                         'www.'.$cleanHost,

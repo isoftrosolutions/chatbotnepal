@@ -22,16 +22,16 @@ class GroqService
 
     public function __construct()
     {
-        $this->apiKey      = Setting::get('grok_api_key', env('GROQ_API_KEY', ''));
-        $this->apiUrl      = Setting::get('groq_api_url', env('GROQ_API_URL', 'https://api.groq.com/openai/v1/chat/completions'));
-        $this->model       = Setting::get('grok_model', env('GROQ_MODEL', 'llama-3.3-70b-versatile'));
-        $this->maxTokens   = (int) Setting::get('grok_max_tokens', env('GROQ_MAX_TOKENS', 500));
+        $this->apiKey = Setting::get('grok_api_key', env('GROQ_API_KEY', ''));
+        $this->apiUrl = Setting::get('groq_api_url', env('GROQ_API_URL', 'https://api.groq.com/openai/v1/chat/completions'));
+        $this->model = Setting::get('grok_model', env('GROQ_MODEL', 'llama-3.3-70b-versatile'));
+        $this->maxTokens = (int) Setting::get('grok_max_tokens', env('GROQ_MAX_TOKENS', 500));
         $this->temperature = (float) Setting::get('grok_temperature', env('GROQ_TEMPERATURE', 0.7));
     }
 
     public function setApiKey(?string $key): void
     {
-        $this->userApiKey = $key && !empty(trim($key)) ? trim($key) : null;
+        $this->userApiKey = $key && ! empty(trim($key)) ? trim($key) : null;
     }
 
     public function resetApiKey(): void
@@ -57,12 +57,12 @@ class GroqService
             $response = Http::timeout(30)
                 ->withHeaders([
                     'Authorization' => 'Bearer '.$apiKey,
-                    'Content-Type'  => 'application/json',
+                    'Content-Type' => 'application/json',
                 ])
                 ->post($this->apiUrl, [
-                    'model'       => $this->model,
-                    'messages'    => $messages,
-                    'max_tokens'  => $this->maxTokens,
+                    'model' => $this->model,
+                    'messages' => $messages,
+                    'max_tokens' => $this->maxTokens,
                     'temperature' => $this->temperature,
                 ]);
 
@@ -74,26 +74,26 @@ class GroqService
                 $response = Http::timeout(30)
                     ->withHeaders([
                         'Authorization' => 'Bearer '.$apiKey,
-                        'Content-Type'  => 'application/json',
+                        'Content-Type' => 'application/json',
                     ])
                     ->post($this->apiUrl, [
-                        'model'       => $this->model,
-                        'messages'    => $messages,
-                        'max_tokens'  => $this->maxTokens,
+                        'model' => $this->model,
+                        'messages' => $messages,
+                        'max_tokens' => $this->maxTokens,
                         'temperature' => $this->temperature,
                     ]);
             }
 
             if ($response->failed()) {
-                $status   = $response->status();
-                $body     = $response->body();
+                $status = $response->status();
+                $body = $response->body();
                 $category = $this->categorizeError($status, $body);
 
                 Log::error('Groq API error', [
-                    'status'   => $status,
+                    'status' => $status,
                     'category' => $category,
-                    'body'     => substr($body, 0, 500),
-                    'model'    => $this->model,
+                    'body' => substr($body, 0, 500),
+                    'model' => $this->model,
                 ]);
 
                 $errorMessage = ($status === 429)
@@ -101,29 +101,29 @@ class GroqService
                     : 'AI service temporarily unavailable';
 
                 return [
-                    'success'        => false,
-                    'error'          => $errorMessage,
+                    'success' => false,
+                    'error' => $errorMessage,
                     'error_category' => $category,
                 ];
             }
 
-            $data  = $response->json();
+            $data = $response->json();
             $usage = $data['usage'] ?? [];
 
             return [
-                'success'       => true,
-                'reply'         => $data['choices'][0]['message']['content'] ?? '',
-                'tokens_used'   => $usage['total_tokens'] ?? 0,
-                'input_tokens'  => $usage['prompt_tokens'] ?? 0,
+                'success' => true,
+                'reply' => $data['choices'][0]['message']['content'] ?? '',
+                'tokens_used' => $usage['total_tokens'] ?? 0,
+                'input_tokens' => $usage['prompt_tokens'] ?? 0,
                 'output_tokens' => $usage['completion_tokens'] ?? 0,
-                'model'         => $this->model,
+                'model' => $this->model,
             ];
         } catch (\Exception $e) {
             Log::error('Groq API exception', ['message' => $e->getMessage()]);
 
             return [
-                'success'        => false,
-                'error'          => 'AI service temporarily unavailable',
+                'success' => false,
+                'error' => 'AI service temporarily unavailable',
                 'error_category' => 'network',
             ];
         }
@@ -152,30 +152,30 @@ class GroqService
         $maxRetries = 1;
 
         try {
-            $ch    = curl_init();
+            $ch = curl_init();
             $usage = [];
             $rawBuffer = '';
             $httpCode = 0;
 
             $postData = json_encode([
-                'model'          => $this->model,
-                'messages'       => $messages,
-                'max_tokens'     => $this->maxTokens,
-                'temperature'    => $this->temperature,
-                'stream'         => true,
+                'model' => $this->model,
+                'messages' => $messages,
+                'max_tokens' => $this->maxTokens,
+                'temperature' => $this->temperature,
+                'stream' => true,
                 'stream_options' => ['include_usage' => true],
             ]);
 
             curl_setopt_array($ch, [
-                CURLOPT_URL            => $this->apiUrl,
-                CURLOPT_POST           => true,
-                CURLOPT_POSTFIELDS     => $postData,
-                CURLOPT_HTTPHEADER     => [
+                CURLOPT_URL => $this->apiUrl,
+                CURLOPT_POST => true,
+                CURLOPT_POSTFIELDS => $postData,
+                CURLOPT_HTTPHEADER => [
                     'Authorization: Bearer '.$apiKey,
                     'Content-Type: application/json',
                 ],
                 CURLOPT_RETURNTRANSFER => false,
-                CURLOPT_WRITEFUNCTION  => function ($ch, $data) use ($onChunk, &$usage, &$rawBuffer, &$httpCode) {
+                CURLOPT_WRITEFUNCTION => function ($ch, $data) use ($onChunk, &$usage, &$rawBuffer, &$httpCode) {
                     $rawBuffer .= $data;
 
                     // Check for HTTP error response BEFORE SSE parsing
@@ -223,22 +223,22 @@ class GroqService
 
             // Retry on 429
             while ($httpCode === 429 && $retryCount < $maxRetries) {
-                Log::info("Groq stream 429 rate limit, retrying (attempt " . ($retryCount + 1) . ")...");
+                Log::info('Groq stream 429 rate limit, retrying (attempt '.($retryCount + 1).')...');
                 curl_close($ch);
                 sleep(2);
                 $retryCount++;
 
                 $ch = curl_init();
                 curl_setopt_array($ch, [
-                    CURLOPT_URL            => $this->apiUrl,
-                    CURLOPT_POST           => true,
-                    CURLOPT_POSTFIELDS     => $postData,
-                    CURLOPT_HTTPHEADER     => [
+                    CURLOPT_URL => $this->apiUrl,
+                    CURLOPT_POST => true,
+                    CURLOPT_POSTFIELDS => $postData,
+                    CURLOPT_HTTPHEADER => [
                         'Authorization: Bearer '.$apiKey,
                         'Content-Type: application/json',
                     ],
                     CURLOPT_RETURNTRANSFER => false,
-                    CURLOPT_WRITEFUNCTION  => function ($ch, $data) use ($onChunk, &$usage, &$rawBuffer, &$httpCode) {
+                    CURLOPT_WRITEFUNCTION => function ($ch, $data) use ($onChunk, &$usage, &$rawBuffer, &$httpCode) {
                         $rawBuffer .= $data;
                         if ($httpCode === 0) {
                             $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
@@ -265,6 +265,7 @@ class GroqService
                                 $onChunk($decoded['choices'][0]['delta']['content']);
                             }
                         }
+
                         return strlen($data);
                     },
                     CURLOPT_TIMEOUT => 60,
@@ -281,7 +282,7 @@ class GroqService
             // Handle cURL errors first
             if ($curlError) {
                 Log::error('Groq streaming curl error', ['error' => $curlError, 'http_code' => $httpCode]);
-                $onError('Connection error: ' . $curlError);
+                $onError('Connection error: '.$curlError);
 
                 return;
             }
@@ -307,9 +308,9 @@ class GroqService
             }
 
             $onComplete([
-                'input_tokens'  => $usage['prompt_tokens'] ?? 0,
+                'input_tokens' => $usage['prompt_tokens'] ?? 0,
                 'output_tokens' => $usage['completion_tokens'] ?? 0,
-                'total_tokens'  => $usage['total_tokens'] ?? 0,
+                'total_tokens' => $usage['total_tokens'] ?? 0,
             ]);
         } catch (\Exception $e) {
             Log::error('Groq streaming exception', ['message' => $e->getMessage()]);

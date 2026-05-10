@@ -7,10 +7,13 @@ use Illuminate\Support\Facades\RateLimiter;
 
 class OtpService
 {
-    private const EXPIRY_MINUTES  = 15;
-    private const MAX_ATTEMPTS    = 5;
-    private const MAX_SENDS       = 3;
-    private const SEND_WINDOW     = 15; // minutes
+    private const EXPIRY_MINUTES = 15;
+
+    private const MAX_ATTEMPTS = 5;
+
+    private const MAX_SENDS = 3;
+
+    private const SEND_WINDOW = 15; // minutes
 
     /**
      * Generate a new 6-digit OTP, store it hashed, and return the plain code.
@@ -24,10 +27,10 @@ class OtpService
         $plain = str_pad((string) random_int(0, 999999), 6, '0', STR_PAD_LEFT);
 
         OtpCode::create([
-            'email'      => $email,
-            'code_hash'  => hash('sha256', $plain),
-            'purpose'    => $purpose,
-            'attempts'   => 0,
+            'email' => $email,
+            'code_hash' => hash('sha256', $plain),
+            'purpose' => $purpose,
+            'attempts' => 0,
             'expires_at' => now()->addMinutes(self::EXPIRY_MINUTES),
         ]);
 
@@ -51,6 +54,7 @@ class OtpService
 
         if ($otp->isExpired() || $otp->isExhausted()) {
             $otp->delete();
+
             return false;
         }
 
@@ -61,11 +65,13 @@ class OtpService
             if ($otp->fresh()->isExhausted()) {
                 $otp->delete();
             }
+
             return false;
         }
 
         // Single-use: delete immediately on success
         $otp->delete();
+
         return true;
     }
 
@@ -75,7 +81,8 @@ class OtpService
      */
     public function checkSendRateLimit(string $email): bool
     {
-        $key = 'otp_send:' . sha1($email);
+        $key = 'otp_send:'.sha1($email);
+
         return ! RateLimiter::tooManyAttempts($key, self::MAX_SENDS);
     }
 
@@ -84,7 +91,7 @@ class OtpService
      */
     public function recordSendAttempt(string $email): void
     {
-        $key = 'otp_send:' . sha1($email);
+        $key = 'otp_send:'.sha1($email);
         RateLimiter::hit($key, self::SEND_WINDOW * 60);
     }
 
@@ -93,6 +100,6 @@ class OtpService
      */
     public function sendRetryAfter(string $email): int
     {
-        return RateLimiter::availableIn('otp_send:' . sha1($email));
+        return RateLimiter::availableIn('otp_send:'.sha1($email));
     }
 }

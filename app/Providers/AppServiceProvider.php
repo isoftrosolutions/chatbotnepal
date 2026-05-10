@@ -36,13 +36,13 @@ class AppServiceProvider extends ServiceProvider
             $encryption = Setting::get('smtp_encryption', 'tls');
 
             config([
-                'mail.mailers.smtp.host'       => $host,
-                'mail.mailers.smtp.port'        => (int) Setting::get('smtp_port', 587),
-                'mail.mailers.smtp.encryption'  => $encryption === 'none' ? null : $encryption,
-                'mail.mailers.smtp.username'    => Setting::get('smtp_username'),
-                'mail.mailers.smtp.password'    => Setting::get('smtp_password'),
-                'mail.from.address'             => Setting::get('mail_from_address'),
-                'mail.from.name'                => Setting::get('mail_from_name', config('app.name')),
+                'mail.mailers.smtp.host' => $host,
+                'mail.mailers.smtp.port' => (int) Setting::get('smtp_port', 587),
+                'mail.mailers.smtp.encryption' => $encryption === 'none' ? null : $encryption,
+                'mail.mailers.smtp.username' => Setting::get('smtp_username'),
+                'mail.mailers.smtp.password' => Setting::get('smtp_password'),
+                'mail.from.address' => Setting::get('mail_from_address'),
+                'mail.from.name' => Setting::get('mail_from_name', config('app.name')),
             ]);
         } catch (\Exception $e) {
             // Settings table may not exist during initial migration — fail silently

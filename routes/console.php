@@ -49,8 +49,8 @@ app()->booted(function () {
             // TODO: send email/WhatsApp when mail driver is configured
             Log::info('Billing reminder due', [
                 'invoice' => $invoice->invoice_number,
-                'client'  => $invoice->user?->email,
-                'due'     => $invoice->due_date,
+                'client' => $invoice->user?->email,
+                'due' => $invoice->due_date,
             ]);
         }
     })->dailyAt('09:00')->name('billing-reminders');
@@ -58,10 +58,10 @@ app()->booted(function () {
     // Monthly on 1st: auto-generate invoices for all active clients
     $schedule->call(function () {
         $planPrices = [
-            'basic'    => 1500,
+            'basic' => 1500,
             'standard' => 3000,
-            'growth'   => 5000,
-            'pro'      => 8000,
+            'growth' => 5000,
+            'pro' => 8000,
         ];
 
         $clients = User::where('role', 'client')
@@ -72,14 +72,14 @@ app()->booted(function () {
             $amount = $planPrices[$client->plan] ?? 1500;
 
             Invoice::create([
-                'user_id'              => $client->id,
-                'invoice_number'       => Invoice::generateInvoiceNumber(),
-                'amount'               => $amount,
-                'type'                 => 'monthly',
+                'user_id' => $client->id,
+                'invoice_number' => Invoice::generateInvoiceNumber(),
+                'amount' => $amount,
+                'type' => 'monthly',
                 'billing_period_start' => Carbon::now()->startOfMonth(),
-                'billing_period_end'   => Carbon::now()->endOfMonth(),
-                'status'               => 'pending',
-                'due_date'             => Carbon::now()->addDays(7),
+                'billing_period_end' => Carbon::now()->endOfMonth(),
+                'status' => 'pending',
+                'due_date' => Carbon::now()->addDays(7),
             ]);
         }
 

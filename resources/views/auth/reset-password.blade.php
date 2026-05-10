@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
@@ -6,11 +6,11 @@
 <title>Reset Password — ChatBot Nepal</title>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Inter','Segoe UI',system-ui,sans-serif; min-height:100vh; display:flex; background:#0f0e2a; }
-  .left { flex:1; background:linear-gradient(160deg,#1e1b4b 0%,#1a1a35 40%,#0f0e2a 100%); padding:48px 56px; display:flex; flex-direction:column; position:relative; overflow:hidden; min-height:100vh; }
-  .left::before { content:''; position:absolute; top:-80px; right:-80px; width:360px; height:360px; background:radial-gradient(circle,rgba(99,102,241,0.18) 0%,transparent 70%); pointer-events:none; }
+  body { font-family: 'Poppins','Segoe UI',system-ui,sans-serif; min-height:100vh; display:flex; background:#0B1E3D; }
+  .left { flex:1; background:linear-gradient(160deg,#132847 0%,#0e2038 40%,#0B1E3D 100%); padding:48px 56px; display:flex; flex-direction:column; position:relative; overflow:hidden; min-height:100vh; }
+  .left::before { content:''; position:absolute; top:-80px; right:-80px; width:360px; height:360px; background:radial-gradient(circle,rgba(29,185,84,0.15) 0%,transparent 70%); pointer-events:none; }
   .logo-row { display:flex; align-items:center; gap:12px; margin-bottom:72px; }
-  .logo-icon { width:48px; height:48px; background:#4f46e5; border-radius:10px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .logo-icon { width:48px; height:48px; background:#1DB954; border-radius:9999px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
   .logo-icon svg { width:26px; height:26px; }
   .logo-name { font-size:20px; font-weight:700; color:#ffffff; letter-spacing:-0.3px; }
   .hero-heading { font-size:40px; font-weight:800; line-height:1.12; color:#fff; margin-bottom:20px; letter-spacing:-0.5px; }
@@ -29,10 +29,10 @@
   .input-wrap input { width:100%; background:#fff; border:1.5px solid #e5e7eb; border-radius:8px; padding:13px 44px; font-size:15px; color:#111827; outline:none; transition:border-color 0.2s,box-shadow 0.2s; font-family:inherit; }
   .input-wrap input.otp-input { font-size:24px; font-weight:700; letter-spacing:8px; text-align:center; font-family:'Courier New',monospace; padding:13px 16px; }
   .input-wrap input::placeholder { color:#9ca3af; letter-spacing:normal; }
-  .input-wrap input:focus { border-color:#6366f1; box-shadow:0 0 0 3px rgba(99,102,241,0.12); }
+  .input-wrap input:focus { border-color:#1DB954; box-shadow:0 0 0 3px rgba(29,185,84,0.15); }
   .input-wrap input.error { border-color:#f87171; box-shadow:0 0 0 3px rgba(248,113,113,0.1); }
   .input-wrap .suffix { position:absolute; right:12px; background:none; border:none; cursor:pointer; padding:4px; display:flex; align-items:center; border-radius:4px; color:#9ca3af; transition:color 0.2s; }
-  .input-wrap .suffix:hover,.input-wrap .suffix.active { color:#6366f1; }
+  .input-wrap .suffix:hover,.input-wrap .suffix.active { color:#1DB954; }
   .input-wrap .suffix svg { width:18px; height:18px; }
   .field-error { font-size:12px; color:#dc2626; margin-top:5px; }
   .field-hint { font-size:12px; color:#6b7280; margin-top:5px; }
@@ -47,26 +47,26 @@
   .strength-text { font-size:11px; font-weight:600; }
   .strength-text.weak { color:#ef4444; }
   .strength-text.fair { color:#f59e0b; }
-  .strength-text.good { color:#10b981; }
+  .strength-text.good { color:#18A348; }
   .strength-text.strong { color:#059669; }
   .requirements-list { font-size:11px; color:#6b7280; margin-top:8px; }
   .requirements-list li { margin-bottom:3px; display:flex; align-items:center; gap:6px; }
   .requirements-list .check { width:14px; height:14px; border-radius:50%; background:#e5e7eb; display:flex; align-items:center; justify-content:center; font-size:9px; color:#fff; transition:background 0.2s; }
   .requirements-list .check.met { background:#10b981; }
-  .btn-primary { width:100%; padding:14px; background:#4f46e5; border:none; border-radius:8px; font-size:15px; font-weight:700; color:#fff; cursor:pointer; transition:background 0.2s,box-shadow 0.2s; margin-bottom:20px; font-family:inherit; }
-  .btn-primary:hover { background:#4338ca; box-shadow:0 4px 16px rgba(79,70,229,0.35); }
+  .btn-primary { width:100%; padding:14px; background:#1DB954; border:none; border-radius:8px; font-size:15px; font-weight:700; color:#fff; cursor:pointer; transition:background 0.2s,box-shadow 0.2s; margin-bottom:20px; font-family:inherit; }
+  .btn-primary:hover { background:#18A348; box-shadow:0 4px 16px rgba(29,185,84,0.35); }
   .back-link { text-align:center; font-size:14px; color:#64748b; }
-  .back-link a { color:#4f46e5; font-weight:600; text-decoration:none; }
+  .back-link a { color:#1DB954; font-weight:600; text-decoration:none; }
   .back-link a:hover { text-decoration:underline; }
   .resend-timer { font-size:13px; color:#6b7280; margin-top:8px; }
-  .resend-timer span { font-weight:600; color:#4f46e5; }
+  .resend-timer span { font-weight:600; color:#1DB954; }
   .resend-link { display:inline-block; }
   .resend-link.disabled { color:#9ca3af; pointer-events:none; }
   .otp-fields { display:flex; gap:8px; justify-content:center; margin-bottom:4px; }
   .otp-fields input { width:48px; height:52px; text-align:center; font-size:22px; font-weight:700; font-family:'Courier New',monospace; border:1.5px solid #e5e7eb; border-radius:8px; outline:none; transition:border-color 0.2s,box-shadow 0.2s; }
-  .otp-fields input:focus { border-color:#6366f1; box-shadow:0 0 0 3px rgba(99,102,241,0.12); }
+  .otp-fields input:focus { border-color:#1DB954; box-shadow:0 0 0 3px rgba(29,185,84,0.15); }
   .otp-fields input.error { border-color:#f87171; box-shadow:0 0 0 3px rgba(248,113,113,0.1); }
-  .otp-fields input.filled { border-color:#10b981; background:#f0fdf4; }
+  .otp-fields input.filled { border-color:#18A348; background:#f0fdf4; }
   .right-footer { padding:20px 52px; border-top:1px solid #f1f5f9; }
   .right-footer .copy { font-size:11px; color:#94a3b8; text-transform:uppercase; letter-spacing:0.5px; }
   @media(max-width:900px) { body{flex-direction:column;} .left{min-height:auto;padding:40px 32px;} .hero-heading{font-size:28px;} .right{width:100%;min-height:auto;} .right-inner{padding:40px 32px;} }

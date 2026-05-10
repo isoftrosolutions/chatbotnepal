@@ -19,8 +19,8 @@ class ClientController extends Controller
         if ($search = $request->get('search')) {
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('email', 'like', "%{$search}%")
-                  ->orWhere('company_name', 'like', "%{$search}%");
+                    ->orWhere('email', 'like', "%{$search}%")
+                    ->orWhere('company_name', 'like', "%{$search}%");
             });
         }
 
@@ -28,9 +28,9 @@ class ClientController extends Controller
 
         // Real counts from DB — not from the paginated collection
         $clientStats = [
-            'total'    => User::where('role', 'client')->count(),
-            'active'   => User::where('role', 'client')->where('status', 'active')->count(),
-            'enabled'  => User::where('role', 'client')->where('chatbot_enabled', true)->count(),
+            'total' => User::where('role', 'client')->count(),
+            'active' => User::where('role', 'client')->where('status', 'active')->count(),
+            'enabled' => User::where('role', 'client')->where('chatbot_enabled', true)->count(),
             'inactive' => User::where('role', 'client')->where('status', '!=', 'active')->count(),
         ];
 
@@ -45,26 +45,26 @@ class ClientController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'name'             => 'required|string|max:255',
-            'email'            => 'required|email|unique:users,email',
-            'phone'            => 'nullable|string|max:20',
-            'password'         => 'required|min:8',
-            'company_name'     => 'nullable|string|max:255',
-            'website_url'      => 'nullable|url|max:500',
-            'plan'             => 'required|in:basic,standard,growth,pro',
-            'status'           => 'required|in:active,inactive,suspended',
-            'prechat_enabled'  => 'boolean',
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'phone' => 'nullable|string|max:20',
+            'password' => 'required|min:8',
+            'company_name' => 'nullable|string|max:255',
+            'website_url' => 'nullable|url|max:500',
+            'plan' => 'required|in:basic,standard,growth,pro',
+            'status' => 'required|in:active,inactive,suspended',
+            'prechat_enabled' => 'boolean',
         ]);
 
         $client = User::create([
             ...collect($validated)->except('prechat_enabled')->all(),
-            'role'             => 'client',
-            'api_token'        => Str::random(64),
-            'chatbot_enabled'  => true,
+            'role' => 'client',
+            'api_token' => Str::random(64),
+            'chatbot_enabled' => true,
         ]);
 
         WidgetConfig::create([
-            'user_id'         => $client->id,
+            'user_id' => $client->id,
             ...WidgetConfig::getDefaultConfig(),
             'prechat_enabled' => $request->boolean('prechat_enabled'),
         ]);
@@ -85,14 +85,14 @@ class ClientController extends Controller
         $client = User::where('role', 'client')->findOrFail($id);
 
         $validated = $request->validate([
-            'name'            => 'required|string|max:255',
-            'email'           => 'required|email|unique:users,email,'.$id,
-            'phone'           => 'nullable|string|max:20',
-            'password'        => 'nullable|min:8',
-            'company_name'    => 'nullable|string|max:255',
-            'website_url'     => 'nullable|url|max:500',
-            'plan'            => 'required|in:basic,standard,growth,pro',
-            'status'          => 'required|in:active,inactive,suspended',
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,'.$id,
+            'phone' => 'nullable|string|max:20',
+            'password' => 'nullable|min:8',
+            'company_name' => 'nullable|string|max:255',
+            'website_url' => 'nullable|url|max:500',
+            'plan' => 'required|in:basic,standard,growth,pro',
+            'status' => 'required|in:active,inactive,suspended',
             'prechat_enabled' => 'boolean',
             'welcome_buttons' => 'nullable|string',
         ]);
@@ -105,7 +105,7 @@ class ClientController extends Controller
 
         // Parse welcome_buttons JSON — silently ignore malformed input
         $welcomeButtonsRaw = $request->input('welcome_buttons', '');
-        $welcomeButtons    = [];
+        $welcomeButtons = [];
         if ($welcomeButtonsRaw) {
             $decoded = json_decode($welcomeButtonsRaw, true);
             if (is_array($decoded)) {

@@ -42,14 +42,14 @@ class ChatController extends Controller
         }
 
         $request->validate([
-            'site_id'         => 'required|string',
-            'message'         => 'required|string|max:1000',
-            'visitor_id'      => 'nullable|string|max:64',
+            'site_id' => 'required|string',
+            'message' => 'required|string|max:1000',
+            'visitor_id' => 'nullable|string|max:64',
             'conversation_id' => 'nullable|integer',
-            'source_url'      => 'nullable|string|max:500',
-            'visitor_name'    => 'nullable|string|max:100',
-            'visitor_email'   => 'nullable|email|max:191',
-            'visitor_phone'   => 'nullable|string|max:30',
+            'source_url' => 'nullable|string|max:500',
+            'visitor_name' => 'nullable|string|max:100',
+            'visitor_email' => 'nullable|email|max:191',
+            'visitor_phone' => 'nullable|string|max:30',
         ]);
 
         $sessionToken = $request->header('X-Session-Token');
@@ -110,8 +110,8 @@ class ChatController extends Controller
         $parsed = ChatButtonParser::parse($result['reply']);
 
         return response()->json([
-            'reply'           => $parsed['message'],
-            'buttons'         => $parsed['buttons'],
+            'reply' => $parsed['message'],
+            'buttons' => $parsed['buttons'],
             'conversation_id' => $result['conversation_id'],
         ]);
     }
@@ -119,9 +119,9 @@ class ChatController extends Controller
     public function history(Request $request): JsonResponse
     {
         $request->validate([
-            'site_id'         => 'required|string',
+            'site_id' => 'required|string',
             'conversation_id' => 'required|integer',
-            'visitor_id'      => 'nullable|string|max:64',
+            'visitor_id' => 'nullable|string|max:64',
         ]);
 
         $sessionToken = $request->header('X-Session-Token');
@@ -164,9 +164,9 @@ class ChatController extends Controller
             ->limit(40)
             ->get(['role', 'message', 'created_at'])
             ->map(fn ($m) => [
-                'role'    => $m->role,
+                'role' => $m->role,
                 'message' => $m->message,
-                'time'    => $m->created_at?->format('H:i'),
+                'time' => $m->created_at?->format('H:i'),
             ]);
 
         return response()->json(['messages' => $messages]);

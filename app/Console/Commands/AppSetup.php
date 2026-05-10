@@ -6,6 +6,7 @@ use App\Models\Setting;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class AppSetup extends Command
 {
@@ -17,55 +18,55 @@ class AppSetup extends Command
 
     private array $secrets = [
         'groq' => [
-            'label'    => 'Groq API Key',
-            'env'      => 'GROQ_API_KEY',
-            'db_key'   => 'grok_api_key',
-            'secret'   => true,
+            'label' => 'Groq API Key',
+            'env' => 'GROQ_API_KEY',
+            'db_key' => 'grok_api_key',
+            'secret' => true,
             'required' => true,
         ],
         'groq_model' => [
-            'label'    => 'Groq Model',
-            'env'      => 'GROQ_MODEL',
-            'db_key'   => 'grok_model',
-            'secret'   => false,
+            'label' => 'Groq Model',
+            'env' => 'GROQ_MODEL',
+            'db_key' => 'grok_model',
+            'secret' => false,
             'required' => false,
-            'default'  => 'llama-3.3-70b-versatile',
+            'default' => 'llama-3.3-70b-versatile',
         ],
         'smtp_host' => [
-            'label'    => 'SMTP Host',
-            'env'      => 'MAIL_HOST',
-            'db_key'   => 'mail_host',
-            'secret'   => false,
+            'label' => 'SMTP Host',
+            'env' => 'MAIL_HOST',
+            'db_key' => 'mail_host',
+            'secret' => false,
             'required' => true,
-            'default'  => 'smtp.gmail.com',
+            'default' => 'smtp.gmail.com',
         ],
         'smtp_port' => [
-            'label'    => 'SMTP Port',
-            'env'      => 'MAIL_PORT',
-            'db_key'   => 'mail_port',
-            'secret'   => false,
+            'label' => 'SMTP Port',
+            'env' => 'MAIL_PORT',
+            'db_key' => 'mail_port',
+            'secret' => false,
             'required' => true,
-            'default'  => '587',
+            'default' => '587',
         ],
         'smtp_username' => [
-            'label'    => 'SMTP Username (email)',
-            'env'      => 'MAIL_USERNAME',
-            'db_key'   => 'mail_username',
-            'secret'   => false,
+            'label' => 'SMTP Username (email)',
+            'env' => 'MAIL_USERNAME',
+            'db_key' => 'mail_username',
+            'secret' => false,
             'required' => true,
         ],
         'smtp_password' => [
-            'label'    => 'SMTP Password / App Password',
-            'env'      => 'MAIL_PASSWORD',
-            'db_key'   => 'mail_password',
-            'secret'   => true,
+            'label' => 'SMTP Password / App Password',
+            'env' => 'MAIL_PASSWORD',
+            'db_key' => 'mail_password',
+            'secret' => true,
             'required' => true,
         ],
         'smtp_from' => [
-            'label'    => 'Mail From Address',
-            'env'      => 'MAIL_FROM_ADDRESS',
-            'db_key'   => 'mail_from_address',
-            'secret'   => false,
+            'label' => 'Mail From Address',
+            'env' => 'MAIL_FROM_ADDRESS',
+            'db_key' => 'mail_from_address',
+            'secret' => false,
             'required' => true,
         ],
     ];
@@ -105,6 +106,7 @@ class AppSetup extends Command
 
             if (! $value && ($cfg['required'] ?? false)) {
                 $this->warn("  Skipping {$cfg['label']} — no value provided.");
+
                 continue;
             }
 
@@ -147,22 +149,22 @@ class AppSetup extends Command
     {
         $this->line('  Sending test email...');
         try {
-            $mailFrom  = Setting::get('mail_username', env('MAIL_FROM_ADDRESS'));
-            $mailHost  = Setting::get('mail_host', env('MAIL_HOST'));
-            $mailPort  = Setting::get('mail_port', env('MAIL_PORT'));
-            $mailUser  = Setting::get('mail_username', env('MAIL_USERNAME'));
-            $mailPass  = Setting::get('mail_password', env('MAIL_PASSWORD'));
+            $mailFrom = Setting::get('mail_username', env('MAIL_FROM_ADDRESS'));
+            $mailHost = Setting::get('mail_host', env('MAIL_HOST'));
+            $mailPort = Setting::get('mail_port', env('MAIL_PORT'));
+            $mailUser = Setting::get('mail_username', env('MAIL_USERNAME'));
+            $mailPass = Setting::get('mail_password', env('MAIL_PASSWORD'));
 
             config([
-                'mail.mailers.smtp.host'       => $mailHost,
-                'mail.mailers.smtp.port'       => $mailPort,
-                'mail.mailers.smtp.username'   => $mailUser,
-                'mail.mailers.smtp.password'   => $mailPass,
+                'mail.mailers.smtp.host' => $mailHost,
+                'mail.mailers.smtp.port' => $mailPort,
+                'mail.mailers.smtp.username' => $mailUser,
+                'mail.mailers.smtp.password' => $mailPass,
                 'mail.mailers.smtp.encryption' => 'tls',
-                'mail.from.address'            => $mailFrom,
+                'mail.from.address' => $mailFrom,
             ]);
 
-            \Illuminate\Support\Facades\Mail::raw(
+            Mail::raw(
                 'ChatBot Nepal setup test — SMTP is working!',
                 fn ($m) => $m->to($mailFrom)->subject('ChatBot Nepal — SMTP Test')
             );

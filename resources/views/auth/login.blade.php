@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
@@ -6,12 +6,12 @@
 <title>Sign In — ChatBot Nepal</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   body {
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-family: 'Poppins', system-ui, -apple-system, sans-serif;
     min-height: 100vh;
     display: flex;
     background: #ffffff;
@@ -20,7 +20,7 @@
   /* ── LEFT PANEL ── */
   .left {
     flex: 1;
-    background: linear-gradient(160deg, #f0fdf7 0%, #ffffff 60%, #f0fdf7 100%);
+    background: linear-gradient(160deg, #f0fdf9 0%, #ffffff 60%, #f0fdf9 100%);
     padding: 48px 56px;
     display: flex;
     flex-direction: column;
@@ -34,7 +34,7 @@
     position: absolute;
     top: -120px; right: -120px;
     width: 400px; height: 400px;
-    background: radial-gradient(circle, rgba(24,226,153,0.12) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(29,185,84,0.12) 0%, transparent 70%);
     pointer-events: none;
   }
 
@@ -48,7 +48,7 @@
 
   .logo-icon {
     width: 40px; height: 40px;
-    background: #0d0d0d;
+    background: #0B1E3D;
     border-radius: 9999px;
     display: flex; align-items: center; justify-content: center;
     flex-shrink: 0;
@@ -59,7 +59,7 @@
   .logo-name {
     font-size: 18px;
     font-weight: 600;
-    color: #0d0d0d;
+    color: #0F172A;
     letter-spacing: -0.3px;
   }
 
@@ -68,14 +68,14 @@
     font-size: 40px;
     font-weight: 600;
     line-height: 1.10;
-    color: #0d0d0d;
+    color: #0F172A;
     letter-spacing: -0.8px;
     margin-bottom: 16px;
   }
 
   .hero-sub {
     font-size: 18px;
-    color: #666666;
+    color: #64748B;
     line-height: 1.50;
     max-width: 400px;
     margin-bottom: 56px;
@@ -97,26 +97,26 @@
 
   .feature-icon {
     width: 40px; height: 40px;
-    background: #fafafa;
+    background: #F1F5F9;
     border: 1px solid rgba(0,0,0,0.05);
     border-radius: 12px;
     flex-shrink: 0;
     display: flex; align-items: center; justify-content: center;
   }
 
-  .feature-icon svg { width: 18px; height: 18px; stroke: #0d0d0d; }
+  .feature-icon svg { width: 18px; height: 18px; stroke: #0F172A; }
 
   .feature-text strong {
     display: block;
     font-size: 14px;
     font-weight: 500;
-    color: #0d0d0d;
+    color: #0F172A;
     margin-bottom: 2px;
   }
 
   .feature-text span {
     font-size: 13px;
-    color: #888888;
+    color: #64748B;
     line-height: 1.5;
   }
 
@@ -124,7 +124,7 @@
   .trusted {
     margin-top: auto;
     padding-top: 40px;
-    border-top: 1px solid rgba(0,0,0,0.05);
+    border-top: 1px solid #E2E8F0;
   }
 
   .trusted-inner {
@@ -141,26 +141,26 @@
     width: 32px; height: 32px;
     border-radius: 50%;
     border: 2px solid #ffffff;
-    background: #18E299;
+    background: #1DB954;
     display: flex; align-items: center; justify-content: center;
     font-size: 11px;
     font-weight: 600;
-    color: #0d0d0d;
+    color: #0F172A;
     margin-left: -6px;
     flex-shrink: 0;
   }
 
   .avatar:first-child { margin-left: 0; }
-  .avatar:nth-child(2) { background: #d4fae8; }
-  .avatar:nth-child(3) { background: #0fa76e; color: #fff; }
+  .avatar:nth-child(2) { background: #dcfce7; }
+  .avatar:nth-child(3) { background: #18A348; color: #fff; }
 
   .trusted-text {
     font-size: 13px;
-    color: #888888;
+    color: #64748B;
   }
 
   .trusted-text strong {
-    color: #0d0d0d;
+    color: #0F172A;
     font-weight: 600;
   }
 
@@ -169,7 +169,7 @@
     width: 480px;
     flex-shrink: 0;
     background: #ffffff;
-    border-left: 1px solid rgba(0,0,0,0.05);
+    border-left: 1px solid #E2E8F0;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
@@ -186,14 +186,14 @@
   .card-title {
     font-size: 28px;
     font-weight: 600;
-    color: #0d0d0d;
+    color: #0F172A;
     letter-spacing: -0.56px;
     margin-bottom: 6px;
   }
 
   .card-sub {
     font-size: 15px;
-    color: #666666;
+    color: #64748B;
     margin-bottom: 32px;
     line-height: 1.5;
   }
@@ -221,7 +221,7 @@
     display: block;
     font-size: 13px;
     font-weight: 500;
-    color: #333333;
+    color: #0F172A;
     margin-bottom: 6px;
   }
 
@@ -234,29 +234,29 @@
   .input-wrap svg.prefix {
     position: absolute; left: 14px;
     width: 16px; height: 16px;
-    color: #888888;
+    color: #64748B;
     pointer-events: none;
     flex-shrink: 0;
   }
 
   .input-wrap input {
     width: 100%;
-    background: #fafafa;
+    background: #F1F5F9;
     border: 1px solid rgba(0,0,0,0.08);
     border-radius: 9999px;
     padding: 12px 44px;
     font-size: 15px;
-    color: #0d0d0d;
+    color: #0F172A;
     outline: none;
     transition: border-color 0.2s, box-shadow 0.2s;
     font-family: inherit;
   }
 
-  .input-wrap input::placeholder { color: #888888; }
+  .input-wrap input::placeholder { color: #64748B; }
 
   .input-wrap input:focus {
-    border-color: #18E299;
-    box-shadow: 0 0 0 1px #18E299;
+    border-color: #1DB954;
+    box-shadow: 0 0 0 3px rgba(29,185,84,0.15);
   }
 
   .input-wrap input.error {
@@ -270,12 +270,12 @@
     cursor: pointer; padding: 4px;
     display: flex; align-items: center;
     border-radius: 4px;
-    color: #888888;
+    color: #64748B;
     transition: color 0.2s;
   }
 
-  .input-wrap .suffix:hover { color: #0d0d0d; }
-  .input-wrap .suffix.active { color: #18E299; }
+  .input-wrap .suffix:hover { color: #0F172A; }
+  .input-wrap .suffix.active { color: #1DB954; }
   .input-wrap .suffix svg { width: 18px; height: 18px; }
 
   /* REMEMBER + FORGOT */
@@ -293,31 +293,31 @@
 
   .remember input[type="checkbox"] {
     width: 16px; height: 16px;
-    accent-color: #18E299;
+    accent-color: #1DB954;
     cursor: pointer;
     border-radius: 4px;
   }
 
   .remember span {
     font-size: 14px;
-    color: #333333;
+    color: #0F172A;
     user-select: none;
   }
 
   .forgot {
     font-size: 14px;
     font-weight: 500;
-    color: #18E299;
+    color: #1DB954;
     text-decoration: none;
     transition: color 0.2s;
   }
-  .forgot:hover { color: #0fa76e; }
+  .forgot:hover { color: #18A348; }
 
   /* SIGN IN BUTTON */
   .btn-signin {
     width: 100%;
     padding: 13px 24px;
-    background: #0d0d0d;
+    background: #0B1E3D;
     border: none;
     border-radius: 9999px;
     font-size: 15px;
@@ -336,6 +336,7 @@
 
   .btn-signin:hover {
     opacity: 0.9;
+    box-shadow: 0 4px 20px rgba(29,185,84,0.35);
   }
 
   .btn-signin:active { transform: scale(0.99); }
@@ -346,21 +347,21 @@
   .demo-row {
     text-align: center;
     font-size: 14px;
-    color: #666666;
+    color: #64748B;
   }
 
   .demo-row a {
-    color: #18E299;
+    color: #1DB954;
     font-weight: 500;
     text-decoration: none;
   }
 
-  .demo-row a:hover { color: #0fa76e; text-decoration: underline; }
+  .demo-row a:hover { color: #18A348; text-decoration: underline; }
 
   /* RIGHT FOOTER */
   .right-footer {
     padding: 16px 48px;
-    border-top: 1px solid rgba(0,0,0,0.05);
+    border-top: 1px solid #E2E8F0;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -370,7 +371,7 @@
 
   .right-footer .copy {
     font-size: 12px;
-    color: #888888;
+    color: #64748B;
   }
 
   .right-footer .footer-links {
@@ -381,12 +382,12 @@
   .right-footer .footer-links a {
     font-size: 12px;
     font-weight: 500;
-    color: #888888;
+    color: #64748B;
     text-decoration: none;
     transition: color 0.2s;
   }
 
-  .right-footer .footer-links a:hover { color: #18E299; }
+  .right-footer .footer-links a:hover { color: #1DB954; }
 
   /* MOBILE */
   @media (max-width: 900px) {
