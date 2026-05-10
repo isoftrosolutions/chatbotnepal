@@ -3,504 +3,625 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>{{ $title }}</title>
-  <meta property="og:title" content="{{ $title }}" />
+  <title>{{ $hostedPage->title }}</title>
+  <meta property="og:title" content="{{ $hostedPage->title }}" />
   <meta property="og:description" content="{{ $ogDescription }}" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              primary: '{{ $hostedPage->brand_color ?? "#3B1FA8" }}',
+              dark: '#2D1680',
+              accent: '#6C47FF',
+            }
+          }
+        }
+      }
+    }
+  </script>
   <style>
     :root {
-      --brand-primary: {{ $brandPrimary }};
-      --brand-bg: {{ $brandBg }};
-      --brand-font: {{ $brandFont }};
-      --text: #141426;
-      --muted: #6b7085;
-      --line: #e6e8ef;
-      --white: #ffffff;
-      --shadow: 0 14px 40px rgba(17, 24, 39, 0.12);
+      --brand-primary: {{ $hostedPage->brand_color ?? '#3B1FA8' }};
+      --brand-dark: #2D1680;
+      --brand-accent: #6C47FF;
     }
-
-    * { box-sizing: border-box; }
     body {
-      margin: 0;
-      font-family: var(--brand-font);
-      background: linear-gradient(180deg, #f7f8ff 0%, var(--brand-bg) 100%);
-      color: var(--text);
+      font-family: 'Inter', system-ui, sans-serif;
+      background: #F3F4F8;
     }
-
-    .page { max-width: 1280px; margin: 24px auto; padding: 0 16px; }
-    .top { text-align: center; margin-bottom: 14px; }
-    .top h1 { margin: 0 0 12px; font-size: 38px; }
-    .url {
-      display: inline-block;
-      border: 1px solid #ccc3ff;
-      border-radius: 14px;
-      padding: 10px 18px;
-      color: #4427c9;
-      font-weight: 600;
-      background: #fdfcff;
+    .scroll-smooth { scroll-behavior: smooth; }
+    .typing-dot {
+      animation: bounce 1.4s infinite ease-in-out both;
     }
-    .share-row { margin-top: 10px; display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; transition: opacity .25s ease; }
-    .share-row.hidden { opacity: 0; pointer-events: none; }
-    .share-btn {
-      border: 1px solid #dddff2;
-      background: #fff;
-      color: #2b2f48;
-      border-radius: 10px;
-      padding: 8px 12px;
-      font-size: 13px;
-      font-weight: 600;
-      text-decoration: none;
+    .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+    .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+    .typing-dot:nth-child(3) { animation-delay: 0s; }
+    @keyframes bounce {
+      0%, 80%, 100% { transform: scale(0.6); opacity: 0.5; }
+      40% { transform: scale(1); opacity: 1; }
     }
-    .share-btn svg { width: 14px; height: 14px; vertical-align: -2px; margin-right: 6px; }
-
-    .shell {
-      background: var(--white);
-      border: 1px solid var(--line);
-      border-radius: 20px;
-      overflow: hidden;
-      box-shadow: var(--shadow);
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
     }
-
-    .bar {
-      background: linear-gradient(120deg, #351469 0%, #231048 100%);
-      color: #fff;
-      padding: 16px 22px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .brand { display: flex; gap: 12px; align-items: center; }
-    .brand img { width: 42px; height: 42px; border-radius: 10px; object-fit: cover; }
-    .online { font-size: 14px; display: flex; align-items: center; gap: 8px; }
-    .dot { width: 9px; height: 9px; border-radius: 50%; background: #3ee36c; }
-
-    .content { display: grid; grid-template-columns: 310px 1fr 290px; min-height: 640px; }
-    .left, .center, .right { padding: 18px; }
-    .left { background: #f9f8ff; border-right: 1px solid var(--line); }
-    .right { background: #fbfbff; border-left: 1px solid var(--line); }
-
-    .welcome-image { width: 100%; border-radius: 12px; height: 170px; object-fit: cover; border: 1px solid #d7d9ea; }
-    .left h3 { margin: 16px 0 8px; font-size: 30px; }
-    .left p { margin: 0 0 12px; color: var(--muted); line-height: 1.45; font-size: 16px; }
-
-    .quick { margin-top: 16px; font-weight: 700; color: #3d2ea3; font-size: 18px; }
-    .qa { margin-top: 10px; display: grid; gap: 10px; }
-    .qa button {
-      width: 100%; text-align: left; padding: 12px 14px; border: 1px solid #e0e1f3;
-      background: #fff; border-radius: 11px; cursor: pointer; font-size: 16px;
-    }
-
-    .messages {
-      height: 484px;
-      overflow: auto;
-      padding: 6px 2px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .msg {
-      max-width: 86%;
-      padding: 12px 14px;
-      border-radius: 14px;
-      white-space: pre-wrap;
-      line-height: 1.4;
-      font-size: 15px;
-    }
-    .bot { background: #fff; border: 1px solid var(--line); }
-    .user {
-      background: linear-gradient(135deg, #7d58f8 0%, var(--brand-primary) 100%);
-      color: #fff;
-      margin-left: auto;
-    }
-    .typing { color: var(--muted); font-size: 14px; display: none; padding: 4px 2px; }
-    .btn-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 6px 0 10px; }
-    .chat-btn {
-      border: 1px solid #ccd0ea;
-      background: #fff;
-      border-radius: 10px;
-      padding: 7px 10px;
-      font-size: 13px;
-      cursor: pointer;
-      color: #2c2f42;
-      text-decoration: none;
-      display: inline-block;
-    }
-
-    .composer {
-      margin-top: 12px;
-      display: flex;
-      border: 1px solid #d8d9ea;
-      border-radius: 12px;
-      overflow: hidden;
-      background: #fff;
-    }
-    .composer input {
-      flex: 1;
-      border: none;
-      outline: none;
-      padding: 13px;
-      font-size: 15px;
-    }
-    .composer button {
-      width: 54px;
-      border: none;
-      background: var(--brand-primary);
-      color: #fff;
-      font-size: 20px;
-      cursor: pointer;
-    }
-
-    .lead-card {
-      border: 1px solid #e4e5f4;
-      border-radius: 14px;
-      background: #fff;
-      padding: 16px;
-    }
-    .lead-card.floating {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: min(92vw, 360px);
-      z-index: 1200;
-      box-shadow: 0 20px 56px rgba(14, 17, 32, 0.28);
-    }
-    .lead-card.hidden { display: none; }
-    .lead-card h4 { margin: 0 0 6px; font-size: 24px; }
-    .lead-card p { margin: 0 0 14px; color: var(--muted); font-size: 14px; }
-    .lead-card input {
-      width: 100%;
-      margin-bottom: 10px;
-      border: 1px solid #d8daeb;
-      border-radius: 10px;
-      padding: 11px;
-      font-size: 14px;
-    }
-    .lead-card button {
-      width: 100%;
-      background: var(--brand-primary);
-      color: #fff;
-      border: none;
-      border-radius: 10px;
-      padding: 11px;
-      font-weight: 700;
-      cursor: pointer;
-    }
-    .lead-note { margin-top: 8px; text-align: center; color: var(--muted); font-size: 12px; }
-    .lead-skip {
-      margin-top: 8px;
-      width: 100%;
-      background: #fff;
-      border: 1px solid #d8daeb;
-      border-radius: 10px;
-      padding: 10px;
-      cursor: pointer;
-      font-weight: 600;
-      color: #2c2f42;
-    }
-
-    .footer { padding: 12px 18px; text-align: center; color: var(--muted); border-top: 1px solid var(--line); background: #fff; }
-
-    @media (max-width: 1120px) {
-      .content { grid-template-columns: 1fr; }
-      .left, .right { border: none; border-top: 1px solid var(--line); }
-      .messages { height: 390px; }
-    }
-    @media (max-width: 768px) {
-      .page { margin: 10px auto; padding: 0 8px; }
-      .top h1 { font-size: 24px; }
-      .share-row { display: none !important; }
-      .bar { padding: 12px; }
-      .content { min-height: auto; }
-      .left, .center, .right { padding: 12px; }
-      .left h3 { font-size: 24px; }
-      .messages { height: 300px; }
-      .composer input { font-size: 14px; padding: 11px; }
-      .composer button { width: 46px; font-size: 16px; }
-      .url { font-size: 12px; padding: 8px 10px; word-break: break-all; }
-      .right { order: 3; }
-      .center { order: 2; }
-      .left { order: 1; }
-      .msg { max-width: 94%; font-size: 14px; }
-    }
+    .animate-pulse-slow { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
   </style>
 </head>
-<body>
-<div class="page">
-  <div class="top">
-    <h1>{{ $title }}</h1>
-    <div class="share-row" id="shareRow">
-      <a class="share-btn" id="shareFacebook" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 22v-8h2.7l.4-3h-3.1V9.1c0-.9.3-1.5 1.6-1.5h1.7V4.9c-.3 0-1.3-.1-2.4-.1-2.4 0-4 1.5-4 4.2V11H8v3h2.4v8h3.1z"/></svg>Facebook</a>
-      <a class="share-btn" id="shareTwitter" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="m18.9 2 2.6 3.7-5.7 6.5L22 22h-4.7l-4.6-6.1L7.4 22H2.7l6.1-7L2 2h4.8l4.2 5.7L15.9 2h3z"/></svg>X</a>
-      <a class="share-btn" id="shareWhatsapp" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.7 14.9L2 22l5.3-1.4A10 10 0 1 0 12 2Zm5.8 14.1c-.2.6-1.3 1.2-1.8 1.2-.5 0-1.2.2-3.8-1-3.2-1.5-5.2-4.9-5.4-5.1-.2-.2-1.3-1.7-1.3-3.2s.8-2.3 1.1-2.6c.3-.3.6-.4.8-.4h.6c.2 0 .4 0 .6.5.2.6.8 2 .8 2.1.1.2.1.4 0 .6 0 .2-.2.4-.3.5-.2.2-.3.4-.5.6-.1.1-.3.3-.1.6.2.4 1 1.6 2.1 2.5 1.4 1.2 2.5 1.6 2.9 1.8.4.2.6.1.8-.1.2-.3 1-1.1 1.3-1.5.2-.3.5-.3.8-.2.3.1 2 .9 2.3 1 .3.2.5.2.6.4.1.2.1 1-.1 1.6Z"/></svg>WhatsApp</a>
-    </div>
-  </div>
+<body class="min-h-screen">
+  @php
+    $brandColor = $hostedPage->brand_color ?? '#3B1FA8';
+    $quickActions = $hostedPage->quick_actions ?? [];
+    $bizName = $hostedPage->title;
+    $firstLetter = strtoupper(substr($bizName, 0, 1));
+  @endphp
 
-  <div class="shell">
-    <div class="bar">
-      <div class="brand">
-        @if($logoUrl)
-          <img src="{{ $logoUrl }}" alt="logo" />
-        @endif
-        <div>
-          <div style="font-size:24px;font-weight:700">{{ $title }}</div>
-          <div style="opacity:.84;font-size:14px">Luxury AI assistant experience</div>
+  <!-- Header -->
+  <header class="fixed top-0 left-0 right-0 z-50 h-[72px] bg-[var(--brand-primary)] px-4 lg:px-6 flex items-center justify-between shadow-lg">
+    <div class="flex items-center gap-3">
+      @if($hostedPage->logo_url)
+        <img src="{{ $hostedPage->logo_url }}" alt="Logo" class="w-12 h-12 rounded-xl object-cover" />
+      @else
+        <div class="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center text-white text-xl font-bold">
+          {{ $firstLetter }}
         </div>
+      @endif
+      <div>
+        <div class="text-white font-bold text-xl">{{ $bizName }}</div>
+        <div class="text-white/80 text-sm italic">{{ $hostedPage->tagline }}</div>
       </div>
-      <div class="online"><span class="dot"></span>AI Assistant Online</div>
     </div>
-
-    <div class="content">
-      <aside class="left">
-        @if($logoUrl)
-          <img class="welcome-image" src="{{ $logoUrl }}" alt="welcome" />
-        @endif
-        <h3>Welcome</h3>
-        <p>{{ $welcomeMessage }}</p>
-
-        <div class="quick">Quick Actions</div>
-        <div class="qa">
-          <button class="quick-action-btn" data-prompt="Check room availability">Check Room Availability</button>
-          <button class="quick-action-btn" data-prompt="Show room prices">View Room Prices</button>
-          <button class="quick-action-btn" data-prompt="Share your location">Hotel Location</button>
-        </div>
-      </aside>
-
-      <section class="center">
-        <div id="messages" class="messages">
-          <div class="msg bot">{{ $welcomeMessage }}</div>
-          <div id="typing" class="typing">Assistant is typing...</div>
-        </div>
-
-        <div class="composer">
-          <input id="message" placeholder="Type your message..." />
-          <button id="send">></button>
-        </div>
-        <div id="chatStatus" style="margin-top:8px;color:#6b7085;font-size:12px;">Connecting...</div>
-      </section>
-
-      <aside class="right" id="leadAside">
-        <div class="lead-card hidden" id="leadCard">
-          <h4>Almost there!</h4>
-          <p>Please share your details so we can assist you better.</p>
-          <input id="leadName" placeholder="Your name" />
-          <input id="leadPhone" placeholder="Phone number" />
-          <input id="leadEmail" placeholder="Email (optional)" />
-          <button id="leadSubmit">Submit</button>
-          <button id="leadSkip" class="lead-skip" type="button">Skip</button>
-          <div class="lead-note">You can continue chatting after this.</div>
-        </div>
-      </aside>
+    <div class="flex items-center gap-2 text-white text-sm">
+      <span class="w-2.5 h-2.5 rounded-full bg-green-400 animate-pulse-slow"></span>
+      <span>AI Assistant Online</span>
     </div>
+  </header>
 
-    <div class="footer">We typically reply instantly</div>
+  <!-- Mobile Info Button -->
+  <button id="mobileInfoBtn" class="fixed top-[80px] left-3 z-40 lg:hidden bg-white rounded-full p-2 shadow-lg border border-gray-200" aria-label="Show business info">
+    <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+    </svg>
+  </button>
+
+  <!-- Main Layout -->
+  <div class="pt-[72px] pb-4 lg:pb-6 min-h-screen">
+    <div class="max-w-7xl mx-auto px-2 lg:px-4">
+      <div class="grid grid-cols-1 lg:grid-cols-[280px_1fr_320px] gap-4 lg:gap-6">
+        
+        <!-- Left Sidebar -->
+        <aside id="sidebar" class="hidden lg:block bg-white rounded-2xl shadow-sm border border-gray-100 p-4 h-fit sticky top-4">
+          @if($hostedPage->cover_image_url)
+            <img src="{{ $hostedPage->cover_image_url }}" alt="Welcome" class="w-full h-[180px] rounded-lg object-cover border border-gray-200 mb-4" />
+          @else
+            <div class="w-full h-[180px] rounded-lg bg-gradient-to-br from-[var(--brand-primary)] to-[var(--brand-dark)] mb-4 flex items-center justify-center">
+              <svg class="w-16 h-16 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+              </svg>
+            </div>
+          @endif
+          
+          <h3 class="text-lg font-bold text-gray-900 mb-2">Welcome to {{ $bizName }} 👋</h3>
+          <p class="text-sm text-gray-600 mb-4">{{ $hostedPage->welcome_message }}</p>
+
+          <div class="text-xs uppercase font-semibold text-[var(--brand-primary)] mb-3">Quick Actions</div>
+          <div class="space-y-2">
+            @foreach($quickActions as $action)
+              <button class="quick-action-btn flex items-center justify-between w-full px-4 py-3 rounded-xl border border-gray-200 hover:bg-purple-50 hover:border-purple-200 transition-all text-sm font-medium text-gray-700" data-prompt="{{ $action['label'] }}">
+                <div class="flex items-center gap-2">
+                  @switch($action['icon'] ?? 'chat')
+                    @case('calendar')
+                      <svg class="w-4 h-4 text-[var(--brand-primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                      @break
+                    @case('currency')
+                      <svg class="w-4 h-4 text-[var(--brand-primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                      @break
+                    @case('location')
+                      <svg class="w-4 h-4 text-[var(--brand-primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                      @break
+                    @case('phone')
+                      <svg class="w-4 h-4 text-[var(--brand-primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
+                      @break
+                    @default
+                      <svg class="w-4 h-4 text-[var(--brand-primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
+                  @endswitch
+                  <span>{{ $action['label'] }}</span>
+                </div>
+                <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+              </button>
+            @endforeach
+          </div>
+
+          <div class="mt-6 pt-4 border-t border-gray-100">
+            <p class="text-xs text-gray-400 text-center">✨ Powered by iSoftro AI</p>
+          </div>
+        </aside>
+
+        <!-- Mobile Sidebar Overlay -->
+        <div id="mobileSidebar" class="fixed inset-0 z-50 bg-black/50 hidden lg:hidden">
+          <div class="absolute left-0 top-0 bottom-0 w-80 bg-white shadow-2xl transform -translate-x-full transition-transform" id="sidebarPanel">
+            <div class="p-4">
+              <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-lg">Business Info</h3>
+                <button id="closeSidebar" class="p-2 hover:bg-gray-100 rounded-lg" aria-label="Close">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+              </div>
+              @if($hostedPage->cover_image_url)
+                <img src="{{ $hostedPage->cover_image_url }}" alt="Welcome" class="w-full h-32 rounded-lg object-cover mb-4" />
+              @endif
+              <h4 class="font-bold mb-2">Welcome to {{ $bizName }} 👋</h4>
+              <p class="text-sm text-gray-600 mb-4">{{ $hostedPage->welcome_message }}</p>
+              <div class="text-xs uppercase font-semibold text-[var(--brand-primary)] mb-3">Quick Actions</div>
+              <div class="space-y-2">
+                @foreach($quickActions as $action)
+                  <button class="quick-action-btn mobile-quick-btn flex items-center justify-between w-full px-3 py-2.5 rounded-lg border border-gray-200 hover:bg-purple-50 text-sm font-medium" data-prompt="{{ $action['label'] }}">
+                    <span>{{ $action['label'] }}</span>
+                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                  </button>
+                @endforeach
+              </div>
+              <p class="text-xs text-gray-400 text-center mt-6">✨ Powered by iSoftro AI</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chat Area -->
+        <section class="bg-white rounded-2xl shadow-sm border border-gray-100 flex flex-col lg:h-[calc(100vh-120px)]">
+          <div id="chatMessages" class="flex-1 overflow-y-auto p-4 space-y-4 scroll-smooth">
+            <!-- Messages will be inserted here -->
+            <div id="welcomeMsg" class="flex gap-3">
+              <div class="w-9 h-9 rounded-full bg-[var(--brand-primary)] flex items-center justify-center flex-shrink-0">
+                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
+                </svg>
+              </div>
+              <div class="bg-white border border-gray-100 rounded-2xl rounded-tl-none px-4 py-3 max-w-[80%] shadow-sm">
+                <p class="text-gray-800 whitespace-pre-wrap">{{ $hostedPage->welcome_message }}</p>
+                <p class="text-xs text-gray-400 mt-1 text-right">Now</p>
+              </div>
+            </div>
+
+            <!-- Typing Indicator -->
+            <div id="typingIndicator" class="hidden flex gap-3">
+              <div class="w-9 h-9 rounded-full bg-[var(--brand-primary)] flex items-center justify-center flex-shrink-0">
+                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
+                </svg>
+              </div>
+              <div class="bg-white border border-gray-100 rounded-2xl rounded-tl-none px-4 py-3 shadow-sm">
+                <div class="flex gap-1">
+                  <span class="typing-dot w-2 h-2 rounded-full bg-gray-400"></span>
+                  <span class="typing-dot w-2 h-2 rounded-full bg-gray-400"></span>
+                  <span class="typing-dot w-2 h-2 rounded-full bg-gray-400"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Suggestion Chips -->
+          <div id="suggestionChips" class="hidden px-4 py-2 flex flex-wrap gap-2 border-t border-gray-100">
+            <!-- Will be populated dynamically -->
+          </div>
+
+          <!-- Input Area -->
+          <div class="p-4 border-t border-gray-100 bg-white rounded-b-2xl">
+            <div class="flex items-center gap-2 bg-gray-50 rounded-xl border border-gray-200 px-3 py-2">
+              <button class="p-2 text-gray-400 hover:text-gray-600" aria-label="Attach file">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
+                </svg>
+              </button>
+              <input type="text" id="chatInput" placeholder="Type your message..." class="flex-1 bg-transparent border-none outline-none text-gray-800 placeholder-gray-400" aria-label="Type your message" />
+              <button id="sendBtn" class="w-10 h-10 rounded-xl bg-[var(--brand-primary)] flex items-center justify-center hover:opacity-90 transition text-white" aria-label="Send message">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                </svg>
+              </button>
+            </div>
+            <p class="text-xs text-gray-400 text-center mt-2">We typically reply instantly ⚡</p>
+          </div>
+        </section>
+
+        <!-- Right Lead Capture (Desktop) -->
+        <aside class="hidden lg:block" id="leadContainer">
+          <div id="leadCard" class="bg-white rounded-2xl shadow-xl p-6 border border-gray-100 sticky top-4 hidden">
+            <button id="leadClose" class="absolute top-4 right-4 p-1 text-gray-400 hover:text-gray-600" aria-label="Close lead form">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
+            <div id="leadFormContent">
+              <h4 class="font-bold text-xl mb-1">Almost there! 😊</h4>
+              <p class="text-sm text-gray-500 mb-4">Please share your details so we can assist you better.</p>
+              <form id="leadForm" class="space-y-3">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Your Name</label>
+                  <input type="text" id="leadName" required class="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[var(--brand-primary)] focus:border-transparent" placeholder="Enter your name" />
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+                  <div class="flex">
+                    <div class="flex items-center px-3 bg-gray-50 border border-r-0 border-gray-200 rounded-l-lg">
+                      <span class="text-lg">🇳🇵</span>
+                      <span class="text-sm text-gray-600 ml-1">+977</span>
+                    </div>
+                    <input type="tel" id="leadPhone" required class="flex-1 px-3 py-2.5 border border-gray-200 rounded-r-lg text-sm focus:outline-none focus:ring-2 focus:ring-[var(--brand-primary)] focus:border-transparent" placeholder="98XXXXXXXX" />
+                  </div>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Email <span class="text-gray-400">(optional)</span></label>
+                  <input type="email" id="leadEmail" class="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[var(--brand-primary)] focus:border-transparent" placeholder="your@email.com" />
+                </div>
+                <button type="submit" class="w-full py-3 bg-[var(--brand-primary)] text-white font-semibold rounded-xl hover:opacity-90 transition">
+                  Submit
+                </button>
+              </form>
+              <p class="text-xs text-gray-400 text-center mt-3">You can continue chatting after this.</p>
+            </div>
+            <div id="leadSuccess" class="hidden text-center py-4">
+              <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+              </div>
+              <p class="font-semibold text-gray-800">Thanks! We'll be in touch soon ✓</p>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
   </div>
-</div>
 
-<script>
-let sessionId = null;
-let sessionToken = null;
-let messageCount = 0;
-let leadCaptureShown = false;
-const slug = @json($slug);
-const shareUrl = window.location.href;
-const messagesEl = document.getElementById('messages');
-const typingEl = document.getElementById('typing');
-const statusEl = document.getElementById('chatStatus');
-const leadCardEl = document.getElementById('leadCard');
-const leadAsideEl = document.getElementById('leadAside');
-const shareRowEl = document.getElementById('shareRow');
-const isMobile = window.matchMedia('(max-width: 768px)').matches;
+  <!-- Mobile Lead Card (Floating) -->
+  <div id="mobileLeadCard" class="fixed bottom-20 left-4 right-4 z-40 hidden">
+    <div class="bg-white rounded-2xl shadow-2xl p-5 border border-gray-100 relative">
+      <button id="mobileLeadClose" class="absolute top-3 right-3 p-1 text-gray-400 hover:text-gray-600" aria-label="Close lead form">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+      </button>
+      <div id="mobileLeadContent">
+        <h4 class="font-bold text-lg mb-1">Almost there! 😊</h4>
+        <p class="text-sm text-gray-500 mb-4">Share your details for better assistance.</p>
+        <form id="mobileLeadForm" class="space-y-3">
+          <input type="text" id="mobileLeadName" required class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm" placeholder="Your name" />
+          <div class="flex">
+            <div class="flex items-center px-2 bg-gray-50 border border-r-0 border-gray-200 rounded-l-lg text-sm">
+              <span>🇳🇵</span>
+              <span class="ml-1">+977</span>
+            </div>
+            <input type="tel" id="mobileLeadPhone" required class="flex-1 px-2 py-2 border border-gray-200 rounded-r-lg text-sm" placeholder="98XXXXXXXX" />
+          </div>
+          <input type="email" id="mobileLeadEmail" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm" placeholder="Email (optional)" />
+          <button type="submit" class="w-full py-2.5 bg-[var(--brand-primary)] text-white font-semibold rounded-xl">
+            Submit
+          </button>
+        </form>
+      </div>
+      <div id="mobileLeadSuccess" class="hidden text-center py-3">
+        <p class="font-semibold text-green-600">Thanks! We'll be in touch ✓</p>
+      </div>
+    </div>
+  </div>
 
-function getFingerprint() {
-  const key = 'hosted_chat_fingerprint_v1';
-  let fp = localStorage.getItem(key);
-  if (!fp) {
-    fp = 'fp_' + Math.random().toString(36).slice(2) + Date.now().toString(36);
-    localStorage.setItem(key, fp);
-  }
-  return fp;
-}
+  <script>
+    const slug = @json($hostedPage->slug);
+    const brandColor = @json($brandColor);
+    const messagesContainer = document.getElementById('chatMessages');
+    const chatInput = document.getElementById('chatInput');
+    const sendBtn = document.getElementById('sendBtn');
+    const typingIndicator = document.getElementById('typingIndicator');
+    const suggestionChips = document.getElementById('suggestionChips');
+    const leadCard = document.getElementById('leadCard');
+    const leadClose = document.getElementById('leadClose');
+    const mobileLeadCard = document.getElementById('mobileLeadCard');
+    const mobileLeadClose = document.getElementById('mobileLeadClose');
+    const mobileSidebar = document.getElementById('mobileSidebar');
+    const sidebarPanel = document.getElementById('sidebarPanel');
+    const isMobile = window.matchMedia('(max-width: 1023px)').matches;
 
-function appendMessage(role, text) {
-  const div = document.createElement('div');
-  div.className = 'msg ' + role;
-  div.textContent = text;
-  messagesEl.insertBefore(div, typingEl);
-  messagesEl.scrollTop = messagesEl.scrollHeight;
-}
+    let sessionId = null;
+    let sessionToken = null;
+    let messageCount = 0;
+    let leadSubmitted = false;
+    let leadDismissed = false;
 
-function appendButtons(buttons) {
-  if (!Array.isArray(buttons) || buttons.length === 0) return;
-  const row = document.createElement('div');
-  row.className = 'btn-row';
-
-  buttons.slice(0, 4).forEach((btn) => {
-    if (btn.type === 'reply' && btn.value) {
-      const button = document.createElement('button');
-      button.className = 'chat-btn';
-      button.type = 'button';
-      button.textContent = btn.label || 'Option';
-      button.addEventListener('click', () => sendMessage(btn.value));
-      row.appendChild(button);
-      return;
+    function getFingerprint() {
+      const key = 'hosted_chat_fingerprint_v1';
+      let fp = localStorage.getItem(key);
+      if (!fp) {
+        fp = 'fp_' + Math.random().toString(36).slice(2) + Date.now().toString(36);
+        localStorage.setItem(key, fp);
+      }
+      return fp;
     }
 
-    if (btn.type === 'link' && btn.url) {
-      const link = document.createElement('a');
-      link.className = 'chat-btn';
-      link.href = btn.url;
-      link.target = '_blank';
-      link.rel = 'noopener';
-      link.textContent = btn.label || 'Open';
-      row.appendChild(link);
+    function getTimestamp() {
+      const now = new Date();
+      return now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
     }
-  });
 
-  messagesEl.insertBefore(row, typingEl);
-  messagesEl.scrollTop = messagesEl.scrollHeight;
-}
-
-async function init() {
-  const res = await fetch('/api/chat/init', {
-    method: 'POST', headers: {'Content-Type':'application/json'},
-    body: JSON.stringify({ slug, visitor_fingerprint: getFingerprint(), source_url: window.location.href })
-  });
-  const data = await res.json();
-  if (data.success) {
-    sessionId = data.session_id;
-    sessionToken = data.session_token;
-    statusEl.textContent = 'Connected';
-  } else {
-    statusEl.textContent = data.error || 'Connection failed. Refresh to retry.';
-  }
-}
-
-async function sendMessage(text) {
-  if (!sessionId || !sessionToken || !text) {
-    statusEl.textContent = 'Not connected yet.';
-    return;
-  }
-  appendMessage('user', text);
-  typingEl.style.display = 'block';
-  const res = await fetch('/api/chat/message', {
-    method: 'POST', headers: {'Content-Type':'application/json'},
-    body: JSON.stringify({
-      session_id: sessionId,
-      session_token: sessionToken,
-      visitor_fingerprint: getFingerprint(),
-      message: text,
-      source_url: window.location.href
-    })
-  });
-  const data = await res.json();
-  typingEl.style.display = 'none';
-  if (!res.ok || !data.success) {
-    statusEl.textContent = data.error || 'Message failed. Please retry.';
-    appendMessage('bot', 'Sorry, your message could not be processed. Please try again.');
-    return;
-  }
-  statusEl.textContent = 'Connected';
-  appendMessage('bot', data.reply || 'Sorry, I could not process that.');
-  appendButtons(data.buttons || []);
-  messageCount += 1;
-  maybeShowLeadCapture();
-}
-
-function maybeShowLeadCapture() {
-  if (leadCaptureShown) return;
-  if (messageCount >= 1) {
-    if (!isMobile) {
-      leadCardEl.classList.remove('hidden');
-      leadAsideEl.style.display = '';
+    function scrollToBottom() {
+      messagesContainer.scrollTo({ top: messagesContainer.scrollHeight, behavior: 'smooth' });
     }
-    leadCaptureShown = true;
-  }
-}
 
-function showFirstVisitLeadPopup() {
-  if (isMobile) return;
-  const key = 'hosted_lead_popup_seen_v1';
-  if (localStorage.getItem(key) === '1') return;
-  localStorage.setItem(key, '1');
-
-  leadAsideEl.style.display = 'none';
-  leadCardEl.classList.remove('hidden');
-  leadCardEl.classList.add('floating');
-
-  setTimeout(() => {
-    if (leadCardEl.classList.contains('floating')) {
-      leadCardEl.classList.add('hidden');
-      leadCardEl.classList.remove('floating');
+    function createUserMessage(text) {
+      const div = document.createElement('div');
+      div.className = 'flex justify-end';
+      div.innerHTML = `
+        <div class="bg-[var(--brand-primary)] text-white rounded-2xl rounded-tr-none px-4 py-3 max-w-[80%]">
+          <p class="whitespace-pre-wrap">${escapeHtml(text)}</p>
+          <p class="text-[10px] text-white/70 mt-1 text-right">${getTimestamp()}</p>
+        </div>
+      `;
+      return div;
     }
-  }, 5000);
-}
 
-function skipLeadCard() {
-  if (leadCardEl.classList.contains('floating')) {
-    leadCardEl.classList.remove('floating');
-    leadAsideEl.style.display = '';
-    leadCardEl.classList.remove('hidden');
-    return;
-  }
-  leadCardEl.classList.add('hidden');
-}
+    function createBotMessage(text, suggestions = []) {
+      const div = document.createElement('div');
+      div.className = 'flex gap-3';
+      div.innerHTML = `
+        <div class="w-9 h-9 rounded-full bg-[var(--brand-primary)] flex items-center justify-center flex-shrink-0">
+          <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
+          </svg>
+        </div>
+        <div class="bg-white border border-gray-100 rounded-2xl rounded-tl-none px-4 py-3 max-w-[80%] shadow-sm">
+          <p class="text-gray-800 whitespace-pre-wrap">${escapeHtml(text)}</p>
+          <p class="text-xs text-gray-400 mt-1 text-right">${getTimestamp()}</p>
+        </div>
+      `;
+      return div;
+    }
 
-async function submitLead() {
-  if (!sessionId || !sessionToken) return;
-  const name = document.getElementById('leadName').value.trim();
-  const phone = document.getElementById('leadPhone').value.trim();
-  const email = document.getElementById('leadEmail').value.trim();
+    function createSuggestionChips(suggestions) {
+      if (!Array.isArray(suggestions) || suggestions.length === 0) return;
+      suggestionChips.innerHTML = '';
+      suggestions.forEach(suggestion => {
+        const btn = document.createElement('button');
+        btn.className = 'px-3 py-1.5 text-sm border border-gray-200 rounded-full hover:bg-purple-50 hover:border-purple-200 transition-colors';
+        btn.textContent = suggestion;
+        btn.addEventListener('click', () => sendMessage(suggestion));
+        suggestionChips.appendChild(btn);
+      });
+      suggestionChips.classList.remove('hidden');
+    }
 
-  const res = await fetch('/api/chat/lead', {
-    method: 'POST',
-    headers: {'Content-Type':'application/json'},
-    body: JSON.stringify({
-      session_id: sessionId,
-      session_token: sessionToken,
-      visitor_fingerprint: getFingerprint(),
-      name,
-      phone,
-      email,
-      trigger: 'sidebar_form'
-    })
-  });
-  const data = await res.json();
-  if (data.success) {
-    document.getElementById('leadSubmit').textContent = 'Submitted';
-    document.getElementById('leadSubmit').disabled = true;
-  } else {
-    statusEl.textContent = data.error || 'Lead submit failed.';
-  }
-}
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
 
-document.getElementById('send').addEventListener('click', () => {
-  const input = document.getElementById('message');
-  const value = input.value.trim();
-  input.value = '';
-  sendMessage(value);
-});
+    function appendMessage(role, text, suggestions = []) {
+      const msg = role === 'user' ? createUserMessage(text) : createBotMessage(text, suggestions);
+      messagesContainer.insertBefore(msg, typingIndicator);
+      scrollToBottom();
+    }
 
-document.getElementById('message').addEventListener('keydown', (e) => {
-  if (e.key === 'Enter') document.getElementById('send').click();
-});
+    function showTyping() {
+      typingIndicator.classList.remove('hidden');
+      scrollToBottom();
+    }
 
-document.querySelectorAll('.quick-action-btn').forEach((btn) => {
-  btn.addEventListener('click', () => sendMessage(btn.dataset.prompt));
-});
+    function hideTyping() {
+      typingIndicator.classList.add('hidden');
+    }
 
-document.getElementById('leadSubmit').addEventListener('click', submitLead);
-document.getElementById('leadSkip').addEventListener('click', skipLeadCard);
-document.getElementById('shareFacebook').href = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(shareUrl);
-document.getElementById('shareTwitter').href = 'https://twitter.com/intent/tweet?url=' + encodeURIComponent(shareUrl) + '&text=' + encodeURIComponent('Chat with us live');
-document.getElementById('shareWhatsapp').href = 'https://wa.me/?text=' + encodeURIComponent('Chat with us: ' + shareUrl);
-setTimeout(() => {
-  if (!isMobile) {
-    shareRowEl.classList.add('hidden');
-  }
-}, 2000);
+    function showErrorMessage(text) {
+      const msg = createBotMessage(text);
+      messagesContainer.insertBefore(msg, typingIndicator);
+      scrollToBottom();
+    }
 
-showFirstVisitLeadPopup();
-init();
-</script>
+    function maybeShowLeadCapture() {
+      if (leadSubmitted || leadDismissed) return;
+      if (messageCount >= 2) {
+        if (isMobile) {
+          mobileLeadCard.classList.remove('hidden');
+        } else {
+          leadCard.classList.remove('hidden');
+        }
+      }
+    }
+
+    function dismissLeadCard() {
+      leadDismissed = true;
+      if (isMobile) {
+        mobileLeadCard.classList.add('hidden');
+      } else {
+        leadCard.classList.add('hidden');
+      }
+    }
+
+    function showLeadSuccess() {
+      leadSubmitted = true;
+      if (isMobile) {
+        document.getElementById('mobileLeadContent').classList.add('hidden');
+        document.getElementById('mobileLeadSuccess').classList.remove('hidden');
+        setTimeout(() => mobileLeadCard.classList.add('hidden'), 2000);
+      } else {
+        document.getElementById('leadFormContent').classList.add('hidden');
+        document.getElementById('leadSuccess').classList.remove('hidden');
+      }
+    }
+
+    async function initChat() {
+      try {
+        const res = await fetch('/api/chat/init', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+            slug, 
+            channel: 'hosted_page',
+            visitor_fingerprint: getFingerprint(),
+            source_url: window.location.href
+          })
+        });
+        const data = await res.json();
+        if (data.success) {
+          sessionId = data.session_id;
+          sessionToken = data.session_token;
+        } else {
+          showErrorMessage('Service temporarily unavailable. Please refresh the page.');
+        }
+      } catch (e) {
+        showErrorMessage('Sorry, I\'m having trouble connecting. Please try again in a moment.');
+      }
+    }
+
+    async function sendMessage(text) {
+      if (!text || !sessionId || !sessionToken) return;
+      suggestionChips.classList.add('hidden');
+      appendMessage('user', text);
+      showTyping();
+
+      try {
+        const res = await fetch('/api/chat/message', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            session_id: sessionId,
+            session_token: sessionToken,
+            message: text,
+            visitor_fingerprint: getFingerprint(),
+            source_url: window.location.href
+          })
+        });
+        
+        const data = await res.json();
+        hideTyping();
+        
+        if (!res.ok) {
+          if (res.status === 429) {
+            showErrorMessage('You\'re sending messages too quickly. Please wait a moment.');
+          } else {
+            showErrorMessage('Sorry, I\'m having trouble connecting. Please try again in a moment.');
+          }
+          return;
+        }
+        
+        if (data.success) {
+          appendMessage('bot', data.reply || 'I\'m not sure how to respond to that.');
+          if (data.suggestions && data.suggestions.length > 0) {
+            createSuggestionChips(data.suggestions);
+          } else if (data.buttons && data.buttons.length > 0) {
+            const suggestions = data.buttons
+              .filter(b => b.type === 'reply')
+              .map(b => b.label);
+            if (suggestions.length > 0) {
+              createSuggestionChips(suggestions);
+            }
+          }
+          messageCount++;
+          maybeShowLeadCapture();
+        } else {
+          showErrorMessage(data.error || 'Sorry, your message could not be processed.');
+        }
+      } catch (e) {
+        hideTyping();
+        showErrorMessage('Sorry, I\'m having trouble connecting. Please try again in a moment.');
+      }
+    }
+
+    async function submitLead(name, phone, email) {
+      if (!sessionId || !sessionToken) return;
+      
+      try {
+        const res = await fetch('/api/chat/lead', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            session_id: sessionId,
+            session_token: sessionToken,
+            visitor_fingerprint: getFingerprint(),
+            name,
+            phone,
+            email,
+            trigger: 'chat_lead_capture'
+          })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showLeadSuccess();
+        }
+      } catch (e) {
+        console.error('Lead submission error:', e);
+      }
+    }
+
+    // Event Listeners
+    sendBtn.addEventListener('click', () => {
+      const text = chatInput.value.trim();
+      chatInput.value = '';
+      sendMessage(text);
+    });
+
+    chatInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendBtn.click();
+      }
+    });
+
+    document.querySelectorAll('.quick-action-btn').forEach(btn => {
+      btn.addEventListener('click', () => sendMessage(btn.dataset.prompt));
+    });
+
+    document.querySelectorAll('.mobile-quick-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        sendMessage(btn.dataset.prompt);
+        mobileSidebar.classList.add('hidden');
+        sidebarPanel.classList.add('-translate-x-full');
+      });
+    });
+
+    leadClose.addEventListener('click', dismissLeadCard);
+    mobileLeadClose.addEventListener('click', dismissLeadCard);
+
+    document.getElementById('leadForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = document.getElementById('leadName').value.trim();
+      const phone = document.getElementById('leadPhone').value.trim();
+      const email = document.getElementById('leadEmail').value.trim();
+      if (name && phone) {
+        submitLead(name, '+977' + phone, email);
+      }
+    });
+
+    document.getElementById('mobileLeadForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = document.getElementById('mobileLeadName').value.trim();
+      const phone = document.getElementById('mobileLeadPhone').value.trim();
+      const email = document.getElementById('mobileLeadEmail').value.trim();
+      if (name && phone) {
+        submitLead(name, '+977' + phone, email);
+      }
+    });
+
+    // Mobile sidebar handlers
+    document.getElementById('mobileInfoBtn').addEventListener('click', () => {
+      mobileSidebar.classList.remove('hidden');
+      sidebarPanel.classList.remove('-translate-x-full');
+    });
+
+    mobileSidebar.addEventListener('click', (e) => {
+      if (e.target === mobileSidebar) {
+        mobileSidebar.classList.add('hidden');
+        sidebarPanel.classList.add('-translate-x-full');
+      }
+    });
+
+    document.getElementById('closeSidebar').addEventListener('click', () => {
+      mobileSidebar.classList.add('hidden');
+      sidebarPanel.classList.add('-translate-x-full');
+    });
+
+    // Initialize
+    initChat();
+  </script>
 </body>
 </html>
