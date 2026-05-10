@@ -54,6 +54,22 @@ class User extends Authenticatable
                 $user->site_id = self::generateSiteId($user->company_name ?? $user->name);
             }
         });
+
+        static::created(function (User $user) {
+            if (! $user->isClient()) {
+                return;
+            }
+
+            HostedPage::firstOrCreate(
+                ['client_id' => $user->id],
+                [
+                    'slug' => HostedPage::generateUniqueSlug($user->company_name ?? $user->name),
+                    'status' => 'active',
+                    'public_config' => HostedPage::defaultPublicConfig($user),
+                    'behavior_config' => HostedPage::defaultBehaviorConfig(),
+                ]
+            );
+        });
     }
 
     public static function generateSiteId(?string $name): string
