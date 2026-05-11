@@ -531,6 +531,7 @@
         #cn-mic:hover   { background: #e8e9ea; transform: translateY(-1px); }
         #cn-mic:active  { transform: scale(.94); }
         #cn-mic.recording { background: #ef4444; color: #fff; animation: pulse 1.5s infinite; }
+        #cn-mic.transcribing { background: #f59e0b; color: #fff; animation: pulse 0.8s infinite; pointer-events: none; }
         #cn-mic:focus-visible { box-shadow: 0 0 0 3px rgba(0,109,119,.4); }
 
         @keyframes pulse {
@@ -1565,7 +1566,7 @@
             mediaRecorder.start();
             isRecording = true;
             micBtn.classList.add('recording');
-            addMsg('🎤 Recording... Click mic again to stop.', 'bot');
+            micBtn.title = 'Stop recording';
         }
 
         function stopRecording() {
@@ -1573,11 +1574,18 @@
                 mediaRecorder.stop();
                 isRecording = false;
                 micBtn.classList.remove('recording');
+                micBtn.classList.add('transcribing');
+                micBtn.title = 'Transcribing...';
             }
         }
 
+        function resetMicBtn() {
+            micBtn.classList.remove('transcribing');
+            micBtn.title = 'Record voice message';
+        }
+
         async function processRecording() {
-            if (audioChunks.length === 0) return;
+            if (audioChunks.length === 0) { resetMicBtn(); return; }
 
             const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
             const formData = new FormData();
@@ -1591,28 +1599,24 @@
                 });
 
                 const result = await response.json();
-
-                if (result.error) {
-                    addMsg('Could not understand audio, please type instead.', 'bot');
-                    return;
-                }
-
                 const transcript = result.transcript;
+
                 if (transcript) {
                     input.value = transcript;
                     input.dispatchEvent(new Event('input'));
-                    // Auto-send the transcript
-                    setTimeout(() => {
-                        if (!busy) {
-                            handleSend();
-                        }
-                    }, 100);
+                    input.focus();
+                    input.setSelectionRange(transcript.length, transcript.length);
                 } else {
-                    addMsg('Could not understand audio, please type instead.', 'bot');
+                    // Flash input border red briefly to signal failure
+                    input.style.outline = '2px solid #ef4444';
+                    setTimeout(() => { input.style.outline = ''; }, 1500);
                 }
             } catch (error) {
                 console.error('Transcription error:', error);
-                addMsg('Could not understand audio, please type instead.', 'bot');
+                input.style.outline = '2px solid #ef4444';
+                setTimeout(() => { input.style.outline = ''; }, 1500);
+            } finally {
+                resetMicBtn();
             }
         }
 
