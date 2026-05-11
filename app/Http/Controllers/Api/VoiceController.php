@@ -20,7 +20,9 @@ class VoiceController extends Controller
         ]);
 
         try {
-            $client = User::where('api_token', $request->token)->first();
+            $client = User::where('site_id', $request->token)
+                ->orWhere('api_token', $request->token)
+                ->first();
             if (! $client) {
                 return response()->json(['error' => 'invalid_token'], 401);
             }
@@ -80,7 +82,9 @@ class VoiceController extends Controller
         ]);
 
         try {
-            $client = User::where('api_token', $request->token)->first();
+            $client = User::where('site_id', $request->token)
+                ->orWhere('api_token', $request->token)
+                ->first();
             if (! $client) {
                 return response()->json(['error' => 'invalid_token'], 401);
             }
