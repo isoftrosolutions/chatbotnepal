@@ -73,7 +73,8 @@ class InvoiceService
             ->get();
 
         foreach ($invoices as $invoice) {
-            $invoice->user->update(['chatbot_enabled' => false]);
+            // Auto-disable on overdue removed per business decision 2026-05-15. Overdue clients are now handled manually.
+            // $invoice->user->update(['chatbot_enabled' => false]);
         }
 
         return $invoices->count();

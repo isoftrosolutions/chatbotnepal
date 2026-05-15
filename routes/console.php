@@ -28,9 +28,10 @@ app()->booted(function () {
 
         foreach ($overdue as $invoice) {
             $invoice->update(['status' => 'overdue']);
-            if ($invoice->user) {
-                $invoice->user->update(['chatbot_enabled' => false]);
-            }
+            // Auto-disable on overdue removed per business decision 2026-05-15. Overdue clients are now handled manually.
+            // if ($invoice->user) {
+            //     $invoice->user->update(['chatbot_enabled' => false]);
+            // }
         }
 
         Log::info('Scheduler: checked overdue invoices', ['count' => $overdue->count()]);
