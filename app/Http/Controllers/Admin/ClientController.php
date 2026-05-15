@@ -53,6 +53,11 @@ class ClientController extends Controller
             'website_url' => 'nullable|url|max:500',
             'plan' => 'required|in:basic,standard,growth,pro',
             'status' => 'required|in:active,inactive,suspended',
+            'plan_name' => 'nullable|string|max:100',
+            'monthly_amount' => 'nullable|numeric|min:0',
+            'billing_cycle' => 'required|in:monthly,quarterly,yearly',
+            'next_billing_date' => 'nullable|date',
+            'subscription_status' => 'required|in:active,paused,cancelled',
             'prechat_enabled' => 'boolean',
         ]);
 
@@ -61,6 +66,8 @@ class ClientController extends Controller
             'role' => 'client',
             'api_token' => Str::random(64),
             'chatbot_enabled' => true,
+            'subscription_started_at' => now(),
+            'next_billing_date' => now()->addMonth(),
         ]);
 
         WidgetConfig::create([
@@ -93,6 +100,11 @@ class ClientController extends Controller
             'website_url' => 'nullable|url|max:500',
             'plan' => 'required|in:basic,standard,growth,pro',
             'status' => 'required|in:active,inactive,suspended',
+            'plan_name' => 'nullable|string|max:100',
+            'monthly_amount' => 'nullable|numeric|min:0',
+            'billing_cycle' => 'required|in:monthly,quarterly,yearly',
+            'next_billing_date' => 'nullable|date',
+            'subscription_status' => 'required|in:active,paused,cancelled',
             'prechat_enabled' => 'boolean',
             'welcome_buttons' => 'nullable|string',
         ]);

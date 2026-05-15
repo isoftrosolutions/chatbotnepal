@@ -29,6 +29,12 @@ class User extends Authenticatable
         'voice_enabled',
         'voice',
         'last_login_at',
+        'plan_name',
+        'monthly_amount',
+        'billing_cycle',
+        'next_billing_date',
+        'subscription_started_at',
+        'subscription_status',
     ];
 
     protected $hidden = [
@@ -42,6 +48,9 @@ class User extends Authenticatable
         'password' => 'hashed',
         'chatbot_enabled' => 'boolean',
         'voice_enabled' => 'boolean',
+        'monthly_amount' => 'decimal:2',
+        'next_billing_date' => 'date',
+        'subscription_started_at' => 'datetime',
     ];
 
     protected static function booted(): void

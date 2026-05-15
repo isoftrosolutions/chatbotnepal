@@ -61,24 +61,6 @@ class InvoiceService
         return $overdueInvoices->count();
     }
 
-    public function disableChatbotsForOverdue(): int
-    {
-        $setting = Setting::get('auto_disable_after_days', 7);
-        $cutoffDate = Carbon::now()->subDays($setting);
-
-        $invoices = Invoice::where('status', 'overdue')
-            ->where('due_date', '<', $cutoffDate)
-            ->whereHas('user', fn ($q) => $q->where('chatbot_enabled', true))
-            ->with('user')
-            ->get();
-
-        foreach ($invoices as $invoice) {
-            // Auto-disable on overdue removed per business decision 2026-05-15. Overdue clients are now handled manually.
-            // $invoice->user->update(['chatbot_enabled' => false]);
-        }
-
-        return $invoices->count();
-    }
 
     public function generateMonthlyInvoices(): int
     {

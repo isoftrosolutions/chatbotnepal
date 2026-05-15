@@ -84,7 +84,11 @@
       "Bash(Copy-Item *)",
       "Bash(findstr /i \"voice\\\\|users\")",
       "Bash(Select-String -Pattern \"voice|users\" -SimpleMatch)",
-      "Bash(Test-Path *)"
+      "Bash(Test-Path *)",
+      "Bash(Select-String -Pattern \"voice|2026_05\")",
+      "PowerShell(php artisan tinker --execute=\"use App\\\\Models\\\\Setting; echo Setting::get\\('grok_api_key'\\) ? 'groq: set' : 'groq: MISSING'; echo PHP_EOL; echo Setting::get\\('gemini_api_key'\\) ? 'gemini: set' : 'gemini: MISSING';\")",
+      "PowerShell(git add *)",
+      "PowerShell(git push *)"
     ]
   }
 }

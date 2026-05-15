@@ -17,7 +17,7 @@ Artisan::command('inspire', function () {
 app()->booted(function () {
     $schedule = app(Schedule::class);
 
-    // Daily midnight: disable chatbot for clients overdue past grace period
+    // Daily midnight: mark invoices as overdue past grace period
     $schedule->call(function () {
         $graceDays = (int) Setting::get('auto_disable_after_days', 7);
 
@@ -28,15 +28,12 @@ app()->booted(function () {
 
         foreach ($overdue as $invoice) {
             $invoice->update(['status' => 'overdue']);
-            // Auto-disable on overdue removed per business decision 2026-05-15. Overdue clients are now handled manually.
-            // if ($invoice->user) {
-            //     $invoice->user->update(['chatbot_enabled' => false]);
-            // }
         }
 
         Log::info('Scheduler: checked overdue invoices', ['count' => $overdue->count()]);
-    })->daily()->name('disable-overdue-chatbots');
+    })->daily()->name('mark-overdue-invoices');
 
+    // TODO: Wire up mail driver and send actual reminders. Currently only logs to laravel.log.
     // Daily 9 AM: log upcoming billing reminders
     $schedule->call(function () {
         $reminderDays = (int) Setting::get('billing_reminder_days', 3);
@@ -56,34 +53,36 @@ app()->booted(function () {
         }
     })->dailyAt('09:00')->name('billing-reminders');
 
-    // Monthly on 1st: auto-generate invoices for all active clients
+    // Daily 00:10: Generate invoices for clients whose next_billing_date has arrived
+    // Checks all active clients with valid billing setup and creates invoices when due
     $schedule->call(function () {
-        $planPrices = [
-            'basic' => 1500,
-            'standard' => 3000,
-            'growth' => 5000,
-            'pro' => 8000,
-        ];
-
-        $clients = User::where('role', 'client')
-            ->where('status', 'active')
+        $due = User::where('role', 'client')
+            ->where('subscription_status', 'active')
+            ->whereNotNull('monthly_amount')
+            ->whereDate('next_billing_date', '<=', today())
             ->get();
 
-        foreach ($clients as $client) {
-            $amount = $planPrices[$client->plan] ?? 1500;
-
+        foreach ($due as $client) {
             Invoice::create([
                 'user_id' => $client->id,
                 'invoice_number' => Invoice::generateInvoiceNumber(),
-                'amount' => $amount,
-                'type' => 'monthly',
-                'billing_period_start' => Carbon::now()->startOfMonth(),
-                'billing_period_end' => Carbon::now()->endOfMonth(),
+                'amount' => $client->monthly_amount,
+                'type' => $client->billing_cycle,
+                'billing_period_start' => today(),
+                'billing_period_end' => today(),
                 'status' => 'pending',
-                'due_date' => Carbon::now()->addDays(7),
+                'due_date' => today()->addDays(7),  // 7-day payment window
             ]);
+
+            // Advance next_billing_date based on cycle
+            $next = match($client->billing_cycle) {
+                'monthly' => today()->addMonth(),
+                'quarterly' => today()->addMonths(3),
+                'yearly' => today()->addYear(),
+            };
+            $client->update(['next_billing_date' => $next]);
         }
 
-        Log::info('Scheduler: monthly invoices generated', ['count' => $clients->count()]);
-    })->monthlyOn(1, '00:05')->name('generate-monthly-invoices');
+        Log::info('Scheduler: generated due invoices', ['count' => $due->count()]);
+    })->dailyAt('00:10')->name('generate-due-invoices');
 });

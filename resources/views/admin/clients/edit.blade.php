@@ -115,9 +115,66 @@
             </select>
           </div>
         </div>
-      </div>
+       </div>
 
-      {{-- Chatbot Features --}}
+       {{-- Billing & Subscription --}}
+       <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+         <div class="p-6 border-b border-gray-50 flex items-center gap-4">
+           <div class="w-12 h-12 bg-[#E8F5E8] rounded-2xl flex items-center justify-center">
+             <i data-lucide="credit-card" class="text-[#4CAF50] w-6 h-6"></i>
+           </div>
+           <h3 class="text-lg font-bold text-[#1B1B38]">Billing & Subscription</h3>
+         </div>
+         <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+           <div>
+             <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Plan Display Name</label>
+             <input type="text" name="plan_name" value="{{ old('plan_name', $client->plan_name) }}"
+               class="w-full bg-[#F4F7FE] border-none rounded-xl px-4 py-3 text-sm text-[#1B1B38] focus:ring-2 focus:ring-[#4318FF]/20 transition-all outline-none"
+               placeholder="e.g. Basic Plan, Custom Discount">
+             @error('plan_name') <span class="text-[#EE5D50] text-[10px] font-bold mt-1 uppercase tracking-wide block">{{ $message }}</span> @enderror
+           </div>
+           <div>
+             <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Billing Amount (NPR) *</label>
+             <input type="number" name="monthly_amount" value="{{ old('monthly_amount', $client->monthly_amount) }}" step="0.01" min="0"
+               class="w-full bg-[#F4F7FE] border-none rounded-xl px-4 py-3 text-sm text-[#1B1B38] focus:ring-2 focus:ring-[#4318FF]/20 transition-all outline-none"
+               placeholder="1500.00">
+             @error('monthly_amount') <span class="text-[#EE5D50] text-[10px] font-bold mt-1 uppercase tracking-wide block">{{ $message }}</span> @enderror
+           </div>
+           <div>
+             <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Billing Cycle *</label>
+             <select name="billing_cycle" required
+               class="w-full bg-[#F4F7FE] border-none rounded-xl px-4 py-3 text-sm text-[#1B1B38] focus:ring-2 focus:ring-[#4318FF]/20 transition-all cursor-pointer outline-none">
+               <option value="monthly" {{ $client->billing_cycle === 'monthly' ? 'selected' : '' }}>Monthly</option>
+               <option value="quarterly" {{ $client->billing_cycle === 'quarterly' ? 'selected' : '' }}>Quarterly</option>
+               <option value="yearly" {{ $client->billing_cycle === 'yearly' ? 'selected' : '' }}>Yearly</option>
+             </select>
+             @error('billing_cycle') <span class="text-[#EE5D50] text-[10px] font-bold mt-1 uppercase tracking-wide block">{{ $message }}</span> @enderror
+           </div>
+           <div>
+             <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Subscription Status *</label>
+             <select name="subscription_status" required
+               class="w-full bg-[#F4F7FE] border-none rounded-xl px-4 py-3 text-sm text-[#1B1B38] focus:ring-2 focus:ring-[#4318FF]/20 transition-all cursor-pointer outline-none">
+               <option value="active" {{ $client->subscription_status === 'active' ? 'selected' : '' }}>Active</option>
+               <option value="paused" {{ $client->subscription_status === 'paused' ? 'selected' : '' }}>Paused</option>
+               <option value="cancelled" {{ $client->subscription_status === 'cancelled' ? 'selected' : '' }}>Cancelled</option>
+             </select>
+             @error('subscription_status') <span class="text-[#EE5D50] text-[10px] font-bold mt-1 uppercase tracking-wide block">{{ $message }}</span> @enderror
+           </div>
+           <div>
+             <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Next Billing Date</label>
+             <input type="date" name="next_billing_date" value="{{ old('next_billing_date', $client->next_billing_date?->format('Y-m-d')) }}"
+               class="w-full bg-[#F4F7FE] border-none rounded-xl px-4 py-3 text-sm text-[#1B1B38] focus:ring-2 focus:ring-[#4318FF]/20 transition-all outline-none">
+             @error('next_billing_date') <span class="text-[#EE5D50] text-[10px] font-bold mt-1 uppercase tracking-wide block">{{ $message }}</span> @enderror
+           </div>
+           <div>
+             <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Subscription Started</label>
+             <input type="text" value="{{ $client->subscription_started_at?->format('M j, Y') }}" readonly
+               class="w-full bg-gray-50 border-none rounded-xl px-4 py-3 text-sm text-gray-500 outline-none cursor-not-allowed">
+           </div>
+         </div>
+       </div>
+
+       {{-- Chatbot Features --}}
       <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
         <div class="p-6 border-b border-gray-50 flex items-center gap-4">
           <div class="w-12 h-12 bg-violet-50 rounded-2xl flex items-center justify-center">
